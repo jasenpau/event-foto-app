@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventFoto.API", "EventFoto.API\EventFoto.API.csproj", "{40582642-65A6-4D97-BB9F-BF705C8FC110}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{FFEC2E73-62AB-4109-A661-C83C91A047AA}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40582642-65A6-4D97-BB9F-BF705C8FC110}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40582642-65A6-4D97-BB9F-BF705C8FC110}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40582642-65A6-4D97-BB9F-BF705C8FC110}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40582642-65A6-4D97-BB9F-BF705C8FC110}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
