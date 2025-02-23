@@ -1,0 +1,12 @@
+<form [formGroup]="form" class="login-form">
+  <h3>Prisijungimas</h3>
+  <app-input-field id="email" label="El. paštas" formControlName="email" />
+  <app-input-field
+    id="password"
+    label="Slaptažodis"
+    type="password"
+    formControlName="password"
+  />
+  <app-button [type]="buttonType">Prisijungti</app-button>
+  <p class="login-form__notice">Neturite paskyros? <a href="mailto:paulius.jasenas@ktu.edu">Susisiekite</a> su sistemos administratoriumi ir paprašykite prieigos.</p>
+</form>

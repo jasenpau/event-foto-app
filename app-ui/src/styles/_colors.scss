@@ -1,0 +1,19 @@
+$blue: #4199d0;
+$red: #f93943;
+$white: #fff;
+
+$background-elevated: #fff;
+$background: #eeeeee;
+
+$foreground: #222;
+$foreground-light: #454545;
+
+$accent: $blue;
+$accent-dark: darken($accent, 10%);
+$accent-hover: lighten($accent, 4%);
+$accent-outline: #79bce7;
+
+$error: $red;
+
+$outline: #bfbfbf;
+$outline-hover: #999999;

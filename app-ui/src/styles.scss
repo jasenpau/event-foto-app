@@ -1,1 +1,20 @@
+@use "colors";
+
 /* You can add global styles to this file, and also import other style files */
+html,
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+
+body {
+  background: colors.$background;
+}
+
+a {
+  color: colors.$accent-dark;
+
+  &:hover {
+    color: darken(colors.$accent-dark, 20%);
+  }
+}

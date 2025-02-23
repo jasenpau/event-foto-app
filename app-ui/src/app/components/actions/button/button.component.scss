@@ -1,0 +1,24 @@
+@use "colors";
+@use "common/functions";
+
+.button {
+  border: 2px solid colors.$accent-outline;
+  background: colors.$accent;
+  color: colors.$background;
+  padding: functions.rem-size(11px) functions.rem-size(16px);
+
+  font-size: functions.rem-size(14px);
+  line-height: functions.rem-size(21px);
+  font-weight: bold;
+
+  transition: background-color 150ms ease-out;
+
+  &--wide {
+    width: 100%;
+  }
+
+  &:hover {
+    background: colors.$accent-hover;
+    cursor: pointer;
+  }
+}

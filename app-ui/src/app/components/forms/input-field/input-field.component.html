@@ -1,0 +1,10 @@
+<div class="input-field">
+  <label *ngIf="label" class="input-field__label" [for]="id">{{ label }}</label>
+  <input
+    *ngIf="hostControl?.control"
+    class="input-field__input"
+    [type]="type"
+    [id]="id"
+    [formControl]="hostControl.control"
+  />
+</div>

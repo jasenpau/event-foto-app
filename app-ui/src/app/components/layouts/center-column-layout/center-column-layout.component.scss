@@ -1,0 +1,9 @@
+@use "colors";
+
+.center-layout {
+  margin: 64px auto 0;
+  background: colors.$background-elevated;
+  border: 1px solid colors.$outline;
+  padding: 24px 48px;
+  max-width: 400px;
+}

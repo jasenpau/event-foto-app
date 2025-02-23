@@ -1,0 +1,11 @@
+@use "common/typography";
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__notice {
+    @include typography.notice;
+  }
+}

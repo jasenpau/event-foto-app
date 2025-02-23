@@ -1,0 +1,8 @@
+<ng-container [ngSwitch]="currentLayout">
+  <app-empty-layout *ngSwitchCase="layoutType.Empty">
+    <router-outlet />
+  </app-empty-layout>
+  <app-center-column-layout *ngSwitchCase="layoutType.CenterColumn">
+    <router-outlet />
+  </app-center-column-layout>
+</ng-container>

@@ -1,0 +1,8 @@
+@use "common/functions";
+@use "colors";
+
+@mixin notice {
+  margin: functions.rem-size(12px) 0;
+  font-size: functions.rem-size(14px);
+  color: colors.$foreground-light;
+}

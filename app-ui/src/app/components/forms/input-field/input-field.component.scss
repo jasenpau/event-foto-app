@@ -1,0 +1,20 @@
+@use "colors";
+@use "common/form-styles";
+@use "common/functions";
+
+.input-field {
+  &__label {
+    font-size: functions.rem-size(14px);
+    margin-bottom: 8px;
+    display: block;
+    font-weight: bold;
+    color: colors.$foreground;
+  }
+
+  &__input {
+    @include form-styles.input-field;
+
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
