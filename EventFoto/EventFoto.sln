@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution 
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventFoto.Data", "EventFoto.Data\EventFoto.Data.csproj", "{00649701-3D0F-45A9-9194-3BFF9443F817}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,5 +21,9 @@ Global
 		{40582642-65A6-4D97-BB9F-BF705C8FC110}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40582642-65A6-4D97-BB9F-BF705C8FC110}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40582642-65A6-4D97-BB9F-BF705C8FC110}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00649701-3D0F-45A9-9194-3BFF9443F817}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00649701-3D0F-45A9-9194-3BFF9443F817}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00649701-3D0F-45A9-9194-3BFF9443F817}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00649701-3D0F-45A9-9194-3BFF9443F817}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
