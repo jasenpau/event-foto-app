@@ -20,10 +20,10 @@ import { CenterColumnLayoutComponent } from '../components/layouts/center-column
 })
 export class RootComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
+  private destroy$: Subject<void> = new Subject<void>();
   protected readonly layoutType = LayoutType;
 
   currentLayout: LayoutType | null = null;
-  destroy$: Subject<void> = new Subject<void>();
 
   ngOnInit() {
     this.router.events

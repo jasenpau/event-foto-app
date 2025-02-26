@@ -1,4 +1,4 @@
-<form [formGroup]="form" class="login-form">
+<form class="login-form" [formGroup]="form" (ngSubmit)="login()">
   <h3>Prisijungimas</h3>
   <app-input-field id="email" label="El. paštas" formControlName="email" />
   <app-input-field
@@ -7,6 +7,7 @@
     type="password"
     formControlName="password"
   />
+  <p class="login-form__error" *ngIf="loginError">{{loginError}}</p>
   <app-button [type]="buttonType">Prisijungti</app-button>
   <p class="login-form__notice">Neturite paskyros? <a href="mailto:paulius.jasenas@ktu.edu">Susisiekite</a> su sistemos administratoriumi ir paprašykite prieigos.</p>
 </form>

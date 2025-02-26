@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use "colors";
 
 /* You can add global styles to this file, and also import other style files */
@@ -15,6 +16,6 @@ a {
   color: colors.$accent-dark;
 
   &:hover {
-    color: darken(colors.$accent-dark, 20%);
+    color: color.adjust(colors.$accent-dark, $lightness: -20%);
   }
 }

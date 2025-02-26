@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 $blue: #4199d0;
 $red: #f93943;
 $white: #fff;
@@ -9,8 +11,8 @@ $foreground: #222;
 $foreground-light: #454545;
 
 $accent: $blue;
-$accent-dark: darken($accent, 10%);
-$accent-hover: lighten($accent, 4%);
+$accent-dark: color.adjust($accent, $lightness: -10%);
+$accent-hover: color.adjust($accent, $lightness: 4%);
 $accent-outline: #79bce7;
 
 $error: $red;

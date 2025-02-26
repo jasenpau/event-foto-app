@@ -5,7 +5,6 @@ namespace EventFoto.Data.Models;
 public record ServiceResult<T>
 {
     public bool Success { get; init; }
-    public string Message { get; init; }
     public AppError Error { get; init; }
     public T Data { get; init; }
 
@@ -23,12 +22,5 @@ public record ServiceResult<T>
         Success = false,
         Error = error,
         
-    };
-
-    public static ServiceResult<T> Fail(AppError error, string message) => new()
-    {
-        Success = false,
-        Error = error,
-        Message = message,
     };
 }
