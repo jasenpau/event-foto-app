@@ -1,0 +1,11 @@
+<nav class="sidenav">
+  <ul class="sidenav__list">
+    <li *ngFor="let item of sidenavItems">
+      <a class="sidenav__list-item"
+         [routerLink]="item.link"
+         routerLinkActive="sidenav__list-item--selected">
+        {{item.title}}
+      </a>
+    </li>
+  </ul>
+</nav>

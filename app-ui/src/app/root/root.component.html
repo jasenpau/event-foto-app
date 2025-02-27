@@ -5,4 +5,7 @@
   <app-center-column-layout *ngSwitchCase="layoutType.CenterColumn">
     <router-outlet />
   </app-center-column-layout>
+  <app-main-layout *ngSwitchCase="layoutType.Main">
+    <router-outlet />
+  </app-main-layout>
 </ng-container>

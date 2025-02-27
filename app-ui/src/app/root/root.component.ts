@@ -5,6 +5,7 @@ import { Subject, takeUntil, tap } from 'rxjs';
 import { NgSwitch, NgSwitchCase } from '@angular/common';
 import { EmptyLayoutComponent } from '../components/layouts/empty-layout/empty-layout.component';
 import { CenterColumnLayoutComponent } from '../components/layouts/center-column-layout/center-column-layout.component';
+import { MainLayoutComponent } from '../components/layouts/main-layout/main-layout.component';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ import { CenterColumnLayoutComponent } from '../components/layouts/center-column
     EmptyLayoutComponent,
     NgSwitchCase,
     CenterColumnLayoutComponent,
+    MainLayoutComponent,
   ],
   templateUrl: './root.component.html',
   styleUrl: './root.component.scss',

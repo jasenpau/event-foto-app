@@ -1,8 +1,11 @@
 using System.Text;
+using EventFoto.API.Filters;
 using EventFoto.API.Services;
 using EventFoto.Data;
 using EventFoto.Data.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -14,7 +17,15 @@ public static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         
-        builder.Services.AddControllers();
+        builder.Services.AddControllers(options =>
+        {
+            options.Filters.Add<ValidationFilter>();
+        });
+        
+        builder.Services.Configure<ApiBehaviorOptions>(options =>
+        {
+            options.SuppressModelStateInvalidFilter = true;
+        });
 
         builder.Services.AddDbContextPool<EventFotoContext>(opt => 
             opt.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
@@ -36,7 +47,10 @@ public static class Program
     private static void ConfigureServices(IServiceCollection services)
     {
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IEventRepository, EventRepository>();
+        
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IEventService, EventService>();
     }
 
     private static void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)

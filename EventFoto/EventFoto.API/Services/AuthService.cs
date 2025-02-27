@@ -49,14 +49,13 @@ public class AuthService : IAuthService
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-            new Claim("userId", user.Id.ToString()),
-            new Claim(ClaimTypes.Role, "User") // Optional: Assign role
+            new Claim(AppClaims.UserId, user.Id.ToString()),
         };
 
         var token = new JwtSecurityToken(
             issuer: _configuration["Jwt:Issuer"],
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(2),
+            expires: DateTime.UtcNow.AddHours(2),
             signingCredentials: credentials
             );
         

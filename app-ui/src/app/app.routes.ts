@@ -9,7 +9,7 @@ export const routes: Routes = [
   {
     path: '',
     component: EventListComponent,
-    data: { layout: LayoutType.Empty },
+    data: { layout: LayoutType.Main },
     canActivate: [CanActivateAuth]
   },
   {

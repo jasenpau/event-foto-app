@@ -3,8 +3,8 @@ import { InputFieldComponent } from '../../../components/forms/input-field/input
 import { ButtonComponent } from '../../../components/actions/button/button.component';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ButtonType } from '../../../components/actions/button/button.types';
-import { AuthService } from '../../../services/auth.service';
-import { LoginRequestDto } from '../../../services/auth.types';
+import { AuthService } from '../../../services/auth/auth.service';
+import { LoginRequestDto } from '../../../services/auth/auth.types';
 import { Subject, takeUntil, tap } from 'rxjs';
 import { AppError } from '../../../globals/errors';
 import { Router } from '@angular/router';

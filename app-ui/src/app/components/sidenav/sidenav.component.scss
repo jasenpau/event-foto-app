@@ -1,0 +1,35 @@
+@use "sass:color";
+@use "colors";
+@use "common/functions";
+
+.sidenav {
+  background: colors.$background-elevated;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__list-item {
+    display: block;
+    padding: 14px 32px;
+    border-bottom: 1px solid colors.$outline;
+    text-decoration: none;
+    color: colors.$foreground;
+    transition: background 150ms ease-in-out;
+    font-size: functions.rem-size(14px);
+
+    &:hover {
+      background: color.change(colors.$accent, $alpha: 0.1);
+    }
+
+    &--selected {
+      color: colors.$accent;
+      background: color.change(colors.$accent, $alpha: 0.1);
+    }
+  }
+}

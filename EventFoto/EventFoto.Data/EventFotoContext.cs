@@ -7,6 +7,7 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
 {
     public DbSet<User> Users { get; set; }
     public DbSet<UserCredential> UserCredentials { get; set; }
+    public DbSet<Event> Events { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -30,13 +31,22 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
 
         modelBuilder.Entity<UserCredential>(entity =>
         {
-            entity.ToTable("UserCredentials");
             entity.HasKey(u => u.Id);
             entity.Property(uc => uc.Type)
                 .IsRequired();
             entity.Property(uc => uc.HashedPassword)
                 .IsRequired(false)
                 .HasMaxLength(255);
+            entity.ToTable("UserCredentials");
+        });
+        
+        modelBuilder.Entity<Event>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(255);
+            entity.ToTable("Events");
         });
     }   
 }

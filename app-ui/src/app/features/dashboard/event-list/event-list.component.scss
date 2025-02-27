@@ -1,0 +1,37 @@
+@use "colors";
+
+.event-list {
+  max-width: 1200px;
+  padding-top: 24px;
+  margin: 0 auto;
+
+  &__title {
+    margin: 0;
+  }
+
+  &__header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 48px;
+  }
+
+  &__table {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+
+    td, th {
+      border-bottom: 1px solid colors.$outline;
+      padding: 16px 24px;
+    }
+  }
+
+  &__table-name {
+    width: 100%;
+  }
+
+  &__breadcrumbs {
+    height: 64px;
+  }
+}

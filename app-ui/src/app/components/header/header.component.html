@@ -1,0 +1,7 @@
+<header class="header">
+  <h1 class="header__title">EventFoto</h1>
+  <div class="header__actions">
+    <p class="header__user-email" *ngIf="currentUser">{{currentUser.email}}</p>
+    <app-button [type]="buttonType.Text" (click)="logout()">Atsijungti</app-button>
+  </div>
+</header>

@@ -5,4 +5,5 @@ public enum AppError
     UserNotFound,
     NoCredentials,
     InvalidCredentials,
+    ValidationFailed,
 }
