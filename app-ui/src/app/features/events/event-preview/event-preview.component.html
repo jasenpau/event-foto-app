@@ -1,0 +1,8 @@
+<div class="event-preview">
+  <div class="page-header">
+    <h2 class="text-headline-large no-margin">Nuotraukos</h2>
+  </div>
+  <div class="event-preview__image-list" *ngIf="imageUrls.length > 0">
+    <img *ngFor="let imageSrc of imageUrls" [ngSrc]="imageSrc" width="200" height="200" alt="photo"/>
+  </div>
+</div>

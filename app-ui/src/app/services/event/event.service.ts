@@ -19,4 +19,8 @@ export class EventService {
   createEvent(event: EventCreateDto): Observable<EventDto> {
     return this.http.post<EventDto>(`${ApiBaseUrl}/event`, event, getAuthHeaders());
   }
+
+  getEventPhotos(): Observable<string[]> {
+    return this.http.get<string[]>(`${ApiBaseUrl}/imaging/photos`, getAuthHeaders());
+  }
 }

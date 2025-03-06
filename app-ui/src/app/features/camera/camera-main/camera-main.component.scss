@@ -1,0 +1,25 @@
+.camera {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+
+  &__video {
+    max-width: 100vw;
+    max-height: 100vh;
+    margin: 0 auto;
+  }
+
+  &__canvas {
+    display: none;
+  }
+
+  &__controls {
+    position: absolute;
+    bottom: 32px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}

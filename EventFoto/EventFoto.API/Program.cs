@@ -7,6 +7,7 @@ using EventFoto.Data.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 
 namespace EventFoto.API;
@@ -36,6 +37,16 @@ public static class Program
         var app = builder.Build();
 
         // app.UseHttpsRedirection();
+        
+        var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+        if (!Directory.Exists(uploadsPath))
+            Directory.CreateDirectory(uploadsPath);
+
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(uploadsPath),
+            RequestPath = "/uploads"
+        });
         
         app.UseAuthentication();
         app.UseAuthorization();

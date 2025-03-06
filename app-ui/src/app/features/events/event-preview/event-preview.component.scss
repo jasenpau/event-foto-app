@@ -1,0 +1,14 @@
+.event-preview {
+
+  &__image-list {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+    }
+  }
+}

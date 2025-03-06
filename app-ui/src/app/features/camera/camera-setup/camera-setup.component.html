@@ -1,0 +1,7 @@
+<div>
+  <h3>Nustatymai</h3>
+  <select id="camera-select" [formControl]="cameraSelect">
+    <option *ngFor="let device of cameraDevices" [value]="device.deviceId">{{ device.label }}</option>
+  </select>
+  <app-button (click)="selectCamera()">Pasirinkti</app-button>
+</div>
