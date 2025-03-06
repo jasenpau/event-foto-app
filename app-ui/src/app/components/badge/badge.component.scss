@@ -1,0 +1,24 @@
+@use "typography";
+@use "colors";
+
+.badge {
+  @include typography.label-large;
+
+  padding: 6px 8px;
+  border-radius: 4px;
+
+  &--primary {
+    background-color: colors.$primary;
+    color: colors.$on-primary;
+  }
+
+  &--secondary {
+    background-color: colors.$secondary;
+    color: colors.$on-secondary;
+  }
+
+  &--tertiary {
+    background-color: colors.$tertiary;
+    color: colors.$on-tertiary;
+  }
+}

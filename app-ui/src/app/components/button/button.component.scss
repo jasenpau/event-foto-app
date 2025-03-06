@@ -1,0 +1,74 @@
+@use "sass:color";
+@use "../../../styles/colors";
+@use "../../../styles/functions";
+@use "../../../styles/typography";
+
+.button {
+  @include typography.label-large;
+
+  align-items: center;
+  background: none;
+  border: 0;
+  border-radius: 20px;
+  color: colors.$primary;
+  cursor: pointer;
+  display: flex;
+  font-family: typography.$font-family;
+  height: 40px;
+  justify-content: center;
+  padding: 8px 12px;
+
+  transition-property: background-color, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+
+  &--wide {
+    width: 100%;
+  }
+
+  &:disabled {
+    color: colors.$on-surface-disabled;
+    cursor: not-allowed;
+  }
+
+  &:hover:enabled {
+    background: color.change(colors.$primary, $alpha: 0.08);
+  }
+
+  &:focus:enabled,
+  &:active:enabled {
+    background: color.change(colors.$primary, $alpha: 0.12);
+  }
+
+
+  &--filled {
+    background-color: colors.$primary;
+    color: colors.$on-primary;
+    fill: colors.$on-primary;
+    padding: 8px 24px;
+
+    &:disabled {
+      background-color: colors.$primary-disabled;
+      color: colors.$on-surface-disabled;
+      cursor: not-allowed;
+    }
+
+    &:hover:enabled {
+      background: colors.$primary-hover;
+      box-shadow: colors.$elevation-1;
+    }
+
+    &:focus:enabled,
+    &:active:enabled {
+      background: colors.$primary-focus;
+    }
+  }
+
+  &--icon {
+    padding: 8px 24px 8px 16px;
+
+    app-svg-icon {
+      margin-right: 8px;
+    }
+  }
+}

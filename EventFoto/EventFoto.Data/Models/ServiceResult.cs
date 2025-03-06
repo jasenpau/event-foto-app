@@ -21,6 +21,5 @@ public record ServiceResult<T>
     {
         Success = false,
         Error = error,
-        
     };
 }

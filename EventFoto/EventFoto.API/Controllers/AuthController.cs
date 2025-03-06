@@ -2,7 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using EventFoto.API.Services;
+using EventFoto.Core.Authentication;
 using EventFoto.Data.DTOs;
 using EventFoto.Data.Enums;
 using EventFoto.Data.Models;
@@ -20,12 +20,10 @@ namespace EventFoto.API.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
-    private readonly IConfiguration _configuration;
 
-    public AuthController(IAuthService authService, IConfiguration configuration)
+    public AuthController(IAuthService authService)
     {
         _authService = authService;
-        _configuration = configuration;
     }
     
     [HttpPost("login")]
@@ -52,6 +50,31 @@ public class AuthController : ControllerBase
                 );
         }
 
+        return Problem(
+            title: AppErrorMessage.InternalError,
+            statusCode: StatusCodes.Status500InternalServerError
+        );
+    }
+
+    [HttpPost("register")]
+    public async Task<ActionResult<RegisterResponseDto>> Register([FromBody] RegisterRequestDto request)
+    {
+        var userCreateDetails = new UserCreateDetails
+        {
+            Name = request.Name,
+            Email = request.Email,
+        };
+        
+        var result = await _authService.RegisterPasswordAsync(userCreateDetails, request.Password);
+
+        if (result.Success)
+        {
+            return new RegisterResponseDto
+            {
+                Token = result.Data
+            };
+        }
+        
         return Problem(
             title: AppErrorMessage.InternalError,
             statusCode: StatusCodes.Status500InternalServerError

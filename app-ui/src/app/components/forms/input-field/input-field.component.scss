@@ -1,20 +1,19 @@
 @use "colors";
-@use "common/form-styles";
-@use "common/functions";
+@use "form-styles";
+@use "typography";
 
 .input-field {
   &__label {
-    font-size: functions.rem-size(14px);
+    @include typography.label-large;
+
     margin-bottom: 8px;
     display: block;
-    font-weight: bold;
-    color: colors.$foreground;
+    color: colors.$on-surface-variant;
   }
 
   &__input {
     @include form-styles.input-field;
 
     width: 100%;
-    box-sizing: border-box;
   }
 }

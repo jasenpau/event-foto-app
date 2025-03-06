@@ -4,8 +4,17 @@
       <a class="sidenav__list-item"
          [routerLink]="item.link"
          routerLinkActive="sidenav__list-item--selected">
+        <div class="sidenav__list-item-pill">
+          <app-svg-icon [iconSrc]="item.icon" />
+        </div>
         {{item.title}}
       </a>
     </li>
   </ul>
+  <button class="sidenav__list-item sidenav__logout" (click)="logout()">
+    <div class="sidenav__list-item-pill">
+      <app-svg-icon [iconSrc]="svgIconSrc.Logout" />
+    </div>
+    Atsijungti
+  </button>
 </nav>

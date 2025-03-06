@@ -1,0 +1,33 @@
+@use "colors";
+@use "functions";
+
+@mixin reset {
+  outline: none;
+  border: none;
+  background: transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+@mixin input-field {
+  @include reset;
+
+  background: transparent;
+  border-radius: 4px;
+  border: 1px solid colors.$outline;
+  font-size: functions.rem-size(16px);
+  line-height: 1.5;
+  padding: functions.rem-size(15px);
+  color: colors.$on-surface;
+
+  &:hover {
+    border-color: colors.$on-surface-variant;
+  }
+
+  &:focus {
+    border-color: colors.$primary;
+    border-width: 2px;
+    padding: functions.rem-size(14px);
+  }
+}

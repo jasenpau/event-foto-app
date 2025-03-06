@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { ButtonComponent } from '../actions/button/button.component';
+import { ButtonComponent } from '../button/button.component';
 import { AuthService } from '../../services/auth/auth.service';
 import { User } from '../../services/auth/auth.types';
-import { ButtonType } from '../actions/button/button.types';
+import { ButtonType } from '../button/button.types';
 import { NgIf } from '@angular/common';
 
 @Component({

@@ -2,8 +2,9 @@
 
 .center-layout {
   margin: 64px auto 0;
-  background: colors.$background-elevated;
+  background: colors.$white;
   border: 1px solid colors.$outline;
-  padding: 24px 48px;
-  max-width: 400px;
+  border-radius: 24px;
+  padding: 24px;
+  max-width: 460px;
 }

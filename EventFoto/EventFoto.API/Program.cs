@@ -1,11 +1,11 @@
 using System.Text;
 using EventFoto.API.Filters;
-using EventFoto.API.Services;
+using EventFoto.Core.Authentication;
+using EventFoto.Core.Events;
 using EventFoto.Data;
 using EventFoto.Data.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 

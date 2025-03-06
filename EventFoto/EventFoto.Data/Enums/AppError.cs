@@ -6,4 +6,5 @@ public enum AppError
     NoCredentials,
     InvalidCredentials,
     ValidationFailed,
+    UserCreationFailed,
 }

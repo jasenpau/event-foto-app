@@ -17,7 +17,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\EventFoto.Core\EventFoto.Core.csproj" />
       <ProjectReference Include="..\EventFoto.Data\EventFoto.Data.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Services\" />
     </ItemGroup>
 
 </Project>

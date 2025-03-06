@@ -1,8 +1,41 @@
 @use 'sass:color';
 
+$white: #fff;
+$surface: #fefbfe;
+$surface-tint-3: #eaeaf1;
+$on-surface: #1b1b1d;
+$on-surface-variant: #45464c;
+$primary-container: #d9e2ff;
+$primary-on-container: #001944;
+$outline: #76777c;
+$primary: #365ca8;
+$on-primary: #fff;
+$secondary: #575e71;
+$on-secondary: #fff;
+$tertiary: #725572;
+$on-tertiary: #fff;
+
+$primary-hover: linear-gradient(
+    0deg,
+    rgb(255 255 255 / 8%),
+    rgb(255 255 255 / 8%)
+  ),
+  $primary;
+$primary-disabled: #365ca81f;
+$primary-focus: linear-gradient(
+    0deg,
+    rgb(255 255 255 / 12%),
+    rgb(255 255 255 / 12%)
+  ),
+  $primary;
+$on-surface-disabled: #1b1b1d61;
+
+$elevation-1: 0 1px 2px rgb(0 0 0 / 30%), 0 1px 3px 1px rgb(0 0 0 / 15%);
+
+// Legacy colors
 $blue: #4199d0;
 $red: #f93943;
-$white: #fff;
+
 
 $background-elevated: #fff;
 $background: #eeeeee;
@@ -17,5 +50,5 @@ $accent-outline: #79bce7;
 
 $error: $red;
 
-$outline: #bfbfbf;
+//$outline: #bfbfbf;
 $outline-hover: #999999;

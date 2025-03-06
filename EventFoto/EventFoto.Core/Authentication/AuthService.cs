@@ -6,9 +6,10 @@ using EventFoto.Data.Enums;
 using EventFoto.Data.Models;
 using EventFoto.Data.Repositories;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace EventFoto.API.Services;
+namespace EventFoto.Core.Authentication;
 
 public class AuthService : IAuthService
 {
@@ -40,7 +41,34 @@ public class AuthService : IAuthService
         return ServiceResult<string>.Ok(token);
 
     }
-    
+
+    public async Task<ServiceResult<string>> RegisterPasswordAsync(UserCreateDetails userDetails, string password)
+    {
+        var passwordHash = HashPassword(password);
+        var newUser = new User
+        {
+            Email = userDetails.Email,
+            Name = userDetails.Name,
+            Credentials = new List<UserCredential>
+            {
+                new()
+                {
+                    Type = CredentialType.Password,
+                    HashedPassword = passwordHash,
+                }
+            }
+        };
+        
+        var result = await _userRepository.CreateUserAsync(newUser);
+        if (result is not null && result.Id > 0)
+        {
+            var token = GenerateToken(result);
+            return ServiceResult<string>.Ok(token);
+        }
+
+        return ServiceResult<string>.Fail(AppError.UserCreationFailed);
+    }
+
     private string GenerateToken(User user)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));

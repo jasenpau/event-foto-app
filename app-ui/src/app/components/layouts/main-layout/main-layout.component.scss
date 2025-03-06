@@ -2,22 +2,24 @@
 
 .main-layout {
   display: grid;
-  grid-template-columns: 250px 1fr;
+  grid-template-columns: 80px 1fr;
   grid-template-rows: 64px 1fr;
   min-height: 100vh;
 
-  &__header {
-    grid-column: 1 / 3;
-    border-bottom: 1px solid colors.$outline;
-  }
-
-  //&__sidenav {
-  //  grid-column: 1 / 2;
-  //  grid-row: 2 / 3;
-  //  border-right: 1px solid colors.$outline;
+  //&__header {
+  //  grid-column: 1 / 3;
+  //  border-bottom: 1px solid colors.$outline;
   //}
 
+  &__sidenav {
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+    border-right: 1px solid colors.$outline;
+  }
+
   &__content {
-    grid-column: 1 / 3;
+    padding: 32px 40px 0;
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
   }
 }

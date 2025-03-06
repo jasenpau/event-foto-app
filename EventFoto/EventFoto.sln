@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventFoto.Data", "EventFoto.Data\EventFoto.Data.csproj", "{00649701-3D0F-45A9-9194-3BFF9443F817}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventFoto.Core", "EventFoto.Core\EventFoto.Core.csproj", "{C3468BB5-26A8-4D6B-BB3F-888CC4E4721C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,5 +27,9 @@ Global
 		{00649701-3D0F-45A9-9194-3BFF9443F817}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00649701-3D0F-45A9-9194-3BFF9443F817}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00649701-3D0F-45A9-9194-3BFF9443F817}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3468BB5-26A8-4D6B-BB3F-888CC4E4721C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3468BB5-26A8-4D6B-BB3F-888CC4E4721C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3468BB5-26A8-4D6B-BB3F-888CC4E4721C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3468BB5-26A8-4D6B-BB3F-888CC4E4721C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,5 +1,5 @@
 using EventFoto.API.Extensions;
-using EventFoto.API.Services;
+using EventFoto.Core.Events;
 using EventFoto.Data.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,7 +1,7 @@
 using EventFoto.Data.DTOs;
 using EventFoto.Data.Models;
 
-namespace EventFoto.API.Services;
+namespace EventFoto.Core.Events;
 
 public interface IEventService
 {

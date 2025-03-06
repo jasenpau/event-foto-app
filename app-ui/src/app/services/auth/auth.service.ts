@@ -27,6 +27,11 @@ export class AuthService {
       }
     }
 
+    // Check if auth token is expired
+    if (this.currentUser && Date.now() > this.currentUser?.tokenValidUntil * 1000)  {
+      this.currentUser = null;
+    }
+
     return this.currentUser;
   }
 

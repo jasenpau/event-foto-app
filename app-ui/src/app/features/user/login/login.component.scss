@@ -1,4 +1,4 @@
-@use "common/typography";
+@use "typography";
 @use "colors";
 
 .login-form {
@@ -7,7 +7,8 @@
   gap: 16px;
 
   &__notice {
-    @include typography.notice;
+    color: colors.$on-surface-variant;
+    margin: 0;
   }
 
   &__error {

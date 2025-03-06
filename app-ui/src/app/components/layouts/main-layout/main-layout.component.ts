@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { HeaderComponent } from '../../header/header.component';
+import { SidenavComponent } from '../../sidenav/sidenav.component';
 
 @Component({
   selector: 'app-main-layout',
-  imports: [HeaderComponent],
+  imports: [SidenavComponent],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',
 })

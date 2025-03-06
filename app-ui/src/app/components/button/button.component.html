@@ -1,0 +1,9 @@
+<button class="button type-label-medium" [ngClass]="{
+  'button--wide': size === buttonSize.Wide,
+  'button--filled': type === buttonType.Filled,
+  'button--text': type === buttonType.Text,
+  'button--icon': !!icon
+}">
+  <app-svg-icon *ngIf="icon" [iconSrc]="icon" [size]="iconSize" />
+  <ng-content />
+</button>

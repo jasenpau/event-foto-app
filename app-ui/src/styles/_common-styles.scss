@@ -1,0 +1,33 @@
+@use "colors";
+@use "typography";
+
+.no-margin {
+  margin: 0;
+}
+
+.table {
+  text-align: left;
+  border-collapse: collapse;
+
+  td, th {
+    @include typography.body-medium;
+
+    padding-left: 32px;
+    height: 56px;
+    border-bottom: 1px solid colors.$outline;
+  }
+
+  th {
+    @include typography.label-large;
+  }
+}
+
+td.table__pad-row-start,
+th.table__pad-row-start {
+  padding-left: 64px;
+}
+
+td.table__pad-row-end,
+th.table__pad-row-end {
+  padding-right: 64px;
+}

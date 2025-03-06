@@ -2,7 +2,7 @@ using EventFoto.Data.DTOs;
 using EventFoto.Data.Models;
 using EventFoto.Data.Repositories;
 
-namespace EventFoto.API.Services;
+namespace EventFoto.Core.Events;
 
 public class EventService : IEventService
 {
