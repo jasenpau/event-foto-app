@@ -1,9 +1,10 @@
 @use "sass:color";
-@use "../../../styles/colors";
-@use "../../../styles/functions";
-@use "../../../styles/typography";
+@use "colors";
+@use "functions";
+@use "typography";
 
-.button {
+a.button,
+button.button {
   @include typography.label-large;
 
   align-items: center;
@@ -12,8 +13,9 @@
   border-radius: 20px;
   color: colors.$primary;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   font-family: typography.$font-family;
+  text-decoration: none;
   height: 40px;
   justify-content: center;
   padding: 8px 12px;

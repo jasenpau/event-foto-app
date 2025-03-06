@@ -8,10 +8,11 @@ import { NgForOf, NgIf } from '@angular/common';
 import { SvgIconSrc } from '../../../components/svg-icon/svg-icon.types';
 import { BadgeComponent } from '../../../components/badge/badge.component';
 import { BadgeType } from '../../../components/badge/badge.types';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-event-list',
-  imports: [ButtonComponent, NgForOf, BadgeComponent, NgIf],
+  imports: [ButtonComponent, NgForOf, BadgeComponent, NgIf, RouterLink],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',
 })

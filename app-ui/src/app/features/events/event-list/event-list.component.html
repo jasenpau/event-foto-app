@@ -1,14 +1,14 @@
 <div class="event-list">
-  <div class="event-list__header">
-    <h2 class="event-list__title text-headline-large no-margin">Renginiai</h2>
-    <app-button [icon]="buttonIcon.Add">Sukurti renginį</app-button>
+  <div class="page-header">
+    <h2 class="text-headline-large no-margin">Renginiai</h2>
+    <app-button [icon]="buttonIcon.Add" routerLink="/event/create">Sukurti renginį</app-button>
   </div>
   <table class="event-list__table table">
     <tr>
       <th class="event-list__table-name table__pad-row-start">Pavadinimas</th>
       <th>Būsena</th>
       <th>Nuotraukos</th>
-      <th class="event-list__table-action table__pad-row-end"></th>
+      <th class="table__pad-row-end"></th>
     </tr>
     <tr *ngFor="let event of events">
       <td class="event-list__table-name table__pad-row-start">{{event.name}}</td>
@@ -17,7 +17,7 @@
         <app-badge *ngIf="!event.isArchived" [type]="badgeType.Primary">Aktyvus</app-badge>
       </td>
       <td>0</td>
-      <td class="event-list__table-action table__pad-row-end">
+      <td class="table__pad-row-end">
         <app-button [type]="buttonType.Text">Peržiūrėti</app-button>
       </td>
     </tr>

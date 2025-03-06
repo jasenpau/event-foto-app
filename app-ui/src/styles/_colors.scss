@@ -14,6 +14,7 @@ $secondary: #575e71;
 $on-secondary: #fff;
 $tertiary: #725572;
 $on-tertiary: #fff;
+$error: #BA1A1A;
 
 $primary-hover: linear-gradient(
     0deg,
@@ -48,7 +49,7 @@ $accent-dark: color.adjust($accent, $lightness: -10%);
 $accent-hover: color.adjust($accent, $lightness: 4%);
 $accent-outline: #79bce7;
 
-$error: $red;
+
 
 //$outline: #bfbfbf;
 $outline-hover: #999999;

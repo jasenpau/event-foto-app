@@ -1,6 +1,7 @@
 @use "colors";
 @use "form-styles";
 @use "typography";
+@use "functions";
 
 .input-field {
   &__label {
@@ -15,5 +16,21 @@
     @include form-styles.input-field;
 
     width: 100%;
+
+    &.ng-touched.ng-invalid {
+      border-width: 2px;
+      border-color: colors.$error;
+      padding: functions.rem-size(14px);
+    }
+  }
+
+  &__supporting-text {
+    margin: 8px 0 0;
+    color: colors.$on-surface-variant;
+    min-height: functions.rem-size(16px);
+
+    &--error {
+      color: colors.$error;
+    }
   }
 }

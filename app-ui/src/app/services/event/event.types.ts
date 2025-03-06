@@ -5,6 +5,10 @@ export interface EventData {
   createdAt: Date;
 }
 
+export interface EventCreateDto {
+  name: string;
+}
+
 export interface EventDto {
   id: number;
   name: string;

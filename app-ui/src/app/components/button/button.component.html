@@ -1,9 +1,28 @@
-<button class="button type-label-medium" [ngClass]="{
+<a *ngIf="routerLink"
+   [routerLink]="routerLink"
+   class="button type-label-medium"
+   [ngClass]="{
   'button--wide': size === buttonSize.Wide,
   'button--filled': type === buttonType.Filled,
   'button--text': type === buttonType.Text,
   'button--icon': !!icon
 }">
+  <ng-container *ngTemplateOutlet="innerContent"></ng-container>
+</a>
+
+<button *ngIf="!routerLink"
+        class="button type-label-medium"
+        [ngClass]="{
+  'button--wide': size === buttonSize.Wide,
+  'button--filled': type === buttonType.Filled,
+  'button--text': type === buttonType.Text,
+  'button--icon': !!icon
+}">
+  <ng-container *ngTemplateOutlet="innerContent"></ng-container>
+</button>
+
+
+<ng-template #innerContent>
   <app-svg-icon *ngIf="icon" [iconSrc]="icon" [size]="iconSize" />
   <ng-content />
-</button>
+</ng-template>

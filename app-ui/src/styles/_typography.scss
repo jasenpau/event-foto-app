@@ -8,10 +8,22 @@ $weight-regular: 400;
 $weight-medium: 500;
 $weight-bold: 700;
 
+@mixin body-small {
+  font-size: functions.rem-size(12px);
+  font-weight: $weight-regular;
+  line-height: functions.rem-size(16px);
+}
+
 @mixin body-medium {
   font-size: functions.rem-size(14px);
   font-weight: $weight-regular;
   line-height: functions.rem-size(20px);
+}
+
+@mixin body-large {
+  font-size: functions.rem-size(16px);
+  font-weight: $weight-regular;
+  line-height: functions.rem-size(24px);
 }
 
 @mixin label-medium {
@@ -38,8 +50,17 @@ $weight-bold: 700;
   line-height: 1.25;
 }
 
+.text-body-small {
+  @include body-small;
+}
+
+
 .text-body-medium {
   @include body-medium;
+}
+
+.text-body-large {
+  @include body-large;
 }
 
 .text-label-medium {

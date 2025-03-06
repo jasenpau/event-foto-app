@@ -6,11 +6,6 @@
   grid-template-rows: 64px 1fr;
   min-height: 100vh;
 
-  //&__header {
-  //  grid-column: 1 / 3;
-  //  border-bottom: 1px solid colors.$outline;
-  //}
-
   &__sidenav {
     grid-column: 1 / 2;
     grid-row: 1 / 3;

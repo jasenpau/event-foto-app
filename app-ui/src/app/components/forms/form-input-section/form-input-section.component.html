@@ -1,0 +1,9 @@
+<div class="form-input-section">
+  <div>
+    <label [for]="inputId" class="text-title-medium">{{label}}</label>
+    <p *ngIf="description" class="form-input-section__description text-body-medium">{{description}}</p>
+  </div>
+  <div>
+    <ng-content />
+  </div>
+</div>

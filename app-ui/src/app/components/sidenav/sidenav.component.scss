@@ -62,9 +62,9 @@
   &__logout {
     @include form-styles.reset;
 
-    margin-top: auto;
     background: none;
     border: none;
     cursor: pointer;
+    margin-bottom: 0;
   }
 }

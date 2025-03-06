@@ -1,0 +1,12 @@
+<div class="create-event">
+  <div class="page-header">
+    <h2 class="text-headline-large no-margin">Naujas renginys</h2>
+    <app-button [type]="buttonType.Text" routerLink="/event">Atšaukti</app-button>
+  </div>
+  <form [formGroup]="createEventForm" (ngSubmit)="onSubmit()">
+    <app-form-input-section inputId="name" label="Pavadinimas" description="Renginio pavadinimas atvaizduojamas sistemoje">
+      <app-input-field id="name" formControlName="name" />
+    </app-form-input-section>
+    <app-button>Sukurti</app-button>
+  </form>
+</div>

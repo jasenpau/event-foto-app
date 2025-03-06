@@ -2,21 +2,10 @@
 @use "functions";
 
 .header {
-  background: colors.$background-elevated;
+  background: colors.$surface;
   display: flex;
   height: 100%;
   justify-content: space-between;
   align-items: center;
   padding: 0 32px;
-
-  &__title {
-    margin: 0;
-    font-size: functions.rem-size(24px);
-  }
-
-  &__actions {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
 }
