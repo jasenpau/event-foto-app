@@ -42,6 +42,7 @@ export class RootComponent implements OnInit, OnDestroy {
                   'No layout specified for route',
                   routeSnapshot.title,
                 );
+                console.log(routeSnapshot.url[0]);
               }
             }
           }

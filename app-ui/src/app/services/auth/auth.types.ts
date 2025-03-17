@@ -15,12 +15,18 @@ export interface LoginResult {
 export interface TokenPayload {
   iss: string
   exp: number,
-  userId: string,
-  sub: string,
+  oid: string,
+  name: string
 }
 
 export interface User {
+  name: string,
   email: string,
-  id: number,
-  tokenValidUntil: number,
+  uniqueId: string,
+  tokenValidUntil: Date,
+}
+
+export enum LoginType {
+  EmailPassword = 'email-password',
+  MSAL = 'msal'
 }

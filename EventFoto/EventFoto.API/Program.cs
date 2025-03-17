@@ -66,6 +66,8 @@ public static class Program
 
     private static void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
     {
+        var multiIssuerHelper = new MultiIssuerHelper(configuration);
+        
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -75,9 +77,10 @@ public static class Program
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidIssuers = multiIssuerHelper.GetIssuers(),
                     //ValidAudience = configuration["Jwt:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+                    LogValidationExceptions = true,
+                    IssuerSigningKeyResolver = multiIssuerHelper.IssuerSigningKeyResolver
                 };
             });
 

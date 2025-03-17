@@ -9,5 +9,7 @@ public record UserCredential
     public CredentialType Type { get; init; }
     public string HashedPassword { get; init; }
     
+    public Guid? EntraObjectId { get; init; }
+    
     public User User { get; init; }
 }

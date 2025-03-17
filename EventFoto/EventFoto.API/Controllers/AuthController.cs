@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using EventFoto.API.Extensions;
 using EventFoto.Core.Authentication;
 using EventFoto.Data.DTOs;
 using EventFoto.Data.Enums;
@@ -10,13 +11,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 
 namespace EventFoto.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[AllowAnonymous]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
@@ -27,6 +28,7 @@ public class AuthController : ControllerBase
     }
     
     [HttpPost("login")]
+    [AllowAnonymous]
     public async Task<ActionResult<LoginResponseDto>> Login([FromBody] LoginRequestDto request)
     {
         var result = await _authService.LoginAsync(request.Email, request.Password);
@@ -57,6 +59,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
+    [AllowAnonymous]
     public async Task<ActionResult<RegisterResponseDto>> Register([FromBody] RegisterRequestDto request)
     {
         var userCreateDetails = new UserCreateDetails
@@ -79,5 +82,24 @@ public class AuthController : ControllerBase
             title: AppErrorMessage.InternalError,
             statusCode: StatusCodes.Status500InternalServerError
         );
+    }
+
+    [HttpGet("entra-status")]
+    public async Task<ActionResult<EntraStatusResponseDto>> EntraStatus()
+    {
+        var userIdString = HttpContext.User.FindFirst(AppClaims.UserId)?.Value;
+        var hasId = int.TryParse(userIdString, out var userId);
+        if (hasId)
+        {
+            // return userId;
+        }
+        
+        var objectIdString = HttpContext.User.FindFirst(ClaimConstants.ObjectId)?.Value;
+        var hasObjectId = Guid.TryParse(objectIdString, out var objectId);
+
+        return new EntraStatusResponseDto
+        {
+            EntraStatus = "not-found"
+        };
     }
 }

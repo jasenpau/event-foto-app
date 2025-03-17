@@ -9,9 +9,12 @@ export class CanActivateAuth implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(): MaybeAsync<GuardResult> {
+    console.log('guard triggered');
     if (this.authService.getCurrentUser()) {
       return true;
     }
+
+    console.log('navigating to login, cuz no user');
 
     const loginPath = this.router.parseUrl('/login');
     return new RedirectCommand(loginPath, {

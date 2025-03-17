@@ -1,5 +1,6 @@
 using System.Security.Authentication;
 using EventFoto.Data.Enums;
+using Microsoft.Identity.Web;
 
 namespace EventFoto.API.Extensions;
 
@@ -9,12 +10,13 @@ public static class HttpContextExtensions
     {
         var userIdString = httpContext.User.FindFirst(AppClaims.UserId)?.Value;
         var hasId = int.TryParse(userIdString, out var userId);
-        
-        if (!hasId)
+        if (hasId)
         {
-            throw new AuthenticationException("Invalid user id");
+            return userId;
         }
+        
+        var objectId = httpContext.User.FindFirst(ClaimConstants.ObjectId)?.Value;
 
-        return userId;
+        throw new AuthenticationException("Invalid user id");
     }
 }

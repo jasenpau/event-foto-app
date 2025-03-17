@@ -14,15 +14,12 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.Identity.Web" Version="3.8.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\EventFoto.Core\EventFoto.Core.csproj" />
       <ProjectReference Include="..\EventFoto.Data\EventFoto.Data.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Services\" />
     </ItemGroup>
 
 </Project>

@@ -56,6 +56,10 @@ export class LoginComponent implements OnDestroy {
       .subscribe();
   };
 
+  async msalLogin() {
+    await this.authService.msalLogin();
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

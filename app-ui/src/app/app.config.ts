@@ -10,6 +10,6 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideHttpClient(),
     provideRouter(routes),
-    provideAngularSvgIcon()
+    provideAngularSvgIcon(),
   ],
 };
