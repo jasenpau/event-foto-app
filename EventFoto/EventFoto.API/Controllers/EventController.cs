@@ -1,6 +1,7 @@
-using EventFoto.API.Extensions;
+using EventFoto.API.Filters;
 using EventFoto.Core.Events;
 using EventFoto.Data.DTOs;
+using EventFoto.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,6 +29,7 @@ public class EventController : AppControllerBase
     }
     
     [HttpPost]
+    [AccessGroupFilter(UserGroup.EventAdmin)]
     public async Task<ActionResult<EventDto>> CreateEvent([FromBody] CreateEventDto createEventDto)
     {
         var userId = RequestUserId();

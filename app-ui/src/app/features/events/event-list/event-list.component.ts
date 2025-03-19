@@ -10,6 +10,8 @@ import { BadgeComponent } from '../../../components/badge/badge.component';
 import { BadgeType } from '../../../components/badge/badge.types';
 import { RouterLink } from '@angular/router';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
+import { UserService } from '../../../services/user/user.service';
+import { UserGroup } from '../../../globals/userGroups';
 
 @Component({
   selector: 'app-event-list',
@@ -17,14 +19,22 @@ import { DisposableComponent } from '../../../components/disposable/disposable.c
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',
 })
-export class EventListComponent extends DisposableComponent implements OnInit, OnDestroy {
-
+export class EventListComponent
+  extends DisposableComponent
+  implements OnInit, OnDestroy
+{
   buttonType = ButtonType;
   buttonIcon = SvgIconSrc;
   badgeType = BadgeType;
-  events: EventData[] = [];
 
-  constructor(private eventService: EventService) {
+  events: EventData[] = [];
+  userGroups: UserGroup[] = [];
+  showCreateEvent = false;
+
+  constructor(
+    private eventService: EventService,
+    private userService: UserService,
+  ) {
     super();
   }
 
@@ -38,5 +48,20 @@ export class EventListComponent extends DisposableComponent implements OnInit, O
         takeUntil(this.destroy$),
       )
       .subscribe();
+
+    this.userService
+      .userGroups()
+      .pipe(
+        tap((groups) => {
+          this.userGroups = groups;
+          this.updateViewPermissions();
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+  }
+
+  private updateViewPermissions() {
+    this.showCreateEvent = this.userGroups.includes(UserGroup.EventAdmin);
   }
 }

@@ -1,4 +1,6 @@
 using System.Security.Authentication;
+using EventFoto.API.Providers;
+using EventFoto.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web;
 

@@ -2,23 +2,33 @@ import { Injectable } from '@angular/core';
 import { CanActivate, GuardResult, MaybeAsync, RedirectCommand, Router } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
 import { UserService } from '../services/user/user.service';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CanActivateAuth implements CanActivate {
+export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService,
               private userService: UserService,
               private router: Router) {}
 
   canActivate(): MaybeAsync<GuardResult> {
-    if (this.authService.getUserTokenData()) {
-      return true;
+    const isLoggedIn = this.authService.getUserTokenData() !== null;
+    if (!isLoggedIn) {
+      const loginPath = this.router.parseUrl('/login');
+      return new RedirectCommand(loginPath, {
+        skipLocationChange: true
+      })
     }
 
-    const loginPath = this.router.parseUrl('/login');
-    return new RedirectCommand(loginPath, {
-      skipLocationChange: true
-    })
+    if (this.userService.getCurrentUserData() !== null) {
+      return this.userService.fetchCurrentUserData()
+        .pipe(map((data) => {
+          console.log('is user data loaded', 'yes');
+          return Boolean(data);
+        }));
+    }
+
+    return true;
   }
 }

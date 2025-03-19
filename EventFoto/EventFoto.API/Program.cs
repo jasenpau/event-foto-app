@@ -1,4 +1,5 @@
 using EventFoto.API.Filters;
+using EventFoto.API.Providers;
 using EventFoto.Core.Events;
 using EventFoto.Core.Users;
 using EventFoto.Data;
@@ -56,6 +57,8 @@ public static class Program
 
     private static void ConfigureServices(IServiceCollection services)
     {
+        services.AddSingleton<IGroupSettingsProvider, GroupSettingsProvider>();
+        
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IEventRepository, EventRepository>();
         

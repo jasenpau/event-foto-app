@@ -39,7 +39,7 @@ export class AuthService {
     });
   }
 
-  getUserTokenData() {
+  getUserTokenData(): User | null {
     if (!this.currentUser) {
       const token = this.getToken();
       if (!token) return null;
@@ -88,6 +88,7 @@ export class AuthService {
         email: decodedToken.email ?? '',
         uniqueId: decodedToken.oid,
         tokenValidUntil: new Date(decodedToken.exp * 1000),
+        groups: decodedToken.groups ?? [],
       };
     } catch (error) {
       console.error('Invalid JWT token', error);

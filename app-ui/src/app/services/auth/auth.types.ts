@@ -4,6 +4,7 @@ export interface TokenPayload {
   oid: string,
   name: string,
   email?: string,
+  groups?: string[],
 }
 
 export interface User {
@@ -11,4 +12,5 @@ export interface User {
   email: string,
   uniqueId: string,
   tokenValidUntil: Date,
+  groups: string[],
 }
