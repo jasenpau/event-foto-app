@@ -13,7 +13,7 @@ public class EventRepository : IEventRepository
         _context = context;
     }
 
-    public async Task<IList<Event>> GetAllEventsByUser(int userId)
+    public async Task<IList<Event>> GetAllEventsByUser(Guid userId)
     {
         return await Events.Where(e => e.CreatedBy == userId).ToListAsync();
     }

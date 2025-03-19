@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EventFoto.Data.Migrations
 {
     [DbContext(typeof(EventFotoContext))]
-    [Migration("20250226230933_Events")]
-    partial class Events
+    [Migration("20250318011606_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,8 +33,8 @@ namespace EventFoto.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
@@ -49,16 +49,16 @@ namespace EventFoto.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedBy");
+
                     b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("EventFoto.Data.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -78,43 +78,13 @@ namespace EventFoto.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("EventFoto.Data.Models.UserCredential", b =>
+            modelBuilder.Entity("EventFoto.Data.Models.Event", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("HashedPassword")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserCredentials", (string)null);
-                });
-
-            modelBuilder.Entity("EventFoto.Data.Models.UserCredential", b =>
-                {
-                    b.HasOne("EventFoto.Data.Models.User", "User")
-                        .WithMany("Credentials")
-                        .HasForeignKey("UserId")
+                    b.HasOne("EventFoto.Data.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("CreatedBy")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("EventFoto.Data.Models.User", b =>
-                {
-                    b.Navigation("Credentials");
                 });
 #pragma warning restore 612, 618
         }

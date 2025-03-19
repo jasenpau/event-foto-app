@@ -1,41 +1,59 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth/auth.service';
-import { Subject, takeUntil, tap } from 'rxjs';
+import { takeUntil, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { UserService } from '../../../services/user/user.service';
+import { RegisterComponent } from '../register/register.component';
+import { NgIf } from '@angular/common';
+import { DisposableComponent } from '../../../components/disposable/disposable.component';
+import { handleApiError } from '../../../helpers/handleApiError';
+import { AppError } from '../../../globals/errors';
 
 @Component({
   selector: 'app-login-redirect',
-  imports: [],
-  template: '<p>login-redirect works!</p>',
+  imports: [RegisterComponent, NgIf],
+  template: '<app-register *ngIf="showRegisterForm" />',
 })
-export class LoginRedirectComponent implements OnInit, OnDestroy {
-  private destroy$: Subject<void> = new Subject<void>();
+export class LoginRedirectComponent extends DisposableComponent implements OnInit, OnDestroy {
+  showRegisterForm = false;
 
   // Inject auth service to handle token redirect
   constructor(
     private authService: AuthService,
+    private userService: UserService,
     private router: Router,
   ) {
+    super();
   }
 
   ngOnInit() {
     this.authService.tokenEvents
       .pipe(
         tap((event) => {
-          console.log('token event:', event)
           if (event === 'received') {
-            console.log('token received succ');
-            this.router.navigate(['/']);
+            this.triggerUserCheck();
           }
         }),
         takeUntil(this.destroy$),
       )
       .subscribe();
-    console.log('current user', this.authService.getCurrentUser());
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+  private triggerUserCheck(): void {
+    this.userService.fetchCurrentUserData()
+    .pipe(
+      tap((exists) => {
+        if (exists) {
+          this.router.navigate(['/']);
+        }
+      }),
+      handleApiError(error => {
+        if (error.title === AppError.UserNotFound) {
+          this.showRegisterForm = true;
+        }
+      }),
+      takeUntil(this.destroy$),
+    )
+    .subscribe();
   }
 }

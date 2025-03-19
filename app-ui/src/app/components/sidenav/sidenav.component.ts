@@ -4,9 +4,7 @@ import { NgForOf } from '@angular/common';
 import { AppSvgIconComponent } from '../svg-icon/app-svg-icon.component';
 import { SvgIconSrc } from '../svg-icon/svg-icon.types';
 import { User } from '../../services/auth/auth.types';
-import { ButtonType } from '../button/button.types';
 import { AuthService } from '../../services/auth/auth.service';
-import { ButtonComponent } from '../button/button.component';
 
 interface SidenavItem {
   title: string;
@@ -35,10 +33,10 @@ export class SidenavComponent {
   currentUser: User | null = null;
 
   constructor(private authService: AuthService) {
-    this.currentUser = this.authService.getCurrentUser();
+    this.currentUser = this.authService.getUserTokenData();
   }
 
   logout() {
-    this.authService.logout();
+    this.authService.msalLogout();
   }
 }

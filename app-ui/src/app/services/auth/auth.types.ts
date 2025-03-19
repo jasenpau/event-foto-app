@@ -1,22 +1,9 @@
-export interface LoginRequestDto {
-  email: string,
-  password: string,
-}
-
-export interface LoginResponseDto {
-  token: string,
-}
-
-export interface LoginResult {
-  success: boolean,
-  error?: string,
-}
-
 export interface TokenPayload {
   iss: string
   exp: number,
   oid: string,
-  name: string
+  name: string,
+  email?: string,
 }
 
 export interface User {
@@ -24,9 +11,4 @@ export interface User {
   email: string,
   uniqueId: string,
   tokenValidUntil: Date,
-}
-
-export enum LoginType {
-  EmailPassword = 'email-password',
-  MSAL = 'msal'
 }

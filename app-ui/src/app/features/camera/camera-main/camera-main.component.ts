@@ -1,9 +1,8 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { CameraSetupComponent } from '../camera-setup/camera-setup.component';
 import { NgIf } from '@angular/common';
 import { ButtonComponent } from '../../../components/button/button.component';
 import { ImagingService } from '../../../services/imaging/imaging.service';
-import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-camera-main',

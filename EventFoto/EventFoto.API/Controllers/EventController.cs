@@ -9,7 +9,7 @@ namespace EventFoto.API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class EventController : ControllerBase
+public class EventController : AppControllerBase
 {
     private readonly IEventService _eventService;
 
@@ -21,7 +21,7 @@ public class EventController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<EventDto[]>> GetAllEvents()
     {
-        var userId = HttpContext.RequestUserId();
+        var userId = RequestUserId();
         var events = await _eventService.GetAllEventsByUser(userId);
         var eventDtos = events.Data.Select(EventDto.FromEvent).ToArray();
         return Ok(eventDtos);
@@ -30,7 +30,7 @@ public class EventController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<EventDto>> CreateEvent([FromBody] CreateEventDto createEventDto)
     {
-        var userId = HttpContext.RequestUserId();
+        var userId = RequestUserId();
         var createdEvent = await _eventService.CreateEventAsync(createEventDto, userId);
         return EventDto.FromEvent(createdEvent.Data);
     }

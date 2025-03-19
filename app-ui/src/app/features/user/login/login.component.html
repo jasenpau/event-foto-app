@@ -1,14 +1,5 @@
-<form class="login-form" [formGroup]="form" (ngSubmit)="login()">
+<div class="login-form">
   <h3 class="text-title-large no-margin">Prisijungimas</h3>
-  <app-input-field id="email" label="El. paštas" formControlName="email" />
-  <app-input-field
-    id="password"
-    label="Slaptažodis"
-    type="password"
-    formControlName="password"
-  />
-  <p class="login-form__error" *ngIf="loginError">{{loginError}}</p>
-  <app-button [type]="buttonType" [size]="buttonSize">Prisijungti</app-button>
-  <a (click)="msalLogin()">Prisijungti su Microsoft</a>
+  <app-button [type]="buttonType" [size]="buttonSize" (click)="msalLogin()">Prisijungti su Microsoft</app-button>
   <p class="login-form__notice text-body-medium">Neturite paskyros? <a href="mailto:paulius.jasenas@ktu.edu">Susisiekite</a> su sistemos administratoriumi ir paprašykite prieigos.</p>
-</form>
+</div>

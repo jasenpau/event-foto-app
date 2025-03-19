@@ -1,0 +1,7 @@
+<form [formGroup]="form" (ngSubmit)="register()" class="register-form">
+  <h3 class="text-title-large no-margin">Registracija</h3>
+  <p class="text-body-medium no-margin">Pateikite šiek tiek informacijos apie save.</p>
+  <app-input-field id="name" formControlName="name" label="Vardas" />
+  <app-input-field id="email" formControlName="email" label="El. paštas" />
+  <app-button [type]="buttonType" [size]="buttonSize">Pateikti</app-button>
+</form>

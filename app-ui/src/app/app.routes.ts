@@ -18,6 +18,7 @@ export const routes: Routes = [
   {
     path: 'redirect',
     component: LoginRedirectComponent,
+    data: { layout: LayoutType.CenterColumn },
   },
   {
     path: 'event',

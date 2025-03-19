@@ -1,7 +1,7 @@
 namespace EventFoto.Data.DTOs;
 
-public record LoginRequestDto
+public record RegisterDto
 {
     public string Email { get; init; }
-    public string Password { get; init; }
+    public string Name { get; init; }
 }

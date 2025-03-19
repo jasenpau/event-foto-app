@@ -1,5 +1,5 @@
 export enum AppError {
+  InternalError = 'internal-error',
   UserNotFound = 'user-not-found',
-  NoCredentials = 'no-credentials',
-  InvalidCredentials = 'invalid-credentials',
+  ValidationFailed = 'validation-failed',
 }

@@ -13,13 +13,13 @@ public class EventService : IEventService
         _eventRepository = eventRepository;
     }
 
-    public async Task<ServiceResult<IList<Event>>> GetAllEventsByUser(int userId)
+    public async Task<ServiceResult<IList<Event>>> GetAllEventsByUser(Guid userId)
     {
         var events = await _eventRepository.GetAllEventsByUser(userId);
         return ServiceResult<IList<Event>>.Ok(events);
     }
     
-    public async Task<ServiceResult<Event>> CreateEventAsync(CreateEventDto eventDto, int userId)
+    public async Task<ServiceResult<Event>> CreateEventAsync(CreateEventDto eventDto, Guid userId)
     {
         var eventData = new Event
         {

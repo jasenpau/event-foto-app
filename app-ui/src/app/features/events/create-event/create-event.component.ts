@@ -6,7 +6,8 @@ import { FormInputSectionComponent } from '../../../components/forms/form-input-
 import { InputFieldComponent } from '../../../components/forms/input-field/input-field.component';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EventService } from '../../../services/event/event.service';
-import { Subject, takeUntil, tap } from 'rxjs';
+import { takeUntil, tap } from 'rxjs';
+import { DisposableComponent } from '../../../components/disposable/disposable.component';
 
 @Component({
   selector: 'app-create-event',
@@ -21,14 +22,14 @@ import { Subject, takeUntil, tap } from 'rxjs';
   templateUrl: './create-event.component.html',
   styleUrl: './create-event.component.scss',
 })
-export class CreateEventComponent implements OnDestroy {
-  private destroy$: Subject<void> = new Subject<void>();
+export class CreateEventComponent extends DisposableComponent implements OnDestroy {
 
   protected readonly buttonType = ButtonType;
   protected createEventForm: FormGroup;
 
   constructor(private readonly eventService: EventService,
               private router: Router) {
+    super();
     this.createEventForm = new FormGroup({
       name: new FormControl('', [Validators.required]),
     });
@@ -49,10 +50,5 @@ export class CreateEventComponent implements OnDestroy {
         )
         .subscribe();
     }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

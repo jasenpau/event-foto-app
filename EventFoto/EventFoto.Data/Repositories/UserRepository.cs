@@ -13,17 +13,8 @@ public class UserRepository : IUserRepository
         _context = context;
     }
     
-    public Task<User> GetUserByIdAsync(int userId) =>
+    public Task<User> GetUserByIdAsync(Guid userId) =>
         Users.SingleOrDefaultAsync(u => u.Id == userId);
-
-    public Task<User> GetUserByEmailAsync(string email) =>
-        Users.SingleOrDefaultAsync(u => u.Email == email);
-
-    public Task<User> GetUserWithCredentialsAsync(string email)
-    {
-        var user = Users.Include(u => u.Credentials);
-        return user.SingleOrDefaultAsync(u => u.Email == email);
-    }
 
     public async Task<User> CreateUserAsync(User user)
     {
