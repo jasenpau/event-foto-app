@@ -1,7 +1,7 @@
 @use "sass:color";
 @use "colors";
 @use "typography";
-@use "form-styles";
+@use "functions";
 
 .sidenav {
   background: colors.$surface;
@@ -60,7 +60,7 @@
   }
 
   &__logout {
-    @include form-styles.reset;
+    @include functions.reset;
 
     background: none;
     border: none;

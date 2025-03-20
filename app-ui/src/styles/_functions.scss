@@ -3,3 +3,12 @@
 @function rem-size($size) {
   @return math.div($size, 16px) + rem;
 }
+
+@mixin reset {
+  outline: none;
+  border: none;
+  background: transparent;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}

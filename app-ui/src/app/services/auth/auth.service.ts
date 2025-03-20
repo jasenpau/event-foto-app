@@ -68,8 +68,8 @@ export class AuthService {
   msalLogout() {
     this.clearToken();
     this.currentUser = null;
-    // return this.msalInstance.logoutRedirect();
-    this.router.navigate(['/']);
+    return this.msalInstance.logoutRedirect();
+    // this.router.navigate(['/']);
   }
 
   private handleMsalLoginRedirect(tokenResponse: AuthenticationResult | null) {

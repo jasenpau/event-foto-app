@@ -1,0 +1,22 @@
+<div class="input-field">
+  <label *ngIf="label" class="input-field__label" [for]="id">{{ label }}</label>
+  <input
+    *ngIf="hostControl?.control"
+    class="input-field__input"
+    [id]="id"
+    [formControl]="hostControl.control"
+    [altInput]="true"
+    [convertModelValue]="true"
+    [enableTime]="enableTime"
+    [time24hr]="enableTime"
+    [minDate]="minDate"
+    [formatDate]="formatLtDate"
+    [plugins]="plugins"
+    altFormat="lt-format"
+    mwlFlatpickr
+  />
+  <p class="input-field__supporting-text text-body-small"
+     [ngClass]="{ 'input-field__supporting-text--error': showErrors() }">
+    {{ showErrors() ? getError() : supportingText }}
+  </p>
+</div>

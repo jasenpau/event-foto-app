@@ -20,18 +20,18 @@
         {{ event.name }}
       </td>
       <td>
-        <app-badge *ngIf="event.isArchived" [type]="badgeType.Secondary"
-          >Archyvuotas</app-badge
-        >
-        <app-badge *ngIf="!event.isArchived" [type]="badgeType.Primary"
-          >Aktyvus</app-badge
-        >
+        <app-badge *ngIf="event.isArchived" [type]="badgeType.Secondary">
+          Archyvuotas
+        </app-badge>
+        <app-badge *ngIf="!event.isArchived" [type]="badgeType.Primary">
+          Aktyvus
+        </app-badge>
       </td>
       <td>0</td>
       <td class="table__pad-row-end">
-        <app-button routerLink="/event/123" [type]="buttonType.Text"
-          >Peržiūrėti</app-button
-        >
+        <app-button routerLink="/event/123" [type]="buttonType.Text">
+          Peržiūrėti
+        </app-button>
       </td>
     </tr>
   </table>

@@ -1,5 +1,6 @@
 @use "colors";
 @use "typography";
+@use "functions";
 
 .no-margin {
   margin: 0;
@@ -37,4 +38,53 @@ th.table__pad-row-start {
 td.table__pad-row-end,
 th.table__pad-row-end {
   padding-right: 64px;
+}
+
+.input-field {
+  &__label {
+    @include typography.label-large;
+
+    margin-bottom: 8px;
+    display: block;color: colors.$on-surface-variant;
+  }
+
+  &__input {
+    @include functions.reset;
+
+    font-family: typography.$font-family;
+    background: transparent;
+    border-radius: 4px;
+    border: 1px solid colors.$outline;
+    font-size: functions.rem-size(16px);
+    line-height: 1.5;
+    padding: functions.rem-size(15px);
+    color: colors.$on-surface;
+    width: 100%;
+
+    &:hover {
+      border-color: colors.$on-surface-variant;
+    }
+
+    &:focus {
+      border-color: colors.$primary;
+      border-width: 2px;
+      padding: functions.rem-size(14px);
+    }
+
+    &.ng-touched.ng-invalid {
+      border-width: 2px;
+      border-color: colors.$error;
+      padding: functions.rem-size(14px);
+    }
+  }
+
+  &__supporting-text {
+    margin: 8px 0 0;
+    color: colors.$on-surface-variant;
+    min-height: functions.rem-size(16px);
+
+    &--error {
+      color: colors.$error;
+    }
+  }
 }

@@ -2,6 +2,7 @@
   <div>
     <label [for]="inputId" class="text-title-medium">{{label}}</label>
     <p *ngIf="description" class="form-input-section__description text-body-medium">{{description}}</p>
+    <p *ngIf="subtext" class="form-input-section__subtext text-body-small">{{subtext}}</p>
   </div>
   <div>
     <ng-content />

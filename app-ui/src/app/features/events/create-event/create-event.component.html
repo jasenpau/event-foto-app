@@ -4,8 +4,48 @@
     <app-button [type]="buttonType.Text" routerLink="/event">Atšaukti</app-button>
   </div>
   <form [formGroup]="createEventForm" (ngSubmit)="onSubmit()">
-    <app-form-input-section inputId="name" label="Pavadinimas" description="Renginio pavadinimas atvaizduojamas sistemoje">
+    <app-form-input-section
+      inputId="name"
+      label="Pavadinimas"
+      description="Renginio pavadinimas atvaizduojamas sistemoje">
       <app-input-field id="name" formControlName="name" />
+    </app-form-input-section>
+    <app-form-input-section
+      inputId="startDate"
+      label="Pradžios data"
+      description="Renginio pradžios data ir laikas">
+      <app-date-picker
+        id="startDate"
+        formControlName="startDate"
+        [enableTime]="true"
+        [minDate]="dateTimeNow"
+      />
+    </app-form-input-section>
+    <app-form-input-section
+      inputId="endDate"
+      label="Pabaigos data"
+      description="Renginio pabaigos data ir laikas"
+      subtext="neprivaloma">
+      <app-date-picker
+        id="endDate"
+        formControlName="endDate"
+        [enableTime]="true"
+        [minDate]="dateTimeNow"
+      />
+    </app-form-input-section>
+    <app-form-input-section
+      inputId="location"
+      label="Vieta"
+      description="Renginio lokacija"
+      subtext="neprivaloma">
+      <app-input-field id="location" formControlName="location" />
+    </app-form-input-section>
+    <app-form-input-section
+      inputId="note"
+      label="Papildoma informacija"
+      description="Naudinga infromacija fotografams"
+      subtext="neprivaloma, iki 500 simbolių">
+      <app-text-area id="note" formControlName="note" />
     </app-form-input-section>
     <app-button>Sukurti</app-button>
   </form>

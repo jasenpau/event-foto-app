@@ -1,0 +1,13 @@
+@use "typography";
+@use "functions";
+
+textarea.input-field__input {
+  @include typography.body-medium;
+
+  min-height: functions.rem-size(8 * 1.5 * 14px);
+  padding: functions.rem-size(11px);
+
+  &:focus {
+    padding: functions.rem-size(10px);
+  }
+}

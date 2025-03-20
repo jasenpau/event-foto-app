@@ -29,7 +29,11 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "node_modules/flatpickr/dist/flatpickr.css",
+              "node_modules/flatpickr/dist/plugins/confirmDate/confirmDate.css",
+              "src/styles.scss"
+            ],
             "stylePreprocessorOptions": {
               "includePaths": ["src/styles"]
             },

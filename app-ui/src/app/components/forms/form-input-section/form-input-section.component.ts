@@ -11,4 +11,5 @@ export class FormInputSectionComponent {
   @Input({ required: true }) inputId!: string;
   @Input({ required: true }) label!: string;
   @Input() description?: string;
+  @Input() subtext?: string;
 }
