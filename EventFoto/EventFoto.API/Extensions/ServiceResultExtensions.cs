@@ -12,6 +12,7 @@ public static class ServiceResultExtensions
         return result.StatusCode switch
         {
             HttpStatusCode.NotFound => new NotFoundObjectResult(problemDetails),
+            HttpStatusCode.Conflict => new ConflictObjectResult(problemDetails),
             _ => new BadRequestObjectResult(problemDetails)
         };
     }

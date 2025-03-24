@@ -5,6 +5,7 @@ namespace EventFoto.Core.Events;
 
 public interface IEventService
 {
-    public Task<ServiceResult<IList<Event>>> GetAllEventsByUser(Guid userId);
+    public Task<ServiceResult<Event>> GetById(int id);
+    public Task<ServiceResult<IList<Event>>> GetAllEventsByUserAsync(Guid userId);
     public Task<ServiceResult<Event>> CreateEventAsync(CreateEventDto eventDto, Guid userId);
 }

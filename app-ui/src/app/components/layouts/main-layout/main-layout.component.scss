@@ -4,7 +4,7 @@
   display: grid;
   grid-template-columns: 80px 1fr;
   grid-template-rows: 64px 1fr;
-  min-height: 100vh;
+  height: 100vh;
 
   &__sidenav {
     grid-column: 1 / 2;
@@ -13,8 +13,9 @@
   }
 
   &__content {
-    padding: 32px 40px 0;
+    padding: 32px 40px;
     grid-column: 2 / 3;
     grid-row: 1 / 3;
+    overflow: scroll;
   }
 }

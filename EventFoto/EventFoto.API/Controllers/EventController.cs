@@ -1,3 +1,4 @@
+using EventFoto.API.Extensions;
 using EventFoto.API.Filters;
 using EventFoto.Core.Events;
 using EventFoto.Data.DTOs;
@@ -20,12 +21,19 @@ public class EventController : AppControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<EventDto[]>> GetAllEvents()
+    public async Task<ActionResult<EventListDto[]>> GetAllEvents()
     {
         var userId = RequestUserId();
-        var events = await _eventService.GetAllEventsByUser(userId);
-        var eventDtos = events.Data.Select(EventDto.FromEvent).ToArray();
+        var events = await _eventService.GetAllEventsByUserAsync(userId);
+        var eventDtos = events.Data.Select(EventListDto.FromEvent).ToArray();
         return Ok(eventDtos);
+    }
+    
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<EventListDto[]>> GetEventById(int id)
+    {
+        var result = await _eventService.GetById(id);
+        return result.Success ? Ok(EventDto.FromEvent(result.Data)) : result.ToErrorResponse();
     }
     
     [HttpPost]
@@ -33,7 +41,7 @@ public class EventController : AppControllerBase
     public async Task<ActionResult<EventDto>> CreateEvent([FromBody] CreateEventDto createEventDto)
     {
         var userId = RequestUserId();
-        var createdEvent = await _eventService.CreateEventAsync(createEventDto, userId);
-        return EventDto.FromEvent(createdEvent.Data);
+        var result = await _eventService.CreateEventAsync(createEventDto, userId);
+        return result.Success ? Ok(EventDto.FromEvent(result.Data)) : result.ToErrorResponse();
     }
 }

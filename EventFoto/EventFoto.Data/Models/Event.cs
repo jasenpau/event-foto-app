@@ -11,4 +11,6 @@ public class Event
     public string Note { get; set; }
     public Guid CreatedBy { get; set; }
     public DateTime CreatedOn { get; set; }
+    
+    public User CreatedByUser { get; set; }
 }

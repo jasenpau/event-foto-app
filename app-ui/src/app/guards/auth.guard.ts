@@ -24,7 +24,6 @@ export class AuthGuard implements CanActivate {
     if (this.userService.getCurrentUserData() !== null) {
       return this.userService.fetchCurrentUserData()
         .pipe(map((data) => {
-          console.log('is user data loaded', 'yes');
           return Boolean(data);
         }));
     }

@@ -31,13 +31,15 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(255);
+            entity.HasIndex(e => e.Name)
+                .IsUnique();
             entity.Property(e => e.Note)
                 .IsRequired(false)
                 .HasMaxLength(500);
             entity.Property(e => e.Location)
                 .IsRequired(false)
                 .HasMaxLength(255);
-            entity.HasOne<User>()
+            entity.HasOne(e => e.CreatedByUser)
                 .WithMany()
                 .HasForeignKey(e => e.CreatedBy)
                 .HasPrincipalKey(u => u.Id);

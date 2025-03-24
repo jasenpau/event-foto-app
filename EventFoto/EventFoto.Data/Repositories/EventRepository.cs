@@ -13,7 +13,14 @@ public class EventRepository : IEventRepository
         _context = context;
     }
 
-    public async Task<IList<Event>> GetAllEventsByUser(Guid userId)
+    public Task<Event> GetByIdAsync(int id)
+    {
+        return Events
+            .Include(e => e.CreatedByUser)
+            .FirstOrDefaultAsync(e => e.Id == id);
+    }
+
+    public async Task<IList<Event>> GetAllEventsByUserAsync(Guid userId)
     {
         return await Events.Where(e => e.CreatedBy == userId).ToListAsync();
     }
@@ -23,6 +30,8 @@ public class EventRepository : IEventRepository
         eventData.CreatedOn = DateTime.UtcNow;
         Events.Add(eventData);
         await _context.SaveChangesAsync();
-        return eventData;
+        return await Events
+            .Include(e => e.CreatedByUser)
+            .FirstOrDefaultAsync(e => e.Id == eventData.Id);
     }
 }

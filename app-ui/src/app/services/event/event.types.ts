@@ -7,6 +7,10 @@ export interface EventData {
 
 export interface EventCreateDto {
   name: string;
+  startDate: Date;
+  endDate?: Date;
+  location?: string;
+  note?: string
 }
 
 export interface EventDto {

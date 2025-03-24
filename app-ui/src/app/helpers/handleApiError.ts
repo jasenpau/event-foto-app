@@ -6,7 +6,7 @@ type ErrorHandler = (err: ErrorDetails) => void;
 
 export const handleApiError = (handler: ErrorHandler) => {
   return catchError((error) => {
-    if (error instanceof HttpErrorResponse && error.error.status && error.error.title) {
+    if (error instanceof HttpErrorResponse && error.error?.status && error.error?.title) {
       handler(error.error as ErrorDetails);
       return of(null);
     }
