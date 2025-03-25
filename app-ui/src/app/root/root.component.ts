@@ -9,6 +9,7 @@ import { MainLayoutComponent } from '../components/layouts/main-layout/main-layo
 import { DisposableComponent } from '../components/disposable/disposable.component';
 import { Lithuanian } from 'flatpickr/dist/l10n/lt';
 import flatpickr from 'flatpickr';
+import { SnackbarContainerComponent } from '../components/snackbar-container/snackbar-container.component';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ import flatpickr from 'flatpickr';
     NgSwitchCase,
     CenterColumnLayoutComponent,
     MainLayoutComponent,
+    SnackbarContainerComponent,
   ],
   templateUrl: './root.component.html',
   styleUrl: './root.component.scss',

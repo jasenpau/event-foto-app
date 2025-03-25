@@ -4,7 +4,7 @@
     <app-button
       *ngIf="showCreateEvent"
       [icon]="buttonIcon.Add"
-      routerLink="/event/create">
+      link="/event/create">
       Sukurti renginį
     </app-button>
   </div>
@@ -29,7 +29,7 @@
       </td>
       <td>0</td>
       <td class="table__pad-row-end">
-        <app-button routerLink="/event/123" [type]="buttonType.Text">
+        <app-button link="/event/123" [type]="buttonType.Text">
           Peržiūrėti
         </app-button>
       </td>

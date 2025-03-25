@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ButtonComponent } from '../../../components/button/button.component';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { ButtonType } from '../../../components/button/button.types';
 import { FormInputSectionComponent } from '../../../components/forms/form-input-section/form-input-section.component';
 import { InputFieldComponent } from '../../../components/forms/input-field/input-field.component';
@@ -18,12 +18,13 @@ import { DatePickerComponent } from '../../../components/forms/date-picker/date-
 import { TextAreaComponent } from '../../../components/forms/text-area/text-area.component';
 import { handleApiError } from '../../../helpers/handleApiError';
 import { noDuplicatesValidator } from '../../../components/forms/validators/noDuplicatesValidator';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
+import { SnackbarType } from '../../../services/snackbar/snackbar.types';
 
 @Component({
   selector: 'app-create-event',
   imports: [
     ButtonComponent,
-    RouterLink,
     FormInputSectionComponent,
     InputFieldComponent,
     FormsModule,
@@ -46,6 +47,7 @@ export class CreateEventComponent
 
   constructor(
     private readonly eventService: EventService,
+    private readonly snackbarService: SnackbarService,
     private router: Router,
   ) {
     super();
@@ -96,7 +98,7 @@ export class CreateEventComponent
         .pipe(
           tap((event) => {
             if (event.id) {
-              this.router.navigate(['event']);
+              this.onCreateSuccess();
             }
           }),
           handleApiError((error) => {
@@ -114,5 +116,10 @@ export class CreateEventComponent
   private addConflictingName(name: string) {
     this.existingNames.push(name.trim());
     this.createEventForm.controls['name'].updateValueAndValidity();
+  }
+
+  private onCreateSuccess() {
+    this.snackbarService.addSnackbar(SnackbarType.Success, 'Renginys sukurtas');
+    this.router.navigate(['event']);
   }
 }

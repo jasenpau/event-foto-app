@@ -1,0 +1,13 @@
+<div class="snackbar__container">
+  <div class="snackbar__message" *ngFor="let msg of snackbarMessages" [ngClass]="{
+  'snackbar__message--success': msg.type === SnackbarType.Success,
+  'snackbar__message--error': msg.type === SnackbarType.Error,
+  'snackbar__message--info': msg.type === SnackbarType.Info,
+  }">
+    <app-svg-icon [iconSrc]="getIcon(msg.type)" />
+    <p class="snackbar__title">{{msg.message}}</p>
+    <button class="snackbar__close-button" (click)="closeSnackbar(msg.id)">
+      <app-svg-icon [iconSrc]="svgIconSrc.Close" />
+    </button>
+  </div>
+</div>

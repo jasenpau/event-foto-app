@@ -24,9 +24,9 @@ html {
 }
 
 a {
-  color: colors.$accent-dark;
+  color: colors.$primary;
 
   &:hover {
-    color: color.adjust(colors.$accent-dark, $lightness: -20%);
+    color: colors.$primary-hover
   }
 }

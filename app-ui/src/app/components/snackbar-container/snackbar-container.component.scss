@@ -1,0 +1,55 @@
+@use "colors";
+@use "functions";
+
+.snackbar {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 48px;
+    right: 48px;
+    gap: 16px;
+    min-width: 350px;
+  }
+
+  &__message {
+    display: flex;
+    background: colors.$primary-container;
+    color: colors.$primary-on-container;
+    fill: colors.$primary-on-container;
+    gap: 16px;
+    align-items: center;
+    padding: 0 16px;
+    border-radius: 4px;
+    border: 1px solid colors.$primary-on-container;
+
+    &--error {
+      background: colors.$error-container;
+      color: colors.$error-on-container;
+      fill: colors.$error-on-container;
+      border-color: colors.$error-on-container;
+    }
+
+    &--success {
+      background: colors.$success-container;
+      color: colors.$success-on-container;
+      fill: colors.$success-on-container;
+      border-color: colors.$success-on-container;
+    }
+  }
+
+  &__title {
+    flex: 1;
+  }
+
+  &__close-button {
+    @include functions.reset;
+    padding: 0;
+    height: 24px;
+    border-radius: 50%;
+
+    &:focus {
+      outline: 2px solid colors.$primary;
+    }
+  }
+}

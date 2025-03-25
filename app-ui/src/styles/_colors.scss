@@ -15,6 +15,13 @@ $on-secondary: #fff;
 $tertiary: #725572;
 $on-tertiary: #fff;
 $error: #BA1A1A;
+$on-error: #fff;
+$error-container: #E57373;
+$error-on-container: #1b1b1d;
+$success: #388E3C;
+$on-success: #fff;
+$success-container: #81C784;
+$success-on-container: #1b1b1d;
 
 $primary-hover: linear-gradient(
     0deg,
@@ -33,23 +40,3 @@ $on-surface-disabled: #1b1b1d61;
 
 $elevation-1: 0 1px 2px rgb(0 0 0 / 30%), 0 1px 3px 1px rgb(0 0 0 / 15%);
 
-// Legacy colors
-$blue: #4199d0;
-$red: #f93943;
-
-
-$background-elevated: #fff;
-$background: #eeeeee;
-
-$foreground: #222;
-$foreground-light: #454545;
-
-$accent: $blue;
-$accent-dark: color.adjust($accent, $lightness: -10%);
-$accent-hover: color.adjust($accent, $lightness: 4%);
-$accent-outline: #79bce7;
-
-
-
-//$outline: #bfbfbf;
-$outline-hover: #999999;

@@ -29,12 +29,17 @@
     color: colors.$on-surface-variant;
     text-decoration: none;
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: colors.$on-surface;
 
       .sidenav__list-item-pill {
         background: color.change(colors.$primary, $alpha: 0.08);
       }
+    }
+
+    &:focus {
+      outline: 2px solid colors.$primary;
     }
 
     &--selected,

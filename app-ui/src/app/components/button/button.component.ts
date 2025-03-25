@@ -15,7 +15,7 @@ export class ButtonComponent {
   @Input() type: ButtonType = ButtonType.Filled;
   @Input() size: ButtonSize = ButtonSize.Regular;
   @Input() icon?: SvgIconSrc;
-  @Input() routerLink?: string;
+  @Input() link?: string;
 
   protected readonly buttonType = ButtonType;
   protected readonly buttonSize = ButtonSize;

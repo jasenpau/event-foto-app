@@ -1,5 +1,5 @@
-<a *ngIf="routerLink"
-   [routerLink]="routerLink"
+<a *ngIf="link"
+   [routerLink]="link"
    class="button type-label-medium"
    [ngClass]="{
   'button--wide': size === buttonSize.Wide,
@@ -10,7 +10,7 @@
   <ng-container *ngTemplateOutlet="innerContent"></ng-container>
 </a>
 
-<button *ngIf="!routerLink"
+<button *ngIf="!link"
         class="button type-label-medium"
         [ngClass]="{
   'button--wide': size === buttonSize.Wide,
