@@ -11,6 +11,7 @@
   <table class="event-list__table table">
     <tr>
       <th class="event-list__table-name table__pad-row-start">Pavadinimas</th>
+      <th class="event-list__table-date">Pradžios data ir laikas</th>
       <th>Būsena</th>
       <th>Nuotraukos</th>
       <th class="table__pad-row-end"></th>
@@ -19,13 +20,19 @@
       <td class="event-list__table-name table__pad-row-start">
         {{ event.name }}
       </td>
+      <td class="event-list__table-date">
+        {{ formatDate(event.startDate) }}
+      </td>
       <td>
-        <app-badge *ngIf="event.isArchived" [type]="badgeType.Secondary">
-          Archyvuotas
-        </app-badge>
-        <app-badge *ngIf="!event.isArchived" [type]="badgeType.Primary">
-          Aktyvus
-        </app-badge>
+        @if (!event.isArchived && isActive(event)) {
+          <app-badge [type]="badgeType.Accent">Aktyvus</app-badge>
+        } @else if (!event.isArchived && isPast(event)) {
+          <app-badge [type]="badgeType.Tertiary">Pasibaigęs</app-badge>
+        } @else if (!event.isArchived) {
+          <app-badge [type]="badgeType.Primary">Suplanuotas</app-badge>
+        } @else if (event.isArchived) {
+          <app-badge [type]="badgeType.Secondary">Archyvuotas</app-badge>
+        }
       </td>
       <td>0</td>
       <td class="table__pad-row-end">

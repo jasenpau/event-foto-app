@@ -1,8 +1,9 @@
-export interface EventData {
+export interface EventListDto {
   id: number;
   name: string;
   isArchived: boolean;
-  createdAt: Date;
+  startDate: string;
+  endDate?: string;
 }
 
 export interface EventCreateDto {
@@ -10,7 +11,7 @@ export interface EventCreateDto {
   startDate: Date;
   endDate?: Date;
   location?: string;
-  note?: string
+  note?: string;
 }
 
 export interface EventDto {

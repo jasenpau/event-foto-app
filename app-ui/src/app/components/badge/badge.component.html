@@ -1,7 +1,8 @@
 <span class="badge" [ngClass]="{
   'badge--primary': type === badgeType.Primary,
   'badge--secondary': type === badgeType.Secondary,
-  'badge-tertiary': type === badgeType.Tertiary,
+  'badge--tertiary': type === badgeType.Tertiary,
+  'badge--accent': type === badgeType.Accent,
 }">
   <ng-content />
 </span>

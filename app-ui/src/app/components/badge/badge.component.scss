@@ -21,4 +21,9 @@
     background-color: colors.$tertiary;
     color: colors.$on-tertiary;
   }
+
+  &--accent {
+    background-color: colors.$success-container;
+    color: colors.$success-on-container;
+  }
 }

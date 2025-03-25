@@ -54,6 +54,7 @@ export class CreateEventComponent
     this.createEventForm = new FormGroup({
       name: new FormControl('', [
         Validators.required,
+        Validators.maxLength(255),
         noDuplicatesValidator(
           this.existingNames,
           'Renginys tokiu pavadinimu jau įvestas sistemoje',
@@ -61,7 +62,7 @@ export class CreateEventComponent
       ]),
       startDate: new FormControl('', [Validators.required]),
       endDate: new FormControl(undefined, []),
-      location: new FormControl('', []),
+      location: new FormControl('', [Validators.maxLength(255)]),
       note: new FormControl('', [Validators.maxLength(500)]),
     });
   }

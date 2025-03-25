@@ -10,6 +10,7 @@ import { LoginRedirectComponent } from './features/user/login-redirect/login-red
 import { GroupPermissionGuard } from './guards/group.guard';
 import { UserGroup } from './globals/userGroups';
 import { NoAccessComponent } from './components/no-access/no-access.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 // Routes and their respective layouts. If layout is left blank, empty-layout is used.
 export const routes: Routes = [
@@ -27,7 +28,7 @@ export const routes: Routes = [
     path: 'event',
     component: EventListComponent,
     data: { layout: LayoutType.Main },
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: 'event/create',
@@ -36,13 +37,13 @@ export const routes: Routes = [
       layout: LayoutType.Main,
       requiredGroup: UserGroup.EventAdmin,
     },
-    canActivate: [AuthGuard, GroupPermissionGuard]
+    canActivate: [AuthGuard, GroupPermissionGuard],
   },
   {
     path: 'event/:eventId',
     component: EventPreviewComponent,
     data: { layout: LayoutType.Main },
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: 'login',
@@ -58,5 +59,10 @@ export const routes: Routes = [
     path: 'no-access',
     component: NoAccessComponent,
     data: { layout: LayoutType.CenterColumn },
-  }
+  },
+  {
+    path: '**',
+    component: NotFoundComponent,
+    data: { layout: LayoutType.CenterColumn },
+  },
 ];
