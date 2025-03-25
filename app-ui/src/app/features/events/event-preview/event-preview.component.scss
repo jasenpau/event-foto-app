@@ -1,14 +1,29 @@
-.event-preview {
-
-  &__image-list {
+.event {
+  &__header {
     display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 16px;
+  }
 
-    img {
-      width: 200px;
-      height: 200px;
-      object-fit: cover;
+  &__details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+  }
+
+  &__details-column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__details-row {
+    p {
+      margin: 8px 0;
     }
+  }
+
+  &__photographers {
+    width: 100%;
   }
 }

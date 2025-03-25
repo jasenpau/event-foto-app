@@ -17,6 +17,12 @@ export interface EventCreateDto {
 export interface EventDto {
   id: number;
   name: string;
+  startDate: string;
+  endDate?: string;
+  location?: string;
+  note?: string;
   isArchived: boolean;
   createdAt: Date;
+  createdByUser: string;
+  createdBy: string;
 }

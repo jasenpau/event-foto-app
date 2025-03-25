@@ -51,7 +51,7 @@ export class EventListComponent
     const now = new Date();
     const normalizedStartDate = this.normalizeDate(event.startDate);
     const normalizedEndDate = event.endDate
-      ? this.normalizeDate(event.endDate)
+      ? this.addDay(this.normalizeDate(event.endDate))
       : this.addDay(this.normalizeDate(event.startDate));
 
     return normalizedStartDate <= now && now <= normalizedEndDate;

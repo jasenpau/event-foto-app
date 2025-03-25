@@ -38,6 +38,12 @@ $weight-bold: 700;
   line-height: functions.rem-size(20px);
 }
 
+@mixin title-medium {
+  font-size: functions.rem-size(16px);
+  font-weight: $weight-medium;
+  line-height: 1.5;
+}
+
 @mixin title-large {
   font-size: functions.rem-size(22px);
   font-weight: $weight-regular;
@@ -69,6 +75,10 @@ $weight-bold: 700;
 
 .text-label-large {
   @include label-large;
+}
+
+.text-title-medium {
+  @include title-medium;
 }
 
 .text-title-large {

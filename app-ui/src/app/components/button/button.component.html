@@ -1,26 +1,30 @@
-<a *ngIf="link"
-   [routerLink]="link"
-   class="button type-label-medium"
-   [ngClass]="{
-  'button--wide': size === buttonSize.Wide,
-  'button--filled': type === buttonType.Filled,
-  'button--text': type === buttonType.Text,
-  'button--icon': !!icon
-}">
+<a
+  *ngIf="link"
+  [routerLink]="link"
+  class="button type-label-medium"
+  [ngClass]="{
+    'button--wide': size === buttonSize.Wide,
+    'button--filled': type === buttonType.Filled,
+    'button--text': type === buttonType.Text,
+    'button--icon': !!icon,
+  }"
+>
   <ng-container *ngTemplateOutlet="innerContent"></ng-container>
 </a>
 
-<button *ngIf="!link"
-        class="button type-label-medium"
-        [ngClass]="{
-  'button--wide': size === buttonSize.Wide,
-  'button--filled': type === buttonType.Filled,
-  'button--text': type === buttonType.Text,
-  'button--icon': !!icon
-}">
+<button
+  *ngIf="!link"
+  class="button type-label-medium"
+  [ngClass]="{
+    'button--wide': size === buttonSize.Wide,
+    'button--filled': type === buttonType.Filled,
+    'button--text': type === buttonType.Text,
+    'button--icon': !!icon,
+  }"
+  [disabled]="disabled"
+>
   <ng-container *ngTemplateOutlet="innerContent"></ng-container>
 </button>
-
 
 <ng-template #innerContent>
   <app-svg-icon *ngIf="icon" [iconSrc]="icon" [size]="iconSize" />

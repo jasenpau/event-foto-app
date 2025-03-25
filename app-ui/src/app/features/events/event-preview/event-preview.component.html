@@ -1,8 +1,49 @@
-<div class="event-preview">
+<div class="event" *ngIf="event">
   <div class="page-header">
-    <h2 class="text-headline-large no-margin">Nuotraukos</h2>
+    <div class="event__header">
+      <app-button link="/event" [type]="ButtonType.Text">Grįžti į renginius</app-button>
+      <h2 class="text-headline-large no-margin">{{event.name}}</h2>
+      <app-badge *ngIf="event.isArchived" [type]="BadgeType.Secondary">Archyvuotas</app-badge>
+    </div>
   </div>
-  <div class="event-preview__image-list" *ngIf="imageUrls.length > 0">
-    <img *ngFor="let imageSrc of imageUrls" [ngSrc]="imageSrc" width="200" height="200" alt="photo"/>
+  <div class="event__details">
+    <div class="event__details-column">
+      <div class="event__details-row">
+        <p class="text-title-medium">Renginio pradžia</p>
+        <p class="text-body-large">{{formatDate(event.startDate)}}</p>
+      </div>
+      <div class="event__details-row" *ngIf="event.endDate">
+        <p class="text-title-medium">Renginio pabaiga</p>
+        <p class="text-body-large">{{formatDate(event.endDate)}}</p>
+      </div>
+      <div class="event__details-row" *ngIf="event.location">
+        <p class="text-title-medium">Renginio vieta</p>
+        <p class="text-body-large">{{event.location}}</p>
+      </div>
+      <div class="event__details-row" *ngIf="event.note">
+        <p class="text-title-medium">Papildoma informacija</p>
+        <p class="text-body-large">{{event.note}}</p>
+      </div>
+    </div>
+    <div class="event__details-column">
+      <div class="event__details-row">
+        <p class="text-title-medium">Fotografai</p>
+        <table class="table event__photographers">
+          <tr>
+            <th>Vardas</th>
+            <th>Nuotraukos</th>
+            <th></th>
+          </tr>
+          <tr>
+            <td>Paulius Jasėnas</td>
+            <td><a [routerLink]="'/event/' + event.id + '/gallery'">14</a></td>
+            <td><app-button (click)="removePhotographer()" [type]="ButtonType.Text">Pašalinti</app-button></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="event__photos">
+
   </div>
 </div>

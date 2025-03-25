@@ -33,10 +33,12 @@ button.button {
     cursor: not-allowed;
   }
 
+  &:hover,
   &:hover:enabled {
     background: color.change(colors.$primary, $alpha: 0.08);
   }
 
+  &:focus,
   &:focus:enabled,
   &:active:enabled {
     background: color.change(colors.$primary, $alpha: 0.12);
@@ -55,11 +57,13 @@ button.button {
       cursor: not-allowed;
     }
 
+    &:hover,
     &:hover:enabled {
       background: colors.$primary-hover;
       box-shadow: colors.$elevation-1;
     }
 
+    &:focus,
     &:focus:enabled,
     &:active:enabled {
       background: colors.$primary-focus;

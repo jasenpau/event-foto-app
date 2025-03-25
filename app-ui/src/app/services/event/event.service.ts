@@ -18,6 +18,13 @@ export class EventService {
     );
   }
 
+  getEventDetails(id: number): Observable<EventDto> {
+    return this.http.get<EventDto>(
+      `${ApiBaseUrl}/event/${id}`,
+      getAuthHeaders(),
+    );
+  }
+
   createEvent(event: EventCreateDto): Observable<EventDto> {
     return this.http.post<EventDto>(
       `${ApiBaseUrl}/event`,
