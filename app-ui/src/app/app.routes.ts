@@ -11,6 +11,7 @@ import { GroupPermissionGuard } from './guards/group.guard';
 import { UserGroup } from './globals/userGroups';
 import { NoAccessComponent } from './components/no-access/no-access.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { EventCalendarComponent } from './features/events/event-calendar/event-calendar.component';
 
 // Routes and their respective layouts. If layout is left blank, empty-layout is used.
 export const routes: Routes = [
@@ -40,6 +41,14 @@ export const routes: Routes = [
     canActivate: [AuthGuard, GroupPermissionGuard],
   },
   {
+    path: 'calendar',
+    component: EventCalendarComponent,
+    data: {
+      layout: LayoutType.Main,
+    },
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'event/:eventId',
     component: EventPreviewComponent,
     data: { layout: LayoutType.Main },
@@ -54,6 +63,7 @@ export const routes: Routes = [
     path: 'camera',
     component: CameraMainComponent,
     data: { layout: LayoutType.Empty },
+    canActivate: [AuthGuard],
   },
   {
     path: 'no-access',

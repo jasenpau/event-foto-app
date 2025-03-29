@@ -1,7 +1,24 @@
-<div>
-  <h3>Nustatymai</h3>
-  <select id="camera-select" [formControl]="cameraSelect">
-    <option *ngFor="let device of cameraDevices" [value]="device.deviceId">{{ device.label }}</option>
-  </select>
-  <app-button (click)="selectCamera()">Pasirinkti</app-button>
+<div class="camera-settings">
+  <div class="camera-settings__header">
+    <h3>Nustatymai</h3>
+    <app-button [type]="ButtonType.Text" (click)="cancelSettings()">Atšaukti</app-button>
+  </div>
+  <form
+    *ngIf="settingsForm"
+    class="camera-settings__form"
+    [formGroup]="settingsForm"
+    (ngSubmit)="saveSettings()"
+  >
+    <app-select id="event-select" formControlName="event" label="Renginys" *ngIf="events.length > 0">
+      <option *ngFor="let event of events" [value]="event.id">
+        {{ event.name }}
+      </option>
+    </app-select>
+    <app-select id="camera-select" formControlName="camera" label="Vaizdo kamera" *ngIf="cameraDevices.length > 0">
+      <option *ngFor="let device of cameraDevices" [value]="device.deviceId">
+        {{ device.label }}
+      </option>
+    </app-select>
+    <app-button>Išsaugoti</app-button>
+  </form>
 </div>

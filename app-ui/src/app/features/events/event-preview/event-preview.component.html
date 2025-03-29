@@ -3,7 +3,7 @@
     <div class="event__header">
       <app-button link="/event" [type]="ButtonType.Text">Grįžti į renginius</app-button>
       <h2 class="text-headline-large no-margin">{{event.name}}</h2>
-      <app-badge *ngIf="event.isArchived" [type]="BadgeType.Secondary">Archyvuotas</app-badge>
+      <app-event-badge [event]="event" />
     </div>
   </div>
   <div class="event__details">
@@ -27,17 +27,34 @@
     </div>
     <div class="event__details-column">
       <div class="event__details-row">
-        <p class="text-title-medium">Fotografai</p>
+        <div class="event__photographers-header">
+          <p class="text-title-medium">Fotografai</p>
+          <div class="event__photographers-actions">
+            <app-button *ngIf="showAssignSelf && !isAssignedSelf" [type]="ButtonType.Filled" (click)="assignSelf()">
+              Pridėti save
+            </app-button>
+            <app-button *ngIf="showAssignUsers" [type]="ButtonType.Filled">
+              Pridėti fotografą
+            </app-button>
+          </div>
+        </div>
         <table class="table event__photographers">
           <tr>
             <th>Vardas</th>
             <th>Nuotraukos</th>
             <th></th>
           </tr>
-          <tr>
-            <td>Paulius Jasėnas</td>
-            <td><a [routerLink]="'/event/' + event.id + '/gallery'">14</a></td>
-            <td><app-button (click)="removePhotographer()" [type]="ButtonType.Text">Pašalinti</app-button></td>
+          <tr *ngFor="let photographer of eventPhotographers">
+            <td>{{photographer.name}}</td>
+            <td><a [routerLink]="'/event/' + event.id + '/gallery?user=' + photographer.id">{{photographer.photoCount}}</a></td>
+            <td>
+              <app-button
+                (click)="removePhotographer(photographer.id)"
+                *ngIf="showAssignUsers || photographer.id === userId"
+                [type]="ButtonType.Text">
+                Pašalinti
+              </app-button>
+            </td>
           </tr>
         </table>
       </div>

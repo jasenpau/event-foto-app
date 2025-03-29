@@ -14,8 +14,13 @@ import { AppError } from '../../../globals/errors';
   imports: [RegisterComponent, NgIf],
   template: '<app-register *ngIf="showRegisterForm" />',
 })
-export class LoginRedirectComponent extends DisposableComponent implements OnInit, OnDestroy {
+export class LoginRedirectComponent
+  extends DisposableComponent
+  implements OnInit, OnDestroy
+{
   showRegisterForm = false;
+
+  private redirectUrl?: string;
 
   // Inject auth service to handle token redirect
   constructor(
@@ -30,7 +35,8 @@ export class LoginRedirectComponent extends DisposableComponent implements OnIni
     this.authService.tokenEvents
       .pipe(
         tap((event) => {
-          if (event === 'received') {
+          if (event.name === 'received') {
+            this.redirectUrl = event.state;
             this.initializeUserData();
           }
         }),
@@ -40,26 +46,30 @@ export class LoginRedirectComponent extends DisposableComponent implements OnIni
   }
 
   private initializeUserData() {
-    this.userService.fetchCurrentUserData()
-    .pipe(
-      tap(async (exists) => {
-        await this.loadAppData();
-        if (exists) {
-          await this.router.navigate(['/']);
-        }
-      }),
-      handleApiError(error => {
-        if (error.title === AppError.UserNotFound) {
-          this.showRegisterForm = true;
-        }
-      }),
-      takeUntil(this.destroy$),
-    )
-    .subscribe();
+    this.userService
+      .fetchCurrentUserData()
+      .pipe(
+        tap(async (exists) => {
+          await this.loadAppData();
+          if (exists) {
+            await this.router.navigate([
+              this.redirectUrl ? this.redirectUrl : '/',
+            ]);
+          }
+        }),
+        handleApiError((error) => {
+          if (error.title === AppError.UserNotFound) {
+            this.showRegisterForm = true;
+          }
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
   }
 
   private async loadAppData() {
-    await firstValueFrom(this.userService.getAppGroups()
-      .pipe(takeUntil(this.destroy$)));
+    await firstValueFrom(
+      this.userService.getAppGroups().pipe(takeUntil(this.destroy$)),
+    );
   }
 }

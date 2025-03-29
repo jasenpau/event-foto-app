@@ -8,7 +8,7 @@
       inputId="name"
       label="Pavadinimas"
       description="Renginio pavadinimas atvaizduojamas sistemoje">
-      <app-input-field id="name" formControlName="name" />
+      <app-input-field id="name" formControlName="name" supportingText="Privaloma" />
     </app-form-input-section>
     <app-form-input-section
       inputId="startDate"
@@ -17,6 +17,7 @@
       <app-date-picker
         id="startDate"
         formControlName="startDate"
+        supportingText="Privaloma"
         [enableTime]="true"
         [minDate]="minEventStartDate"
       />

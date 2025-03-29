@@ -1,0 +1,43 @@
+<div class="calendar">
+  <div class="page-header">
+    <div>
+      <h2 class="text-headline-large no-margin">Renginių kalendorius</h2>
+    </div>
+  </div>
+
+  <div class="controls">
+    <label for="month"></label>
+    <select id="month" [(ngModel)]="selectedMonth" (change)="generateCalendar()">
+      <option *ngFor="let month of months; let i = index" [value]="i">{{ month }}</option>
+    </select>
+
+    <label for="year"></label>
+    <select id="year" [(ngModel)]="selectedYear" (change)="generateCalendar()">
+      <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+    </select>
+  </div>
+
+  <table class="calendar">
+    <thead>
+    <tr>
+      <th>Pirmadienis</th>
+      <th>Antradienis</th>
+      <th>Trečiadienis</th>
+      <th>Ketvirtadienis</th>
+      <th>Penktadienis</th>
+      <th>Šeštadienis</th>
+      <th>Sekmadienis</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let week of weeks">
+      <td *ngFor="let day of week"
+          [class.prev-next-month]="!day.currentMonth"
+          [class.today]="day.today">
+        {{ day.day }}
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>

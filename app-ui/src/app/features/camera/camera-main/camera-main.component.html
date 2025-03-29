@@ -1,10 +1,16 @@
 <div class="camera">
-  <app-camera-setup *ngIf="!cameraInitialized" (cameraSelected)="setCameraId($event)" />
+  <app-camera-setup
+    *ngIf="showSettings() || userOpenSettings"
+    (settingsUpdated)="updateSettings($event)"
+  />
   <video class="camera__video" #previewVideo autoplay playsinline></video>
   <canvas class="camera__canvas" #canvas></canvas>
-  <div *ngIf="cameraInitialized"
-       class="camera__controls">
-    <p *ngIf="uploadInProgress">Keliama...</p>
-    <app-button (click)="capture()">Fotografuoti</app-button>
+  <div *ngIf="cameraInitialized" class="camera__controls">
+    <div class="camera__control-section">
+      <app-button (click)="openSettings()">Nustatymai</app-button>
+    </div>
+    <div class="camera__control-section">
+      <app-button (click)="capture()">Fotografuoti</app-button>
+    </div>
   </div>
 </div>

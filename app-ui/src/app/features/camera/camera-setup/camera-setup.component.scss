@@ -1,0 +1,25 @@
+@use "colors";
+
+.camera-settings {
+  position: absolute;
+  background: colors.$surface;
+  width: 100%;
+  height: 100vh;
+  z-index: 2;
+
+  &__header {
+    padding: 0 32px;
+    border-bottom: 1px solid colors.$outline;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__form {
+    max-width: 600px;
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}

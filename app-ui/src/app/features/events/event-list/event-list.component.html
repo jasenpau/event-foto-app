@@ -24,15 +24,7 @@
         {{ formatDate(event.startDate) }}
       </td>
       <td>
-        @if (!event.isArchived && isActive(event)) {
-          <app-badge [type]="badgeType.Accent">Aktyvus</app-badge>
-        } @else if (!event.isArchived && isPast(event)) {
-          <app-badge [type]="badgeType.Tertiary">Pasibaigęs</app-badge>
-        } @else if (!event.isArchived) {
-          <app-badge [type]="badgeType.Primary">Suplanuotas</app-badge>
-        } @else if (event.isArchived) {
-          <app-badge [type]="badgeType.Secondary">Archyvuotas</app-badge>
-        }
+        <app-event-badge [event]="event" />
       </td>
       <td>0</td>
       <td class="table__pad-row-end">

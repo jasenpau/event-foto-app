@@ -1,0 +1,31 @@
+@use "colors";
+
+.controls {
+  margin-bottom: 10px;
+}
+
+.calendar {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.calendar th, .calendar td {
+  border: 1px solid #ccc;
+  text-align: center;
+  width: 14.28%;
+  height: 80px;
+  vertical-align: top;
+}
+
+.calendar th {
+  background: #f4f4f4;
+}
+
+.today {
+  background-color: colors.$primary-container;
+  font-weight: bold;
+}
+
+.prev-next-month {
+  color: colors.$on-surface-variant;
+}

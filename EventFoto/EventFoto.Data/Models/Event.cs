@@ -13,4 +13,5 @@ public class Event
     public DateTime CreatedOn { get; set; }
     
     public User CreatedByUser { get; set; }
+    public IList<User> Photographers { get; set; }
 }

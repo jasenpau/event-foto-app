@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
+  ActivatedRouteSnapshot,
   CanActivate,
   GuardResult,
   MaybeAsync,
@@ -20,10 +21,12 @@ export class AuthGuard implements CanActivate {
     private router: Router,
   ) {}
 
-  canActivate(): MaybeAsync<GuardResult> {
+  canActivate(route: ActivatedRouteSnapshot): MaybeAsync<GuardResult> {
     const isLoggedIn = this.authService.getUserTokenData() !== null;
     if (!isLoggedIn) {
-      const loginPath = this.router.parseUrl('/login');
+      const returnUrl = route.url.map((u) => u.path).join('/');
+      console.log(`/login?redirectUrl=${returnUrl}`);
+      const loginPath = this.router.parseUrl(`/login?redirectUrl=${returnUrl}`);
       return new RedirectCommand(loginPath, {
         skipLocationChange: true,
       });

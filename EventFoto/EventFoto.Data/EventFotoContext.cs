@@ -43,6 +43,8 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
                 .WithMany()
                 .HasForeignKey(e => e.CreatedBy)
                 .HasPrincipalKey(u => u.Id);
+            entity.HasMany(e => e.Photographers)
+                .WithMany(u => u.AssignedPhotographerEvents);
             entity.ToTable("Events");
         });
     }   

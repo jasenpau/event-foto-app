@@ -26,3 +26,9 @@ export interface EventDto {
   createdByUser: string;
   createdBy: string;
 }
+
+export interface EventPhotographer {
+  id: string;
+  name: string;
+  photoCount: number;
+}

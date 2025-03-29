@@ -2,7 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiBaseUrl } from '../../globals/variables';
-import { EventCreateDto, EventListDto, EventDto } from './event.types';
+import {
+  EventCreateDto,
+  EventListDto,
+  EventDto,
+  EventPhotographer,
+} from './event.types';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
 
 @Injectable({
@@ -21,6 +26,34 @@ export class EventService {
   getEventDetails(id: number): Observable<EventDto> {
     return this.http.get<EventDto>(
       `${ApiBaseUrl}/event/${id}`,
+      getAuthHeaders(),
+    );
+  }
+
+  getEventPhotographers(id: number): Observable<EventPhotographer[]> {
+    return this.http.get<EventPhotographer[]>(
+      `${ApiBaseUrl}/event/${id}/photographers`,
+      getAuthHeaders(),
+    );
+  }
+
+  assignPhotographerToEvent(
+    eventId: number,
+    userId: string,
+  ): Observable<EventPhotographer[]> {
+    return this.http.post<EventPhotographer[]>(
+      `${ApiBaseUrl}/event/${eventId}/photographers`,
+      { userId },
+      getAuthHeaders(),
+    );
+  }
+
+  unassignPhotographerFromEvent(
+    eventId: number,
+    userId: string,
+  ): Observable<EventPhotographer[]> {
+    return this.http.delete<EventPhotographer[]>(
+      `${ApiBaseUrl}/event/${eventId}/photographers/${userId}`,
       getAuthHeaders(),
     );
   }

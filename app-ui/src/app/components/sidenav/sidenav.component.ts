@@ -14,20 +14,15 @@ interface SidenavItem {
 
 @Component({
   selector: 'app-sidenav',
-  imports: [
-    RouterLink,
-    RouterLinkActive,
-    NgForOf,
-    AppSvgIconComponent,
-  ],
+  imports: [RouterLink, RouterLinkActive, NgForOf, AppSvgIconComponent],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss',
 })
 export class SidenavComponent {
   svgIconSrc = SvgIconSrc;
   sidenavItems: SidenavItem[] = [
-    { title: 'Renginiai', link: '/', icon: SvgIconSrc.Calendar },
-    { title: 'Nustatymai', link: '/settings', icon: SvgIconSrc.Settings },
+    { title: 'Renginiai', link: '/event', icon: SvgIconSrc.Ticket },
+    { title: 'Kalendorius', link: '/calendar', icon: SvgIconSrc.Calendar },
   ];
 
   currentUser: User | null = null;

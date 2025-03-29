@@ -23,6 +23,18 @@
     }
   }
 
+  &__photographers-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  &__photographers-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+  }
+
   &__photographers {
     width: 100%;
   }

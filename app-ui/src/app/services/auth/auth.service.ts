@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
-import {
-  TokenPayload,
-  User,
-} from './auth.types';
+import { TokenEvent, TokenPayload, User } from './auth.types';
 import { Subject } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
-import { Router } from '@angular/router';
 import {
   AuthenticationResult,
   PublicClientApplication,
@@ -22,11 +18,9 @@ export class AuthService {
   private msalInstance: PublicClientApplication;
   private msalInitialized = false;
 
-  public tokenEvents = new Subject<string>();
+  public tokenEvents = new Subject<TokenEvent>();
 
-  constructor(
-    private router: Router,
-  ) {
+  constructor() {
     this.msalInstance = new PublicClientApplication(msalConfig);
     this.msalInstance.initialize().then(() => {
       this.msalInitialized = true;
@@ -58,10 +52,11 @@ export class AuthService {
     return this.currentUser;
   }
 
-  async msalLogin() {
+  async msalLogin(redirectUrl?: string) {
     if (!this.msalInitialized) return;
     await this.msalInstance.loginRedirect({
       scopes: ['openid', 'profile', `${msalConfig.auth.clientId}/.default`],
+      state: redirectUrl,
     });
   }
 
@@ -76,7 +71,7 @@ export class AuthService {
     if (tokenResponse) {
       this.setToken(tokenResponse.accessToken);
       this.currentUser = this.getUserFromToken(tokenResponse.accessToken);
-      this.tokenEvents.next('received');
+      this.tokenEvents.next({ name: 'received', state: tokenResponse.state });
     }
   }
 
