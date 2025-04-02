@@ -33,7 +33,7 @@
             <app-button *ngIf="showAssignSelf && !isAssignedSelf" [type]="ButtonType.Filled" (click)="assignSelf()">
               Pridėti save
             </app-button>
-            <app-button *ngIf="showAssignUsers" [type]="ButtonType.Filled">
+            <app-button *ngIf="showAssignUsers" [type]="ButtonType.Filled" (click)="openPhotographerForm()">
               Pridėti fotografą
             </app-button>
           </div>
@@ -64,3 +64,6 @@
 
   </div>
 </div>
+<app-side-view *ngIf="showAssignUsersForm && event">
+  <app-assign-photographer-form [eventId]="event.id" (formEvent)="handlePhotographerFormEvent($event)" />
+</app-side-view>

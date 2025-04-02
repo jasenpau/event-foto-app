@@ -17,6 +17,8 @@ import { UserGroup } from '../../../globals/userGroups';
 import { UserService } from '../../../services/user/user.service';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { SnackbarType } from '../../../services/snackbar/snackbar.types';
+import { SideViewComponent } from '../../../components/side-view/side-view.component';
+import { AssignPhotographerFormComponent } from '../assign-photographer-form/assign-photographer-form.component';
 
 @Component({
   selector: 'app-event-preview',
@@ -27,6 +29,8 @@ import { SnackbarType } from '../../../services/snackbar/snackbar.types';
     ButtonComponent,
     EventBadgeComponent,
     NgForOf,
+    SideViewComponent,
+    AssignPhotographerFormComponent,
   ],
   templateUrl: './event-preview.component.html',
   styleUrl: './event-preview.component.scss',
@@ -42,6 +46,7 @@ export class EventPreviewComponent
   protected showAssignSelf = false;
   protected isAssignedSelf = false;
   protected showAssignUsers = false;
+  protected showAssignUsersForm = false;
   protected userId?: string;
 
   constructor(
@@ -101,11 +106,29 @@ export class EventPreviewComponent
     }
   }
 
+  protected openPhotographerForm() {
+    this.showAssignUsersForm = true;
+  }
+
+  protected handlePhotographerFormEvent($event: string) {
+    if ($event === 'cancel') {
+      this.showAssignUsersForm = false;
+    } else if ($event === 'assigned') {
+      this.showAssignUsersForm = false;
+      this.snackbarService.addSnackbar(
+        SnackbarType.Success,
+        'Fotografas pridėtas prie renginio.',
+      );
+      this.loadPhotographers(this.event!.id);
+    }
+  }
+
   private readRouteParams() {
     this.route.paramMap.subscribe((params) => {
       const id = Number(params.get('eventId'));
       if (!isNaN(id) && id > 0) {
         this.loadEvent(id);
+        this.loadPhotographers(id);
       }
     });
   }
@@ -120,9 +143,11 @@ export class EventPreviewComponent
         takeUntil(this.destroy$),
       )
       .subscribe();
+  }
 
+  private loadPhotographers(eventId: number) {
     this.eventService
-      .getEventPhotographers(id)
+      .getEventPhotographers(eventId)
       .pipe(
         tap((data) => {
           this.setPhotographerList(data);

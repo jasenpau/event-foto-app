@@ -1,3 +1,4 @@
+using EventFoto.Data.DTOs;
 using EventFoto.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -55,5 +56,37 @@ public class EventRepository : IEventRepository
         _context.Entry(eventData).State = EntityState.Modified;
         await _context.SaveChangesAsync();
         return eventData;
+    }
+
+    public async Task<PagedData<string, Event>> SearchEventsAsync(EventSearchParams searchParams)
+    {
+        IQueryable<Event> query = Events.Include(e => e.CreatedByUser);
+
+        if (!string.IsNullOrWhiteSpace(searchParams.KeyOffset))
+        {
+            query = query.Where(e => e.Name.CompareTo(searchParams.KeyOffset) > 0);
+        }
+
+        if (!string.IsNullOrWhiteSpace(searchParams.Query))
+        {
+            query = query.Where(e => EF.Functions.ILike(e.Name, $"%{searchParams.Query}%"));
+        }
+
+        query = query.OrderBy(e => e.Name);
+        // Add +1 to the query to check, if we have the next page.
+        query = query.Take(searchParams.PageSize + 1);
+
+        var queryResult = await query.ToListAsync();
+        var hasNextPage = queryResult.Count > searchParams.PageSize;
+        // Remove last element to constrain to the queried page size.
+        if (hasNextPage) queryResult.RemoveAt(queryResult.Count - 1);
+
+        return new PagedData<string, Event>
+        {
+            Data = queryResult,
+            PageSize = searchParams.PageSize,
+            KeyOffset = searchParams.KeyOffset,
+            HasNextPage = hasNextPage
+        };
     }
 }

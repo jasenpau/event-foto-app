@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiBaseUrl } from '../../globals/variables';
 import {
@@ -9,6 +9,7 @@ import {
   EventPhotographer,
 } from './event.types';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
+import { PagedData } from '../../components/paged-table/paged-table.types';
 
 @Injectable({
   providedIn: 'root',
@@ -70,6 +71,24 @@ export class EventService {
     return this.http.get<string[]>(
       `${ApiBaseUrl}/imaging/photos`,
       getAuthHeaders(),
+    );
+  }
+
+  searchEvents(
+    searchTerm: string | null,
+    keyOffset: string | null,
+    pageSize?: number,
+  ) {
+    let params = new HttpParams();
+    if (searchTerm) params = params.append('query', searchTerm);
+    if (keyOffset) params = params.append('keyOffset', keyOffset.toString());
+    if (pageSize) params = params.append('pageSize', pageSize.toString());
+    return this.http.get<PagedData<string, EventListDto>>(
+      `${ApiBaseUrl}/event/search`,
+      {
+        ...getAuthHeaders(),
+        params,
+      },
     );
   }
 }

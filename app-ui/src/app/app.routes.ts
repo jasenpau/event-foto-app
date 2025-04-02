@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './features/user/login/login.component';
+import { LoginComponent } from './features/auth/login/login.component';
 import { LayoutType } from './components/layouts/layout.types';
 import { EventListComponent } from './features/events/event-list/event-list.component';
 import { AuthGuard } from './guards/auth.guard';
 import { CreateEventComponent } from './features/events/create-event/create-event.component';
 import { CameraMainComponent } from './features/camera/camera-main/camera-main.component';
 import { EventPreviewComponent } from './features/events/event-preview/event-preview.component';
-import { LoginRedirectComponent } from './features/user/login-redirect/login-redirect.component';
+import { LoginRedirectComponent } from './features/auth/login-redirect/login-redirect.component';
 import { GroupPermissionGuard } from './guards/group.guard';
 import { UserGroup } from './globals/userGroups';
 import { NoAccessComponent } from './components/no-access/no-access.component';

@@ -1,4 +1,5 @@
 using System.Net;
+using EventFoto.Data.DTOs;
 using EventFoto.Data.Enums;
 using EventFoto.Data.Models;
 using EventFoto.Data.Repositories;
@@ -14,14 +15,14 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
     
-    public async Task<ServiceResult<User>> GetUser(Guid userId)
+    public async Task<ServiceResult<User>> GetUserAsync(Guid userId)
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
         if (user == null) return ServiceResult<User>.Fail(AppErrorMessage.UserNotFound, HttpStatusCode.NotFound);
         return ServiceResult<User>.Ok(user);
     }
 
-    public async Task<ServiceResult<User>> CreateUser(UserCreateDetails userDetails, Guid userId)
+    public async Task<ServiceResult<User>> CreateUserAsync(UserCreateDetails userDetails, Guid userId)
     {
         var newUser = new User
         {
@@ -31,5 +32,13 @@ public class UserService : IUserService
         };
         var user = await _userRepository.CreateUserAsync(newUser);
         return ServiceResult<User>.Ok(user);
+    }
+
+    public async Task<ServiceResult<PagedData<string, User>>> SearchUsersAsync(UserSearchParams searchParams)
+    {
+        var result = await _userRepository.SearchUsersAsync(searchParams);
+        return result is not null
+            ? ServiceResult<PagedData<string, User>>.Ok(result)
+            : ServiceResult<PagedData<string, User>>.Fail("Query failed", HttpStatusCode.InternalServerError);
     }
 }

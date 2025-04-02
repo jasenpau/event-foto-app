@@ -8,7 +8,14 @@
       Sukurti renginį
     </app-button>
   </div>
-  <table class="event-list__table table">
+  <div>
+    <app-input-field id="search" label="Paieška" [formControl]="searchControl" />
+    <app-button [type]="buttonType.Text" [disabled]="!eventsTableData.showPrevious" (click)="previousPage()">Ankstesnis</app-button>
+    <app-button [type]="buttonType.Text" [disabled]="!eventsTableData.showNext" (click)="nextPage()">Kitas</app-button>
+  </div>
+  <table
+    class="event-list__table table"
+    *ngIf="!eventsTableData.loading">
     <tr>
       <th class="event-list__table-name table__pad-row-start">Pavadinimas</th>
       <th class="event-list__table-date">Pradžios data ir laikas</th>
@@ -16,7 +23,7 @@
       <th>Nuotraukos</th>
       <th class="table__pad-row-end"></th>
     </tr>
-    <tr *ngFor="let event of events">
+    <tr *ngFor="let event of eventsTableData.pageData">
       <td class="event-list__table-name table__pad-row-start">
         {{ event.name }}
       </td>

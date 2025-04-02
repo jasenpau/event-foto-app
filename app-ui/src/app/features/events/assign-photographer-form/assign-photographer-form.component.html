@@ -1,0 +1,19 @@
+<div class="assign-photographer-header">
+  <h3>Pridėti fotografą</h3>
+  <app-button [type]="ButtonType.Text" (click)="cancel()">Uždaryti</app-button>
+</div>
+<div>
+  <app-input-field id="photographer-search" label="Paieška" [formControl]="searchControl" />
+  <table class="table assign-photographer-table" *ngIf="!userTableData.loading">
+    <tr>
+      <th>Vardas</th>
+      <th>El. paštas</th>
+      <th></th>
+    </tr>
+    <tr *ngFor="let user of userTableData.pageData">
+      <td>{{ user.name }}</td>
+      <td>{{ user.email }}</td>
+      <td><app-button [type]="ButtonType.Text" (click)="assignUser(user.id)">Pridėti</app-button></td>
+    </tr>
+  </table>
+</div>

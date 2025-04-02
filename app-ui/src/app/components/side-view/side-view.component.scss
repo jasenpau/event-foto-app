@@ -1,0 +1,19 @@
+@use "colors";
+
+.side-view {
+  position: fixed;
+  display: grid;
+  grid-template-columns: 1fr 700px;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+
+  &__container {
+    grid-column: 2 / 3;
+    height: 100vh;
+    background: colors.$surface;
+    padding: 32px 48px;
+  }
+}

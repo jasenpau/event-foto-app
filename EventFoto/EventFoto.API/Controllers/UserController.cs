@@ -28,7 +28,7 @@ public class UserController : AppControllerBase
         var userId = RequestUserId();
         if (userId != id) return Unauthorized();
         
-        var result = await _userService.GetUser(userId);
+        var result = await _userService.GetUserAsync(userId);
         return result.Success ? Ok(result.Data) : result.ToErrorResponse();
     }
 
@@ -41,7 +41,7 @@ public class UserController : AppControllerBase
             Email = registerDto.Email,
             Name = registerDto.Name,
         };
-        var result = await _userService.CreateUser(userCreateDetails, userId);
+        var result = await _userService.CreateUserAsync(userCreateDetails, userId);
         return result.Success
             ? Ok(new UserDto()
             {
@@ -57,5 +57,18 @@ public class UserController : AppControllerBase
     {
         var groups = _groupSettingsProvider.GetGroups();
         return Ok(groups);
+    }
+
+    [HttpGet("search")]
+    public async Task<ActionResult<PagedData<string, UserListDto>>> SearchUsers([FromQuery] UserSearchParams searchParams)
+    {
+        var searchResult = await _userService.SearchUsersAsync(searchParams);
+        if (!searchResult.Success)
+        {
+            return searchResult.ToErrorResponse();
+        }
+
+        var result = searchResult.Data.ToDto(UserListDto.FromUser);
+        return Ok(result);
     }
 }

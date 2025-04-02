@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Router, RouterOutlet, RoutesRecognized } from '@angular/router';
 import { LayoutType } from '../components/layouts/layout.types';
 import { takeUntil, tap } from 'rxjs';
@@ -49,7 +55,6 @@ export class RootComponent
                   'No layout specified for route',
                   routeSnapshot.title,
                 );
-                console.log(routeSnapshot.url[0]);
               }
             }
           }

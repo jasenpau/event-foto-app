@@ -3,6 +3,7 @@ using EventFoto.API.Filters;
 using EventFoto.Core.Events;
 using EventFoto.Data.DTOs;
 using EventFoto.Data.Enums;
+using EventFoto.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,19 @@ public class EventController : AppControllerBase
         var events = await _eventService.GetAllEventsAsync();
         var eventDtos = events.Data.Select(EventListDto.FromEvent).ToArray();
         return Ok(eventDtos);
+    }
+
+    [HttpGet("search")]
+    public async Task<ActionResult<PagedData<string, EventListDto>>> SearchEvents([FromQuery] EventSearchParams searchParams)
+    {
+        var searchResult = await _eventService.SearchEventsAsync(searchParams);
+        if (!searchResult.Success)
+        {
+            return searchResult.ToErrorResponse();
+        }
+
+        var result = searchResult.Data.ToDto(EventListDto.FromEvent);
+        return Ok(result);
     }
     
     [HttpGet("{id:int}")]

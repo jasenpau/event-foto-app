@@ -22,4 +22,8 @@
       <ProjectReference Include="..\EventFoto.Data\EventFoto.Data.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Uploads\" />
+    </ItemGroup>
+
 </Project>

@@ -26,10 +26,7 @@ export class AuthService {
       this.msalInitialized = true;
       this.msalInstance
         .handleRedirectPromise()
-        .then((result) => this.handleMsalLoginRedirect(result))
-        .catch((error) => {
-          console.log('handleRedirectError', error);
-        });
+        .then((result) => this.handleMsalLoginRedirect(result));
     });
   }
 

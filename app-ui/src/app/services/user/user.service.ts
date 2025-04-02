@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, Observable, of, tap } from 'rxjs';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
 import { ApiBaseUrl } from '../../globals/variables';
@@ -11,6 +11,7 @@ import {
 } from './user.types';
 import { AuthService } from '../auth/auth.service';
 import { UserGroup } from '../../globals/userGroups';
+import { PagedData } from '../../components/paged-table/paged-table.types';
 
 @Injectable({
   providedIn: 'root',
@@ -95,5 +96,26 @@ export class UserService {
           this.currentUser = result;
         }),
       );
+  }
+
+  searchUsers(
+    searchTerm: string | null,
+    keyOffset: string | null,
+    pageSize?: number,
+    excludeEventId?: number,
+  ) {
+    let params = new HttpParams();
+    if (searchTerm) params = params.append('query', searchTerm);
+    if (keyOffset) params = params.append('keyOffset', keyOffset.toString());
+    if (pageSize) params = params.append('pageSize', pageSize.toString());
+    if (excludeEventId)
+      params = params.append('excludeEventId', excludeEventId.toString());
+    return this.http.get<PagedData<string, UserData>>(
+      `${ApiBaseUrl}/user/search`,
+      {
+        ...getAuthHeaders(),
+        params,
+      },
+    );
   }
 }
