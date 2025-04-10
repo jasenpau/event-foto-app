@@ -30,6 +30,11 @@
   }
 }
 
+td.table__no-wrap,
+th.table__no-wrap {
+  white-space: nowrap;
+}
+
 td.table__pad-row-start,
 th.table__pad-row-start {
   padding-left: 64px;

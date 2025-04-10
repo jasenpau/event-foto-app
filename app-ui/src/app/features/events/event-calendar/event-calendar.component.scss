@@ -1,31 +1,77 @@
 @use "colors";
 
-.controls {
-  margin-bottom: 10px;
-}
-
 .calendar {
-  width: 100%;
-  border-collapse: collapse;
-}
+  &__controls {
+    display: grid;
+    grid-template-columns: minmax(0, 150px) minmax(0, 300px);
+    gap: 32px;
+    width: 100%;
+  }
 
-.calendar th, .calendar td {
-  border: 1px solid #ccc;
-  text-align: center;
-  width: 14.28%;
-  height: 80px;
-  vertical-align: top;
-}
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
 
-.calendar th {
-  background: #f4f4f4;
-}
+    td,
+    th {
+      border: 1px solid #ccc;
+      width: 14.28%;
+      min-height: 80px;
+      vertical-align: top;
+      padding: 4px;
+    }
 
-.today {
-  background-color: colors.$primary-container;
-  font-weight: bold;
-}
+    th {
+      height: 40px;
+      background: #f4f4f4;
+      vertical-align: middle;
+    }
+  }
 
-.prev-next-month {
-  color: colors.$on-surface-variant;
+  &__table-day {
+    text-align: center;
+    margin: 0;
+  }
+
+  &__table-today {
+    background-color: colors.$primary-container;
+    font-weight: bold;
+  }
+
+  &__table-prev-next-month {
+    color: colors.$on-surface-variant;
+    opacity: 0.7;
+  }
+
+  &__table-events-container {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    list-style: none;
+  }
+
+  &__table-event {
+    background: colors.$tertiary-container;
+    color: colors.$tertiary-on-container;
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__table-event a {
+    text-decoration: none;
+    color: colors.$tertiary-on-container;
+  }
+
+  &__table-event-time {
+    opacity: 0.74;
+    text-align: right;
+  }
+
+  &__table-event p {
+    margin: 0;
+  }
 }

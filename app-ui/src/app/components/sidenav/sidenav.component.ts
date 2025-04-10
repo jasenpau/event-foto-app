@@ -23,6 +23,7 @@ export class SidenavComponent {
   sidenavItems: SidenavItem[] = [
     { title: 'Renginiai', link: '/event', icon: SvgIconSrc.Ticket },
     { title: 'Kalendorius', link: '/calendar', icon: SvgIconSrc.Calendar },
+    { title: 'Naudotojai', link: '/users', icon: SvgIconSrc.Users },
   ];
 
   currentUser: User | null = null;

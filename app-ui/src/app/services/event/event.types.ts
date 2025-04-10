@@ -32,3 +32,11 @@ export interface EventPhotographer {
   name: string;
   photoCount: number;
 }
+
+export interface EventSearchParamsDto {
+  searchTerm?: string | null;
+  keyOffset?: string | null;
+  pageSize?: number;
+  fromDate?: Date;
+  toDate?: Date;
+}

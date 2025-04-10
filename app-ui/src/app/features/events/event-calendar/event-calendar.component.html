@@ -5,20 +5,17 @@
     </div>
   </div>
 
-  <div class="controls">
-    <label for="month"></label>
-    <select id="month" [(ngModel)]="selectedMonth" (change)="generateCalendar()">
-      <option *ngFor="let month of months; let i = index" [value]="i">{{ month }}</option>
-    </select>
-
-    <label for="year"></label>
-    <select id="year" [(ngModel)]="selectedYear" (change)="generateCalendar()">
+  <form class="calendar__controls" [formGroup]="calendarForm">
+    <app-select id="year" label="Metai" formControlName="year">
       <option *ngFor="let year of years" [value]="year">{{ year }}</option>
-    </select>
-  </div>
+    </app-select>
 
-  <table class="calendar">
-    <thead>
+    <app-select id="month" label="Mėnuo" formControlName="month">
+      <option *ngFor="let month of months; let i = index" [value]="i">{{ month }}</option>
+    </app-select>
+  </form>
+
+  <table class="calendar__table">
     <tr>
       <th>Pirmadienis</th>
       <th>Antradienis</th>
@@ -28,16 +25,39 @@
       <th>Šeštadienis</th>
       <th>Sekmadienis</th>
     </tr>
-    </thead>
-    <tbody>
     <tr *ngFor="let week of weeks">
       <td *ngFor="let day of week"
-          [class.prev-next-month]="!day.currentMonth"
-          [class.today]="day.today">
-        {{ day.day }}
+          [class.calendar__table-today]="day.today">
+        <p class="calendar__table-day" [class.calendar__table-prev-next-month]="!day.currentMonth">{{ day.day }}</p>
+        <ul class="calendar__table-events-container">
+          <li class="calendar__table-event" *ngFor="let eventDisplay of day.events">
+            <a [routerLink]="'/event/' + eventDisplay.event.id">
+              <p>{{ eventDisplay.event.name }}</p>
+              <p *ngIf="eventDisplay.startsToday && eventDisplay.endsToday && eventDisplay.event.endDate"
+              class="calendar__table-event-time">
+                {{ formatEventTime(eventDisplay.event.startDate) }} - {{ formatEventTime(eventDisplay.event.endDate) }}
+              </p>
+              <p *ngIf="eventDisplay.startsToday && eventDisplay.endsToday && !eventDisplay.event.endDate"
+                 class="calendar__table-event-time">
+                {{ formatEventTime(eventDisplay.event.startDate) }}
+              </p>
+              <p *ngIf="eventDisplay.startsToday && !eventDisplay.endsToday"
+                 class="calendar__table-event-time">
+                Pradžia {{ formatEventTime(eventDisplay.event.startDate) }}
+              </p>
+              <p *ngIf="!eventDisplay.startsToday && eventDisplay.endsToday && eventDisplay.event.endDate"
+                 class="calendar__table-event-time">
+                Pabaiga {{ formatEventTime(eventDisplay.event.endDate) }}
+              </p>
+              <p *ngIf="!eventDisplay.startsToday && !eventDisplay.endsToday"
+                 class="calendar__table-event-time">
+                Tęstinis
+              </p>
+            </a>
+          </li>
+        </ul>
       </td>
     </tr>
-    </tbody>
   </table>
 
 </div>

@@ -29,11 +29,6 @@ public class EventRepository : IEventRepository
             .FirstOrDefaultAsync(e => e.Id == id);
     }
 
-    public async Task<IList<Event>> GetAllEventsAsync()
-    {
-        return await Events.ToListAsync();
-    }
-
     public async Task<IList<User>> GetEventPhotographersAsync(int eventId)
     {
         var selectedEvent = await Events.Include(e => e.Photographers)

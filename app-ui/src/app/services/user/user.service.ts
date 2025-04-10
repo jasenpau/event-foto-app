@@ -56,7 +56,7 @@ export class UserService {
       );
   }
 
-  userGroups(): Observable<UserGroup[]> {
+  getUserGroups(): Observable<UserGroup[]> {
     const user = this.authService.getUserTokenData();
     if (!user) return of([]);
 
@@ -79,7 +79,7 @@ export class UserService {
   }
 
   userGroupsCallback(callback: UserGroupsCallback) {
-    this.userGroups().subscribe((groups) => {
+    this.getUserGroups().subscribe((groups) => {
       callback(groups);
     });
   }

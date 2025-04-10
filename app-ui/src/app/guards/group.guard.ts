@@ -31,7 +31,7 @@ export class GroupPermissionGuard implements CanActivate {
       );
     }
 
-    return this.userService.userGroups().pipe(
+    return this.userService.getUserGroups().pipe(
       map((groups) => {
         const canActivate = groups.includes(requiredGroup);
         if (canActivate) return true;

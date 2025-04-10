@@ -6,7 +6,6 @@ namespace EventFoto.Core.Events;
 public interface IEventService
 {
     public Task<ServiceResult<Event>> GetById(int id);
-    public Task<ServiceResult<IList<Event>>> GetAllEventsAsync();
     public Task<ServiceResult<IList<EventPhotographerDto>>> GetEventPhotographersAsync(int eventId);
     public Task<ServiceResult<IList<EventPhotographerDto>>> AssignPhotographerAsync(int eventId, Guid userId);
     public Task<ServiceResult<IList<EventPhotographerDto>>> UnassignPhotographerAsync(int eventId, Guid userId);

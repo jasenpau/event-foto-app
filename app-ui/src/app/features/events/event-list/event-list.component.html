@@ -18,7 +18,7 @@
     *ngIf="!eventsTableData.loading">
     <tr>
       <th class="event-list__table-name table__pad-row-start">Pavadinimas</th>
-      <th class="event-list__table-date">Pradžios data ir laikas</th>
+      <th class="table__no-wrap">Pradžios data ir laikas</th>
       <th>Būsena</th>
       <th>Nuotraukos</th>
       <th class="table__pad-row-end"></th>
@@ -27,7 +27,7 @@
       <td class="event-list__table-name table__pad-row-start">
         {{ event.name }}
       </td>
-      <td class="event-list__table-date">
+      <td class="table__no-wrap">
         {{ formatDate(event.startDate) }}
       </td>
       <td>

@@ -4,6 +4,7 @@ export interface UserData {
   id: string;
   email: string;
   name: string;
+  groupAssignment: string;
 }
 
 export interface AppGroupsDto {

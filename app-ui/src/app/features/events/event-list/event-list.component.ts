@@ -50,7 +50,11 @@ export class EventListComponent
     super();
     this.eventsTableData = new PagedDataTable<string, EventListDto>(
       (searchTerm, keyOffset, pageSize) => {
-        return this.eventService.searchEvents(searchTerm, keyOffset, pageSize);
+        return this.eventService.searchEvents({
+          searchTerm,
+          keyOffset,
+          pageSize,
+        });
       },
       (item) => item.name,
       '',

@@ -18,7 +18,7 @@ import { UserService } from '../../../services/user/user.service';
 import { debounceTime, takeUntil, tap } from 'rxjs';
 import { NgForOf, NgIf } from '@angular/common';
 
-const USER_TABLE_PAGE_SIZE = 20;
+const USER_TABLE_PAGE_SIZE = 10;
 
 @Component({
   selector: 'app-assign-photographer-form',

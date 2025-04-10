@@ -7,6 +7,7 @@ import {
   EventListDto,
   EventDto,
   EventPhotographer,
+  EventSearchParamsDto,
 } from './event.types';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
 import { PagedData } from '../../components/paged-table/paged-table.types';
@@ -74,15 +75,19 @@ export class EventService {
     );
   }
 
-  searchEvents(
-    searchTerm: string | null,
-    keyOffset: string | null,
-    pageSize?: number,
-  ) {
+  searchEvents(searchParams: EventSearchParamsDto) {
     let params = new HttpParams();
-    if (searchTerm) params = params.append('query', searchTerm);
-    if (keyOffset) params = params.append('keyOffset', keyOffset.toString());
-    if (pageSize) params = params.append('pageSize', pageSize.toString());
+    if (searchParams.searchTerm)
+      params = params.append('query', searchParams.searchTerm);
+    if (searchParams.keyOffset)
+      params = params.append('keyOffset', searchParams.keyOffset);
+    if (searchParams.pageSize)
+      params = params.append('pageSize', searchParams.pageSize);
+    if (searchParams.fromDate)
+      params = params.append('fromDate', searchParams.fromDate.toISOString());
+    if (searchParams.toDate)
+      params = params.append('toDate', searchParams.toDate.toISOString());
+
     return this.http.get<PagedData<string, EventListDto>>(
       `${ApiBaseUrl}/event/search`,
       {

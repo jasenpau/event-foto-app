@@ -12,6 +12,7 @@ import { UserGroup } from './globals/userGroups';
 import { NoAccessComponent } from './components/no-access/no-access.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { EventCalendarComponent } from './features/events/event-calendar/event-calendar.component';
+import { UserListComponent } from './features/user-admin/user-list/user-list.component';
 
 // Routes and their respective layouts. If layout is left blank, empty-layout is used.
 export const routes: Routes = [
@@ -53,6 +54,15 @@ export const routes: Routes = [
     component: EventPreviewComponent,
     data: { layout: LayoutType.Main },
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'users',
+    component: UserListComponent,
+    data: {
+      layout: LayoutType.Main,
+      requiredGroup: UserGroup.EventAdmin,
+    },
+    canActivate: [AuthGuard, GroupPermissionGuard],
   },
   {
     path: 'login',

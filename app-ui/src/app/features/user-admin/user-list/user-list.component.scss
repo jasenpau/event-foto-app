@@ -1,0 +1,11 @@
+@use "colors";
+
+.user-list {
+  &__table {
+    width: 100%;
+  }
+
+  &__table-full-width {
+    width: 50%;
+  }
+}

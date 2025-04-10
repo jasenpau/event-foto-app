@@ -7,7 +7,6 @@ public interface IEventRepository
 {
     public Task<Event> GetByIdAsync(int id);
     public Task<Event> GetByIdWithPhotographersAsync(int id);
-    public Task<IList<Event>> GetAllEventsAsync();
     public Task<IList<User>> GetEventPhotographersAsync(int eventId);
     public Task<Event> CreateAsync(Event eventData);
     public Task<Event> UpdateEventAsync(Event eventData);

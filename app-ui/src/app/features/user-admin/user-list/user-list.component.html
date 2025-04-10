@@ -1,1 +1,39 @@
-<p>user-list works!</p>
+<div class="user-list">
+  <div class="page-header">
+    <h2 class="text-headline-large no-margin">Naudotojai</h2>
+    <app-button link="/users/invite">
+      Pakviesti naudotoją
+    </app-button>
+  </div>
+  <div>
+    <app-input-field id="search" label="Paieška" [formControl]="searchControl" />
+    <app-button [type]="buttonType.Text" [disabled]="!userTableData.showPrevious" (click)="previousPage()">Ankstesnis</app-button>
+    <app-button [type]="buttonType.Text" [disabled]="!userTableData.showNext" (click)="nextPage()">Kitas</app-button>
+  </div>
+  <table
+    class="user-list__table table"
+    *ngIf="!userTableData.loading">
+    <tr>
+      <th class="user-list__table-full-width table__pad-row-start">Vardas</th>
+      <th class="user-list__table-full-width">El. pašto adresas</th>
+      <th class="table__no-wrap">Pareigos</th>
+      <th class="table__pad-row-end"></th>
+    </tr>
+    <tr *ngFor="let user of userTableData.pageData">
+      <td class="user-list__table-full-width table__pad-row-start">
+        {{ user.name }}
+      </td>
+      <td class="user-list__table-full-width">
+        {{ user.email }}
+      </td>
+      <td class="table__no-wrap">
+        {{ getUserGroupName(user.groupAssignment) }}
+      </td>
+      <td class="table__pad-row-end">
+        <app-button [link]="'/users/' + user.id" [type]="buttonType.Text">
+          Peržiūrėti
+        </app-button>
+      </td>
+    </tr>
+  </table>
+</div>

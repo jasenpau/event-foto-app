@@ -5,23 +5,31 @@ $surface: #fefbfe;
 $surface-tint-3: #eaeaf1;
 $on-surface: #1b1b1d;
 $on-surface-variant: #45464c;
-$primary-container: #d9e2ff;
-$primary-on-container: #001944;
-$outline: #76777c;
+
 $primary: #365ca8;
 $on-primary: #fff;
+$primary-container: #d9e2ff;
+$primary-on-container: #001944;
+
 $secondary: #575e71;
 $on-secondary: #fff;
+
 $tertiary: #725572;
 $on-tertiary: #fff;
+$tertiary-container: #fdd7fa;
+$tertiary-on-container: #2a132c;
+
 $error: #BA1A1A;
 $on-error: #fff;
 $error-container: #E57373;
 $error-on-container: #1b1b1d;
+
 $success: #388E3C;
 $on-success: #fff;
 $success-container: #81C784;
 $success-on-container: #1b1b1d;
+
+$outline: #76777c;
 
 $primary-hover: linear-gradient(
     0deg,

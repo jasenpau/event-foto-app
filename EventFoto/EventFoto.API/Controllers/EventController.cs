@@ -21,14 +21,6 @@ public class EventController : AppControllerBase
         _eventService = eventService;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<EventListDto[]>> GetAllEvents()
-    {
-        var events = await _eventService.GetAllEventsAsync();
-        var eventDtos = events.Data.Select(EventListDto.FromEvent).ToArray();
-        return Ok(eventDtos);
-    }
-
     [HttpGet("search")]
     public async Task<ActionResult<PagedData<string, EventListDto>>> SearchEvents([FromQuery] EventSearchParams searchParams)
     {

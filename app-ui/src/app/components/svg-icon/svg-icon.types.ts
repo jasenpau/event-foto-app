@@ -8,6 +8,7 @@ export enum SvgIconSrc {
   InfoCircle = 'assets/icons/info-circle.svg',
   Close = 'assets/icons/close.svg',
   Ticket = 'assets/icons/ticket.svg',
+  Users = 'assets/icons/users.svg',
 }
 
 export enum SvgIconSize {
