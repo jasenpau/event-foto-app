@@ -87,6 +87,8 @@ export class EventService {
       params = params.append('fromDate', searchParams.fromDate.toISOString());
     if (searchParams.toDate)
       params = params.append('toDate', searchParams.toDate.toISOString());
+    if (searchParams.showArchived)
+      params = params.append('showArchived', searchParams.showArchived);
 
     return this.http.get<PagedData<string, EventListDto>>(
       `${ApiBaseUrl}/event/search`,

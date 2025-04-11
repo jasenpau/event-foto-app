@@ -1,3 +1,4 @@
+using System.Globalization;
 using EventFoto.Data.DTOs;
 using EventFoto.Data.Models;
 using Microsoft.EntityFrameworkCore;
@@ -59,7 +60,11 @@ public class EventRepository : IEventRepository
 
         if (!string.IsNullOrWhiteSpace(searchParams.KeyOffset))
         {
-            query = query.Where(e => e.Name.CompareTo(searchParams.KeyOffset) > 0);
+            var offset = searchParams.KeyOffset.Split('|');
+            var offsetDate = DateTime.Parse(offset[0], CultureInfo.InvariantCulture,
+                DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
+            var offsetId = int.Parse(offset[1]);
+            query = query.Where(e => e.StartDate >= offsetDate && e.Id > offsetId);
         }
 
         if (!string.IsNullOrWhiteSpace(searchParams.Query))
@@ -67,7 +72,28 @@ public class EventRepository : IEventRepository
             query = query.Where(e => EF.Functions.ILike(e.Name, $"%{searchParams.Query}%"));
         }
 
-        query = query.OrderBy(e => e.Name);
+        if (searchParams.FromDate.HasValue)
+        {
+            query = query.Where(e =>
+                e.StartDate >= searchParams.FromDate.Value ||
+                (e.EndDate.HasValue && e.EndDate.Value >= searchParams.FromDate.Value)
+            );
+        }
+
+        if (searchParams.ToDate.HasValue)
+        {
+            query = query.Where(e =>
+                e.StartDate <= searchParams.ToDate.Value ||
+                (e.EndDate.HasValue && e.EndDate.Value <= searchParams.ToDate.Value)
+            );
+        }
+
+        if (searchParams.ShowArchived is null or false)
+        {
+            query = query.Where(e => e.IsArchived == false);
+        }
+
+        query = query.OrderBy(e => e.StartDate).ThenBy(e => e.Id);
         // Add +1 to the query to check, if we have the next page.
         query = query.Take(searchParams.PageSize + 1);
 
@@ -79,6 +105,7 @@ public class EventRepository : IEventRepository
         return new PagedData<string, Event>
         {
             Data = queryResult,
+
             PageSize = searchParams.PageSize,
             KeyOffset = searchParams.KeyOffset,
             HasNextPage = hasNextPage

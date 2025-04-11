@@ -11,7 +11,7 @@ import { ButtonComponent } from '../../../components/button/button.component';
 import { ButtonType } from '../../../components/button/button.types';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { PagedDataTable } from '../../../components/paged-table/paged-table.types';
+import { PagedDataTable } from '../../../components/paged-table/paged-table';
 import { UserData } from '../../../services/user/user.types';
 import { EventService } from '../../../services/event/event.service';
 import { UserService } from '../../../services/user/user.service';

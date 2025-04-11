@@ -8,7 +8,10 @@ import {
 } from 'angularx-flatpickr';
 import flatpickr from 'flatpickr';
 import confirmDatePlugin from 'flatpickr/dist/plugins/confirmDate/confirmDate';
-import { formatLithuanianDate } from '../../../helpers/formatLithuanianDate';
+import {
+  formatLithuanianDate,
+  formatLithuanianDateOnly,
+} from '../../../helpers/formatLithuanianDate';
 
 @Component({
   selector: 'app-date-picker',
@@ -25,13 +28,19 @@ import { formatLithuanianDate } from '../../../helpers/formatLithuanianDate';
 })
 export class DatePickerComponent extends FormElementBaseComponent {
   @Input() enableTime = false;
+  @Input() dateOnly = false;
   @Input({ required: false }) minDate!: Date;
   @Input() subtext?: string;
 
   protected plugins = [confirmDatePlugin({ confirmText: 'Patvirtinti' })];
 
   formatLtDate(value: any, format: any) {
+    if (format === 'lt-date-only') return formatLithuanianDateOnly(value);
     if (format === 'lt-format') return formatLithuanianDate(value);
     return flatpickr.formatDate(value, format);
+  }
+
+  get altFormat(): string {
+    return this.dateOnly ? 'lt-date-only' : 'lt-format';
   }
 }

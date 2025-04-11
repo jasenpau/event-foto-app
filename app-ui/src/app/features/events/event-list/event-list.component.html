@@ -9,7 +9,26 @@
     </app-button>
   </div>
   <div>
-    <app-input-field id="search" label="Paieška" [formControl]="searchControl" />
+    <form class="event-list__controls" [formGroup]="searchForm">
+      <app-input-field id="search" label="Paieška" formControlName="search" />
+      <app-date-picker
+        id="fromDate"
+        formControlName="fromDate"
+        label="Nuo datos"
+        [dateOnly]="true"
+      />
+      <app-date-picker
+        id="toDate"
+        formControlName="toDate"
+        label="Iki datos"
+        [dateOnly]="true"
+      />
+      <app-checkbox
+        id="showArchived"
+        formControlName="showArchived"
+        label="Rodyti archyvuotus renginius"
+      />
+    </form>
     <app-button [type]="buttonType.Text" [disabled]="!eventsTableData.showPrevious" (click)="previousPage()">Ankstesnis</app-button>
     <app-button [type]="buttonType.Text" [disabled]="!eventsTableData.showNext" (click)="nextPage()">Kitas</app-button>
   </div>

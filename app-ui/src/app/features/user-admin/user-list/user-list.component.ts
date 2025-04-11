@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { PagedDataTable } from '../../../components/paged-table/paged-table.types';
+import { PagedDataTable } from '../../../components/paged-table/paged-table';
 import { AppGroupsDto, UserData } from '../../../services/user/user.types';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../../services/user/user.service';

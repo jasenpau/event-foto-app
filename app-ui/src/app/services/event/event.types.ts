@@ -39,4 +39,5 @@ export interface EventSearchParamsDto {
   pageSize?: number;
   fromDate?: Date;
   toDate?: Date;
+  showArchived?: boolean;
 }

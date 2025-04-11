@@ -1,6 +1,13 @@
 @use "colors";
 
 .event-list {
+  &__controls {
+    display: grid;
+    grid-template-columns: minmax(150px, 1fr) minmax(250px, 0.5fr) minmax(250px, 0.5fr) minmax(180px, 0.3fr);
+    gap: 1rem;
+    width: 100%;
+  }
+
   &__table {
     width: 100%;
   }

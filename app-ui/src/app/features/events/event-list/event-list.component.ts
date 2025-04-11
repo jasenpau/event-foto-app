@@ -1,6 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EventService } from '../../../services/event/event.service';
-import { EventListDto } from '../../../services/event/event.types';
+import {
+  EventListDto,
+  EventSearchParamsDto,
+} from '../../../services/event/event.types';
 import { ButtonComponent } from '../../../components/button/button.component';
 import { ButtonType } from '../../../components/button/button.types';
 import { NgForOf, NgIf } from '@angular/common';
@@ -10,10 +13,19 @@ import { UserService } from '../../../services/user/user.service';
 import { UserGroup } from '../../../globals/userGroups';
 import { formatLithuanianDate } from '../../../helpers/formatLithuanianDate';
 import { EventBadgeComponent } from '../../../components/event-badge/event-badge.component';
-import { PagedDataTable } from '../../../components/paged-table/paged-table.types';
+import { PagedDataTable } from '../../../components/paged-table/paged-table';
 import { InputFieldComponent } from '../../../components/forms/input-field/input-field.component';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { debounceTime, takeUntil, tap } from 'rxjs';
+import { DatePickerComponent } from '../../../components/forms/date-picker/date-picker.component';
+import { PagedDataLoader } from '../../../components/paged-table/paged-table.types';
+import { getStartOfDay } from '../../../helpers/getStartOfDay';
+import { CheckboxComponent } from '../../../components/forms/checkbox/checkbox.component';
 
 const EVENT_TABLE_PAGE_SIZE = 20;
 
@@ -26,6 +38,8 @@ const EVENT_TABLE_PAGE_SIZE = 20;
     EventBadgeComponent,
     InputFieldComponent,
     ReactiveFormsModule,
+    DatePickerComponent,
+    CheckboxComponent,
   ],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',
@@ -38,10 +52,9 @@ export class EventListComponent
   protected buttonIcon = SvgIconSrc;
 
   protected eventsTableData: PagedDataTable<string, EventListDto>;
-  protected searchControl: FormControl = new FormControl('', [
-    Validators.max(100),
-  ]);
+  protected searchForm: FormGroup;
   protected showCreateEvent = false;
+  protected minFromDate: Date = new Date(0);
 
   constructor(
     private eventService: EventService,
@@ -50,16 +63,18 @@ export class EventListComponent
     super();
     this.eventsTableData = new PagedDataTable<string, EventListDto>(
       (searchTerm, keyOffset, pageSize) => {
-        return this.eventService.searchEvents({
-          searchTerm,
-          keyOffset,
-          pageSize,
-        });
+        return this.searchEvents(searchTerm, keyOffset, pageSize);
       },
-      (item) => item.name,
+      (item) => `${item.startDate}|${item.id}`,
       '',
       EVENT_TABLE_PAGE_SIZE,
     );
+    this.searchForm = new FormGroup({
+      search: new FormControl(null, [Validators.maxLength(100)]),
+      fromDate: new FormControl(getStartOfDay(new Date()), []),
+      toDate: new FormControl(null, []),
+      showArchived: new FormControl(null, []),
+    });
   }
 
   ngOnInit() {
@@ -83,16 +98,53 @@ export class EventListComponent
 
   private initializeSearch() {
     this.eventsTableData.initialize();
-    this.searchControl.valueChanges
+    this.searchForm.valueChanges
       .pipe(
         debounceTime(300),
         tap((value) => {
-          this.eventsTableData.setSearchTerm(value);
+          if (value['fromDate'] instanceof Date) {
+            this.minFromDate = value['fromDate'];
+            const toDate = this.searchForm.value['toDate'];
+            if (toDate instanceof Date && value['fromDate'] > toDate) {
+              this.searchForm.patchValue({ toDate: null });
+              return;
+            }
+          }
+
+          const searchTerm: string | null = value['search'];
+          this.eventsTableData.setSearchTerm(searchTerm);
         }),
         takeUntil(this.destroy$),
       )
       .subscribe();
   }
+
+  private searchEvents: PagedDataLoader<string, EventListDto> = (
+    searchTerm,
+    keyOffset,
+    pageSize,
+  ) => {
+    const formValue = this.searchForm.value;
+    const searchParams: EventSearchParamsDto = {
+      searchTerm,
+      keyOffset,
+      pageSize,
+    };
+
+    if (formValue['fromDate']) {
+      searchParams['fromDate'] = new Date(formValue['fromDate']);
+      searchParams['fromDate']?.setHours(0, 0, 0, 0);
+    }
+    if (formValue['toDate']) {
+      searchParams['toDate'] = new Date(formValue['toDate']);
+      searchParams['toDate'].setHours(23, 59, 59, 999);
+    }
+    if (formValue['showArchived']) {
+      searchParams['showArchived'] = formValue['showArchived'];
+    }
+
+    return this.eventService.searchEvents(searchParams);
+  };
 
   private updateViewPermissions(groups: UserGroup[]) {
     this.showCreateEvent = groups.includes(UserGroup.EventAdmin);
