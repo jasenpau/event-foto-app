@@ -26,4 +26,11 @@
       <Folder Include="Uploads\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="..\appsettings.local.json">
+        <Link>appsettings.local.json</Link>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>

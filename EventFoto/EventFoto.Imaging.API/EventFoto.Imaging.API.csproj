@@ -8,6 +8,19 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4"/>
+        <PackageReference Include="Microsoft.Identity.Web" Version="3.8.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\appsettings.local.json">
+        <Link>appsettings.local.json</Link>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\EventFoto.Core\EventFoto.Core.csproj" />
+      <ProjectReference Include="..\EventFoto.Data\EventFoto.Data.csproj" />
     </ItemGroup>
 
 </Project>

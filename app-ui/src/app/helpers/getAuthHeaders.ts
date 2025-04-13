@@ -1,4 +1,4 @@
-import { AUTH_TOKEN_STORAGE_KEY } from '../services/auth/auth.service';
+import { AUTH_TOKEN_STORAGE_KEY } from '../services/auth/auth.const';
 
 export const getAuthHeaders = () => {
   return {

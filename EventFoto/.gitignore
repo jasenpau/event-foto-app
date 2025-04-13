@@ -44,3 +44,6 @@ msbuild.err
 msbuild.wrn
 
 /EventFoto.API/Uploads/*
+/EventFoto.Imaging.API/Uploads/*
+
+appsettings.local.json

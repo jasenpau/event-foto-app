@@ -1,10 +1,11 @@
-using EventFoto.API.Providers;
+using EventFoto.Core.Providers;
 using EventFoto.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace EventFoto.API.Filters;
+namespace EventFoto.Core.Filters;
 
 [AttributeUsage(AttributeTargets.Method)]
 public class AccessGroupFilter(UserGroup group) : AuthorizeAttribute, IAuthorizationFilter
@@ -20,8 +21,7 @@ public class AccessGroupFilter(UserGroup group) : AuthorizeAttribute, IAuthoriza
         }
 
         var userGroups = user.FindAll("groups");
-        var groupSettingsProvider = context.HttpContext.RequestServices.GetService<IGroupSettingsProvider>();
-        if (groupSettingsProvider is null) throw new NullReferenceException("No group settings provider found.");
+        var groupSettingsProvider = context.HttpContext.RequestServices.GetRequiredService<IGroupSettingsProvider>();
         var appGroups = groupSettingsProvider.GetGroups();
 
         var canAccess = group switch

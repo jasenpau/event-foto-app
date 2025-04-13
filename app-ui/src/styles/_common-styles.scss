@@ -82,6 +82,14 @@ th.table__pad-row-end {
       border-color: colors.$error;
       padding: functions.rem-size(14px);
     }
+
+    &:disabled {
+      color: colors.$on-surface-variant;
+    }
+
+    &:disabled:hover {
+      border: 1px solid colors.$outline;
+    }
   }
 
   &__supporting-text {

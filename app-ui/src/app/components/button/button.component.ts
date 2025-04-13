@@ -17,6 +17,7 @@ export class ButtonComponent {
   @Input() icon?: SvgIconSrc;
   @Input() link?: string;
   @Input() disabled?: boolean;
+  @Input() disableFormSubmit?: boolean = false;
 
   protected readonly buttonType = ButtonType;
   protected readonly buttonSize = ButtonSize;

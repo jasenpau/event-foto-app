@@ -1,6 +1,7 @@
 using EventFoto.Data.Models;
+using Microsoft.Extensions.Configuration;
 
-namespace EventFoto.API.Providers;
+namespace EventFoto.Core.Providers;
 
 public class GroupSettingsProvider : IGroupSettingsProvider
 {

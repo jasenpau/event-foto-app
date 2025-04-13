@@ -18,6 +18,7 @@ import {
 import { EventService } from '../../../services/event/event.service';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { takeUntil, tap } from 'rxjs';
+import { AUTH_TOKEN_STORAGE_KEY } from '../../../services/auth/auth.const';
 
 @Component({
   selector: 'app-camera-main',
@@ -36,21 +37,28 @@ export class CameraMainComponent
   protected event?: CameraEvent;
   protected cameraLoadingFinished = false;
   protected eventLoadingFinished = false;
-  protected displaySettings =
-    this.cameraLoadingFinished &&
-    this.eventLoadingFinished &&
-    (!this.cameraDevice || !this.event);
   protected userOpenSettings = false;
 
   protected cameraInitialized = false;
   protected cameraStream?: MediaStream;
   protected uploadInProgress = false;
 
+  private cameraWorker: Worker;
+
   constructor(
     private readonly imagingService: ImagingService,
     private readonly eventService: EventService,
   ) {
     super();
+    this.cameraWorker = new Worker(
+      new URL('./camera.worker', import.meta.url),
+      {
+        type: 'module',
+      },
+    );
+    this.cameraWorker.onmessage = (e) => {
+      this.handleWorkerMessage(e);
+    };
   }
 
   ngOnInit() {
@@ -73,9 +81,10 @@ export class CameraMainComponent
     this.userOpenSettings = false;
   }
 
-  capture() {
-    this.uploadInProgress = true;
-    console.log('CLICK!');
+  async capture() {
+    if (!this.event) return;
+    const eventId = this.event.id;
+
     const ctx = this.canvas.nativeElement.getContext('2d');
     const canvas = this.canvas.nativeElement;
     const video = this.previewVideo.nativeElement;
@@ -85,14 +94,34 @@ export class CameraMainComponent
 
     if (ctx) {
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      canvas.toBlob((blob) => {
-        if (blob) {
-          this.imagingService.uploadImage(blob).subscribe((response) => {
-            console.log('Upload', response);
-            setTimeout(() => {
-              this.uploadInProgress = false;
-            }, 100);
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+
+        try {
+          const filename = `${eventId}-${Date.now()}.jpg`;
+
+          const root = await navigator.storage.getDirectory();
+          const fileHandle = await root.getFileHandle(filename, {
+            create: true,
           });
+          const writable = await fileHandle.createWritable();
+
+          await writable.write(blob);
+          await writable.close();
+
+          console.log('Saved to OPFS', filename);
+
+          const authToken = localStorage.getItem(AUTH_TOKEN_STORAGE_KEY);
+          if (!authToken) return;
+
+          this.cameraWorker.postMessage({
+            eventId,
+            filename,
+            authToken,
+            captureDate: new Date(),
+          });
+        } catch (err) {
+          console.error('Failed to write to OPFS:', err);
         }
       }, 'image/jpeg');
     }
@@ -111,12 +140,16 @@ export class CameraMainComponent
   }
 
   private loadCamera() {
+    console.log('loading camera...');
     const cameraDevice = loadCameraDevice();
     if (cameraDevice) {
       this.cameraDevice = cameraDevice;
-      this.initCamera(cameraDevice.deviceId);
+      this.initCamera(cameraDevice.deviceId).finally(() => {
+        this.cameraLoadingFinished = true;
+      });
+    } else {
+      this.cameraLoadingFinished = true;
     }
-    this.cameraLoadingFinished = true;
   }
 
   private loadEvent() {
@@ -154,13 +187,20 @@ export class CameraMainComponent
       },
     };
 
-    this.cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
-    if (!this.cameraStream) {
+    try {
+      this.cameraStream =
+        await navigator.mediaDevices.getUserMedia(constraints);
+      if (!this.cameraStream) {
+        this.openSettings();
+        return;
+      }
+      this.previewVideo.nativeElement.srcObject = this.cameraStream;
+      this.cameraInitialized = true;
+    } catch (error) {
       console.log('failed to init camera', cameraId);
-      return;
+      console.error(error);
+      this.openSettings();
     }
-    this.previewVideo.nativeElement.srcObject = this.cameraStream;
-    this.cameraInitialized = true;
   }
 
   private stopCamera() {
@@ -175,5 +215,11 @@ export class CameraMainComponent
   override ngOnDestroy() {
     super.ngOnDestroy();
     this.stopCamera();
+    this.cameraWorker.terminate();
+  }
+
+  private handleWorkerMessage(e: MessageEvent) {
+    console.log('respone from worker');
+    console.log(e);
   }
 }

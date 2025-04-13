@@ -9,11 +9,20 @@
     [formGroup]="settingsForm"
     (ngSubmit)="saveSettings()"
   >
-    <app-select id="event-select" formControlName="event" label="Renginys" *ngIf="events.length > 0">
-      <option *ngFor="let event of events" [value]="event.id">
-        {{ event.name }}
-      </option>
-    </app-select>
+    <div>
+      <p class="text-label-large camera-settings__selected-event-label"></p>
+      <app-input-field
+        id="Pasirinktas renginys"
+        label="Renginys"
+        [readonly]="true"
+        formControlName="event" />
+      <app-button
+        [type]="ButtonType.Text"
+        (click)="openEventSelector()"
+        [disableFormSubmit]="true">
+        Pakeisti
+      </app-button>
+    </div>
     <app-select id="camera-select" formControlName="camera" label="Vaizdo kamera" *ngIf="cameraDevices.length > 0">
       <option *ngFor="let device of cameraDevices" [value]="device.deviceId">
         {{ device.label }}
@@ -22,3 +31,25 @@
     <app-button>Išsaugoti</app-button>
   </form>
 </div>
+<app-side-view *ngIf="showEventSelector">
+  <div class="camera-settings__event-select-header">
+    <h3>Rinktis renginį</h3>
+    <app-button [type]="ButtonType.Text" (click)="closeEventSelector()">Uždaryti</app-button>
+  </div>
+  <div>
+    <app-input-field id="event-search" label="Paieška" [formControl]="searchControl" />
+    <table class="table camera-settings__event-table" *ngIf="!eventsTableData.loading">
+      <tr>
+        <th>Pavadinimas</th>
+        <th>Pradžios data</th>
+        <th></th>
+      </tr>
+      <tr *ngFor="let event of eventsTableData.pageData">
+        <td>{{ event.name }}</td>
+        <td>{{ formatDate(event.startDate) }}</td>
+        <td><app-button [type]="ButtonType.Text" (click)="selectEvent(event)">Pasirinkti</app-button></td>
+      </tr>
+    </table>
+  </div>
+
+</app-side-view>

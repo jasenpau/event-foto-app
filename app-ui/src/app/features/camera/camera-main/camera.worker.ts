@@ -1,0 +1,80 @@
+/// <reference lib="webworker" />
+
+import { UploadEventType } from '../camera.types';
+
+interface SasUriResponse {
+  sasUri: string;
+  expiresOn: string;
+}
+
+let sasTokenData = {
+  sasUri: '',
+  expiresOn: new Date(0),
+};
+
+addEventListener('message', async ({ data }) => {
+  const { filename, eventId, captureDate, authToken } = data;
+
+  if (!filename || !eventId) {
+    postMessage({
+      eventType: UploadEventType.UploadError,
+      error: 'Invalid filename or event id.',
+    });
+    return;
+  }
+
+  postMessage({ eventType: UploadEventType.UploadStart, filename });
+
+  try {
+    const root = await navigator.storage.getDirectory();
+    const fileHandle = await root.getFileHandle(filename);
+    const file = await fileHandle.getFile();
+
+    const sasContainerUri = await acquireSasUri(eventId, authToken);
+    const sasParts = sasContainerUri.split('?');
+    const sasUri = `${sasParts[0]}/${filename}?${sasParts[1]}`;
+
+    const uploadResponse = await fetch(sasContainerUri, {
+      method: 'PUT',
+      headers: {
+        'x-ms-blob-type': 'BlockBlob',
+        'Content-Type': file.type || 'application/octet-stream',
+      },
+      body: file,
+    });
+    console.log('[worker]', uploadResponse);
+    if (!uploadResponse.ok) {
+      postMessage({
+        eventType: UploadEventType.UploadError,
+        error: uploadResponse.status,
+      });
+      return;
+    }
+
+    postMessage({ eventType: UploadEventType.UploadComplete });
+  } catch (error) {
+    postMessage({ eventType: UploadEventType.UploadError, error: error });
+  }
+});
+
+const acquireSasUri = async (eventId: number, authToken: string) => {
+  if (sasTokenData.sasUri && new Date() > sasTokenData.expiresOn) {
+    return sasTokenData.sasUri;
+  }
+
+  const response = await fetch(`/api/image/sas/${eventId}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
+
+  if (response.ok) {
+    const sasResponse = (await response.json()) as SasUriResponse;
+    sasTokenData.sasUri = sasResponse.sasUri;
+    sasTokenData.expiresOn = new Date(sasResponse.expiresOn);
+    return sasTokenData.sasUri;
+  }
+
+  throw Error('Cannot acquire SAS URI');
+};

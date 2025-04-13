@@ -1,8 +1,10 @@
-using EventFoto.API.Filters;
-using EventFoto.API.Providers;
+using System.Reflection;
 using EventFoto.Core.Events;
+using EventFoto.Core.Filters;
+using EventFoto.Core.Providers;
 using EventFoto.Core.Users;
 using EventFoto.Data;
+using EventFoto.Data.PhotoStorage;
 using EventFoto.Data.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +19,15 @@ public static class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        
+
+        var basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        builder.Configuration.Sources.Clear();
+        builder.Configuration
+            .SetBasePath(basePath!)
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .AddJsonFile("appsettings.local.json", optional: false, reloadOnChange: true)
+            .AddEnvironmentVariables();
+
         builder.Services.AddControllers(options =>
         {
             options.Filters.Add<ValidationFilter>();
@@ -38,16 +48,6 @@ public static class Program
 
         // app.UseHttpsRedirection();
         
-        var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
-        if (!Directory.Exists(uploadsPath))
-            Directory.CreateDirectory(uploadsPath);
-
-        app.UseStaticFiles(new StaticFileOptions
-        {
-            FileProvider = new PhysicalFileProvider(uploadsPath),
-            RequestPath = "/uploads"
-        });
-        
         app.UseAuthentication();
         app.UseAuthorization();
         
@@ -64,6 +64,8 @@ public static class Program
         
         services.AddScoped<IEventService, EventService>();
         services.AddScoped<IUserService, UserService>();
+
+        services.AddScoped<IPhotoBlobStorage, PhotoBlobStorage>();
     }
 
     private static void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)

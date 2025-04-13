@@ -2,7 +2,7 @@ using System.Net;
 using EventFoto.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EventFoto.API.Extensions;
+namespace EventFoto.Core.Extensions;
 
 public static class ServiceResultExtensions
 {

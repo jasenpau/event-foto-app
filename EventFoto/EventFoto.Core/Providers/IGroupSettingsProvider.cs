@@ -1,6 +1,6 @@
 using EventFoto.Data.Models;
 
-namespace EventFoto.API.Providers;
+namespace EventFoto.Core.Providers;
 
 public interface IGroupSettingsProvider
 {

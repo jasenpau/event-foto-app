@@ -6,9 +6,7 @@ import {
   AuthenticationResult,
   PublicClientApplication,
 } from '@azure/msal-browser';
-import { msalConfig } from './auth.const';
-
-export const AUTH_TOKEN_STORAGE_KEY = 'auth-token';
+import { AUTH_TOKEN_STORAGE_KEY, msalConfig } from './auth.const';
 
 @Injectable({
   providedIn: 'root',

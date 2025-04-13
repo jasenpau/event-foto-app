@@ -1,5 +1,6 @@
-using EventFoto.API.Extensions;
-using EventFoto.API.Providers;
+using EventFoto.Core.ControllerBase;
+using EventFoto.Core.Extensions;
+using EventFoto.Core.Providers;
 using EventFoto.Core.Users;
 using EventFoto.Data.DTOs;
 using EventFoto.Data.Models;

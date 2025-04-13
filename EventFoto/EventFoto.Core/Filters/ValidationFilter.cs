@@ -2,7 +2,7 @@ using EventFoto.Data.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace EventFoto.API.Filters;
+namespace EventFoto.Core.Filters;
 
 public class ValidationFilter : ActionFilterAttribute
 {

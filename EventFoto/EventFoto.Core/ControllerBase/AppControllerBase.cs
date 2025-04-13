@@ -1,13 +1,12 @@
 using System.Security.Authentication;
-using EventFoto.API.Providers;
+using EventFoto.Core.Providers;
 using EventFoto.Data.Enums;
-using EventFoto.Data.Models;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
 
-namespace EventFoto.API.Controllers;
+namespace EventFoto.Core.ControllerBase;
 
-public class AppControllerBase : ControllerBase
+public class AppControllerBase : Microsoft.AspNetCore.Mvc.ControllerBase
 {
     protected Guid RequestUserId()
     {
@@ -30,8 +29,7 @@ public class AppControllerBase : ControllerBase
             return null;
         }
 
-        var groupSettingsProvider = HttpContext.RequestServices.GetService<IGroupSettingsProvider>();
-        if (groupSettingsProvider is null) throw new NullReferenceException("No group settings provider found.");
+        var groupSettingsProvider = HttpContext.RequestServices.GetRequiredService<IGroupSettingsProvider>();
         var appGroups = groupSettingsProvider.GetGroups();
 
         var userGroups = user.FindAll("groups").ToList();

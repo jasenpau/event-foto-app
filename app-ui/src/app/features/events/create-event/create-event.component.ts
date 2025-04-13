@@ -17,7 +17,7 @@ import { DisposableComponent } from '../../../components/disposable/disposable.c
 import { DatePickerComponent } from '../../../components/forms/date-picker/date-picker.component';
 import { TextAreaComponent } from '../../../components/forms/text-area/text-area.component';
 import { handleApiError } from '../../../helpers/handleApiError';
-import { noDuplicatesValidator } from '../../../components/forms/validators/noDuplicatesValidator';
+import { invalidValues } from '../../../components/forms/validators/invalidValues';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { SnackbarType } from '../../../services/snackbar/snackbar.types';
 
@@ -55,7 +55,7 @@ export class CreateEventComponent
       name: new FormControl('', [
         Validators.required,
         Validators.maxLength(255),
-        noDuplicatesValidator(
+        invalidValues(
           this.existingNames,
           'Renginys tokiu pavadinimu jau įvestas sistemoje',
         ),

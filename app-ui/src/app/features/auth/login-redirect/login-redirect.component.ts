@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth/auth.service';
-import { firstValueFrom, takeUntil, tap } from 'rxjs';
+import { catchError, firstValueFrom, of, takeUntil, tap, timeout } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user/user.service';
 import { RegisterComponent } from '../register/register.component';
@@ -34,11 +34,16 @@ export class LoginRedirectComponent
   ngOnInit() {
     this.authService.tokenEvents
       .pipe(
+        timeout(5000),
         tap((event) => {
           if (event.name === 'received') {
             this.redirectUrl = event.state;
             this.initializeUserData();
           }
+        }),
+        catchError(() => {
+          this.router.navigate(['/']);
+          return of();
         }),
         takeUntil(this.destroy$),
       )

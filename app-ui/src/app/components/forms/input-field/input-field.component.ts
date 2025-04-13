@@ -13,4 +13,5 @@ type SupportedFieldTypes = 'text' | 'password';
 })
 export class InputFieldComponent extends FormElementBaseComponent {
   @Input() type: SupportedFieldTypes = 'text';
+  @Input() readonly = false;
 }

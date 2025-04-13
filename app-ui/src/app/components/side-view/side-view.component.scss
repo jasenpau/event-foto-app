@@ -9,11 +9,13 @@
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
 
   &__container {
     grid-column: 2 / 3;
     height: 100vh;
     background: colors.$surface;
     padding: 32px 48px;
+    overflow: scroll;
   }
 }

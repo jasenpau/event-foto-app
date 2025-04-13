@@ -18,13 +18,6 @@ import { PagedData } from '../../components/paged-table/paged-table.types';
 export class EventService {
   constructor(private http: HttpClient) {}
 
-  getEvents(): Observable<EventListDto[]> {
-    return this.http.get<EventListDto[]>(
-      `${ApiBaseUrl}/event`,
-      getAuthHeaders(),
-    );
-  }
-
   getEventDetails(id: number): Observable<EventDto> {
     return this.http.get<EventDto>(
       `${ApiBaseUrl}/event/${id}`,

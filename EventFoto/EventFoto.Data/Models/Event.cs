@@ -14,4 +14,5 @@ public class Event
     
     public User CreatedByUser { get; set; }
     public IList<User> Photographers { get; set; }
+    public IList<EventPhoto> Photos { get; set; }
 }

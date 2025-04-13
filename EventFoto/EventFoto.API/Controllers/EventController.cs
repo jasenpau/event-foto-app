@@ -1,6 +1,7 @@
-using EventFoto.API.Extensions;
-using EventFoto.API.Filters;
+using EventFoto.Core.ControllerBase;
 using EventFoto.Core.Events;
+using EventFoto.Core.Extensions;
+using EventFoto.Core.Filters;
 using EventFoto.Data.DTOs;
 using EventFoto.Data.Enums;
 using EventFoto.Data.Models;

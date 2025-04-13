@@ -3,6 +3,7 @@ using System.Net;
 using EventFoto.Data.DTOs;
 using EventFoto.Data.Extensions;
 using EventFoto.Data.Models;
+using EventFoto.Data.PhotoStorage;
 using EventFoto.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -13,11 +14,15 @@ public class EventService : IEventService
 {
     private readonly IEventRepository _eventRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IPhotoBlobStorage _photoBlobStorage;
 
-    public EventService(IEventRepository eventRepository,  IUserRepository userRepository)
+    public EventService(IEventRepository eventRepository,
+        IUserRepository userRepository,
+        IPhotoBlobStorage  photoBlobStorage)
     {
         _eventRepository = eventRepository;
         _userRepository = userRepository;
+        _photoBlobStorage = photoBlobStorage;
     }
 
     public async Task<ServiceResult<Event>> GetById(int id)
@@ -89,6 +94,8 @@ public class EventService : IEventService
         try
         {
             eventData = await _eventRepository.CreateAsync(eventData);
+            var containerName = _photoBlobStorage.GetContainerName(eventData.Id);
+            await _photoBlobStorage.CreateContainerAsync(containerName);
             return ServiceResult<Event>.Ok(eventData);
         }
         catch (DbUpdateException ex)

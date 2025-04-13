@@ -1,0 +1,34 @@
+@use "colors";
+
+.checkbox {
+  &__input {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    background-color: transparent;
+    font: inherit;
+    border: 2px solid colors.$outline;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+
+    &:checked {
+      border-color: colors.$primary;
+      background: colors.$primary;
+    }
+
+    &:checked::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 8px;
+      width: 6px;
+      height: 12px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+  }
+}

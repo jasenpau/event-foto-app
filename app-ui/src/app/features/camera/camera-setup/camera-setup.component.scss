@@ -20,6 +20,26 @@
     padding: 16px 24px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 32px;
+  }
+
+  &__selected-event-label {
+    color: colors.$on-surface-variant;
+  }
+
+  &__event-select-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  &__event-table-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  &__event-table {
+    width: 100%;
   }
 }

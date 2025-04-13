@@ -47,5 +47,29 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
                 .WithMany(u => u.AssignedPhotographerEvents);
             entity.ToTable("Events");
         });
+
+        modelBuilder.Entity<EventPhoto>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Filename)
+                .IsRequired()
+                .HasMaxLength(255);
+            entity.Property(e => e.IsDeleted)
+                .IsRequired()
+                .HasDefaultValue(false);
+            entity.Property(e => e.UploadDate)
+                .IsRequired();
+            entity.Property(e => e.CaptureDate)
+                .IsRequired();
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .HasPrincipalKey(u => u.Id);
+            entity.HasOne(e => e.Event)
+                .WithMany(e => e.Photos)
+                .HasForeignKey(e => e.EventId)
+                .HasPrincipalKey(e => e.Id);
+            entity.ToTable("EventPhotos");
+        });
     }   
 }
