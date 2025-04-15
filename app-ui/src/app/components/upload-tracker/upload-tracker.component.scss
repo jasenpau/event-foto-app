@@ -1,0 +1,29 @@
+@use "colors";
+
+.upload-tracker {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #222;
+  padding: 4px;
+  border-radius: 4px;
+
+  &__spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid colors.$on-surface-variant;
+    border-top: 2px solid colors.$primary;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  }
+
+  &__counter {
+    color: white;
+  }
+}

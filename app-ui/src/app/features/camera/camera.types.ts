@@ -13,6 +13,12 @@ export interface CameraSettings {
   event?: CameraEvent;
 }
 
+export interface UploadMessage {
+  eventType: UploadEventType;
+  filename: string;
+  error?: any;
+}
+
 export enum UploadEventType {
   UploadStart = 'upload-start',
   UploadComplete = 'upload-complete',

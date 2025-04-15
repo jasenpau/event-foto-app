@@ -12,7 +12,7 @@ public class PhotoBlobStorage : IPhotoBlobStorage
 
     public PhotoBlobStorage(IConfiguration configuration)
     {
-        _connectionString = configuration["PhotoBlob:ConnectionString"];
+        _connectionString = configuration["AzureStorage:ConnectionString"];
     }
 
     public string GetContainerName(int eventId) => $"event-{eventId}";

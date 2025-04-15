@@ -1,10 +1,10 @@
 ﻿using EventFoto.Data.DTOs;
 using EventFoto.Data.Models;
 
-namespace EventFoto.Core.EventPhotoService;
+namespace EventFoto.Core.EventPhotos;
 
 public interface IEventPhotoService
 {
-    public Task<ServiceResult<EventPhoto>> UploadPhoto(EventPhotoUploadData photoData);
+    public Task<ServiceResult<EventPhoto>> UploadPhoto(Guid userId, UploadMessageDto uploadPhotoData);
     public Task<ServiceResult<SasUriResponseDto>> GetUploadSasUri(int eventId);
 }

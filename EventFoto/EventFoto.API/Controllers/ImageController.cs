@@ -1,10 +1,11 @@
 ﻿using EventFoto.Core.ControllerBase;
-using EventFoto.Core.EventPhotoService;
+using EventFoto.Core.EventPhotos;
 using EventFoto.Core.Extensions;
+using EventFoto.Data.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EventFoto.Imaging.API.Controllers;
+namespace EventFoto.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -34,26 +35,15 @@ public class ImageController : AppControllerBase
     }
 
     [HttpPost("upload")]
-    public async Task<IActionResult> UploadImage([FromForm] IFormFile? image, [FromForm] int eventId, [FromForm] DateTime captureDate)
+    public async Task<IActionResult> UploadImage([FromBody] UploadMessageDto uploadMessage)
     {
-        if (image is null || image.Length == 0)
-            return BadRequest("Invalid file.");
-
-        if (eventId <= 0)
+        if (uploadMessage.EventId <= 0)
         {
             return BadRequest("Invalid event ID.");
         }
 
-        var uploadPhotoData = new EventPhotoUploadData
-        {
-            ImageFile = image,
-            CaptureDate = captureDate,
-            EventId = eventId,
-            UserId = RequestUserId()
-        };
-
-        var result = await _eventPhotoService.UploadPhoto(uploadPhotoData);
-        return result.Success ? Ok(uploadPhotoData) : result.ToErrorResponse();
+        var result = await _eventPhotoService.UploadPhoto(RequestUserId(), uploadMessage);
+        return result.Success ? Ok(result.Data) : result.ToErrorResponse();
     }
 
     [HttpGet("sas/{eventId:int}")]

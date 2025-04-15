@@ -27,4 +27,10 @@
     display: flex;
     justify-content: center;
   }
+
+  &__upload-tracker {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
 }

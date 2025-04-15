@@ -1,13 +1,13 @@
 /// <reference lib="webworker" />
 
-import { UploadEventType } from '../camera.types';
+import { UploadEventType, UploadMessage } from '../camera.types';
 
 interface SasUriResponse {
   sasUri: string;
   expiresOn: string;
 }
 
-let sasTokenData = {
+const sasTokenData = {
   sasUri: '',
   expiresOn: new Date(0),
 };
@@ -23,7 +23,10 @@ addEventListener('message', async ({ data }) => {
     return;
   }
 
-  postMessage({ eventType: UploadEventType.UploadStart, filename });
+  postMessage({
+    eventType: UploadEventType.UploadStart,
+    filename,
+  });
 
   try {
     const root = await navigator.storage.getDirectory();
@@ -34,7 +37,7 @@ addEventListener('message', async ({ data }) => {
     const sasParts = sasContainerUri.split('?');
     const sasUri = `${sasParts[0]}/${filename}?${sasParts[1]}`;
 
-    const uploadResponse = await fetch(sasContainerUri, {
+    const uploadResponse = await fetch(sasUri, {
       method: 'PUT',
       headers: {
         'x-ms-blob-type': 'BlockBlob',
@@ -46,19 +49,51 @@ addEventListener('message', async ({ data }) => {
     if (!uploadResponse.ok) {
       postMessage({
         eventType: UploadEventType.UploadError,
+        filename,
         error: uploadResponse.status,
       });
       return;
     }
 
-    postMessage({ eventType: UploadEventType.UploadComplete });
+    const uploadMessage = JSON.stringify({
+      filename,
+      captureDate,
+      eventId,
+    });
+
+    const uploadMessageResponse = await fetch(`/api/image/upload`, {
+      method: 'POST',
+      body: uploadMessage,
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!uploadMessageResponse.ok) {
+      postMessage({
+        eventType: UploadEventType.UploadError,
+        filename,
+        error: uploadMessageResponse.status,
+      });
+    }
+
+    await root.removeEntry(filename);
+    postMessage({
+      eventType: UploadEventType.UploadComplete,
+      filename,
+    });
   } catch (error) {
-    postMessage({ eventType: UploadEventType.UploadError, error: error });
+    sendMessage({
+      eventType: UploadEventType.UploadError,
+      filename,
+      error: error,
+    });
   }
 });
 
 const acquireSasUri = async (eventId: number, authToken: string) => {
-  if (sasTokenData.sasUri && new Date() > sasTokenData.expiresOn) {
+  if (sasTokenData.sasUri && sasTokenData.expiresOn > new Date()) {
     return sasTokenData.sasUri;
   }
 
@@ -77,4 +112,8 @@ const acquireSasUri = async (eventId: number, authToken: string) => {
   }
 
   throw Error('Cannot acquire SAS URI');
+};
+
+const sendMessage = (message: UploadMessage) => {
+  postMessage(message);
 };

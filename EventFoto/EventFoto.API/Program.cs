@@ -1,4 +1,5 @@
 using System.Reflection;
+using EventFoto.Core;
 using EventFoto.Core.Events;
 using EventFoto.Core.Filters;
 using EventFoto.Core.Providers;
@@ -57,15 +58,9 @@ public static class Program
 
     private static void ConfigureServices(IServiceCollection services)
     {
-        services.AddSingleton<IGroupSettingsProvider, GroupSettingsProvider>();
-        
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IEventRepository, EventRepository>();
-        
-        services.AddScoped<IEventService, EventService>();
-        services.AddScoped<IUserService, UserService>();
+        ServiceConfigurator.ConfigureServices(services);
 
-        services.AddScoped<IPhotoBlobStorage, PhotoBlobStorage>();
+        services.AddSingleton<IGroupSettingsProvider, GroupSettingsProvider>();
     }
 
     private static void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)

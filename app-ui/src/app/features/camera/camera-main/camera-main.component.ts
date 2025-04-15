@@ -9,7 +9,12 @@ import { CameraSetupComponent } from '../camera-setup/camera-setup.component';
 import { NgIf } from '@angular/common';
 import { ButtonComponent } from '../../../components/button/button.component';
 import { ImagingService } from '../../../services/imaging/imaging.service';
-import { CameraDevice, CameraEvent, CameraSettings } from '../camera.types';
+import {
+  CameraDevice,
+  CameraEvent,
+  CameraSettings,
+  UploadMessage,
+} from '../camera.types';
 import {
   loadCameraDevice,
   loadCameraEvent,
@@ -19,10 +24,17 @@ import { EventService } from '../../../services/event/event.service';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { takeUntil, tap } from 'rxjs';
 import { AUTH_TOKEN_STORAGE_KEY } from '../../../services/auth/auth.const';
+import { UserService } from '../../../services/user/user.service';
+import { UploadTrackerComponent } from '../../../components/upload-tracker/upload-tracker.component';
 
 @Component({
   selector: 'app-camera-main',
-  imports: [CameraSetupComponent, NgIf, ButtonComponent],
+  imports: [
+    CameraSetupComponent,
+    NgIf,
+    ButtonComponent,
+    UploadTrackerComponent,
+  ],
   templateUrl: './camera-main.component.html',
   styleUrl: './camera-main.component.scss',
 })
@@ -38,16 +50,18 @@ export class CameraMainComponent
   protected cameraLoadingFinished = false;
   protected eventLoadingFinished = false;
   protected userOpenSettings = false;
+  protected uploadEvent?: UploadMessage;
 
   protected cameraInitialized = false;
   protected cameraStream?: MediaStream;
-  protected uploadInProgress = false;
 
   private cameraWorker: Worker;
+  private userId?: string;
 
   constructor(
     private readonly imagingService: ImagingService,
     private readonly eventService: EventService,
+    private readonly userService: UserService,
   ) {
     super();
     this.cameraWorker = new Worker(
@@ -64,6 +78,7 @@ export class CameraMainComponent
   ngOnInit() {
     this.loadCamera();
     this.loadEvent();
+    this.userId = this.userService.getCurrentUserData()?.id;
   }
 
   updateSettings(settings: CameraSettings) {
@@ -98,7 +113,7 @@ export class CameraMainComponent
         if (!blob) return;
 
         try {
-          const filename = `${eventId}-${Date.now()}.jpg`;
+          const filename = `${this.userId}-${Date.now()}.jpg`;
 
           const root = await navigator.storage.getDirectory();
           const fileHandle = await root.getFileHandle(filename, {
@@ -108,8 +123,6 @@ export class CameraMainComponent
 
           await writable.write(blob);
           await writable.close();
-
-          console.log('Saved to OPFS', filename);
 
           const authToken = localStorage.getItem(AUTH_TOKEN_STORAGE_KEY);
           if (!authToken) return;
@@ -220,6 +233,7 @@ export class CameraMainComponent
 
   private handleWorkerMessage(e: MessageEvent) {
     console.log('respone from worker');
-    console.log(e);
+    console.log(e.data);
+    this.uploadEvent = e.data;
   }
 }

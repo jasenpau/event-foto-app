@@ -3,6 +3,7 @@
     *ngIf="showSettings() || userOpenSettings"
     (settingsUpdated)="updateSettings($event)"
   />
+  <app-upload-tracker class="camera__upload-tracker" [uploadEvent]="uploadEvent" />
   <video class="camera__video" #previewVideo autoplay playsinline></video>
   <canvas class="camera__canvas" #canvas></canvas>
   <div class="camera__controls">
