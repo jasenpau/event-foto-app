@@ -4,22 +4,27 @@ import { Subject } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import {
   AuthenticationResult,
+  Configuration,
   PublicClientApplication,
 } from '@azure/msal-browser';
-import { AUTH_TOKEN_STORAGE_KEY, msalConfig } from './auth.const';
+import { AUTH_TOKEN_STORAGE_KEY, buildMsalConfig } from './auth.const';
+import { EnvService } from '../environment/env.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private readonly msalConfig: Configuration;
   private currentUser: User | null = null;
   private msalInstance: PublicClientApplication;
   private msalInitialized = false;
 
   public tokenEvents = new Subject<TokenEvent>();
 
-  constructor() {
-    this.msalInstance = new PublicClientApplication(msalConfig);
+  constructor(private readonly envService: EnvService) {
+    this.msalConfig = buildMsalConfig(this.envService.getConfig());
+
+    this.msalInstance = new PublicClientApplication(this.msalConfig);
     this.msalInstance.initialize().then(() => {
       this.msalInitialized = true;
       this.msalInstance
@@ -50,7 +55,11 @@ export class AuthService {
   async msalLogin(redirectUrl?: string) {
     if (!this.msalInitialized) return;
     await this.msalInstance.loginRedirect({
-      scopes: ['openid', 'profile', `${msalConfig.auth.clientId}/.default`],
+      scopes: [
+        'openid',
+        'profile',
+        `${this.msalConfig.auth.clientId}/.default`,
+      ],
       state: redirectUrl,
     });
   }

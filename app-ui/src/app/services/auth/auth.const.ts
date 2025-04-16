@@ -1,14 +1,14 @@
 import { Configuration } from '@azure/msal-browser';
-import { environment } from '../../../environments/environment';
+import { AppEnvironment } from '../environment/env.service';
 
 export const AUTH_TOKEN_STORAGE_KEY = 'auth-token';
 
-export const msalConfig: Configuration = {
+export const buildMsalConfig = (env: AppEnvironment): Configuration => ({
   auth: {
-    clientId: environment.auth.clientId,
-    authority: environment.auth.authority,
-    redirectUri: `${environment.baseUrl}/redirect`,
-    postLogoutRedirectUri: `${environment.baseUrl}/`,
+    clientId: env.auth.clientId,
+    authority: env.auth.authority,
+    redirectUri: `${env.baseUrl}/redirect`,
+    postLogoutRedirectUri: `${env.baseUrl}/`,
     navigateToLoginRequestUrl: false,
   },
-};
+});
