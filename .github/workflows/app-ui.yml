@@ -1,12 +1,14 @@
 name: Deploy app-ui
 
-on:
+on: 
   push:
     branches:
       - main
     paths:
       - 'app-ui/**'
-      - '.github/workflows/deploy-ui.yml'
+      - '.github/workflows/app-ui.yml'
+
+  workflow_dispatch:
 
 env:
   NODE_VERSION: '22'
