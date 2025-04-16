@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EventFoto.Data.Migrations
 {
     [DbContext(typeof(EventFotoContext))]
-    [Migration("20250412212234_AddEventPhoto")]
+    [Migration("20250415223000_AddEventPhoto")]
     partial class AddEventPhoto
     {
         /// <inheritdoc />
@@ -73,9 +73,11 @@ namespace EventFoto.Data.Migrations
 
             modelBuilder.Entity("EventFoto.Data.Models.EventPhoto", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CaptureDate")
                         .HasColumnType("timestamp with time zone");
@@ -92,6 +94,12 @@ namespace EventFoto.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
+
+                    b.Property<bool>("IsProcessed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("ProcessedFilename")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("UploadDate")
                         .HasColumnType("timestamp with time zone");

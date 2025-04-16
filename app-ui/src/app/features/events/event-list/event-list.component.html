@@ -39,7 +39,6 @@
       <th class="event-list__table-name table__pad-row-start">Pavadinimas</th>
       <th class="table__no-wrap">Pradžios data ir laikas</th>
       <th>Būsena</th>
-      <th>Nuotraukos</th>
       <th class="table__pad-row-end"></th>
     </tr>
     <tr *ngFor="let event of eventsTableData.pageData">
@@ -52,7 +51,6 @@
       <td>
         <app-event-badge [event]="event" />
       </td>
-      <td>0</td>
       <td class="table__pad-row-end">
         <app-button [link]="'/event/' + event.id" [type]="buttonType.Text">
           Peržiūrėti

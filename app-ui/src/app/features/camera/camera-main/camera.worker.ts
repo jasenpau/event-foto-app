@@ -5,11 +5,13 @@ import { UploadEventType, UploadMessage } from '../camera.types';
 interface SasUriResponse {
   sasUri: string;
   expiresOn: string;
+  eventId: number;
 }
 
 const sasTokenData = {
   sasUri: '',
   expiresOn: new Date(0),
+  eventId: 0,
 };
 
 addEventListener('message', async ({ data }) => {
@@ -93,7 +95,11 @@ addEventListener('message', async ({ data }) => {
 });
 
 const acquireSasUri = async (eventId: number, authToken: string) => {
-  if (sasTokenData.sasUri && sasTokenData.expiresOn > new Date()) {
+  if (
+    sasTokenData.sasUri &&
+    sasTokenData.expiresOn > new Date() &&
+    eventId === sasTokenData.eventId
+  ) {
     return sasTokenData.sasUri;
   }
 

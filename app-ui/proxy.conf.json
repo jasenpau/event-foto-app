@@ -4,5 +4,11 @@
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"
+  },
+  "/thumbnail": {
+    "target": "http://localhost:5192",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
   }
 }

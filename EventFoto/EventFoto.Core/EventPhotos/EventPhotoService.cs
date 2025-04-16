@@ -71,8 +71,19 @@ public class EventPhotoService : IEventPhotoService
         var result = new SasUriResponseDto
         {
             SasUri = sasResult.Data,
-            ExpiresOn = DateTime.UtcNow.AddMinutes(tokenExpiryInMinutes)
+            ExpiresOn = DateTime.UtcNow.AddMinutes(tokenExpiryInMinutes),
+            EventId = eventId
         };
         return ServiceResult<SasUriResponseDto>.Ok(result);
+    }
+
+    public async Task<ServiceResult<PagedData<string, EventPhoto>>> SearchEventPhotosAsync(
+        EventPhotoSearchParams searchParams)
+
+    {
+        var result = await _eventPhotoRepository.SearchEventPhotosAsync(searchParams);
+        return result is not null
+            ? ServiceResult<PagedData<string, EventPhoto>>.Ok(result)
+            : ServiceResult<PagedData<string, EventPhoto>>.Fail("Query failed", HttpStatusCode.InternalServerError);
     }
 }

@@ -44,4 +44,22 @@ public class PhotoBlobStorage : IPhotoBlobStorage
         var sasUri = containerClient.GenerateSasUri(sasBuilder);
         return ServiceResult<string>.Ok(sasUri.ToString());
     }
+
+    public async Task<ServiceResult<MemoryStream>> DownloadImageAsync(string containerName, string filename,
+        CancellationToken cancellationToken)
+    {
+        var containerClient = new BlobContainerClient(_connectionString, containerName);
+        var blobClient = containerClient.GetBlobClient(filename);
+
+        if (!await blobClient.ExistsAsync(cancellationToken))
+        {
+            return ServiceResult<MemoryStream>.Fail($"Blob '{filename}' not found in container '{containerName}'.",
+                HttpStatusCode.NotFound);
+        }
+
+        var stream = new MemoryStream();
+        await blobClient.DownloadToAsync(stream, cancellationToken);
+        stream.Position = 0;
+        return ServiceResult<MemoryStream>.Ok(stream);
+    }
 }

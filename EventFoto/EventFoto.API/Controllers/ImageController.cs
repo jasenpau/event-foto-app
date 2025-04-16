@@ -12,26 +12,17 @@ namespace EventFoto.API.Controllers;
 [Authorize]
 public class ImageController : AppControllerBase
 {
+    private readonly IWebHostEnvironment _env;
+    private readonly IConfiguration _configuration;
     private readonly IEventPhotoService _eventPhotoService;
-    private readonly string _uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
 
-    public ImageController(IEventPhotoService eventPhotoService)
+    public ImageController(IWebHostEnvironment env,
+        IConfiguration configuration,
+        IEventPhotoService eventPhotoService)
     {
+        _env = env;
+        _configuration = configuration;
         _eventPhotoService = eventPhotoService;
-    }
-
-    [HttpGet("photos")]
-    public async Task<ActionResult> GetImages()
-    {
-        if (!Directory.Exists(_uploadPath))
-            return Ok(new List<string>());
-
-        var files = Directory.GetFiles(_uploadPath)
-            .Select(Path.GetFileName)
-            .Select(fileName => $"{Request.Scheme}://{Request.Host}/uploads/{fileName}")
-            .ToList();
-
-        return Ok(files);
     }
 
     [HttpPost("upload")]
@@ -51,5 +42,35 @@ public class ImageController : AppControllerBase
     {
         var result = await _eventPhotoService.GetUploadSasUri(eventId);
         return result.Success ? Ok(result.Data) : result.ToErrorResponse();
+    }
+
+    [HttpPost("thumbnail")]
+    [AllowAnonymous]
+    public async Task<IActionResult> UploadThumbnail([FromForm] IFormFile? thumbnail, [FromForm] int eventId)
+    {
+        if (Request.Headers.Authorization != _configuration["ImageProcessorOptions:AuthorizationKey"])
+        {
+            return Unauthorized("Invalid authorization key.");
+        }
+
+        if (thumbnail == null || thumbnail.Length == 0)
+            return BadRequest("No thumbnail uploaded.");
+
+        if (eventId <= 0)
+        {
+            return BadRequest("Invalid event ID.");
+        }
+
+        var thumbnailsDir = Path.Combine(_env.ContentRootPath, "Thumbnails", eventId.ToString());
+
+        if (!Directory.Exists(thumbnailsDir))
+            Directory.CreateDirectory(thumbnailsDir);
+
+        var filePath = Path.Combine(thumbnailsDir, thumbnail.FileName);
+
+        await using var stream = new FileStream(filePath, FileMode.Create);
+        await thumbnail.CopyToAsync(stream);
+
+        return Ok("OK");
     }
 }

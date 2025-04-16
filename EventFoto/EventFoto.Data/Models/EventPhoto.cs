@@ -2,14 +2,16 @@
 
 public record EventPhoto
 {
-    public Guid Id { get; init; }
-    public string Filename { get; init; }
-    public DateTime UploadDate { get; init; }
-    public DateTime CaptureDate { get; init; }
-    public bool IsDeleted { get; init; }
-    public int EventId { get; init; }
-    public Guid UserId { get; init; }
+    public int Id { get; set; }
+    public string Filename { get; set; }
+    public DateTime UploadDate { get; set; }
+    public DateTime CaptureDate { get; set; }
+    public bool IsDeleted { get; set; }
+    public bool IsProcessed { get; set; }
+    public string ProcessedFilename { get; set; }
+    public int EventId { get; set; }
+    public Guid UserId { get; set; }
 
-    public User User { get; init; }
-    public Event Event { get; init; }
+    public User User { get; set; }
+    public Event Event { get; set; }
 }

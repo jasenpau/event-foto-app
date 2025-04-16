@@ -51,6 +51,17 @@ public static class Program
         
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(
+                Path.Combine(builder.Environment.ContentRootPath, "Thumbnails")),
+            RequestPath = "/thumbnails",
+            OnPrepareResponse = ctx =>
+            {
+                ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=86400");
+            }
+        });
         
         app.MapControllers();
         app.Run();

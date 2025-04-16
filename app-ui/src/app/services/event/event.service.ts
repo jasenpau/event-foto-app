@@ -61,13 +61,6 @@ export class EventService {
     );
   }
 
-  getEventPhotos(): Observable<string[]> {
-    return this.http.get<string[]>(
-      `${ApiBaseUrl}/imaging/photos`,
-      getAuthHeaders(),
-    );
-  }
-
   searchEvents(searchParams: EventSearchParamsDto) {
     let params = new HttpParams();
     if (searchParams.searchTerm)

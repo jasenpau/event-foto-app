@@ -20,6 +20,7 @@ builder.Services.AddDbContextPool<EventFotoContext>(options =>
 
 ServiceConfigurator.ConfigureServices(builder.Services);
 builder.Services.AddScoped<IImageProcessor, ImageProcessor>();
+builder.Services.AddHttpClient();
 
 // Application Insights isn't enabled by default. See https://aka.ms/AAt8mw4.
 // builder.Services
