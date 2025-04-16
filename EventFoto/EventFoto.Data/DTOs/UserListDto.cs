@@ -9,14 +9,11 @@ public record UserListDto
     public string Email { get; init; }
     public Guid GroupAssignment { get; init; }
 
-    public static UserListDto FromUser(User user)
+    public static UserListDto FromUser(User user) => new()
     {
-        return new UserListDto
-        {
-            Id = user.Id,
-            Name = user.Name,
-            Email = user.Email,
-            GroupAssignment = user.GroupAssignment,
-        };
-    }
+        Id = user.Id,
+        Name = user.Name,
+        Email = user.Email,
+        GroupAssignment = user.GroupAssignment
+    };
 }

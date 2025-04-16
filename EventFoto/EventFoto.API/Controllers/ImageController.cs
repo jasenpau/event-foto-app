@@ -2,6 +2,7 @@
 using EventFoto.Core.EventPhotos;
 using EventFoto.Core.Extensions;
 using EventFoto.Data.DTOs;
+using EventFoto.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,23 @@ public class ImageController : AppControllerBase
         _eventPhotoService = eventPhotoService;
     }
 
+    [HttpGet("details/{id:int}")]
+    public async Task<ActionResult<EventPhotoDto>> GetPhotoById(int id)
+    {
+        var result = await _eventPhotoService.GetByIdAsync(id);
+        return result.Success ? Ok(EventPhotoDto.FromEventPhoto(result.Data)) : result.ToErrorResponse();
+    }
+
+    [HttpGet("raw/{eventId:int}/{filename}")]
+    public async Task<IActionResult> GetRawPhoto(int eventId, string filename, CancellationToken cancellationToken)
+    {
+        var result = await _eventPhotoService.GetRawPhotoAsync(eventId, filename, cancellationToken);
+        if (!result.Success)
+            return result.ToErrorResponse();
+
+        return File(result.Data, "image/jpeg", filename);
+    }
+
     [HttpPost("upload")]
     public async Task<IActionResult> UploadImage([FromBody] UploadMessageDto uploadMessage)
     {
@@ -38,7 +56,7 @@ public class ImageController : AppControllerBase
     }
 
     [HttpGet("sas/{eventId:int}")]
-    public async Task<IActionResult> GetUploadSasUrl([FromRoute] int eventId)
+    public async Task<ActionResult<SasUriResponseDto>> GetUploadSasUrl([FromRoute] int eventId)
     {
         var result = await _eventPhotoService.GetUploadSasUri(eventId);
         return result.Success ? Ok(result.Data) : result.ToErrorResponse();
@@ -61,16 +79,25 @@ public class ImageController : AppControllerBase
             return BadRequest("Invalid event ID.");
         }
 
-        var thumbnailsDir = Path.Combine(_env.ContentRootPath, "Thumbnails", eventId.ToString());
+        var ms = new MemoryStream();
+        await thumbnail.CopyToAsync(ms);
+        ms.Position = 0;
 
-        if (!Directory.Exists(thumbnailsDir))
-            Directory.CreateDirectory(thumbnailsDir);
+        var result = await _eventPhotoService.SaveThumbnail(eventId, _env.ContentRootPath, thumbnail.FileName, ms);
+        return result.Success ? Ok(result.Data) : result.ToErrorResponse();
+    }
 
-        var filePath = Path.Combine(thumbnailsDir, thumbnail.FileName);
+    [HttpGet("search")]
+    public async Task<ActionResult<PagedData<string, EventPhotoListDto>>> SearchEventPhotos(
+        [FromQuery] EventPhotoSearchParams searchParams)
+    {
+        var searchResult = await _eventPhotoService.SearchEventPhotosAsync(searchParams);
+        if (!searchResult.Success)
+        {
+            return searchResult.ToErrorResponse();
+        }
 
-        await using var stream = new FileStream(filePath, FileMode.Create);
-        await thumbnail.CopyToAsync(stream);
-
-        return Ok("OK");
+        var result = searchResult.Data.ToDto(EventPhotoListDto.FromEventPhoto);
+        return Ok(result);
     }
 }

@@ -28,8 +28,9 @@ public class EventService : IEventService
     public async Task<ServiceResult<Event>> GetById(int id)
     {
         var result = await _eventRepository.GetByIdAsync(id);
-        if (result is not null) return ServiceResult<Event>.Ok(result);
-        return ServiceResult<Event>.Fail("Event not found", HttpStatusCode.NotFound);
+        return result is not null
+            ? ServiceResult<Event>.Ok(result)
+            : ServiceResult<Event>.Fail("Event not found", HttpStatusCode.NotFound);
     }
 
     public async Task<ServiceResult<IList<EventPhotographerDto>>> GetEventPhotographersAsync(int eventId)

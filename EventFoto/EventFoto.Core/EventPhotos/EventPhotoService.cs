@@ -30,6 +30,14 @@ public class EventPhotoService : IEventPhotoService
         _configuration = configuration;
     }
 
+    public async Task<ServiceResult<EventPhoto>> GetByIdAsync(int photoId)
+    {
+        var result = await _eventPhotoRepository.GetByIdAsync(photoId);
+        return result is not null
+            ? ServiceResult<EventPhoto>.Ok(result)
+            : ServiceResult<EventPhoto>.Fail("Photo not found", HttpStatusCode.NotFound);
+    }
+
     public async Task<ServiceResult<EventPhoto>> UploadPhoto(Guid userId, UploadMessageDto uploadPhotoData)
     {
         var eventPhoto = new EventPhoto
@@ -86,4 +94,27 @@ public class EventPhotoService : IEventPhotoService
             ? ServiceResult<PagedData<string, EventPhoto>>.Ok(result)
             : ServiceResult<PagedData<string, EventPhoto>>.Fail("Query failed", HttpStatusCode.InternalServerError);
     }
+
+    public async Task<ServiceResult<string>> SaveThumbnail(int eventId, string contentRootPath, string fileName, MemoryStream thumbStream)
+    {
+        var thumbnailsDir = Path.Combine(contentRootPath, "Thumbnails", eventId.ToString());
+
+        if (!Directory.Exists(thumbnailsDir))
+            Directory.CreateDirectory(thumbnailsDir);
+
+        var filePath = Path.Combine(thumbnailsDir, fileName);
+
+        await using var stream = new FileStream(filePath, FileMode.Create);
+        await thumbStream.CopyToAsync(stream);
+        await thumbStream.DisposeAsync();
+        return ServiceResult<string>.Ok(filePath);
+    }
+
+    public async Task<ServiceResult<MemoryStream>> GetRawPhotoAsync(int eventId, string filename, CancellationToken cancellationToken)
+    {
+        var containerName = _photoBlobStorage.GetContainerName(eventId);
+        var streamResult = await _photoBlobStorage.DownloadImageAsync(containerName, filename, cancellationToken);
+        return streamResult;
+    }
+
 }

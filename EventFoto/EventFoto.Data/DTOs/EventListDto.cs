@@ -10,15 +10,12 @@ public record EventListDto
     public DateTime? EndDate { get; init; }
     public bool IsArchived { get; init; }
 
-    public static EventListDto FromEvent(Event eventData)
+    public static EventListDto FromEvent(Event eventData) => new()
     {
-        return new EventListDto()
-        {
-            Id = eventData.Id,
-            Name = eventData.Name,
-            StartDate = eventData.StartDate,
-            EndDate = eventData.EndDate,
-            IsArchived = eventData.IsArchived
-        };
-    }
+        Id = eventData.Id,
+        Name = eventData.Name,
+        StartDate = eventData.StartDate,
+        EndDate = eventData.EndDate,
+        IsArchived = eventData.IsArchived
+    };
 }

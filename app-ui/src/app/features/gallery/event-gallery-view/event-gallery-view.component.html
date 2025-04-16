@@ -7,9 +7,16 @@
   </div>
   <div class="gallery__grid">
     <div class="gallery__item" *ngFor="let image of imageData">
-      <img *ngIf="image.isProcessed" [src]="ThumbnailBaseUrl + '/' + eventId + '/thumb-' + image.processedFilename" class="gallery__image" [alt]="image.processedFilename" />
+      <img
+        *ngIf="image.isProcessed"
+        [src]="ThumbnailBaseUrl + '/' + eventId + '/thumb-' + image.processedFilename"
+        class="gallery__image"
+        (click)="openPhoto(image)"
+        [alt]="image.processedFilename"
+        tabindex="0" />
     </div>
   </div>
   <div #scrollAnchor class="scroll-anchor"></div>
   <p *ngIf="isLoading">Kraunama...</p>
 </div>
+<app-photo-view *ngIf="openedPhotoData" [openPhotoData]="openedPhotoData" (photoAction)="handlePhotoViewAction($event)" />

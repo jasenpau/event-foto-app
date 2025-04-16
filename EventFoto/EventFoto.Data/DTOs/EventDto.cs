@@ -15,20 +15,17 @@ public record EventDto
     public string CreatedByName { get; set; }
     public DateTime CreatedOn { get; set; }
 
-    public static EventDto FromEvent(Event eventData)
+    public static EventDto FromEvent(Event eventData) => new()
     {
-        return new EventDto
-        {
-            Id = eventData.Id,
-            Name = eventData.Name,
-            StartDate = eventData.StartDate,
-            EndDate = eventData.EndDate,
-            Note = eventData.Note,
-            Location = eventData.Location,
-            IsArchived = eventData.IsArchived,
-            CreatedBy = eventData.CreatedBy,
-            CreatedOn = eventData.CreatedOn,
-            CreatedByName = eventData.CreatedByUser.Name,
-        };
-    }
+        Id = eventData.Id,
+        Name = eventData.Name,
+        StartDate = eventData.StartDate,
+        EndDate = eventData.EndDate,
+        Note = eventData.Note,
+        Location = eventData.Location,
+        IsArchived = eventData.IsArchived,
+        CreatedBy = eventData.CreatedBy,
+        CreatedOn = eventData.CreatedOn,
+        CreatedByName = eventData.CreatedByUser.Name,
+    };
 }

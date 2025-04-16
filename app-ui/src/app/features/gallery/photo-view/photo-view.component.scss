@@ -1,0 +1,70 @@
+@use "sass:color";
+@use "colors";
+
+.photo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+
+  &__container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__viewer {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    max-width: calc(100vw - 64px);
+  }
+
+  &__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    fill: colors.$on-surface;
+    background: transparent;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    padding: 4px;
+    box-sizing: border-box;
+
+    &:hover,
+    &:focus {
+      background: color.adjust(colors.$on-surface, $alpha: -0.9);
+      cursor: pointer;
+    }
+  }
+
+  &__image {
+    flex: 1;
+    max-height: calc(100vh - 64px);
+  }
+
+  &__details {
+    background: colors.$surface;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px;
+  }
+
+  &__detail-line {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__detail-line-title {
+    color: colors.$on-surface-variant;
+  }
+}

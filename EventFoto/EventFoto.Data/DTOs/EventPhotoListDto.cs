@@ -9,14 +9,11 @@ public record EventPhotoListDto
     public string ProcessedFilename { get; set; }
     public DateTime CaptureDate { get; set; }
 
-    public static EventPhotoListDto FromEventPhoto(EventPhoto eventPhoto)
+    public static EventPhotoListDto FromEventPhoto(EventPhoto eventPhoto) => new()
     {
-        return new EventPhotoListDto
-        {
-            Id = eventPhoto.Id,
-            IsProcessed = eventPhoto.IsProcessed,
-            ProcessedFilename = eventPhoto.ProcessedFilename,
-            CaptureDate = eventPhoto.CaptureDate,
-        };
-    }
+        Id = eventPhoto.Id,
+        IsProcessed = eventPhoto.IsProcessed,
+        ProcessedFilename = eventPhoto.ProcessedFilename,
+        CaptureDate = eventPhoto.CaptureDate,
+    };
 }

@@ -103,7 +103,6 @@ export class CreateEventComponent
             }
           }),
           handleApiError((error) => {
-            console.log(error);
             if (error.status === 409) {
               this.addConflictingName(formData.name);
             }

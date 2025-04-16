@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { PagedData } from '../../components/paged-table/paged-table.types';
-import { PhotoListDto, PhotoSearchParamsDto } from './gallery.types';
+import {
+  PhotoDetailDto,
+  PhotoListDto,
+  PhotoSearchParamsDto,
+} from './image.types';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
 import { ApiBaseUrl } from '../../globals/variables';
 
 @Injectable({
   providedIn: 'root',
 })
-export class GalleryService {
+export class ImageService {
   constructor(private http: HttpClient) {}
 
   searchPhotos(searchParams: PhotoSearchParamsDto) {
@@ -27,11 +31,25 @@ export class GalleryService {
       params = params.append('toDate', searchParams.toDate.toISOString());
 
     return this.http.get<PagedData<string, PhotoListDto>>(
-      `${ApiBaseUrl}/gallery/search`,
+      `${ApiBaseUrl}/image/search`,
       {
         ...getAuthHeaders(),
         params,
       },
     );
+  }
+
+  getPhotoDetails(photoId: number) {
+    return this.http.get<PhotoDetailDto>(
+      `${ApiBaseUrl}/image/details/${photoId}`,
+      getAuthHeaders(),
+    );
+  }
+
+  getRawPhoto(eventId: number, filename: string) {
+    return this.http.get(`${ApiBaseUrl}/image/raw/${eventId}/${filename}`, {
+      ...getAuthHeaders(),
+      responseType: 'blob',
+    });
   }
 }

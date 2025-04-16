@@ -1,0 +1,19 @@
+<div class="photo">
+  <div class="photo__container">
+    <div class="photo__viewer" *ngIf="!isLoading">
+      <button class="photo__close" (click)="close()"><app-svg-icon [iconSrc]="SvgIconSrc.Close" /></button>
+      <img class="photo__image" *ngIf="imageDataUrl" [src]="imageDataUrl" [alt]="openPhotoData.photo.processedFilename" />
+      <div class="photo__details" *ngIf="photoDetails">
+        <div class="photo__detail-line">
+          <p class="photo__detail-line-title text-label-large no-margin">Renginio pavadinimas</p>
+          <p class="text-title-large no-margin">{{ photoDetails.eventName }}</p>
+          <a [routerLink]="'/event/' + photoDetails.eventId " *ngIf="showEventNavigation">Eiti į renginį</a>
+        </div>
+        <div class="photo__detail-line">
+          <p class="photo__detail-line-title text-label-large no-margin">Failo pavadinimas</p>
+          <p class="text-body-medium no-margin">{{ photoDetails.processedFilename }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

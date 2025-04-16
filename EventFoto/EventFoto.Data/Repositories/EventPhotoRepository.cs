@@ -15,6 +15,14 @@ public class EventPhotoRepository : IEventPhotoRepository
         _context = context;
     }
 
+    public Task<EventPhoto> GetByIdAsync(int photoId)
+    {
+        return EventPhotos
+            .Include(p => p.User)
+            .Include(p => p.Event)
+            .FirstOrDefaultAsync(p => p.Id == photoId);
+    }
+
     public async Task<EventPhoto> AddEventPhotoAsync(EventPhoto eventPhoto)
     {
         EventPhotos.Add(eventPhoto);

@@ -45,8 +45,6 @@ export const requestCameraPermission = async () => {
 };
 
 export const getVideoDevices = async () => {
-  console.log('gettings cameras...');
-
   const devices = await navigator.mediaDevices.enumerateDevices();
   const videoDevices = devices.filter((device) => device.kind === 'videoinput');
   console.log('got cameras', videoDevices.length);

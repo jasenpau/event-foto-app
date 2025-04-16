@@ -9,15 +9,20 @@ import { ButtonComponent } from '../../../components/button/button.component';
 import { ButtonType } from '../../../components/button/button.types';
 import { NgForOf, NgIf } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { PhotoListDto } from '../../../services/gallery/gallery.types';
-import { GalleryService } from '../../../services/gallery/gallery.service';
+import {
+  OpenPhotoData,
+  PhotoAction,
+  PhotoListDto,
+} from '../../../services/image/image.types';
+import { ImageService } from '../../../services/image/image.service';
 import { ThumbnailBaseUrl } from '../../../globals/variables';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { takeUntil, tap } from 'rxjs';
+import { PhotoViewComponent } from '../photo-view/photo-view.component';
 
 @Component({
   selector: 'app-event-gallery-view',
-  imports: [ButtonComponent, NgForOf, NgIf],
+  imports: [ButtonComponent, NgForOf, NgIf, PhotoViewComponent],
   templateUrl: './event-gallery-view.component.html',
   styleUrl: './event-gallery-view.component.scss',
 })
@@ -31,13 +36,14 @@ export class EventGalleryViewComponent
   protected imageData: PhotoListDto[] = [];
   protected hasMoreImages = true;
   protected isLoading = false;
+  protected openedPhotoData?: OpenPhotoData;
 
   private lastKey = '';
   private observer?: IntersectionObserver;
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly galleryService: GalleryService,
+    private readonly galleryService: ImageService,
   ) {
     super();
     this.readRouteParams();
@@ -70,6 +76,15 @@ export class EventGalleryViewComponent
           takeUntil(this.destroy$),
         )
         .subscribe();
+    }
+  }
+
+  protected openPhoto(image: PhotoListDto) {
+    if (this.eventId) {
+      this.openedPhotoData = {
+        photo: image,
+        eventId: this.eventId,
+      };
     }
   }
 
@@ -116,4 +131,12 @@ export class EventGalleryViewComponent
 
   protected readonly ButtonType = ButtonType;
   protected readonly ThumbnailBaseUrl = ThumbnailBaseUrl;
+
+  handlePhotoViewAction(event: PhotoAction) {
+    switch (event) {
+      case PhotoAction.Close:
+        this.openedPhotoData = undefined;
+        break;
+    }
+  }
 }
