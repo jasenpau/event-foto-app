@@ -45,9 +45,9 @@ jobs:
         run: echo "build-path=dist" >> $GITHUB_OUTPUT
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: angular-build
+          name: app-ui
           path: app-ui/dist
 
   deploy:
@@ -57,9 +57,9 @@ jobs:
 
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: angular-build
+          name: app-ui
           path: dist
 
       - name: Deploy to Azure Static Web App
