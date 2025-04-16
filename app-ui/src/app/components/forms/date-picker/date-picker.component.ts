@@ -34,7 +34,10 @@ export class DatePickerComponent extends FormElementBaseComponent {
 
   protected plugins = [confirmDatePlugin({ confirmText: 'Patvirtinti' })];
 
-  formatLtDate(value: any, format: any) {
+  // @ts-expect-error Types in angularx-flatpickr library are incorrect, this is a workaround
+  formatLtDate(...args) {
+    const value = args[0];
+    const format = args[1] ?? undefined;
     if (format === 'lt-date-only') return formatLithuanianDateOnly(value);
     if (format === 'lt-format') return formatLithuanianDate(value);
     return flatpickr.formatDate(value, format);
