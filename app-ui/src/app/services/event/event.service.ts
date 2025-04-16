@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ApiBaseUrl } from '../../globals/variables';
 import {
   EventCreateDto,
   EventListDto,
@@ -11,23 +10,31 @@ import {
 } from './event.types';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
 import { PagedData } from '../../components/paged-table/paged-table.types';
+import { EnvService } from '../environment/env.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EventService {
-  constructor(private http: HttpClient) {}
+  private readonly apiBaseUrl;
+
+  constructor(
+    private readonly http: HttpClient,
+    private readonly envService: EnvService,
+  ) {
+    this.apiBaseUrl = this.envService.getConfig().apiBaseUrl;
+  }
 
   getEventDetails(id: number): Observable<EventDto> {
     return this.http.get<EventDto>(
-      `${ApiBaseUrl}/event/${id}`,
+      `${this.apiBaseUrl}/event/${id}`,
       getAuthHeaders(),
     );
   }
 
   getEventPhotographers(id: number): Observable<EventPhotographer[]> {
     return this.http.get<EventPhotographer[]>(
-      `${ApiBaseUrl}/event/${id}/photographers`,
+      `${this.apiBaseUrl}/event/${id}/photographers`,
       getAuthHeaders(),
     );
   }
@@ -37,7 +44,7 @@ export class EventService {
     userId: string,
   ): Observable<EventPhotographer[]> {
     return this.http.post<EventPhotographer[]>(
-      `${ApiBaseUrl}/event/${eventId}/photographers`,
+      `${this.apiBaseUrl}/event/${eventId}/photographers`,
       { userId },
       getAuthHeaders(),
     );
@@ -48,14 +55,14 @@ export class EventService {
     userId: string,
   ): Observable<EventPhotographer[]> {
     return this.http.delete<EventPhotographer[]>(
-      `${ApiBaseUrl}/event/${eventId}/photographers/${userId}`,
+      `${this.apiBaseUrl}/event/${eventId}/photographers/${userId}`,
       getAuthHeaders(),
     );
   }
 
   createEvent(event: EventCreateDto): Observable<EventDto> {
     return this.http.post<EventDto>(
-      `${ApiBaseUrl}/event`,
+      `${this.apiBaseUrl}/event`,
       event,
       getAuthHeaders(),
     );
@@ -77,7 +84,7 @@ export class EventService {
       params = params.append('showArchived', searchParams.showArchived);
 
     return this.http.get<PagedData<string, EventListDto>>(
-      `${ApiBaseUrl}/event/search`,
+      `${this.apiBaseUrl}/event/search`,
       {
         ...getAuthHeaders(),
         params,

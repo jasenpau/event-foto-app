@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, Observable, of, tap } from 'rxjs';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
-import { ApiBaseUrl } from '../../globals/variables';
 import {
   AppGroupsDto,
   RegisterDto,
@@ -12,18 +11,23 @@ import {
 import { AuthService } from '../auth/auth.service';
 import { UserGroup } from '../../globals/userGroups';
 import { PagedData } from '../../components/paged-table/paged-table.types';
+import { EnvService } from '../environment/env.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  private readonly apiBaseUrl;
   private currentUser: UserData | null = null;
   private appGroups: AppGroupsDto | null = null;
 
   constructor(
-    private http: HttpClient,
-    private authService: AuthService,
-  ) {}
+    private readonly http: HttpClient,
+    private readonly authService: AuthService,
+    private readonly envService: EnvService,
+  ) {
+    this.apiBaseUrl = this.envService.getConfig().apiBaseUrl;
+  }
 
   fetchCurrentUserData(): Observable<UserData> {
     const userId = this.authService.getUserTokenData()?.uniqueId;
@@ -32,7 +36,7 @@ export class UserService {
     }
 
     return this.http
-      .get<UserData>(`${ApiBaseUrl}/user/${userId}`, getAuthHeaders())
+      .get<UserData>(`${this.apiBaseUrl}/user/${userId}`, getAuthHeaders())
       .pipe(
         tap((userData) => {
           this.currentUser = userData;
@@ -48,7 +52,7 @@ export class UserService {
     if (this.appGroups) return of(this.appGroups);
 
     return this.http
-      .get<AppGroupsDto>(`${ApiBaseUrl}/user/groups`, getAuthHeaders())
+      .get<AppGroupsDto>(`${this.apiBaseUrl}/user/groups`, getAuthHeaders())
       .pipe(
         tap((appGrounds) => {
           this.appGroups = appGrounds;
@@ -87,7 +91,7 @@ export class UserService {
   register(userDetails: RegisterDto): Observable<UserData> {
     return this.http
       .post<UserData>(
-        `${ApiBaseUrl}/user/register`,
+        `${this.apiBaseUrl}/user/register`,
         userDetails,
         getAuthHeaders(),
       )
@@ -111,7 +115,7 @@ export class UserService {
     if (excludeEventId)
       params = params.append('excludeEventId', excludeEventId.toString());
     return this.http.get<PagedData<string, UserData>>(
-      `${ApiBaseUrl}/user/search`,
+      `${this.apiBaseUrl}/user/search`,
       {
         ...getAuthHeaders(),
         params,

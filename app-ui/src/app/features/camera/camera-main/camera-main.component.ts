@@ -8,7 +8,6 @@ import {
 import { CameraSetupComponent } from '../camera-setup/camera-setup.component';
 import { NgIf } from '@angular/common';
 import { ButtonComponent } from '../../../components/button/button.component';
-import { ImagingService } from '../../../services/imaging/imaging.service';
 import {
   CameraDevice,
   CameraEvent,
@@ -26,6 +25,7 @@ import { takeUntil, tap } from 'rxjs';
 import { AUTH_TOKEN_STORAGE_KEY } from '../../../services/auth/auth.const';
 import { UserService } from '../../../services/user/user.service';
 import { UploadTrackerComponent } from '../../../components/upload-tracker/upload-tracker.component';
+import { EnvService } from '../../../services/environment/env.service';
 
 @Component({
   selector: 'app-camera-main',
@@ -57,13 +57,15 @@ export class CameraMainComponent
 
   private cameraWorker: Worker;
   private userId?: string;
+  private readonly apiBaseUrl: string;
 
   constructor(
-    private readonly imagingService: ImagingService,
     private readonly eventService: EventService,
     private readonly userService: UserService,
+    private readonly envService: EnvService,
   ) {
     super();
+    this.apiBaseUrl = this.envService.getConfig().apiBaseUrl;
     this.cameraWorker = new Worker(
       new URL('./camera.worker', import.meta.url),
       {
@@ -131,6 +133,7 @@ export class CameraMainComponent
             eventId,
             filename,
             authToken,
+            apiBaseUrl: this.apiBaseUrl,
             captureDate: new Date(),
           });
         } catch (err) {

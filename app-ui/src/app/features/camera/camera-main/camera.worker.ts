@@ -15,7 +15,7 @@ const sasTokenData = {
 };
 
 addEventListener('message', async ({ data }) => {
-  const { filename, eventId, captureDate, authToken } = data;
+  const { filename, eventId, captureDate, authToken, apiBaseUrl } = data;
 
   if (!filename || !eventId) {
     postMessage({
@@ -35,7 +35,7 @@ addEventListener('message', async ({ data }) => {
     const fileHandle = await root.getFileHandle(filename);
     const file = await fileHandle.getFile();
 
-    const sasContainerUri = await acquireSasUri(eventId, authToken);
+    const sasContainerUri = await acquireSasUri(eventId, authToken, apiBaseUrl);
     const sasParts = sasContainerUri.split('?');
     const sasUri = `${sasParts[0]}/${filename}?${sasParts[1]}`;
 
@@ -63,7 +63,7 @@ addEventListener('message', async ({ data }) => {
       eventId,
     });
 
-    const uploadMessageResponse = await fetch(`/api/image/upload`, {
+    const uploadMessageResponse = await fetch(`${apiBaseUrl}/image/upload`, {
       method: 'POST',
       body: uploadMessage,
       headers: {
@@ -94,7 +94,11 @@ addEventListener('message', async ({ data }) => {
   }
 });
 
-const acquireSasUri = async (eventId: number, authToken: string) => {
+const acquireSasUri = async (
+  eventId: number,
+  authToken: string,
+  apiBaseUrl: string,
+) => {
   if (
     sasTokenData.sasUri &&
     sasTokenData.expiresOn > new Date() &&
@@ -103,7 +107,7 @@ const acquireSasUri = async (eventId: number, authToken: string) => {
     return sasTokenData.sasUri;
   }
 
-  const response = await fetch(`/api/image/sas/${eventId}`, {
+  const response = await fetch(`${apiBaseUrl}/image/sas/${eventId}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${authToken}`,

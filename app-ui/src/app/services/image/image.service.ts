@@ -8,14 +8,21 @@ import {
   PhotoSearchParamsDto,
 } from './image.types';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
-import { ApiBaseUrl } from '../../globals/variables';
 import { map } from 'rxjs';
+import { EnvService } from '../environment/env.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ImageService {
-  constructor(private http: HttpClient) {}
+  private readonly apiBaseUrl;
+
+  constructor(
+    private readonly http: HttpClient,
+    private readonly envService: EnvService,
+  ) {
+    this.apiBaseUrl = this.envService.getConfig().apiBaseUrl;
+  }
 
   searchPhotos(searchParams: PhotoSearchParamsDto) {
     let params = new HttpParams().append(
@@ -33,7 +40,7 @@ export class ImageService {
       params = params.append('toDate', searchParams.toDate.toISOString());
 
     return this.http.get<PagedData<string, PhotoListDto>>(
-      `${ApiBaseUrl}/image/search`,
+      `${this.apiBaseUrl}/image/search`,
       {
         ...getAuthHeaders(),
         params,
@@ -43,22 +50,25 @@ export class ImageService {
 
   getPhotoDetails(photoId: number) {
     return this.http.get<PhotoDetailDto>(
-      `${ApiBaseUrl}/image/details/${photoId}`,
+      `${this.apiBaseUrl}/image/details/${photoId}`,
       getAuthHeaders(),
     );
   }
 
   getRawPhoto(eventId: number, filename: string) {
-    return this.http.get(`${ApiBaseUrl}/image/raw/${eventId}/${filename}`, {
-      ...getAuthHeaders(),
-      responseType: 'blob',
-    });
+    return this.http.get(
+      `${this.apiBaseUrl}/image/raw/${eventId}/${filename}`,
+      {
+        ...getAuthHeaders(),
+        responseType: 'blob',
+      },
+    );
   }
 
   bulkAction(actionType: BulkActionType, photoIds: number[]) {
     return this.http
       .post<string>(
-        `${ApiBaseUrl}/image/bulk-action`,
+        `${this.apiBaseUrl}/image/bulk-action`,
         {
           action: actionType,
           photoIds,

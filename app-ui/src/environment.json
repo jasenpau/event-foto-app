@@ -1,5 +1,6 @@
 {
   "baseUrl": "",
+  "apiBaseUrl": "",
   "auth": {
     "clientId": "",
     "authority": ""
