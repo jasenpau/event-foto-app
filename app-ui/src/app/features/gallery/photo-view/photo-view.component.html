@@ -10,8 +10,24 @@
           <a [routerLink]="'/event/' + photoDetails.eventId " *ngIf="showEventNavigation">Eiti į renginį</a>
         </div>
         <div class="photo__detail-line">
+          <p class="photo__detail-line-title text-label-large no-margin">Fotografas</p>
+          <a class="text-body-large no-margin" [routerLink]="'/user/' + photoDetails.userId ">{{ photoDetails.userName }}</a>
+        </div>
+        <div class="photo__detail-line">
+          <p class="photo__detail-line-title text-label-large no-margin">Nuotrauka sukurta</p>
+          <p class="text-body-large no-margin">{{ formatLtDate(photoDetails.captureDate) }}</p>
+        </div>
+        <div class="photo__detail-line">
+          <p class="photo__detail-line-title text-label-large no-margin">Nuotrauka įkelta</p>
+          <p class="text-body-large no-margin">{{ formatLtDate(photoDetails.uploadDate) }}</p>
+        </div>
+        <div class="photo__detail-line">
           <p class="photo__detail-line-title text-label-large no-margin">Failo pavadinimas</p>
           <p class="text-body-medium no-margin">{{ photoDetails.processedFilename }}</p>
+        </div>
+        <div class="photo__actions">
+          <app-button [type]="ButtonType.Text" (click)="deletePhoto()">Ištrinti</app-button>
+          <app-button [type]="ButtonType.Filled">Atsisiųsti</app-button>
         </div>
       </div>
     </div>

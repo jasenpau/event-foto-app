@@ -33,4 +33,9 @@ export interface OpenPhotoData {
 
 export enum PhotoAction {
   Close = 'close',
+  Delete = 'delete',
+}
+
+export enum BulkActionType {
+  Delete = 'delete',
 }

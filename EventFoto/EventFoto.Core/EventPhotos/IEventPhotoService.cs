@@ -11,5 +11,6 @@ public interface IEventPhotoService
     public Task<ServiceResult<PagedData<string, EventPhoto>>> SearchEventPhotosAsync(
         EventPhotoSearchParams searchParams);
     public Task<ServiceResult<string>> SaveThumbnail(int eventId, string contentRootPath, string fileName, MemoryStream thumbStream);
-    Task<ServiceResult<MemoryStream>> GetRawPhotoAsync(int eventId, string filename, CancellationToken cancellationToken);
+    public Task<ServiceResult<MemoryStream>> GetRawPhotoAsync(int eventId, string filename, CancellationToken cancellationToken);
+    public Task<ServiceResult<int>> DeletePhotosAsync(IList<int> photoIds, string contentRootPath, CancellationToken cancellationToken);
 }

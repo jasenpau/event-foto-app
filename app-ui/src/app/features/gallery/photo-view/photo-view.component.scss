@@ -67,4 +67,11 @@
   &__detail-line-title {
     color: colors.$on-surface-variant;
   }
+
+  &__actions {
+    margin-top: auto;
+    margin-left: auto;
+    display: flex;
+    gap: 32px;
+  }
 }

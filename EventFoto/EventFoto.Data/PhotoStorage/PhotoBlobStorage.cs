@@ -1,6 +1,9 @@
 ﻿using System.Net;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs.Specialized;
 using Azure.Storage.Sas;
+using EventFoto.Data.Extensions;
 using EventFoto.Data.Models;
 using Microsoft.Extensions.Configuration;
 
@@ -19,8 +22,8 @@ public class PhotoBlobStorage : IPhotoBlobStorage
 
     public async Task CreateContainerAsync(string containerName)
     {
-        var serviceClient = new BlobServiceClient(_connectionString);
-        var containerClient = serviceClient.GetBlobContainerClient(containerName);
+        var blobClient = new BlobServiceClient(_connectionString);
+        var containerClient = blobClient.GetBlobContainerClient(containerName);
         await containerClient.CreateIfNotExistsAsync();
     }
 
@@ -61,5 +64,36 @@ public class PhotoBlobStorage : IPhotoBlobStorage
         await blobClient.DownloadToAsync(stream, cancellationToken);
         stream.Position = 0;
         return ServiceResult<MemoryStream>.Ok(stream);
+    }
+
+    public async Task<ServiceResult<int>> DeleteImagesAsync(string containerName, IList<string> filenames, CancellationToken cancellationToken)
+    {
+        var blobClient = new BlobServiceClient(_connectionString);
+        var containerClient = blobClient.GetBlobContainerClient(containerName);
+
+        var batchClient = blobClient.GetBlobBatchClient();
+        var blobUris = filenames.Select(name => containerClient.GetBlobClient(name).Uri).ToList();
+
+        var batches = blobUris.Batch(100);
+        var successCount = 0;
+
+        try
+        {
+            foreach (var batch in batches)
+            {
+                var response = await batchClient.DeleteBlobsAsync(
+                    batch,
+                    DeleteSnapshotsOption.IncludeSnapshots,
+                    cancellationToken: cancellationToken
+                );
+                successCount += response.Count(x => !x.IsError);
+            }
+
+            return ServiceResult<int>.Ok(successCount);
+        }
+        catch (Exception ex)
+        {
+            return ServiceResult<int>.Fail($"Batch delete failed: {ex.Message}", HttpStatusCode.InternalServerError);
+        }
     }
 }

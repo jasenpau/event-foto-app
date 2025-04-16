@@ -43,6 +43,20 @@ public class ImageController : AppControllerBase
         return File(result.Data, "image/jpeg", filename);
     }
 
+    [HttpPost("bulk-action")]
+    public async Task<ActionResult<int>> BulkAction([FromBody] BulkPhotoModifyParams bulkPhotoModifyParams,
+        CancellationToken cancellationToken)
+    {
+        switch (bulkPhotoModifyParams.Action)
+        {
+            case "delete":
+                var result = await _eventPhotoService.DeletePhotosAsync(bulkPhotoModifyParams.PhotoIds, _env.ContentRootPath, cancellationToken);
+                return result.Success ? Ok(result.Data) : result.ToErrorResponse();
+            default:
+                return BadRequest();
+        }
+    }
+
     [HttpPost("upload")]
     public async Task<IActionResult> UploadImage([FromBody] UploadMessageDto uploadMessage)
     {

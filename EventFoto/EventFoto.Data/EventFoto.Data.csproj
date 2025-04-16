@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <PackageReference Include="Azure.Storage.Blobs" Version="12.24.0" />
+      <PackageReference Include="Azure.Storage.Blobs.Batch" Version="12.21.0" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
     </ItemGroup>
 

@@ -86,4 +86,15 @@ public class EventPhotoRepository : IEventPhotoRepository
             HasNextPage = hasNextPage
         };
     }
+
+    public Task<List<EventPhoto>> GetByIdsAsync(IList<int> photoIds)
+    {
+        return EventPhotos.Where(p => photoIds.Contains(p.Id)).ToListAsync();
+    }
+
+    public async Task DeleteEventPhotosAsync(IList<EventPhoto> photos, CancellationToken cancellationToken)
+    {
+        _context.EventPhotos.RemoveRange(photos);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
 }

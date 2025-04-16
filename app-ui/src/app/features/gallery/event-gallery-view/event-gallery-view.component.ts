@@ -68,7 +68,9 @@ export class EventGalleryViewComponent
           tap((images) => {
             this.imageData.push(...images.data);
             this.hasMoreImages = images.hasNextPage;
-            this.lastKey = `${images.data[images.data.length - 1].captureDate}|${images.data[images.data.length - 1].id}`;
+            if (images.data.length > 0) {
+              this.lastKey = `${images.data[images.data.length - 1].captureDate}|${images.data[images.data.length - 1].id}`;
+            }
             this.isLoading = false;
             this.observer?.disconnect();
             this.setupObserver();
@@ -88,29 +90,30 @@ export class EventGalleryViewComponent
     }
   }
 
+  handlePhotoViewAction(event: PhotoAction) {
+    switch (event) {
+      case PhotoAction.Close:
+        this.openedPhotoData = undefined;
+        break;
+      case PhotoAction.Delete:
+        this.openedPhotoData = undefined;
+        this.reload();
+        break;
+    }
+  }
+
   private readRouteParams() {
     this.route.paramMap.subscribe((params) => {
       const eventId = Number(params.get('eventId'));
       if (!isNaN(eventId) && eventId > 0) {
         this.eventId = eventId;
-        this.initialize();
       }
     });
-  }
-
-  private initialize() {
-    // this.loadMore();
   }
 
   private setupObserver() {
     this.observer = new IntersectionObserver(
       (entries) => {
-        console.log('checking', entries);
-        console.log(
-          entries[0].isIntersecting,
-          this.isLoading,
-          this.hasMoreImages,
-        );
         const entry = entries[0];
         if (entry.isIntersecting && !this.isLoading && this.hasMoreImages) {
           this.loadMore();
@@ -124,6 +127,14 @@ export class EventGalleryViewComponent
     this.observer.observe(this.scrollAnchor!.nativeElement);
   }
 
+  private reload() {
+    this.hasMoreImages = true;
+    this.imageData = [];
+    this.isLoading = false;
+    this.lastKey = '';
+    this.loadMore();
+  }
+
   override ngOnDestroy(): void {
     super.ngOnDestroy();
     this.observer?.disconnect();
@@ -131,12 +142,4 @@ export class EventGalleryViewComponent
 
   protected readonly ButtonType = ButtonType;
   protected readonly ThumbnailBaseUrl = ThumbnailBaseUrl;
-
-  handlePhotoViewAction(event: PhotoAction) {
-    switch (event) {
-      case PhotoAction.Close:
-        this.openedPhotoData = undefined;
-        break;
-    }
-  }
 }

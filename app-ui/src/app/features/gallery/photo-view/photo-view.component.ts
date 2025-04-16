@@ -10,6 +10,7 @@ import { SvgIconSrc } from '../../../components/svg-icon/svg-icon.types';
 import { ButtonType } from '../../../components/button/button.types';
 import { AppSvgIconComponent } from '../../../components/svg-icon/app-svg-icon.component';
 import {
+  BulkActionType,
   OpenPhotoData,
   PhotoAction,
   PhotoDetailDto,
@@ -19,10 +20,14 @@ import { DisposableComponent } from '../../../components/disposable/disposable.c
 import { forkJoin, Observable, of, takeUntil, tap } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { ButtonComponent } from '../../../components/button/button.component';
+import { formatLithuanianDateWithSeconds } from '../../../helpers/formatLithuanianDate';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
+import { SnackbarType } from '../../../services/snackbar/snackbar.types';
 
 @Component({
   selector: 'app-photo-view',
-  imports: [AppSvgIconComponent, NgIf, RouterLink],
+  imports: [AppSvgIconComponent, NgIf, RouterLink, ButtonComponent],
   templateUrl: './photo-view.component.html',
   styleUrl: './photo-view.component.scss',
 })
@@ -38,7 +43,10 @@ export class PhotoViewComponent
   protected imageDataUrl?: string;
   protected isLoading = true;
 
-  constructor(private readonly imageService: ImageService) {
+  constructor(
+    private readonly imageService: ImageService,
+    private readonly snackbarService: SnackbarService,
+  ) {
     super();
   }
 
@@ -48,6 +56,28 @@ export class PhotoViewComponent
 
   protected close() {
     this.photoAction.emit(PhotoAction.Close);
+  }
+
+  protected deletePhoto() {
+    if (!this.photoDetails) return;
+
+    this.imageService
+      .bulkAction(BulkActionType.Delete, [this.photoDetails.id])
+      .pipe(
+        tap(() => {
+          this.snackbarService.addSnackbar(
+            SnackbarType.Info,
+            'Nuotrauka buvo ištrinta.',
+          );
+          this.photoAction.emit(PhotoAction.Delete);
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+  }
+
+  protected formatLtDate(dateString: string) {
+    return formatLithuanianDateWithSeconds(new Date(dateString));
   }
 
   private loadImage() {

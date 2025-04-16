@@ -2,6 +2,7 @@
 using EventFoto.Core.Events;
 using EventFoto.Core.PhotoProcessing;
 using EventFoto.Data.DTOs;
+using EventFoto.Data.Extensions;
 using EventFoto.Data.Models;
 using EventFoto.Data.PhotoStorage;
 using EventFoto.Data.Repositories;
@@ -117,4 +118,43 @@ public class EventPhotoService : IEventPhotoService
         return streamResult;
     }
 
+    public async Task<ServiceResult<int>> DeletePhotosAsync(IList<int> photoIds, string contentRootPath, CancellationToken cancellationToken)
+    {
+        var photos = await _eventPhotoRepository.GetByIdsAsync(photoIds);
+        if (photos.Count == 0)
+            return ServiceResult<int>.Ok(0);
+
+        var eventGroups = photos.GroupBy(x => x.EventId);
+        foreach (var eventGroup in eventGroups)
+        {
+            var filenames = new List<string>();
+            filenames.AddRange(eventGroup.Select(x => x.Filename));
+            filenames.AddRange(eventGroup
+                .Select(x => x.ProcessedFilename)
+                .Where(x => !string.IsNullOrEmpty(x)));
+
+            var containerName = _photoBlobStorage.GetContainerName(eventGroup.Key);
+            await _photoBlobStorage.DeleteImagesAsync(containerName, filenames, cancellationToken);
+
+            var thumbnailsDir = Path.Combine(contentRootPath, "Thumbnails", eventGroup.Key.ToString());
+
+            if (!Directory.Exists(thumbnailsDir))
+                throw new InvalidOperationException(
+                    $"Thumbnails directory for event ID: {eventGroup.Key} does not exist");
+
+            foreach (var photo in eventGroup)
+            {
+                if (!photo.IsProcessed) continue;
+
+                var thumbnailPath = Path.Combine(thumbnailsDir, $"thumb-{photo.Filename}");
+                if (File.Exists(thumbnailPath))
+                {
+                    File.Delete(thumbnailPath);
+                }
+            }
+        }
+
+        await _eventPhotoRepository.DeleteEventPhotosAsync(photos, cancellationToken);
+        return ServiceResult<int>.Ok(photos.Count);
+    }
 }

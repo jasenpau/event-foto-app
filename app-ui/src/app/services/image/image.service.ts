@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { PagedData } from '../../components/paged-table/paged-table.types';
 import {
+  BulkActionType,
   PhotoDetailDto,
   PhotoListDto,
   PhotoSearchParamsDto,
 } from './image.types';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
 import { ApiBaseUrl } from '../../globals/variables';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -51,5 +53,20 @@ export class ImageService {
       ...getAuthHeaders(),
       responseType: 'blob',
     });
+  }
+
+  bulkAction(actionType: BulkActionType, photoIds: number[]) {
+    return this.http
+      .post<string>(
+        `${ApiBaseUrl}/image/bulk-action`,
+        {
+          action: actionType,
+          photoIds,
+        },
+        {
+          ...getAuthHeaders(),
+        },
+      )
+      .pipe(map((x) => Number(x)));
   }
 }
