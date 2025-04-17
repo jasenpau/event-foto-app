@@ -3,6 +3,9 @@ name: Deploy EventFoto.Processor
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'EventFoto/**'
+      - '.github/workflows/eventfoto.processor.yml'
   workflow_dispatch:
 
 env:
