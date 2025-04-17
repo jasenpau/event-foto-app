@@ -12,11 +12,16 @@ on:
 
 env:
   NODE_VERSION: '22'
+  APP_BASE_URL: ${{ vars.APP_BASE_URL }}
+  APP_API_BASE_URL: ${{ vars.APP_API_BASE_URL }}
+  APP_AUTH_CLIENT_ID: ${{ vars.APP_AUTH_CLIENT_ID }}
+  APP_AUTH_AUTHORITY: ${{ vars.APP_AUTH_AUTHORITY }}
 
 jobs:
   build:
     name: Build App UI
     runs-on: ubuntu-latest
+    environment: DEV
 
     defaults:
       run:
@@ -61,6 +66,19 @@ jobs:
         with:
           name: app-ui
           path: dist
+
+      - name: Generate environment.json
+        run: |
+          cat <<EOF > dist/event-foto-app-ui/browser/environment.json
+          {
+            "baseUrl": "${{ env.APP_BASE_URL }}",
+            "apiBaseUrl": "${{ env.APP_API_BASE_URL }}",
+            "auth": {
+              "clientId": "${{ env.APP_AUTH_CLIENT_ID }}",
+              "authority": "${{ env.APP_AUTH_AUTHORITY }}"
+            }
+          }
+          EOF
 
       - name: Deploy to Azure Static Web App
         uses: Azure/static-web-apps-deploy@v1
