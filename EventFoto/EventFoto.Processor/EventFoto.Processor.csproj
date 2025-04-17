@@ -30,7 +30,7 @@
         <Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext"/>
     </ItemGroup>
     <ItemGroup>
-      <Content Include="..\appsettings.local.json">
+      <Content Include="..\appsettings.local.json" Condition="Exists('..\appsettings.local.json')">
         <Link>appsettings.local.json</Link>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
