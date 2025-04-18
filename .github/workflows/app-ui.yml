@@ -59,6 +59,7 @@ jobs:
     name: Deploy to dev-eventfoto-ui
     runs-on: ubuntu-latest
     needs: build
+    environment: DEV
 
     steps:
       - name: Download build artifacts
