@@ -26,7 +26,7 @@ public static class Program
         builder.Configuration
             .SetBasePath(basePath!)
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-            .AddJsonFile("appsettings.local.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true)
             .AddEnvironmentVariables();
 
         builder.Services.AddControllers(options =>
