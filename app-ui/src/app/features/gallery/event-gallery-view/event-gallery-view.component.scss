@@ -1,6 +1,7 @@
 @use "colors";
 
-$grid-cell-width: 200px;
+$grid-cell-min-width: 200px;
+$grid-cell-max-width: 400px;
 
 .gallery {
   &__header {
@@ -11,7 +12,7 @@ $grid-cell-width: 200px;
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax($grid-cell-width, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax($grid-cell-min-width, $grid-cell-max-width));
     overflow: hidden;
     gap: 2px;
   }
