@@ -5,7 +5,10 @@ on:
     branches:
       - main
     paths:
-      - 'EventFoto/**'
+      - 'EventFoto/EventFoto/EventFoto.sln'
+      - 'EventFoto/EventFoto.Core/**'
+      - 'EventFoto/EventFoto.Data/**'
+      - 'EventFoto/EventFoto.API/**'
       - '.github/workflows/eventfoto.api.yml'
   workflow_dispatch:
 
