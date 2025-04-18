@@ -64,7 +64,7 @@ jobs:
         with:
           app-name: 'dev-eventfoto-api'
           slot-name: 'Production'
-          package: ./eventfoto-apicd 
+          package: ./eventfoto-api
 
       - name: Set environment variables
         uses: azure/cli@v1
