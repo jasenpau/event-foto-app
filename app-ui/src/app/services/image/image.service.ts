@@ -95,6 +95,10 @@ export class ImageService {
       .pipe(
         map((sasUriResponse) => {
           const parts = sasUriResponse.sasUri.split('?');
+          if (parts[0].endsWith('/')) {
+            parts[0] = parts[0].slice(0, -1);
+          }
+
           this.readOnlySasUri = {
             baseUri: parts[0],
             params: parts[1],

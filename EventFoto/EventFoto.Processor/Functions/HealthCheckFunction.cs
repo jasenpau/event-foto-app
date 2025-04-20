@@ -7,12 +7,12 @@ namespace EventFoto.Processor.Functions;
 public class HealthCheckFunction
 {
     [Function("HealthCheck")]
-    public static HttpResponseData Run(
+    public async Task<HttpResponseData> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "health")] HttpRequestData req,
         FunctionContext executionContext)
     {
         var response = req.CreateResponse(HttpStatusCode.OK);
-        response.WriteString("Healthy");
+        await response.WriteStringAsync("Healthy");
         return response;
     }
 }
