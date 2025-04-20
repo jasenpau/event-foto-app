@@ -67,6 +67,7 @@ jobs:
         with:
           app-name: 'dev-eventfoto-processor'
           package: './eventfoto-processor'
+          scm-do-build-during-deployment: false
 
       - name: Set environment variables
         uses: azure/cli@v1
