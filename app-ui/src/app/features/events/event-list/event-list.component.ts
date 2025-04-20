@@ -80,9 +80,7 @@ export class EventListComponent
   }
 
   ngOnInit() {
-    this.userService.userGroupsCallback((groups) => {
-      this.updateViewPermissions(groups);
-    });
+    this.updateViewPermissions();
     this.initializeSearch();
   }
 
@@ -148,7 +146,8 @@ export class EventListComponent
     return this.eventService.searchEvents(searchParams);
   };
 
-  private updateViewPermissions(groups: UserGroup[]) {
+  private updateViewPermissions() {
+    const groups = this.userService.getUserGroups();
     this.showCreateEvent = groups.includes(UserGroup.EventAdmin);
   }
 }

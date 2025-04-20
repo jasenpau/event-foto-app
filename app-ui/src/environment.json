@@ -4,5 +4,10 @@
   "auth": {
     "clientId": "",
     "authority": ""
+  },
+  "groups": {
+    "photographers": "",
+    "eventAdministrators": "",
+    "systemAdministrators": ""
   }
 }

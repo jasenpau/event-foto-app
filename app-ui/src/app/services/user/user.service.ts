@@ -1,13 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { map, Observable, of, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
-import {
-  AppGroupsDto,
-  RegisterDto,
-  UserData,
-  UserGroupsCallback,
-} from './user.types';
+import { AppGroupsDto, RegisterDto, UserData } from './user.types';
 import { AuthService } from '../auth/auth.service';
 import { UserGroup } from '../../globals/userGroups';
 import { PagedData } from '../../components/paged-table/paged-table.types';
@@ -18,8 +13,8 @@ import { EnvService } from '../environment/env.service';
 })
 export class UserService {
   private readonly apiBaseUrl;
+  private readonly appGroups: AppGroupsDto;
   private currentUser: UserData | null = null;
-  private appGroups: AppGroupsDto | null = null;
 
   constructor(
     private readonly http: HttpClient,
@@ -27,6 +22,7 @@ export class UserService {
     private readonly envService: EnvService,
   ) {
     this.apiBaseUrl = this.envService.getConfig().apiBaseUrl;
+    this.appGroups = this.envService.getConfig().groups;
   }
 
   fetchCurrentUserData(): Observable<UserData> {
@@ -48,44 +44,26 @@ export class UserService {
     return this.currentUser;
   }
 
-  getAppGroups(): Observable<AppGroupsDto> {
-    if (this.appGroups) return of(this.appGroups);
-
-    return this.http
-      .get<AppGroupsDto>(`${this.apiBaseUrl}/user/groups`, getAuthHeaders())
-      .pipe(
-        tap((appGrounds) => {
-          this.appGroups = appGrounds;
-        }),
-      );
+  getAppGroups(): AppGroupsDto {
+    return this.appGroups;
   }
 
-  getUserGroups(): Observable<UserGroup[]> {
+  getUserGroups(): UserGroup[] {
     const user = this.authService.getUserTokenData();
-    if (!user) return of([]);
+    if (!user) return [];
 
-    return this.getAppGroups().pipe(
-      map((groups) => {
-        if (user.groups.includes(groups.systemAdministrators)) {
-          return [
-            UserGroup.SystemAdmin,
-            UserGroup.EventAdmin,
-            UserGroup.Photographer,
-          ];
-        } else if (user.groups.includes(groups.eventAdministrators)) {
-          return [UserGroup.EventAdmin, UserGroup.Photographer];
-        } else if (user.groups.includes(groups.photographers)) {
-          return [UserGroup.Photographer];
-        }
-        return [];
-      }),
-    );
-  }
-
-  userGroupsCallback(callback: UserGroupsCallback) {
-    this.getUserGroups().subscribe((groups) => {
-      callback(groups);
-    });
+    if (user.groups.includes(this.appGroups.systemAdministrators)) {
+      return [
+        UserGroup.SystemAdmin,
+        UserGroup.EventAdmin,
+        UserGroup.Photographer,
+      ];
+    } else if (user.groups.includes(this.appGroups.eventAdministrators)) {
+      return [UserGroup.EventAdmin, UserGroup.Photographer];
+    } else if (user.groups.includes(this.appGroups.photographers)) {
+      return [UserGroup.Photographer];
+    }
+    return [];
   }
 
   register(userDetails: RegisterDto): Observable<UserData> {

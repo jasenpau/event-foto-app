@@ -36,10 +36,11 @@ export class UserListComponent
 
   protected userTableData: PagedDataTable<string, UserData>;
   protected searchControl = new FormControl('', [Validators.max(100)]);
-  protected appGroups?: AppGroupsDto;
+  protected appGroups: AppGroupsDto;
 
   constructor(private userService: UserService) {
     super();
+    this.appGroups = this.userService.getAppGroups();
     this.userTableData = new PagedDataTable<string, UserData>(
       (searchTerm, keyOffset, pageSize) => {
         return this.userService.searchUsers(searchTerm, keyOffset, pageSize);
@@ -52,13 +53,6 @@ export class UserListComponent
 
   ngOnInit() {
     this.initializeSearch();
-    this.userService
-      .getAppGroups()
-      .pipe(
-        tap((groups) => (this.appGroups = groups)),
-        takeUntil(this.destroy$),
-      )
-      .subscribe();
   }
 
   protected getUserGroupName(groupId: string): string {

@@ -13,14 +13,11 @@ namespace EventFoto.API.Controllers;
 public class UserController : AppControllerBase
 {
     private readonly IUserService _userService;
-    private readonly IGroupSettingsProvider _groupSettingsProvider;
 
     public UserController(
-        IUserService userService,
-        IGroupSettingsProvider groupSettingsProvider)
+        IUserService userService)
     {
         _userService = userService;
-        _groupSettingsProvider = groupSettingsProvider;
     }
 
     [HttpGet("{id:guid}")]
@@ -51,13 +48,6 @@ public class UserController : AppControllerBase
                 Name = result.Data.Name,
             })
             : result.ToErrorResponse();
-    }
-    
-    [HttpGet("groups")]
-    public ActionResult<AppGroups> GetGroups()
-    {
-        var groups = _groupSettingsProvider.GetGroups();
-        return Ok(groups);
     }
 
     [HttpGet("search")]

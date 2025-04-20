@@ -16,6 +16,9 @@ env:
   APP_API_BASE_URL: ${{ vars.APP_API_BASE_URL }}
   APP_AUTH_CLIENT_ID: ${{ vars.APP_AUTH_CLIENT_ID }}
   APP_AUTH_AUTHORITY: ${{ vars.APP_AUTH_AUTHORITY }}
+  APP_GROUPS_PHOTOGRAPHER_ID: ${{ vars.GROUPS_PHOTOGRAPHER_ID }}
+  APP_GROUPS_EVENT_ADMIN_ID: ${{ vars.GROUPS_EVENT_ADMIN_ID }}
+  APP_GROUPS_SYSTEM_ADMIN_ID: ${{ vars.GROUPS_SYSTEM_ADMIN_ID }}
 
 jobs:
   build:
@@ -77,6 +80,11 @@ jobs:
             "auth": {
               "clientId": "${{ env.APP_AUTH_CLIENT_ID }}",
               "authority": "${{ env.APP_AUTH_AUTHORITY }}"
+            },
+            "groups": {
+              "photographers": "${{ env.APP_GROUPS_PHOTOGRAPHER_ID }}",
+              "eventAdministrators": "${{ env.APP_GROUPS_EVENT_ADMIN_ID }}",
+              "systemAdministrators": "${{ env.APP_GROUPS_SYSTEM_ADMIN_ID }}"
             }
           }
           EOF

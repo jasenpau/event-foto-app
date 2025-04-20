@@ -8,8 +8,6 @@ import {
   Router,
 } from '@angular/router';
 import { UserService } from '../services/user/user.service';
-import { map } from 'rxjs';
-import { AuthService } from '../services/auth/auth.service';
 import { UserGroup } from '../globals/userGroups';
 
 @Injectable({
@@ -18,7 +16,6 @@ import { UserGroup } from '../globals/userGroups';
 export class GroupPermissionGuard implements CanActivate {
   constructor(
     private userService: UserService,
-    private authService: AuthService,
     private router: Router,
   ) {}
 
@@ -31,16 +28,14 @@ export class GroupPermissionGuard implements CanActivate {
       );
     }
 
-    return this.userService.getUserGroups().pipe(
-      map((groups) => {
-        const canActivate = groups.includes(requiredGroup);
-        if (canActivate) return true;
+    const canActivate = this.userService
+      .getUserGroups()
+      .includes(requiredGroup);
+    if (canActivate) return true;
 
-        const noAccessRoute = this.router.parseUrl('/no-access');
-        return new RedirectCommand(noAccessRoute, {
-          skipLocationChange: true,
-        });
-      }),
-    );
+    const noAccessRoute = this.router.parseUrl('/no-access');
+    return new RedirectCommand(noAccessRoute, {
+      skipLocationChange: true,
+    });
   }
 }

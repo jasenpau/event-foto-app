@@ -79,8 +79,11 @@ export const routes: Routes = [
   {
     path: 'camera',
     component: CameraMainComponent,
-    data: { layout: LayoutType.Empty },
-    canActivate: [AuthGuard],
+    data: {
+      layout: LayoutType.Empty,
+      requiredGroup: UserGroup.Photographer,
+    },
+    canActivate: [AuthGuard, GroupPermissionGuard],
   },
   {
     path: 'no-access',

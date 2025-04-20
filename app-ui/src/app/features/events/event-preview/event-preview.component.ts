@@ -21,7 +21,7 @@ import { SideViewComponent } from '../../../components/side-view/side-view.compo
 import { AssignPhotographerFormComponent } from '../assign-photographer-form/assign-photographer-form.component';
 import { LoaderService } from '../../../services/loader/loader.service';
 
-const COMPONENT_LOADER_KEY = 'event-preview';
+const COMPONENT_LOADING_KEY = 'event-preview';
 
 @Component({
   selector: 'app-event-preview',
@@ -60,15 +60,13 @@ export class EventPreviewComponent
     private readonly loaderService: LoaderService,
   ) {
     super();
-    this.loaderService.startLoading(COMPONENT_LOADER_KEY);
+    this.loaderService.startLoading(COMPONENT_LOADING_KEY);
     this.readRouteParams();
   }
 
   ngOnInit() {
     this.userId = this.userService.getCurrentUserData()?.id;
-    this.userService.userGroupsCallback((groups) => {
-      this.updateViewPermissions(groups);
-    });
+    this.updateViewPermissions();
   }
 
   protected formatDate(dateString: string): string {
@@ -144,7 +142,7 @@ export class EventPreviewComponent
       .pipe(
         tap((event) => {
           this.event = event;
-          this.loaderService.finishLoading(COMPONENT_LOADER_KEY);
+          this.loaderService.finishLoading(COMPONENT_LOADING_KEY);
         }),
         takeUntil(this.destroy$),
       )
@@ -163,7 +161,8 @@ export class EventPreviewComponent
       .subscribe();
   }
 
-  private updateViewPermissions(groups: UserGroup[]) {
+  private updateViewPermissions() {
+    const groups = this.userService.getUserGroups();
     this.showAssignSelf = groups.includes(UserGroup.Photographer);
     this.showAssignUsers = groups.includes(UserGroup.EventAdmin);
   }

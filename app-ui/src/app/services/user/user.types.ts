@@ -1,5 +1,3 @@
-import { UserGroup } from '../../globals/userGroups';
-
 export interface UserData {
   id: string;
   email: string;
@@ -17,5 +15,3 @@ export interface RegisterDto {
   email: string;
   name: string;
 }
-
-export type UserGroupsCallback = (groups: UserGroup[]) => void;

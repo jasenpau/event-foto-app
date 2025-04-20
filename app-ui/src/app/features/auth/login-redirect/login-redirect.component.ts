@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth/auth.service';
-import { firstValueFrom, takeUntil, tap } from 'rxjs';
+import { takeUntil, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user/user.service';
 import { RegisterComponent } from '../register/register.component';
@@ -56,7 +56,6 @@ export class LoginRedirectComponent
       .pipe(
         tap(async (exists) => {
           this.loaderService.finishLoading(COMPONENT_LOADING_KEY);
-          await this.loadAppData();
           if (exists) {
             await this.router.navigate([
               this.redirectUrl ? this.redirectUrl : '/',
@@ -72,11 +71,5 @@ export class LoginRedirectComponent
         takeUntil(this.destroy$),
       )
       .subscribe();
-  }
-
-  private async loadAppData() {
-    await firstValueFrom(
-      this.userService.getAppGroups().pipe(takeUntil(this.destroy$)),
-    );
   }
 }
