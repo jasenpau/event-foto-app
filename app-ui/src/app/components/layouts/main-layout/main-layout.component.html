@@ -3,4 +3,7 @@
   <div class="main-layout__content">
     <ng-content />
   </div>
+  <div class="main-layout__loader" *ngIf="showLoader">
+    <app-spinner />
+  </div>
 </div>

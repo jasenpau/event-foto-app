@@ -19,6 +19,9 @@ import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { SnackbarType } from '../../../services/snackbar/snackbar.types';
 import { SideViewComponent } from '../../../components/side-view/side-view.component';
 import { AssignPhotographerFormComponent } from '../assign-photographer-form/assign-photographer-form.component';
+import { LoaderService } from '../../../services/loader/loader.service';
+
+const COMPONENT_LOADER_KEY = 'event-preview';
 
 @Component({
   selector: 'app-event-preview',
@@ -54,8 +57,10 @@ export class EventPreviewComponent
     private readonly userService: UserService,
     private readonly route: ActivatedRoute,
     private readonly snackbarService: SnackbarService,
+    private readonly loaderService: LoaderService,
   ) {
     super();
+    this.loaderService.startLoading(COMPONENT_LOADER_KEY);
     this.readRouteParams();
   }
 
@@ -139,6 +144,7 @@ export class EventPreviewComponent
       .pipe(
         tap((event) => {
           this.event = event;
+          this.loaderService.finishLoading(COMPONENT_LOADER_KEY);
         }),
         takeUntil(this.destroy$),
       )

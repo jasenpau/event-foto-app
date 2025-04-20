@@ -58,4 +58,7 @@
       </td>
     </tr>
   </table>
+  <div class="event-list__table-loader" *ngIf="eventsTableData.loading">
+    <app-spinner />
+  </div>
 </div>

@@ -8,4 +8,10 @@
   &__table-full-width {
     width: 50%;
   }
+
+  &__table-loader {
+    display: flex;
+    justify-content: center;
+    margin-top: 80px;
+  }
 }

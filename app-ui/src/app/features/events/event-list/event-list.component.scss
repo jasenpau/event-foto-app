@@ -15,4 +15,10 @@
   &__table-name {
     width: 100%;
   }
+
+  &__table-loader {
+    display: flex;
+    justify-content: center;
+    margin-top: 80px;
+  }
 }

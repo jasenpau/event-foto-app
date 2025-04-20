@@ -26,6 +26,7 @@ import { DatePickerComponent } from '../../../components/forms/date-picker/date-
 import { PagedDataLoader } from '../../../components/paged-table/paged-table.types';
 import { getStartOfDay } from '../../../helpers/getStartOfDay';
 import { CheckboxComponent } from '../../../components/forms/checkbox/checkbox.component';
+import { SpinnerComponent } from '../../../components/spinner/spinner.component';
 
 const EVENT_TABLE_PAGE_SIZE = 20;
 
@@ -40,6 +41,7 @@ const EVENT_TABLE_PAGE_SIZE = 20;
     ReactiveFormsModule,
     DatePickerComponent,
     CheckboxComponent,
+    SpinnerComponent,
   ],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',

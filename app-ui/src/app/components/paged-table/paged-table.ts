@@ -119,9 +119,11 @@ export class PagedDataTable<TKey extends string | number, TData> {
       return of({ data: this.internalList[keyOffset], cached: true });
     }
 
+    this.isLoading = true;
     return this.loaderFunction(this.searchTerm, keyOffset, this.pageSize).pipe(
       map((data) => {
         this.internalList[keyOffset] = data;
+        this.isLoading = false;
         return {
           data,
           cached: false,

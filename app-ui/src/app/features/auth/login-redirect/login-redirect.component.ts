@@ -8,6 +8,9 @@ import { NgIf } from '@angular/common';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { handleApiError } from '../../../helpers/handleApiError';
 import { AppError } from '../../../globals/errors';
+import { LoaderService } from '../../../services/loader/loader.service';
+
+const COMPONENT_LOADING_KEY = 'login-redirect';
 
 @Component({
   selector: 'app-login-redirect',
@@ -27,11 +30,13 @@ export class LoginRedirectComponent
     private authService: AuthService,
     private userService: UserService,
     private router: Router,
+    private loaderService: LoaderService,
   ) {
     super();
   }
 
   ngOnInit() {
+    this.loaderService.startLoading(COMPONENT_LOADING_KEY);
     this.authService.tokenEvents
       .pipe(
         tap((event) => {
@@ -50,6 +55,7 @@ export class LoginRedirectComponent
       .fetchCurrentUserData()
       .pipe(
         tap(async (exists) => {
+          this.loaderService.finishLoading(COMPONENT_LOADING_KEY);
           await this.loadAppData();
           if (exists) {
             await this.router.navigate([
@@ -58,6 +64,7 @@ export class LoginRedirectComponent
           }
         }),
         handleApiError((error) => {
+          this.loaderService.finishLoading(COMPONENT_LOADING_KEY);
           if (error.title === AppError.UserNotFound) {
             this.showRegisterForm = true;
           }

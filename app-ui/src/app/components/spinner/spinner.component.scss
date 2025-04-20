@@ -1,0 +1,21 @@
+@use "colors";
+
+$spinner-size: 64px;
+$spinner-thickness: 6px;
+
+:host {
+  display: block;
+}
+
+.spinner {
+  width: $spinner-size;
+  height: $spinner-size;
+  border: $spinner-thickness solid colors.$primary-container;
+  border-top-color: colors.$primary;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+}
