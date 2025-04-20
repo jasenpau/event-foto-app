@@ -6,9 +6,11 @@ import {
   PhotoDetailDto,
   PhotoListDto,
   PhotoSearchParamsDto,
+  ReadOnlySasUri,
+  SasUriResponse,
 } from './image.types';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
-import { map } from 'rxjs';
+import { map, of } from 'rxjs';
 import { EnvService } from '../environment/env.service';
 
 @Injectable({
@@ -16,6 +18,7 @@ import { EnvService } from '../environment/env.service';
 })
 export class ImageService {
   private readonly apiBaseUrl;
+  private readOnlySasUri?: ReadOnlySasUri;
 
   constructor(
     private readonly http: HttpClient,
@@ -78,5 +81,27 @@ export class ImageService {
         },
       )
       .pipe(map((x) => Number(x)));
+  }
+
+  getReadOnlySasUri() {
+    if (this.readOnlySasUri && this.readOnlySasUri.expiresOn > new Date()) {
+      return of(this.readOnlySasUri);
+    }
+
+    return this.http
+      .get<SasUriResponse>(`${this.apiBaseUrl}/image/sas`, {
+        ...getAuthHeaders(),
+      })
+      .pipe(
+        map((sasUriResponse) => {
+          const parts = sasUriResponse.sasUri.split('?');
+          this.readOnlySasUri = {
+            baseUri: parts[0],
+            params: parts[1],
+            expiresOn: new Date(sasUriResponse.expiresOn),
+          };
+          return this.readOnlySasUri;
+        }),
+      );
   }
 }

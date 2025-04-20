@@ -39,14 +39,15 @@ public class ImageProcessor : IImageProcessor
         var image = await Image.LoadAsync(imageStream.Data, cancellationToken);
         await imageStream.Data.DisposeAsync();
         var eventPhoto = await _photoRepository.GetByEventAndFilename(message.EventId, message.Filename);
+        var processedFilename = message.Filename;
 
-        var thumbnailTask = GeneratePreviewImage(image, message, cancellationToken);
+        var thumbnailTask = GeneratePreviewImage(image, message.EventId, processedFilename, cancellationToken);
 
         await Task.WhenAll(thumbnailTask);
         await _photoRepository.MarkAsProcessed(eventPhoto, message.Filename);
     }
 
-    private async Task GeneratePreviewImage(Image originalImage, ProcessingMessage message,
+    private async Task GeneratePreviewImage(Image originalImage, int eventId, string filename,
         CancellationToken cancellationToken)
 
     {
@@ -63,18 +64,8 @@ public class ImageProcessor : IImageProcessor
         await thumbnail.SaveAsJpegAsync(thumbnailStream, cancellationToken);
         thumbnailStream.Position = 0;
 
-        var content = new MultipartFormDataContent
-        {
-            { new StreamContent(thumbnailStream), "thumbnail", $"thumb-{message.Filename}" },
-            { new StringContent(message.EventId.ToString()), "eventId" }
-        };
-
-        var client = _httpClientFactory.CreateClient();
-        client.DefaultRequestHeaders.Add("Authorization", _configuration["ImageProcessorOptions:AuthorizationKey"]);
-        client.BaseAddress = new Uri(_configuration["ImageProcessorOptions:ThumbnailUploadEndpoint"] ??
-                                     throw new InvalidOperationException("Missing ThumbnailUploadEndpoint"));
-
-        var response = await client.PostAsync("/api/image/thumbnail", content, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        var containerName = _photoBlobStorage.GetContainerName(eventId);
+        var thumbnailFilename = $"thumb-{filename}";
+        await _photoBlobStorage.UploadImageAsync(containerName, thumbnailFilename, thumbnailStream, cancellationToken);
     }
 }

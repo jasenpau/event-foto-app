@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Azure.Storage;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs.Specialized;
@@ -11,11 +12,13 @@ namespace EventFoto.Data.PhotoStorage;
 
 public class PhotoBlobStorage : IPhotoBlobStorage
 {
+    private readonly IConfiguration _configuration;
     private readonly string _connectionString;
 
     public PhotoBlobStorage(IConfiguration configuration)
     {
-        _connectionString = configuration["AzureStorage:ConnectionString"];
+        _configuration = configuration;
+        _connectionString = _configuration["AzureStorage:ConnectionString"];
     }
 
     public string GetContainerName(int eventId) => $"event-{eventId}";
@@ -46,6 +49,57 @@ public class PhotoBlobStorage : IPhotoBlobStorage
 
         var sasUri = containerClient.GenerateSasUri(sasBuilder);
         return ServiceResult<string>.Ok(sasUri.ToString());
+    }
+
+    public ServiceResult<string> GetReadOnlySasUri(int tokenExpiryInMinutes)
+    {
+        var accountKey = _configuration["AzureStorage:AccountKey"];
+        var blobServiceClient = new BlobServiceClient(_connectionString);
+        var credential = new StorageSharedKeyCredential(blobServiceClient.AccountName, accountKey);
+
+        var isDev = _configuration["IsDevelopment"] == "true";
+
+        var sasBuilder = new AccountSasBuilder
+        {
+            Services = AccountSasServices.Blobs,
+            ResourceTypes = AccountSasResourceTypes.Container | AccountSasResourceTypes.Object,
+            ExpiresOn = DateTimeOffset.UtcNow.AddMinutes(tokenExpiryInMinutes),
+            Protocol = isDev ? SasProtocol.HttpsAndHttp : SasProtocol.Https
+        };
+
+        sasBuilder.SetPermissions(AccountSasPermissions.Read);
+
+        var sasToken = sasBuilder.ToSasQueryParameters(credential).ToString();
+        var serviceUri = blobServiceClient.Uri;
+
+        return ServiceResult<string>.Ok($"{serviceUri}?{sasToken}");
+    }
+
+    public async Task<ServiceResult<string>> UploadImageAsync(string containerName, string filename, Stream imageStream,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var containerClient = new BlobContainerClient(_connectionString, containerName);
+            await containerClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken);
+            var blobClient = containerClient.GetBlobClient(filename);
+
+            var httpHeaders = new BlobHttpHeaders
+            {
+                ContentType = "image/jpeg"
+            };
+
+            await blobClient.UploadAsync(imageStream, new BlobUploadOptions
+            {
+                HttpHeaders = httpHeaders
+            }, cancellationToken: cancellationToken);
+
+            return ServiceResult<string>.Ok(blobClient.Uri.ToString());
+        }
+        catch (Exception ex)
+        {
+            return ServiceResult<string>.Fail($"Upload failed: {ex.Message}", HttpStatusCode.InternalServerError);
+        }
     }
 
     public async Task<ServiceResult<MemoryStream>> DownloadImageAsync(string containerName, string filename,

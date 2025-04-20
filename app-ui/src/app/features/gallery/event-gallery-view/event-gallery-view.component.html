@@ -9,7 +9,7 @@
     <div class="gallery__item" *ngFor="let image of imageData">
       <img
         *ngIf="image.isProcessed"
-        [src]="ThumbnailBaseUrl + '/' + eventId + '/thumb-' + image.processedFilename"
+        [src]="sasUri?.baseUri + '/event-' + eventId + '/thumb-' + image.processedFilename + '?' + sasUri?.params"
         class="gallery__image"
         (click)="openPhoto(image)"
         [alt]="image.processedFilename"

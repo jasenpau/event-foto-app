@@ -17,7 +17,7 @@ public class ProcessImageFunction
 
     [Function("ProcessImage")]
     public async Task ProcessImage(
-        [QueueTrigger("%ProcessingQueueName%", Connection = "QueueConnectionString")] QueueMessage queueMessage,
+        [QueueTrigger("%AzureStorage:ProcessingQueueName%", Connection = "AzureStorage:ConnectionString")] QueueMessage queueMessage,
         FunctionContext context, CancellationToken cancellationToken = default)
 
     {

@@ -86,6 +86,22 @@ public class EventPhotoService : IEventPhotoService
         return ServiceResult<SasUriResponseDto>.Ok(result);
     }
 
+    public ServiceResult<SasUriResponseDto> GetReadOnlySasUri()
+    {
+        var tokenExpiryInMinutes = int.Parse(_configuration["AzureStorage:TokenExpiryInMinutes"] ?? "20");
+        var sasUriResult = _photoBlobStorage.GetReadOnlySasUri(tokenExpiryInMinutes);
+        if (!sasUriResult.Success)
+            return ServiceResult<SasUriResponseDto>.Fail(sasUriResult.ErrorMessage,
+                sasUriResult.StatusCode ?? HttpStatusCode.InternalServerError);
+
+        var result = new SasUriResponseDto
+        {
+            SasUri = sasUriResult.Data,
+            ExpiresOn = DateTime.UtcNow.AddMinutes(tokenExpiryInMinutes),
+        };
+        return ServiceResult<SasUriResponseDto>.Ok(result);
+    }
+
     public async Task<ServiceResult<PagedData<string, EventPhoto>>> SearchEventPhotosAsync(
         EventPhotoSearchParams searchParams)
 
@@ -96,29 +112,14 @@ public class EventPhotoService : IEventPhotoService
             : ServiceResult<PagedData<string, EventPhoto>>.Fail("Query failed", HttpStatusCode.InternalServerError);
     }
 
-    public async Task<ServiceResult<string>> SaveThumbnail(int eventId, string contentRootPath, string fileName, MemoryStream thumbStream)
-    {
-        var thumbnailsDir = Path.Combine(contentRootPath, "Thumbnails", eventId.ToString());
-
-        if (!Directory.Exists(thumbnailsDir))
-            Directory.CreateDirectory(thumbnailsDir);
-
-        var filePath = Path.Combine(thumbnailsDir, fileName);
-
-        await using var stream = new FileStream(filePath, FileMode.Create);
-        await thumbStream.CopyToAsync(stream);
-        await thumbStream.DisposeAsync();
-        return ServiceResult<string>.Ok(filePath);
-    }
-
-    public async Task<ServiceResult<MemoryStream>> GetRawPhotoAsync(int eventId, string filename, CancellationToken cancellationToken)
+    public async Task<ServiceResult<MemoryStream>> GetPhotoFromBlobAsync(int eventId, string filename, CancellationToken cancellationToken)
     {
         var containerName = _photoBlobStorage.GetContainerName(eventId);
         var streamResult = await _photoBlobStorage.DownloadImageAsync(containerName, filename, cancellationToken);
         return streamResult;
     }
 
-    public async Task<ServiceResult<int>> DeletePhotosAsync(IList<int> photoIds, string contentRootPath, CancellationToken cancellationToken)
+    public async Task<ServiceResult<int>> DeletePhotosAsync(IList<int> photoIds, CancellationToken cancellationToken)
     {
         var photos = await _eventPhotoRepository.GetByIdsAsync(photoIds);
         if (photos.Count == 0)
@@ -132,26 +133,12 @@ public class EventPhotoService : IEventPhotoService
             filenames.AddRange(eventGroup
                 .Select(x => x.ProcessedFilename)
                 .Where(x => !string.IsNullOrEmpty(x)));
+            filenames.AddRange(eventGroup
+                .Where(x => x.IsProcessed)
+                .Select(x => $"thumb-{x.Filename}"));
 
             var containerName = _photoBlobStorage.GetContainerName(eventGroup.Key);
             await _photoBlobStorage.DeleteImagesAsync(containerName, filenames, cancellationToken);
-
-            var thumbnailsDir = Path.Combine(contentRootPath, "Thumbnails", eventGroup.Key.ToString());
-
-            if (!Directory.Exists(thumbnailsDir))
-                throw new InvalidOperationException(
-                    $"Thumbnails directory for event ID: {eventGroup.Key} does not exist");
-
-            foreach (var photo in eventGroup)
-            {
-                if (!photo.IsProcessed) continue;
-
-                var thumbnailPath = Path.Combine(thumbnailsDir, $"thumb-{photo.Filename}");
-                if (File.Exists(thumbnailPath))
-                {
-                    File.Delete(thumbnailPath);
-                }
-            }
         }
 
         await _eventPhotoRepository.DeleteEventPhotosAsync(photos, cancellationToken);

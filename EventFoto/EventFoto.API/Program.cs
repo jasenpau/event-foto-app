@@ -51,19 +51,6 @@ public static class Program
         
         app.UseAuthentication();
         app.UseAuthorization();
-
-        var thumbnailsPath = Path.Combine(builder.Environment.ContentRootPath, "Thumbnails");
-        Directory.CreateDirectory(thumbnailsPath); // Ensure directory exists
-
-        app.UseStaticFiles(new StaticFileOptions
-        {
-            FileProvider = new PhysicalFileProvider(thumbnailsPath),
-            RequestPath = "/thumbnails",
-            OnPrepareResponse = ctx =>
-            {
-                ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=86400");
-            }
-        });
         
         app.MapControllers();
         app.Run();

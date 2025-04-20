@@ -39,3 +39,15 @@ export enum PhotoAction {
 export enum BulkActionType {
   Delete = 'delete',
 }
+
+export interface SasUriResponse {
+  sasUri: string;
+  expiresOn: string;
+  eventId: number;
+}
+
+export interface ReadOnlySasUri {
+  baseUri: string;
+  params: string;
+  expiresOn: Date;
+}

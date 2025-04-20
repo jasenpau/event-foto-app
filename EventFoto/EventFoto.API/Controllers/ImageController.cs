@@ -13,16 +13,10 @@ namespace EventFoto.API.Controllers;
 [Authorize]
 public class ImageController : AppControllerBase
 {
-    private readonly IWebHostEnvironment _env;
-    private readonly IConfiguration _configuration;
     private readonly IEventPhotoService _eventPhotoService;
 
-    public ImageController(IWebHostEnvironment env,
-        IConfiguration configuration,
-        IEventPhotoService eventPhotoService)
+    public ImageController(IEventPhotoService eventPhotoService)
     {
-        _env = env;
-        _configuration = configuration;
         _eventPhotoService = eventPhotoService;
     }
 
@@ -36,7 +30,17 @@ public class ImageController : AppControllerBase
     [HttpGet("raw/{eventId:int}/{filename}")]
     public async Task<IActionResult> GetRawPhoto(int eventId, string filename, CancellationToken cancellationToken)
     {
-        var result = await _eventPhotoService.GetRawPhotoAsync(eventId, filename, cancellationToken);
+        var result = await _eventPhotoService.GetPhotoFromBlobAsync(eventId, filename, cancellationToken);
+        if (!result.Success)
+            return result.ToErrorResponse();
+
+        return File(result.Data, "image/jpeg", filename);
+    }
+
+    [HttpGet("thumbnail/{eventId:int}/{filename}")]
+    public async Task<IActionResult> GetThumbnail(int eventId, string filename, CancellationToken cancellationToken)
+    {
+        var result = await _eventPhotoService.GetPhotoFromBlobAsync(eventId, $"thumb-{filename}", cancellationToken);
         if (!result.Success)
             return result.ToErrorResponse();
 
@@ -50,7 +54,7 @@ public class ImageController : AppControllerBase
         switch (bulkPhotoModifyParams.Action)
         {
             case "delete":
-                var result = await _eventPhotoService.DeletePhotosAsync(bulkPhotoModifyParams.PhotoIds, _env.ContentRootPath, cancellationToken);
+                var result = await _eventPhotoService.DeletePhotosAsync(bulkPhotoModifyParams.PhotoIds, cancellationToken);
                 return result.Success ? Ok(result.Data) : result.ToErrorResponse();
             default:
                 return BadRequest();
@@ -69,35 +73,17 @@ public class ImageController : AppControllerBase
         return result.Success ? Ok(result.Data) : result.ToErrorResponse();
     }
 
-    [HttpGet("sas/{eventId:int}")]
-    public async Task<ActionResult<SasUriResponseDto>> GetUploadSasUrl([FromRoute] int eventId)
+    [HttpGet("sas")]
+    public ActionResult<string> GetReadOnlySasToken()
     {
-        var result = await _eventPhotoService.GetUploadSasUri(eventId);
+        var result = _eventPhotoService.GetReadOnlySasUri();
         return result.Success ? Ok(result.Data) : result.ToErrorResponse();
     }
 
-    [HttpPost("thumbnail")]
-    [AllowAnonymous]
-    public async Task<IActionResult> UploadThumbnail([FromForm] IFormFile? thumbnail, [FromForm] int eventId)
+    [HttpGet("sas/{eventId:int}")]
+    public async Task<ActionResult<SasUriResponseDto>> GetUploadSasUri([FromRoute] int eventId)
     {
-        if (Request.Headers.Authorization != _configuration["ImageProcessorOptions:AuthorizationKey"])
-        {
-            return Unauthorized("Invalid authorization key.");
-        }
-
-        if (thumbnail == null || thumbnail.Length == 0)
-            return BadRequest("No thumbnail uploaded.");
-
-        if (eventId <= 0)
-        {
-            return BadRequest("Invalid event ID.");
-        }
-
-        var ms = new MemoryStream();
-        await thumbnail.CopyToAsync(ms);
-        ms.Position = 0;
-
-        var result = await _eventPhotoService.SaveThumbnail(eventId, _env.ContentRootPath, thumbnail.FileName, ms);
+        var result = await _eventPhotoService.GetUploadSasUri(eventId);
         return result.Success ? Ok(result.Data) : result.ToErrorResponse();
     }
 

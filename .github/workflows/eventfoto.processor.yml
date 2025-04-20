@@ -78,6 +78,4 @@ jobs:
               ConnectionStrings__Database="@Microsoft.KeyVault(SecretUri=https://dev-eventfoto-keyvault.vault.azure.net/secrets/DatabaseConnectionString/)" \
               AzureStorage__ConnectionString="@Microsoft.KeyVault(SecretUri=https://dev-eventfoto-keyvault.vault.azure.net/secrets/StorageContainerConnectionString/)" \
               AzureStorage__ProcessingQueueName="${{ vars.AZURE_STORAGE_PROCESSING_QUEUE }}" \
-              ImageProcessorOptions__AuthorizationKey="@Microsoft.KeyVault(SecretUri=https://dev-eventfoto-keyvault.vault.azure.net/secrets/ApiAuthorizationKey/)" \
-              ImageProcessorOptions__ThumbnailSize="${{ vars.PROCESSING_THUMBNAIL_SIZE }}" \
-              ImageProcessorOptions__ThumbnailUploadEndpoint="${{ vars.PROCESSING_THUMBNAIL_ENDPOINT }}"
+              ImageProcessorOptions__ThumbnailSize="${{ vars.PROCESSING_THUMBNAIL_SIZE }}"

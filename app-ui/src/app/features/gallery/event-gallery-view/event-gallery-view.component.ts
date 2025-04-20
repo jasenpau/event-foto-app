@@ -13,11 +13,11 @@ import {
   OpenPhotoData,
   PhotoAction,
   PhotoListDto,
+  ReadOnlySasUri,
 } from '../../../services/image/image.types';
 import { ImageService } from '../../../services/image/image.service';
-import { ThumbnailBaseUrl } from '../../../globals/variables';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
-import { takeUntil, tap } from 'rxjs';
+import { forkJoin, takeUntil, tap } from 'rxjs';
 import { PhotoViewComponent } from '../photo-view/photo-view.component';
 
 @Component({
@@ -37,13 +37,14 @@ export class EventGalleryViewComponent
   protected hasMoreImages = true;
   protected isLoading = false;
   protected openedPhotoData?: OpenPhotoData;
+  protected sasUri?: ReadOnlySasUri;
 
   private lastKey = '';
   private observer?: IntersectionObserver;
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly galleryService: ImageService,
+    private readonly imageService: ImageService,
   ) {
     super();
     this.readRouteParams();
@@ -59,13 +60,17 @@ export class EventGalleryViewComponent
     if (this.eventId && this.hasMoreImages && !this.isLoading) {
       this.isLoading = true;
 
-      this.galleryService
-        .searchPhotos({
-          keyOffset: this.lastKey === '' ? null : this.lastKey,
-          eventId: this.eventId,
-        })
+      const sas = this.imageService.getReadOnlySasUri();
+
+      const imageData = this.imageService.searchPhotos({
+        keyOffset: this.lastKey === '' ? null : this.lastKey,
+        eventId: this.eventId,
+      });
+
+      forkJoin([imageData, sas])
         .pipe(
-          tap((images) => {
+          tap(([images, sas]) => {
+            this.sasUri = sas;
             this.imageData.push(...images.data);
             this.hasMoreImages = images.hasNextPage;
             if (images.data.length > 0) {
@@ -141,5 +146,4 @@ export class EventGalleryViewComponent
   }
 
   protected readonly ButtonType = ButtonType;
-  protected readonly ThumbnailBaseUrl = ThumbnailBaseUrl;
 }

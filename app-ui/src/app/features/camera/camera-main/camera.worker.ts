@@ -1,12 +1,7 @@
 /// <reference lib="webworker" />
 
 import { UploadEventType, UploadMessage } from '../camera.types';
-
-interface SasUriResponse {
-  sasUri: string;
-  expiresOn: string;
-  eventId: number;
-}
+import { SasUriResponse } from '../../../services/image/image.types';
 
 const sasTokenData = {
   sasUri: '',
