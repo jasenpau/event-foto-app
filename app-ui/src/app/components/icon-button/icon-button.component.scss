@@ -1,0 +1,26 @@
+@use "sass:color";
+@use "colors";
+
+.icon-button {
+  background: transparent;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  padding: 4px;
+  box-sizing: border-box;
+
+  &:hover,
+  &:focus {
+    cursor: pointer;
+  }
+
+  &--dark {
+    fill: colors.$on-surface;
+
+    &:hover,
+    &:focus {
+      background: color.adjust(colors.$on-surface, $alpha: -0.9);
+    }
+  }
+}

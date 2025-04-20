@@ -1,7 +1,7 @@
 <div class="photo">
   <div class="photo__container">
     <div class="photo__viewer" *ngIf="!isLoading">
-      <button class="photo__close" (click)="close()"><app-svg-icon [iconSrc]="SvgIconSrc.Close" /></button>
+      <app-icon-button class="photo__close" [icon]="SvgIconSrc.Close" (click)="close()" />
       <img class="photo__image" *ngIf="imageDataUrl" [src]="imageDataUrl" [alt]="openPhotoData.photo.processedFilename" />
       <div class="photo__details" *ngIf="photoDetails">
         <div class="photo__detail-line">

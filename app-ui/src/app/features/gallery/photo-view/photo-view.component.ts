@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { SvgIconSrc } from '../../../components/svg-icon/svg-icon.types';
 import { ButtonType } from '../../../components/button/button.types';
-import { AppSvgIconComponent } from '../../../components/svg-icon/app-svg-icon.component';
 import {
   BulkActionType,
   OpenPhotoData,
@@ -24,10 +23,11 @@ import { ButtonComponent } from '../../../components/button/button.component';
 import { formatLithuanianDateWithSeconds } from '../../../helpers/formatLithuanianDate';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { SnackbarType } from '../../../services/snackbar/snackbar.types';
+import { IconButtonComponent } from '../../../components/icon-button/icon-button.component';
 
 @Component({
   selector: 'app-photo-view',
-  imports: [AppSvgIconComponent, NgIf, RouterLink, ButtonComponent],
+  imports: [NgIf, RouterLink, ButtonComponent, IconButtonComponent],
   templateUrl: './photo-view.component.html',
   styleUrl: './photo-view.component.scss',
 })

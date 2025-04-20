@@ -9,6 +9,7 @@ export enum SvgIconSrc {
   Close = 'assets/icons/close.svg',
   Ticket = 'assets/icons/ticket.svg',
   Users = 'assets/icons/users.svg',
+  Camera = 'assets/icons/camera.svg',
 }
 
 export enum SvgIconSize {

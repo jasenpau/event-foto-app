@@ -29,20 +29,6 @@
     position: absolute;
     top: 16px;
     right: 16px;
-    fill: colors.$on-surface;
-    background: transparent;
-    border: none;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    padding: 4px;
-    box-sizing: border-box;
-
-    &:hover,
-    &:focus {
-      background: color.adjust(colors.$on-surface, $alpha: -0.9);
-      cursor: pointer;
-    }
   }
 
   &__image {

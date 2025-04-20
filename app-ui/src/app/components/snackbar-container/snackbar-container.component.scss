@@ -41,15 +41,4 @@
   &__title {
     flex: 1;
   }
-
-  &__close-button {
-    @include functions.reset;
-    padding: 0;
-    height: 24px;
-    border-radius: 50%;
-
-    &:focus {
-      outline: 2px solid colors.$primary;
-    }
-  }
 }

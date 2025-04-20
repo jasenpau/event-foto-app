@@ -6,8 +6,6 @@
   }">
     <app-svg-icon [iconSrc]="getIcon(msg.type)" />
     <p class="snackbar__title">{{msg.message}}</p>
-    <button class="snackbar__close-button" (click)="closeSnackbar(msg.id)">
-      <app-svg-icon [iconSrc]="svgIconSrc.Close" />
-    </button>
+    <app-icon-button class="snackbar__close-button" (click)="closeSnackbar(msg.id)" [icon]="svgIconSrc.Close" />
   </div>
 </div>

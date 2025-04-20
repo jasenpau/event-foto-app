@@ -6,13 +6,15 @@ import { DisposableComponent } from '../disposable/disposable.component';
 import { tap } from 'rxjs';
 import {
   SnackbarAction,
-  SnackbarMessage, SnackbarType,
+  SnackbarMessage,
+  SnackbarType,
 } from '../../services/snackbar/snackbar.types';
 import { NgClass, NgForOf } from '@angular/common';
+import { IconButtonComponent } from '../icon-button/icon-button.component';
 
 @Component({
   selector: 'app-snackbar-container',
-  imports: [AppSvgIconComponent, NgForOf, NgClass],
+  imports: [AppSvgIconComponent, NgForOf, NgClass, IconButtonComponent],
   templateUrl: './snackbar-container.component.html',
   styleUrl: './snackbar-container.component.scss',
 })
