@@ -1,16 +1,11 @@
 using System.Reflection;
 using EventFoto.Core;
-using EventFoto.Core.Events;
 using EventFoto.Core.Filters;
 using EventFoto.Core.Providers;
-using EventFoto.Core.Users;
 using EventFoto.Data;
-using EventFoto.Data.PhotoStorage;
-using EventFoto.Data.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Identity.Web;
 
 namespace EventFoto.API;

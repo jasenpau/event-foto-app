@@ -16,6 +16,7 @@ import { DisposableComponent } from '../components/disposable/disposable.compone
 import { Lithuanian } from 'flatpickr/dist/l10n/lt';
 import flatpickr from 'flatpickr';
 import { SnackbarContainerComponent } from '../components/snackbar-container/snackbar-container.component';
+import { ConfirmationModalComponent } from '../components/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,7 @@ import { SnackbarContainerComponent } from '../components/snackbar-container/sna
     CenterColumnLayoutComponent,
     MainLayoutComponent,
     SnackbarContainerComponent,
+    ConfirmationModalComponent,
   ],
   templateUrl: './root.component.html',
   styleUrl: './root.component.scss',

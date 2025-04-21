@@ -27,6 +27,7 @@ import { PagedDataLoader } from '../../../components/paged-table/paged-table.typ
 import { getStartOfDay } from '../../../helpers/getStartOfDay';
 import { CheckboxComponent } from '../../../components/forms/checkbox/checkbox.component';
 import { SpinnerComponent } from '../../../components/spinner/spinner.component';
+import { PaginationControlsComponent } from '../../../components/pagination-controls/pagination-controls.component';
 
 const EVENT_TABLE_PAGE_SIZE = 20;
 
@@ -42,6 +43,7 @@ const EVENT_TABLE_PAGE_SIZE = 20;
     DatePickerComponent,
     CheckboxComponent,
     SpinnerComponent,
+    PaginationControlsComponent,
   ],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',
@@ -86,14 +88,6 @@ export class EventListComponent
 
   protected formatDate(dateString: string) {
     return formatLithuanianDate(new Date(dateString));
-  }
-
-  protected previousPage() {
-    this.eventsTableData.loadPreviousPage();
-  }
-
-  protected nextPage() {
-    this.eventsTableData.loadNextPage();
   }
 
   private initializeSearch() {

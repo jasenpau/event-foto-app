@@ -29,8 +29,7 @@
         label="Rodyti archyvuotus renginius"
       />
     </form>
-    <app-button [type]="buttonType.Text" [disabled]="!eventsTableData.showPrevious" (click)="previousPage()">Ankstesnis</app-button>
-    <app-button [type]="buttonType.Text" [disabled]="!eventsTableData.showNext" (click)="nextPage()">Kitas</app-button>
+    <app-pagination-controls [tableData]="eventsTableData" />
   </div>
   <table
     class="event-list__table table"

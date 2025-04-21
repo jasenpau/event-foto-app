@@ -3,6 +3,7 @@ export interface PhotoListDto {
   isProcessed: boolean;
   processedFilename?: string;
   captureDate: string;
+  selected?: boolean;
 }
 
 export interface PhotoDetailDto {

@@ -7,9 +7,10 @@ import {
 } from '@angular/core';
 import { ButtonComponent } from '../../../components/button/button.component';
 import { ButtonType } from '../../../components/button/button.types';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import {
+  BulkActionType,
   OpenPhotoData,
   PhotoAction,
   PhotoListDto,
@@ -17,12 +18,23 @@ import {
 } from '../../../services/image/image.types';
 import { ImageService } from '../../../services/image/image.service';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
-import { forkJoin, takeUntil, tap } from 'rxjs';
+import { forkJoin, of, switchMap, takeUntil, tap } from 'rxjs';
 import { PhotoViewComponent } from '../photo-view/photo-view.component';
+import { ModalService } from '../../../services/modal/modal.service';
+import { PluralDefinition, pluralizeLt } from '../../../helpers/pluralizeLt';
+import { ModalActions } from '../../../services/modal/modal.types';
+import { SpinnerComponent } from '../../../components/spinner/spinner.component';
 
 @Component({
   selector: 'app-event-gallery-view',
-  imports: [ButtonComponent, NgForOf, NgIf, PhotoViewComponent],
+  imports: [
+    ButtonComponent,
+    NgForOf,
+    NgIf,
+    PhotoViewComponent,
+    NgClass,
+    SpinnerComponent,
+  ],
   templateUrl: './event-gallery-view.component.html',
   styleUrl: './event-gallery-view.component.scss',
 })
@@ -34,6 +46,7 @@ export class EventGalleryViewComponent
 
   protected eventId?: number;
   protected imageData: PhotoListDto[] = [];
+  protected selectedImageIds = new Set<number>();
   protected hasMoreImages = true;
   protected isLoading = false;
   protected openedPhotoData?: OpenPhotoData;
@@ -45,6 +58,7 @@ export class EventGalleryViewComponent
   constructor(
     private readonly route: ActivatedRoute,
     private readonly imageService: ImageService,
+    private readonly modalService: ModalService,
   ) {
     super();
     this.readRouteParams();
@@ -95,7 +109,30 @@ export class EventGalleryViewComponent
     }
   }
 
-  handlePhotoViewAction(event: PhotoAction) {
+  protected togglePhotoSelect(image: PhotoListDto) {
+    if (this.selectedImageIds.has(image.id)) {
+      this.selectedImageIds.delete(image.id);
+    } else {
+      this.selectedImageIds.add(image.id);
+    }
+  }
+
+  protected handlePhotoClick(image: PhotoListDto) {
+    if (this.selectedImageIds.size === 0) this.openPhoto(image);
+    else this.togglePhotoSelect(image);
+  }
+
+  protected handlePhotoKeyboard($event: KeyboardEvent, image: PhotoListDto) {
+    if ($event.key === 'Enter') {
+      this.openPhoto(image);
+    } else if ($event.key === ' ') {
+      // handle Space
+      $event.preventDefault();
+      this.togglePhotoSelect(image);
+    }
+  }
+
+  protected handlePhotoViewAction(event: PhotoAction) {
     switch (event) {
       case PhotoAction.Close:
         this.openedPhotoData = undefined;
@@ -105,6 +142,49 @@ export class EventGalleryViewComponent
         this.reload();
         break;
     }
+  }
+
+  protected unmarkAll() {
+    this.selectedImageIds.clear();
+  }
+
+  protected markAll() {
+    this.selectedImageIds.clear();
+    this.imageData.forEach((i) => this.selectedImageIds.add(i.id));
+  }
+
+  protected bulkDelete() {
+    const selectedImages = Array.from(this.selectedImageIds);
+    const photoDefinition: PluralDefinition = {
+      singular: 'nuotrauką',
+      smallPlural: 'nuotraukas',
+      largePlural: 'nuotraukų',
+    };
+
+    this.modalService
+      .openConfirmModal({
+        body: `Ar tikrai norite ištrinti ${pluralizeLt(selectedImages.length, photoDefinition)}?`,
+        confirm: 'Trinti',
+      })
+      .pipe(
+        switchMap((result) => {
+          console.log('result');
+          if (result === ModalActions.Confirm) {
+            this.imageData = [];
+            this.isLoading = true;
+            return this.imageService
+              .bulkAction(BulkActionType.Delete, selectedImages)
+              .pipe(
+                tap(() => {
+                  this.selectedImageIds.clear();
+                  this.reload();
+                }),
+              );
+          }
+          return of({});
+        }),
+      )
+      .subscribe();
   }
 
   private readRouteParams() {

@@ -11,6 +11,7 @@ import { NgForOf, NgIf } from '@angular/common';
 import { ButtonType } from '../../../components/button/button.types';
 import { SvgIconSrc } from '../../../components/svg-icon/svg-icon.types';
 import { SpinnerComponent } from '../../../components/spinner/spinner.component';
+import { PaginationControlsComponent } from '../../../components/pagination-controls/pagination-controls.component';
 
 const USER_TABLE_PAGE_SIZE = 20;
 
@@ -23,6 +24,7 @@ const USER_TABLE_PAGE_SIZE = 20;
     NgIf,
     ReactiveFormsModule,
     SpinnerComponent,
+    PaginationControlsComponent,
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',
@@ -68,14 +70,6 @@ export class UserListComponent
       default:
         return '';
     }
-  }
-
-  protected previousPage() {
-    this.userTableData.loadPreviousPage();
-  }
-
-  protected nextPage() {
-    this.userTableData.loadNextPage();
   }
 
   private initializeSearch() {

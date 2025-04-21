@@ -1,0 +1,9 @@
+<div class="modal" *ngIf="modalData">
+  <div class="modal__body">
+    <p>{{ modalData.body }}</p>
+    <div class="modal__controls">
+      <app-button [type]="ButtonType.Text" (click)="cancelAction()">{{ modalData.cancel }}</app-button>
+      <app-button [type]="ButtonType.Filled" (click)="confirmAction()">{{ modalData.confirm }}</app-button>
+    </div>
+  </div>
+</div>

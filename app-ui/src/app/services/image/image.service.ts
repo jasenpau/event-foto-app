@@ -10,7 +10,7 @@ import {
   SasUriResponse,
 } from './image.types';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
-import { map, of } from 'rxjs';
+import { map, of, switchMap } from 'rxjs';
 import { EnvService } from '../environment/env.service';
 
 @Injectable({
@@ -58,16 +58,6 @@ export class ImageService {
     );
   }
 
-  getRawPhoto(eventId: number, filename: string) {
-    return this.http.get(
-      `${this.apiBaseUrl}/image/raw/${eventId}/${filename}`,
-      {
-        ...getAuthHeaders(),
-        responseType: 'blob',
-      },
-    );
-  }
-
   bulkAction(actionType: BulkActionType, photoIds: number[]) {
     return this.http
       .post<string>(
@@ -107,5 +97,14 @@ export class ImageService {
           return this.readOnlySasUri;
         }),
       );
+  }
+
+  getFromBlob(eventId: number, filename: string) {
+    return this.getReadOnlySasUri().pipe(
+      switchMap((sasUri) => {
+        const sasUrl = `${sasUri.baseUri}/event-${eventId}/${filename}?${sasUri.params}`;
+        return this.http.get(sasUrl, { responseType: 'blob' });
+      }),
+    );
   }
 }

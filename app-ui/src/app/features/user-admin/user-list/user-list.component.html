@@ -7,8 +7,7 @@
   </div>
   <div>
     <app-input-field id="search" label="Paieška" [formControl]="searchControl" />
-    <app-button [type]="buttonType.Text" [disabled]="!userTableData.showPrevious" (click)="previousPage()">Ankstesnis</app-button>
-    <app-button [type]="buttonType.Text" [disabled]="!userTableData.showNext" (click)="nextPage()">Kitas</app-button>
+    <app-pagination-controls [tableData]="userTableData" />
   </div>
   <table
     class="user-list__table table"

@@ -1,0 +1,27 @@
+@use "colors";
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__body {
+    width: 300px;
+    background: colors.$surface;
+    border-radius: 4px;
+    padding: 16px;
+  }
+
+  &__controls {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    margin-left: auto;
+  }
+}

@@ -76,6 +76,15 @@ export class PhotoViewComponent
       .subscribe();
   }
 
+  protected downloadPhoto() {
+    if (!this.imageDataUrl || !this.photoDetails) return;
+
+    const a = document.createElement('a');
+    a.href = this.imageDataUrl;
+    a.download = this.photoDetails.processedFilename ?? 'image.jpg';
+    a.click();
+  }
+
   protected formatLtDate(dateString: string) {
     return formatLithuanianDateWithSeconds(new Date(dateString));
   }
@@ -100,7 +109,7 @@ export class PhotoViewComponent
       this.openPhotoData.photo.processedFilename
     ) {
       imageSubscription = this.imageService
-        .getRawPhoto(
+        .getFromBlob(
           this.openPhotoData.eventId,
           this.openPhotoData.photo.processedFilename,
         )
