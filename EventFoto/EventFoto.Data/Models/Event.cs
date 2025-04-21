@@ -11,8 +11,10 @@ public class Event
     public string Note { get; set; }
     public Guid CreatedBy { get; set; }
     public DateTime CreatedOn { get; set; }
+    public int DefaultGalleryId { get; set; }
     
     public User CreatedByUser { get; set; }
     public IList<User> Photographers { get; set; }
-    public IList<EventPhoto> Photos { get; set; }
+    public IList<Gallery> Galleries { get; set; }
+    public Gallery DefaultGallery { get; set; }
 }

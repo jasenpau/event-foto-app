@@ -9,9 +9,9 @@ public record EventPhoto
     public bool IsDeleted { get; set; }
     public bool IsProcessed { get; set; }
     public string ProcessedFilename { get; set; }
-    public int EventId { get; set; }
+    public int GalleryId { get; set; }
     public Guid UserId { get; set; }
 
     public User User { get; set; }
-    public Event Event { get; set; }
+    public Gallery Gallery { get; set; }
 }

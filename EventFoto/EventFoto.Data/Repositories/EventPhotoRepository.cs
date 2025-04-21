@@ -19,7 +19,7 @@ public class EventPhotoRepository : IEventPhotoRepository
     {
         return EventPhotos
             .Include(p => p.User)
-            .Include(p => p.Event)
+            .Include(p => p.Gallery).ThenInclude(g => g.Event)
             .FirstOrDefaultAsync(p => p.Id == photoId);
     }
 
@@ -41,15 +41,18 @@ public class EventPhotoRepository : IEventPhotoRepository
 
     public Task<EventPhoto> GetByEventAndFilename(int eventId, string filename)
     {
-        return EventPhotos.Where(p => p.EventId == eventId && p.Filename == filename)
+        return EventPhotos
             .Include(p => p.User)
-            .Include(p => p.Event)
+            .Include(p => p.Gallery).ThenInclude(g => g.Event)
+            .Where(p => p.Gallery.EventId == eventId && p.Filename == filename)
             .SingleOrDefaultAsync();
     }
 
     public async Task<PagedData<string, EventPhoto>> SearchEventPhotosAsync(EventPhotoSearchParams searchParams)
     {
-        IQueryable<EventPhoto> query = EventPhotos.Where(p => !p.IsDeleted && p.EventId == searchParams.EventId);
+        IQueryable<EventPhoto> query = EventPhotos
+            .Include(p => p.Gallery).ThenInclude(g => g.Event)
+            .Where(p => !p.IsDeleted && p.Gallery.EventId == searchParams.EventId);
 
         if (!string.IsNullOrWhiteSpace(searchParams.KeyOffset))
         {
@@ -91,7 +94,10 @@ public class EventPhotoRepository : IEventPhotoRepository
 
     public Task<List<EventPhoto>> GetByIdsAsync(IList<int> photoIds)
     {
-        return EventPhotos.Where(p => photoIds.Contains(p.Id)).ToListAsync();
+        return EventPhotos
+            .Include(p => p.Gallery)
+            .Where(p => photoIds.Contains(p.Id))
+            .ToListAsync();
     }
 
     public async Task DeleteEventPhotosAsync(IList<EventPhoto> photos, CancellationToken cancellationToken)

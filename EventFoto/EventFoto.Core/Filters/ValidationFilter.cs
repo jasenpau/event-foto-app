@@ -1,4 +1,3 @@
-using EventFoto.Data.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -27,7 +26,7 @@ public class ValidationFilter : ActionFilterAttribute
 
         context.Result = new BadRequestObjectResult(new
         {
-            Message = AppErrorMessage.ValidationFailed,
+            Message = "Validation failed",
             Errors = ers
         });
     }

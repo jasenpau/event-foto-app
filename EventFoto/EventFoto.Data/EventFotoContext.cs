@@ -8,6 +8,7 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
     public DbSet<User> Users { get; set; }
     public DbSet<Event> Events { get; set; }
     public DbSet<EventPhoto> EventPhotos { get; set; }
+    public DbSet<Gallery> Galleries { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -44,6 +45,10 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
                 .WithMany()
                 .HasForeignKey(e => e.CreatedBy)
                 .HasPrincipalKey(u => u.Id);
+            entity.HasOne(e => e.DefaultGallery)
+                .WithOne()
+                .HasForeignKey<Event>(e => e.DefaultGalleryId)
+                .OnDelete(DeleteBehavior.Restrict);
             entity.HasMany(e => e.Photographers)
                 .WithMany(u => u.AssignedPhotographerEvents);
             entity.ToTable("Events");
@@ -66,11 +71,24 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
                 .WithMany()
                 .HasForeignKey(e => e.UserId)
                 .HasPrincipalKey(u => u.Id);
-            entity.HasOne(e => e.Event)
+            entity.HasOne(e => e.Gallery)
                 .WithMany(e => e.Photos)
-                .HasForeignKey(e => e.EventId)
+                .HasForeignKey(e => e.GalleryId)
                 .HasPrincipalKey(e => e.Id);
             entity.ToTable("EventPhotos");
+        });
+
+        modelBuilder.Entity<Gallery>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(255);
+            entity.HasOne(g => g.Event)
+                .WithMany(e => e.Galleries)
+                .HasForeignKey(g => g.EventId)
+                .HasPrincipalKey(e => e.Id);
+            entity.ToTable("Gallery");
         });
     }   
 }

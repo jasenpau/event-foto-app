@@ -1,6 +1,5 @@
 using System.Net;
 using EventFoto.Data.DTOs;
-using EventFoto.Data.Enums;
 using EventFoto.Data.Models;
 using EventFoto.Data.Repositories;
 
@@ -18,7 +17,7 @@ public class UserService : IUserService
     public async Task<ServiceResult<User>> GetUserAsync(Guid userId)
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
-        if (user == null) return ServiceResult<User>.Fail(AppErrorMessage.UserNotFound, HttpStatusCode.NotFound);
+        if (user == null) return ServiceResult<User>.Fail("User not found", HttpStatusCode.NotFound);
         return ServiceResult<User>.Ok(user);
     }
 

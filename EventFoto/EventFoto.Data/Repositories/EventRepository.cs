@@ -37,17 +37,42 @@ public class EventRepository : IEventRepository
         return selectedEvent?.Photographers;
     }
 
-    public async Task<Event> CreateAsync(Event eventData)
+    public async Task<Event> CreateAsync(Event eventData, Gallery defaultGallery)
     {
         eventData.CreatedOn = DateTime.UtcNow;
-        Events.Add(eventData);
-        await _context.SaveChangesAsync();
-        return await Events
-            .Include(e => e.CreatedByUser)
-            .FirstOrDefaultAsync(e => e.Id == eventData.Id);
+
+        await using (var transaction = await _context.Database.BeginTransactionAsync())
+        {
+            try
+            {
+                Events.Add(eventData);
+                await _context.SaveChangesAsync();
+                defaultGallery.EventId = eventData.Id;
+                _context.Galleries.Add(defaultGallery);
+                await _context.SaveChangesAsync();
+                eventData.DefaultGalleryId = defaultGallery.Id;
+                _context.Entry(eventData).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return await Events
+                    .Include(e => e.CreatedByUser)
+                    .FirstOrDefaultAsync(e => e.Id == eventData.Id);
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
+        // eventData.CreatedOn = DateTime.UtcNow;
+        // Events.Add(eventData);
+        // await _context.SaveChangesAsync();
+
     }
 
-    public async Task<Event> UpdateEventAsync(Event eventData)
+    public async Task<Event> SaveEventAsync(Event eventData)
     {
         _context.Entry(eventData).State = EntityState.Modified;
         await _context.SaveChangesAsync();

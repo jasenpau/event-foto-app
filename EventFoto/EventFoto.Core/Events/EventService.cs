@@ -59,7 +59,7 @@ public class EventService : IEventService
             return ServiceResult<IList<EventPhotographerDto>>.Fail("User not found", HttpStatusCode.NotFound);
 
         eventData.Photographers.Add(user);
-        await _eventRepository.UpdateEventAsync(eventData);
+        await _eventRepository.SaveEventAsync(eventData);
         return ServiceResult<IList<EventPhotographerDto>>.Ok(MapAssignedPhotographersToDto(eventData.Photographers));
     }
 
@@ -75,7 +75,7 @@ public class EventService : IEventService
 
 
         eventData.Photographers.RemoveAt(userIndex);
-        await _eventRepository.UpdateEventAsync(eventData);
+        await _eventRepository.SaveEventAsync(eventData);
         return ServiceResult<IList<EventPhotographerDto>>.Ok(MapAssignedPhotographersToDto(eventData.Photographers));
 
     }
@@ -90,11 +90,15 @@ public class EventService : IEventService
             Location = eventDto.Location?.Trim(),
             Note = eventDto.Note?.Trim(),
             CreatedBy = userId,
-            IsArchived = false
+            IsArchived = false,
+        };
+        var defaultGallery = new Gallery
+        {
+            Name = "Pagrindinė galerija",
         };
         try
         {
-            eventData = await _eventRepository.CreateAsync(eventData);
+            eventData = await _eventRepository.CreateAsync(eventData, defaultGallery);
             var containerName = _photoBlobStorage.GetContainerName(eventData.Id);
             await _photoBlobStorage.CreateContainerAsync(containerName);
             return ServiceResult<Event>.Ok(eventData);

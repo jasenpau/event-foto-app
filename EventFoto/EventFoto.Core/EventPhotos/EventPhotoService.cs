@@ -40,11 +40,14 @@ public class EventPhotoService : IEventPhotoService
 
     public async Task<ServiceResult<EventPhoto>> UploadPhoto(Guid userId, UploadMessageDto uploadPhotoData)
     {
+        var eventResult = await _eventService.GetById(uploadPhotoData.EventId);
+        if (!eventResult.Success) return ServiceResult<EventPhoto>.Fail("Event not found", HttpStatusCode.NotFound);
+
         var eventPhoto = new EventPhoto
         {
             UserId = userId,
             CaptureDate = uploadPhotoData.CaptureDate,
-            EventId = uploadPhotoData.EventId,
+            GalleryId = eventResult.Data.DefaultGalleryId,
             Filename = uploadPhotoData.Filename,
             UploadDate = DateTime.UtcNow,
         };
@@ -117,7 +120,7 @@ public class EventPhotoService : IEventPhotoService
         if (photos.Count == 0)
             return ServiceResult<int>.Ok(0);
 
-        var eventGroups = photos.GroupBy(x => x.EventId);
+        var eventGroups = photos.GroupBy(x => x.Gallery.EventId);
         foreach (var eventGroup in eventGroups)
         {
             var filenames = new List<string>();

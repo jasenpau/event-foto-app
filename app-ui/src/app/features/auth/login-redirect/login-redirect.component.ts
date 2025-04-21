@@ -7,7 +7,6 @@ import { RegisterComponent } from '../register/register.component';
 import { NgIf } from '@angular/common';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { handleApiError } from '../../../helpers/handleApiError';
-import { AppError } from '../../../globals/errors';
 import { LoaderService } from '../../../services/loader/loader.service';
 
 const COMPONENT_LOADING_KEY = 'login-redirect';
@@ -64,7 +63,7 @@ export class LoginRedirectComponent
         }),
         handleApiError((error) => {
           this.loaderService.finishLoading(COMPONENT_LOADING_KEY);
-          if (error.title === AppError.UserNotFound) {
+          if (error.status === 404) {
             this.showRegisterForm = true;
           }
         }),

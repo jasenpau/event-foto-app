@@ -12,6 +12,8 @@ public record EventPhotoDto
     public string ProcessedFilename { get; init; }
     public int EventId { get; init; }
     public string EventName { get; init; }
+    public string GalleryName { get; init; }
+    public int GalleryId { get; init; }
     public Guid UserId { get; init; }
     public string UserName { get; init; }
 
@@ -23,8 +25,10 @@ public record EventPhotoDto
         CaptureDate = photo.CaptureDate,
         IsProcessed = photo.IsProcessed,
         ProcessedFilename = photo.ProcessedFilename,
-        EventId = photo.EventId,
-        EventName = photo.Event.Name,
+        EventId = photo.Gallery.EventId,
+        EventName = photo.Gallery.Event.Name,
+        GalleryName = photo.Gallery.Name,
+        GalleryId = photo.GalleryId,
         UserId = photo.UserId,
         UserName = photo.User.Name,
     };
