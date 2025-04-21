@@ -42,6 +42,8 @@ public class EventPhotoRepository : IEventPhotoRepository
     public Task<EventPhoto> GetByEventAndFilename(int eventId, string filename)
     {
         return EventPhotos.Where(p => p.EventId == eventId && p.Filename == filename)
+            .Include(p => p.User)
+            .Include(p => p.Event)
             .SingleOrDefaultAsync();
     }
 

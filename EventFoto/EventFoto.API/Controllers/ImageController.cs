@@ -27,26 +27,6 @@ public class ImageController : AppControllerBase
         return result.Success ? Ok(EventPhotoDto.FromEventPhoto(result.Data)) : result.ToErrorResponse();
     }
 
-    [HttpGet("raw/{eventId:int}/{filename}")]
-    public async Task<IActionResult> GetRawPhoto(int eventId, string filename, CancellationToken cancellationToken)
-    {
-        var result = await _eventPhotoService.GetPhotoFromBlobAsync(eventId, filename, cancellationToken);
-        if (!result.Success)
-            return result.ToErrorResponse();
-
-        return File(result.Data, "image/jpeg", filename);
-    }
-
-    [HttpGet("thumbnail/{eventId:int}/{filename}")]
-    public async Task<IActionResult> GetThumbnail(int eventId, string filename, CancellationToken cancellationToken)
-    {
-        var result = await _eventPhotoService.GetPhotoFromBlobAsync(eventId, $"thumb-{filename}", cancellationToken);
-        if (!result.Success)
-            return result.ToErrorResponse();
-
-        return File(result.Data, "image/jpeg", filename);
-    }
-
     [HttpPost("bulk-action")]
     public async Task<ActionResult<int>> BulkAction([FromBody] BulkPhotoModifyParams bulkPhotoModifyParams,
         CancellationToken cancellationToken)

@@ -2,7 +2,6 @@
 using EventFoto.Core.Events;
 using EventFoto.Core.PhotoProcessing;
 using EventFoto.Data.DTOs;
-using EventFoto.Data.Extensions;
 using EventFoto.Data.Models;
 using EventFoto.Data.PhotoStorage;
 using EventFoto.Data.Repositories;
@@ -112,13 +111,6 @@ public class EventPhotoService : IEventPhotoService
             : ServiceResult<PagedData<string, EventPhoto>>.Fail("Query failed", HttpStatusCode.InternalServerError);
     }
 
-    public async Task<ServiceResult<MemoryStream>> GetPhotoFromBlobAsync(int eventId, string filename, CancellationToken cancellationToken)
-    {
-        var containerName = _photoBlobStorage.GetContainerName(eventId);
-        var streamResult = await _photoBlobStorage.DownloadImageAsync(containerName, filename, cancellationToken);
-        return streamResult;
-    }
-
     public async Task<ServiceResult<int>> DeletePhotosAsync(IList<int> photoIds, CancellationToken cancellationToken)
     {
         var photos = await _eventPhotoRepository.GetByIdsAsync(photoIds);
@@ -135,7 +127,7 @@ public class EventPhotoService : IEventPhotoService
                 .Where(x => !string.IsNullOrEmpty(x)));
             filenames.AddRange(eventGroup
                 .Where(x => x.IsProcessed)
-                .Select(x => $"thumb-{x.Filename}"));
+                .Select(x => $"thumb-{x.ProcessedFilename}"));
 
             var containerName = _photoBlobStorage.GetContainerName(eventGroup.Key);
             await _photoBlobStorage.DeleteImagesAsync(containerName, filenames, cancellationToken);

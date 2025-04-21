@@ -1,6 +1,7 @@
 ﻿using EventFoto.Data.Models;
 using EventFoto.Data.PhotoStorage;
 using EventFoto.Data.Repositories;
+using ExifLibrary;
 using Microsoft.Extensions.Configuration;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
@@ -29,22 +30,47 @@ public class ImageProcessor : IImageProcessor
     public async Task ProcessImageAsync(ProcessingMessage message, CancellationToken cancellationToken = default)
     {
         var containerName = _photoBlobStorage.GetContainerName(message.EventId);
-        var imageStream =
-            await _photoBlobStorage.DownloadImageAsync(containerName, message.Filename, cancellationToken);
+        var imageStream = await _photoBlobStorage.DownloadImageAsync(containerName, message.Filename, cancellationToken);
         if (!imageStream.Success)
         {
-            throw new InvalidOperationException("Could not download image.");
+            throw new InvalidOperationException("Could not load image.");
         }
 
-        var image = await Image.LoadAsync(imageStream.Data, cancellationToken);
+        using var image = await Image.LoadAsync(imageStream.Data, cancellationToken);
         await imageStream.Data.DisposeAsync();
+
+        var processedFilename = $"out-{message.Filename}";
+
+        // Add image watermark processing here
+        // ...
+
+        // Thumbnail processing
+        await GeneratePreviewImage(image, message.EventId, processedFilename, cancellationToken);
+
+        // Output processing
+        using var processedImageStream = new MemoryStream();
+        await image.SaveAsJpegAsync(processedImageStream, cancellationToken);
+        processedImageStream.Position = 0;
+
+        // Add EXIF metadata
         var eventPhoto = await _photoRepository.GetByEventAndFilename(message.EventId, message.Filename);
-        var processedFilename = message.Filename;
+        var outputFile = await AddExifData(eventPhoto, processedImageStream);
 
-        var thumbnailTask = GeneratePreviewImage(image, message.EventId, processedFilename, cancellationToken);
+        // Save final image to stream
+        using var outputStream = new MemoryStream();
+        await outputFile.SaveAsync(outputStream);
+        outputStream.Position = 0;
 
-        await Task.WhenAll(thumbnailTask);
-        await _photoRepository.MarkAsProcessed(eventPhoto, message.Filename);
+        await _photoBlobStorage.UploadImageAsync(containerName, processedFilename, outputStream, cancellationToken);
+        await _photoRepository.MarkAsProcessed(eventPhoto, processedFilename);
+    }
+
+    private async Task<ImageFile> AddExifData(EventPhoto photo, MemoryStream imageStream)
+    {
+        var file = await ImageFile.FromStreamAsync(imageStream);
+        file.Properties.Set(ExifTag.DateTimeOriginal, photo.CaptureDate);
+        file.Properties.Set(ExifTag.Artist, photo.User.Name);
+        return file;
     }
 
     private async Task GeneratePreviewImage(Image originalImage, int eventId, string filename,
