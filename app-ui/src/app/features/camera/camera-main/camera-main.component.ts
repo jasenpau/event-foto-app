@@ -26,6 +26,7 @@ import { AUTH_TOKEN_STORAGE_KEY } from '../../../services/auth/auth.const';
 import { UserService } from '../../../services/user/user.service';
 import { UploadTrackerComponent } from '../../../components/upload-tracker/upload-tracker.component';
 import { EnvService } from '../../../services/environment/env.service';
+import { handleApiError } from '../../../helpers/handleApiError';
 
 @Component({
   selector: 'app-camera-main',
@@ -156,7 +157,6 @@ export class CameraMainComponent
   }
 
   private loadCamera() {
-    console.log('loading camera...');
     const cameraDevice = loadCameraDevice();
     if (cameraDevice) {
       this.cameraDevice = cameraDevice;
@@ -175,6 +175,7 @@ export class CameraMainComponent
         .getEventDetails(eventData.id)
         .pipe(
           tap((event) => {
+            console.log('event fetched');
             // Check, if event still exists and refresh the name
             this.event = {
               id: event.id,
@@ -182,6 +183,12 @@ export class CameraMainComponent
             };
             saveCameraEvent(eventData);
             this.eventLoadingFinished = true;
+          }),
+          handleApiError((error) => {
+            if (error.status === 404) {
+              saveCameraEvent();
+              this.eventLoadingFinished = true;
+            }
           }),
           takeUntil(this.destroy$),
         )

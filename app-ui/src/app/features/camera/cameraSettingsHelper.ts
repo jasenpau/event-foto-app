@@ -19,11 +19,15 @@ export const loadCameraDevice = () => {
   return JSON.parse(settingsString) as CameraDevice;
 };
 
-export const saveCameraEvent = (settings: CameraEvent) => {
-  localStorage.setItem(
-    CAMERA_EVENT_SETTINGS_STORAGE_KEY,
-    JSON.stringify(settings),
-  );
+export const saveCameraEvent = (settings?: CameraEvent) => {
+  if (settings) {
+    localStorage.setItem(
+      CAMERA_EVENT_SETTINGS_STORAGE_KEY,
+      JSON.stringify(settings),
+    );
+  } else {
+    localStorage.removeItem(CAMERA_EVENT_SETTINGS_STORAGE_KEY);
+  }
 };
 
 export const loadCameraEvent = () => {
