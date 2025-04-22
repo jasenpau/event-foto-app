@@ -53,6 +53,7 @@ public class DownloadRequestRepository : IDownloadRequestRepository
             throw new KeyNotFoundException($"DownloadRequest with Id {id} not found.");
 
         entity.IsReady = true;
+        entity.ProcessedOn = DateTime.UtcNow;
         await _context.SaveChangesAsync();
     }
 }
