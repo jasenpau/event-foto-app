@@ -1,6 +1,7 @@
 {
   "baseUrl": "",
   "apiBaseUrl": "",
+  "archiveDownloadsContainer": "",
   "auth": {
     "clientId": "",
     "authority": ""

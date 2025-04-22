@@ -19,6 +19,7 @@ env:
   APP_GROUPS_PHOTOGRAPHER_ID: ${{ vars.GROUPS_PHOTOGRAPHER_ID }}
   APP_GROUPS_EVENT_ADMIN_ID: ${{ vars.GROUPS_EVENT_ADMIN_ID }}
   APP_GROUPS_SYSTEM_ADMIN_ID: ${{ vars.GROUPS_SYSTEM_ADMIN_ID }}
+  APP_PROCESSING_ARCHIVE_CONTAINER: ${{ vars.PROCESSING_ARCHIVE_CONTAINER }}
 
 jobs:
   build:
@@ -77,6 +78,7 @@ jobs:
           {
             "baseUrl": "${{ env.APP_BASE_URL }}",
             "apiBaseUrl": "${{ env.APP_API_BASE_URL }}",
+            "archiveDownloadsContainer": "${{ env.APP_PROCESSING_ARCHIVE_CONTAINER }}",
             "auth": {
               "clientId": "${{ env.APP_AUTH_CLIENT_ID }}",
               "authority": "${{ env.APP_AUTH_AUTHORITY }}"

@@ -11,4 +11,6 @@ public interface IEventPhotoService
     public ServiceResult<SasUriResponseDto> GetReadOnlySasUri();
     public Task<ServiceResult<PagedData<string, EventPhoto>>> SearchEventPhotosAsync(EventPhotoSearchParams searchParams);
     public Task<ServiceResult<int>> DeletePhotosAsync(IList<int> photoIds, CancellationToken cancellationToken);
+    public Task<ServiceResult<DownloadRequest>> DownloadPhotosAsync(Guid userId, IList<int> photoIds);
+    public Task<ServiceResult<DownloadRequest>> GetDownloadRequestAsync(Guid userId, int requestId);
 }

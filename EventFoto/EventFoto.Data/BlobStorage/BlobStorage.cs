@@ -8,14 +8,14 @@ using EventFoto.Data.Extensions;
 using EventFoto.Data.Models;
 using Microsoft.Extensions.Configuration;
 
-namespace EventFoto.Data.PhotoStorage;
+namespace EventFoto.Data.BlobStorage;
 
-public class PhotoBlobStorage : IPhotoBlobStorage
+public class BlobStorage : IBlobStorage
 {
     private readonly IConfiguration _configuration;
     private readonly string _connectionString;
 
-    public PhotoBlobStorage(IConfiguration configuration)
+    public BlobStorage(IConfiguration configuration)
     {
         _configuration = configuration;
         _connectionString = _configuration["AzureStorage:ConnectionString"];
@@ -75,8 +75,8 @@ public class PhotoBlobStorage : IPhotoBlobStorage
         return ServiceResult<string>.Ok($"{serviceUri}?{sasToken}");
     }
 
-    public async Task<ServiceResult<string>> UploadImageAsync(string containerName, string filename, Stream imageStream,
-        CancellationToken cancellationToken)
+    public async Task<ServiceResult<string>> UploadFileAsync(string containerName, string filename, Stream fileStream,
+        string contentType, CancellationToken cancellationToken)
     {
         try
         {
@@ -86,10 +86,10 @@ public class PhotoBlobStorage : IPhotoBlobStorage
 
             var httpHeaders = new BlobHttpHeaders
             {
-                ContentType = "image/jpeg"
+                ContentType = contentType
             };
 
-            await blobClient.UploadAsync(imageStream, new BlobUploadOptions
+            await blobClient.UploadAsync(fileStream, new BlobUploadOptions
             {
                 HttpHeaders = httpHeaders
             }, cancellationToken: cancellationToken);
@@ -102,7 +102,13 @@ public class PhotoBlobStorage : IPhotoBlobStorage
         }
     }
 
-    public async Task<ServiceResult<MemoryStream>> DownloadImageAsync(string containerName, string filename,
+    public Task<ServiceResult<string>> UploadFileAsync(string containerName, string filename, Stream fileStream,
+        CancellationToken cancellationToken)
+    {
+        return UploadFileAsync(containerName, filename, fileStream, "image/jpeg", cancellationToken);
+    }
+
+    public async Task<ServiceResult<MemoryStream>> DownloadFileAsync(string containerName, string filename,
         CancellationToken cancellationToken)
     {
         var containerClient = new BlobContainerClient(_connectionString, containerName);
@@ -120,7 +126,7 @@ public class PhotoBlobStorage : IPhotoBlobStorage
         return ServiceResult<MemoryStream>.Ok(stream);
     }
 
-    public async Task<ServiceResult<int>> DeleteImagesAsync(string containerName, IList<string> filenames, CancellationToken cancellationToken)
+    public async Task<ServiceResult<int>> DeleteFilesAsync(string containerName, IList<string> filenames, CancellationToken cancellationToken)
     {
         var blobClient = new BlobServiceClient(_connectionString);
         var containerClient = blobClient.GetBlobContainerClient(containerName);

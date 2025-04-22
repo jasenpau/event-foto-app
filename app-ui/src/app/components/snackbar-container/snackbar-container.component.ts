@@ -9,12 +9,12 @@ import {
   SnackbarMessage,
   SnackbarType,
 } from '../../services/snackbar/snackbar.types';
-import { NgClass, NgForOf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { IconButtonComponent } from '../icon-button/icon-button.component';
 
 @Component({
   selector: 'app-snackbar-container',
-  imports: [AppSvgIconComponent, NgForOf, NgClass, IconButtonComponent],
+  imports: [AppSvgIconComponent, NgForOf, NgClass, IconButtonComponent, NgIf],
   templateUrl: './snackbar-container.component.html',
   styleUrl: './snackbar-container.component.scss',
 })
@@ -51,6 +51,8 @@ export class SnackbarContainerComponent
         return SvgIconSrc.InfoCircle;
       case SnackbarType.Success:
         return SvgIconSrc.CheckCircle;
+      case SnackbarType.Downloading:
+        return SvgIconSrc.Downloading;
     }
   }
 

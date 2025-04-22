@@ -1,5 +1,7 @@
 using EventFoto.Core;
 using EventFoto.Data;
+using EventFoto.Processor.CleanupProcessor;
+using EventFoto.Processor.DownloadZipProcessor;
 using EventFoto.Processor.ImageProcessor;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -16,11 +18,15 @@ builder.Configuration
     .AddEnvironmentVariables();
 
 builder.Services.AddDbContextPool<EventFotoContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Database"));
+
+});
 
 ServiceConfigurator.ConfigureServices(builder.Services);
 builder.Services.AddScoped<IImageProcessor, ImageProcessor>();
-builder.Services.AddHttpClient();
+builder.Services.AddScoped<IDownloadZipProcessor, DownloadZipProcessor>();
+builder.Services.AddScoped<ICleanupProcessor, CleanupProcessor>();
 
 // Application Insights isn't enabled by default. See https://aka.ms/AAt8mw4.
 // builder.Services

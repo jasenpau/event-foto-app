@@ -3,6 +3,7 @@ using System;
 using EventFoto.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EventFoto.Data.Migrations
 {
     [DbContext(typeof(EventFotoContext))]
-    partial class EventFotoContextModelSnapshot : ModelSnapshot
+    [Migration("20250422094733_AddDownloadRequest")]
+    partial class AddDownloadRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,12 +58,6 @@ namespace EventFoto.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Filename")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsReady")
-                        .HasColumnType("boolean");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");

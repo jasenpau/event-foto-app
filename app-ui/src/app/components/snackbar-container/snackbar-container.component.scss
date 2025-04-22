@@ -22,6 +22,8 @@
     padding: 0 16px;
     border-radius: 4px;
     border: 1px solid colors.$primary-on-container;
+    position: relative;
+    overflow: hidden;
 
     &--error {
       background: colors.$error-container;
@@ -40,5 +42,39 @@
 
   &__title {
     flex: 1;
+  }
+
+  &__loading-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      height: 100%;
+      width: 50%;
+      background: colors.$primary-on-container;
+      animation: loading 1.5s infinite ease-in-out;
+      border-radius: 2px;
+    }
+  }
+}
+
+@keyframes loading {
+  0% {
+    left: -50%;
+    width: 50%;
+  }
+  50% {
+    left: 25%;
+    width: 50%;
+  }
+  100% {
+    left: 100%;
+    width: 50%;
   }
 }

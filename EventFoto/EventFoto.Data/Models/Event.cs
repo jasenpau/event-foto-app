@@ -1,6 +1,6 @@
 namespace EventFoto.Data.Models;
 
-public class Event
+public record Event
 {
     public int Id { get; set; }
     public string Name { get; set; }

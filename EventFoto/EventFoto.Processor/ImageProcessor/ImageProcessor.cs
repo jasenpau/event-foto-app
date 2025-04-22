@@ -1,5 +1,5 @@
-﻿using EventFoto.Data.Models;
-using EventFoto.Data.PhotoStorage;
+﻿using EventFoto.Data.BlobStorage;
+using EventFoto.Data.Models;
 using EventFoto.Data.Repositories;
 using ExifLibrary;
 using Microsoft.Extensions.Configuration;
@@ -11,26 +11,24 @@ namespace EventFoto.Processor.ImageProcessor;
 
 public class ImageProcessor : IImageProcessor
 {
-    private readonly IPhotoBlobStorage _photoBlobStorage;
+    private readonly IBlobStorage _blobStorage;
     private readonly IEventPhotoRepository _photoRepository;
     private readonly IConfiguration _configuration;
-    private readonly IHttpClientFactory _httpClientFactory;
 
-    public ImageProcessor(IPhotoBlobStorage photoBlobStorage,
+    public ImageProcessor(IBlobStorage blobStorage,
         IEventPhotoRepository photoRepository,
-        IConfiguration configuration,
-        IHttpClientFactory httpClientFactory)
+        IConfiguration configuration)
     {
-        _photoBlobStorage = photoBlobStorage;
+        _blobStorage = blobStorage;
         _photoRepository = photoRepository;
         _configuration = configuration;
-        _httpClientFactory = httpClientFactory;
     }
 
     public async Task ProcessImageAsync(ProcessingMessage message, CancellationToken cancellationToken = default)
     {
-        var containerName = _photoBlobStorage.GetContainerName(message.EventId);
-        var imageStream = await _photoBlobStorage.DownloadImageAsync(containerName, message.Filename, cancellationToken);
+        var eventId = message.EntityId;
+        var containerName = _blobStorage.GetContainerName(eventId);
+        var imageStream = await _blobStorage.DownloadFileAsync(containerName, message.Filename, cancellationToken);
         if (!imageStream.Success)
         {
             throw new InvalidOperationException("Could not load image.");
@@ -45,7 +43,7 @@ public class ImageProcessor : IImageProcessor
         // ...
 
         // Thumbnail processing
-        await GeneratePreviewImage(image, message.EventId, processedFilename, cancellationToken);
+        await GeneratePreviewImage(image, eventId, processedFilename, cancellationToken);
 
         // Output processing
         using var processedImageStream = new MemoryStream();
@@ -53,7 +51,7 @@ public class ImageProcessor : IImageProcessor
         processedImageStream.Position = 0;
 
         // Add EXIF metadata
-        var eventPhoto = await _photoRepository.GetByEventAndFilename(message.EventId, message.Filename);
+        var eventPhoto = await _photoRepository.GetByEventAndFilename(eventId, message.Filename);
         var outputFile = await AddExifData(eventPhoto, processedImageStream);
 
         // Save final image to stream
@@ -61,7 +59,7 @@ public class ImageProcessor : IImageProcessor
         await outputFile.SaveAsync(outputStream);
         outputStream.Position = 0;
 
-        await _photoBlobStorage.UploadImageAsync(containerName, processedFilename, outputStream, cancellationToken);
+        await _blobStorage.UploadFileAsync(containerName, processedFilename, outputStream, cancellationToken);
         await _photoRepository.MarkAsProcessed(eventPhoto, processedFilename);
     }
 
@@ -77,7 +75,7 @@ public class ImageProcessor : IImageProcessor
         CancellationToken cancellationToken)
 
     {
-        var thumbnailSize = int.Parse(_configuration["ImageProcessorOptions:ThumbnailSize"] ?? "500");
+        var thumbnailSize = int.Parse(_configuration["ProcessorOptions:ThumbnailSize"] ?? "500");
         var scaleFactor = originalImage.Width > originalImage.Height
             ? (double)originalImage.Height / thumbnailSize
             : (double)originalImage.Width / thumbnailSize;
@@ -90,8 +88,8 @@ public class ImageProcessor : IImageProcessor
         await thumbnail.SaveAsJpegAsync(thumbnailStream, cancellationToken);
         thumbnailStream.Position = 0;
 
-        var containerName = _photoBlobStorage.GetContainerName(eventId);
+        var containerName = _blobStorage.GetContainerName(eventId);
         var thumbnailFilename = $"thumb-{filename}";
-        await _photoBlobStorage.UploadImageAsync(containerName, thumbnailFilename, thumbnailStream, cancellationToken);
+        await _blobStorage.UploadFileAsync(containerName, thumbnailFilename, thumbnailStream, cancellationToken);
     }
 }

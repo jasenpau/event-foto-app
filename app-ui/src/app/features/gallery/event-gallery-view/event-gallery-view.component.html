@@ -10,7 +10,7 @@
     <app-button [type]="ButtonType.Filled" (click)="markAll()">Pažymėti visas</app-button>
     <app-button [type]="ButtonType.Text" [disabled]="selectedImageIds.size === 0" (click)="unmarkAll()">Panaikinti žymėjimą</app-button>
     <app-button [type]="ButtonType.Text" [disabled]="selectedImageIds.size === 0">Perkelti į kitą galeriją</app-button>
-    <app-button [type]="ButtonType.Text" [disabled]="selectedImageIds.size === 0">Atsisiųsti</app-button>
+    <app-button [type]="ButtonType.Text" [disabled]="selectedImageIds.size === 0" (click)="bulkDownload()">Atsisiųsti</app-button>
     <app-button [type]="ButtonType.Text" [disabled]="selectedImageIds.size === 0" (click)="bulkDelete()">Ištrinti</app-button>
   </div>
   <div class="gallery__grid">

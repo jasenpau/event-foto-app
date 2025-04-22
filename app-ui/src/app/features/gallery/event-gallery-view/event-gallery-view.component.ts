@@ -10,7 +10,6 @@ import { ButtonType } from '../../../components/button/button.types';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import {
-  BulkActionType,
   OpenPhotoData,
   PhotoAction,
   PhotoListDto,
@@ -24,6 +23,8 @@ import { ModalService } from '../../../services/modal/modal.service';
 import { PluralDefinition, pluralizeLt } from '../../../helpers/pluralizeLt';
 import { ModalActions } from '../../../services/modal/modal.types';
 import { SpinnerComponent } from '../../../components/spinner/spinner.component';
+import { BlobService } from '../../../services/blob/blob.service';
+import { BackgroundTasksService } from '../../../services/background-tasks/background-tasks.service';
 
 @Component({
   selector: 'app-event-gallery-view',
@@ -59,6 +60,8 @@ export class EventGalleryViewComponent
     private readonly route: ActivatedRoute,
     private readonly imageService: ImageService,
     private readonly modalService: ModalService,
+    private readonly blobService: BlobService,
+    private readonly backgroundTasksService: BackgroundTasksService,
   ) {
     super();
     this.readRouteParams();
@@ -74,7 +77,7 @@ export class EventGalleryViewComponent
     if (this.eventId && this.hasMoreImages && !this.isLoading) {
       this.isLoading = true;
 
-      const sas = this.imageService.getReadOnlySasUri();
+      const sas = this.blobService.getReadOnlySasUri();
 
       const imageData = this.imageService.searchPhotos({
         keyOffset: this.lastKey === '' ? null : this.lastKey,
@@ -172,17 +175,30 @@ export class EventGalleryViewComponent
           if (result === ModalActions.Confirm) {
             this.imageData = [];
             this.isLoading = true;
-            return this.imageService
-              .bulkAction(BulkActionType.Delete, selectedImages)
-              .pipe(
-                tap(() => {
-                  this.selectedImageIds.clear();
-                  this.reload();
-                }),
-              );
+            return this.imageService.bulkDelete(selectedImages).pipe(
+              tap(() => {
+                this.selectedImageIds.clear();
+                this.reload();
+              }),
+            );
           }
           return of({});
         }),
+      )
+      .subscribe();
+  }
+
+  protected bulkDownload() {
+    const selectedImages = Array.from(this.selectedImageIds);
+    this.imageService
+      .bulkDownload(selectedImages)
+      .pipe(
+        tap((downloadReq) => {
+          this.backgroundTasksService.startDownloadTask(downloadReq.id);
+          this.selectedImageIds.clear();
+          this.reload();
+        }),
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }

@@ -37,10 +37,6 @@ export enum PhotoAction {
   Delete = 'delete',
 }
 
-export enum BulkActionType {
-  Delete = 'delete',
-}
-
 export interface SasUriResponse {
   sasUri: string;
   expiresOn: string;
@@ -51,4 +47,12 @@ export interface ReadOnlySasUri {
   baseUri: string;
   params: string;
   expiresOn: Date;
+}
+
+export interface DownloadRequestDto {
+  id: number;
+  filename: string;
+  userId: string;
+  createdOn: string;
+  isReady: boolean;
 }

@@ -10,6 +10,7 @@ export enum SvgIconSrc {
   Ticket = 'assets/icons/ticket.svg',
   Users = 'assets/icons/users.svg',
   Camera = 'assets/icons/camera.svg',
+  Downloading = 'assets/icons/downloading.svg',
 }
 
 export enum SvgIconSize {

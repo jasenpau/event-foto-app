@@ -2,15 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { PagedData } from '../../components/paged-table/paged-table.types';
 import {
-  BulkActionType,
+  DownloadRequestDto,
   PhotoDetailDto,
   PhotoListDto,
   PhotoSearchParamsDto,
-  ReadOnlySasUri,
-  SasUriResponse,
 } from './image.types';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
-import { map, of, switchMap } from 'rxjs';
+import { map } from 'rxjs';
 import { EnvService } from '../environment/env.service';
 
 @Injectable({
@@ -18,7 +16,6 @@ import { EnvService } from '../environment/env.service';
 })
 export class ImageService {
   private readonly apiBaseUrl;
-  private readOnlySasUri?: ReadOnlySasUri;
 
   constructor(
     private readonly http: HttpClient,
@@ -58,12 +55,11 @@ export class ImageService {
     );
   }
 
-  bulkAction(actionType: BulkActionType, photoIds: number[]) {
+  bulkDelete(photoIds: number[]) {
     return this.http
       .post<string>(
-        `${this.apiBaseUrl}/image/bulk-action`,
+        `${this.apiBaseUrl}/image/bulk-delete`,
         {
-          action: actionType,
           photoIds,
         },
         {
@@ -73,38 +69,22 @@ export class ImageService {
       .pipe(map((x) => Number(x)));
   }
 
-  getReadOnlySasUri() {
-    if (this.readOnlySasUri && this.readOnlySasUri.expiresOn > new Date()) {
-      return of(this.readOnlySasUri);
-    }
-
-    return this.http
-      .get<SasUriResponse>(`${this.apiBaseUrl}/image/sas`, {
+  bulkDownload(photoIds: number[]) {
+    return this.http.post<DownloadRequestDto>(
+      `${this.apiBaseUrl}/image/bulk-download`,
+      {
+        photoIds,
+      },
+      {
         ...getAuthHeaders(),
-      })
-      .pipe(
-        map((sasUriResponse) => {
-          const parts = sasUriResponse.sasUri.split('?');
-          if (parts[0].endsWith('/')) {
-            parts[0] = parts[0].slice(0, -1);
-          }
-
-          this.readOnlySasUri = {
-            baseUri: parts[0],
-            params: parts[1],
-            expiresOn: new Date(sasUriResponse.expiresOn),
-          };
-          return this.readOnlySasUri;
-        }),
-      );
+      },
+    );
   }
 
-  getFromBlob(eventId: number, filename: string) {
-    return this.getReadOnlySasUri().pipe(
-      switchMap((sasUri) => {
-        const sasUrl = `${sasUri.baseUri}/event-${eventId}/${filename}?${sasUri.params}`;
-        return this.http.get(sasUrl, { responseType: 'blob' });
-      }),
+  getDownloadRequestStatus(requestId: number) {
+    return this.http.get<DownloadRequestDto>(
+      `${this.apiBaseUrl}/image/archive-download/${requestId}`,
+      { ...getAuthHeaders() },
     );
   }
 }

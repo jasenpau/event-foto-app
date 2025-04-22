@@ -2,6 +2,7 @@ export enum SnackbarType {
   Error = 'error',
   Info = 'info',
   Success = 'success',
+  Downloading = 'loading',
 }
 
 export enum SnackbarAction {
@@ -17,6 +18,6 @@ export interface SnackbarMessage {
 
 export interface SnackbarEvent {
   id: number;
-  action: SnackbarAction
-  message?: SnackbarMessage
+  action: SnackbarAction;
+  message?: SnackbarMessage;
 }

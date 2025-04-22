@@ -9,6 +9,8 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
     public DbSet<Event> Events { get; set; }
     public DbSet<EventPhoto> EventPhotos { get; set; }
     public DbSet<Gallery> Galleries { get; set; }
+    public DbSet<DownloadRequest> DownloadRequests { get; set; }
+    public DbSet<DownloadImage> DownloadImages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -89,6 +91,30 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
                 .HasForeignKey(g => g.EventId)
                 .HasPrincipalKey(e => e.Id);
             entity.ToTable("Gallery");
+        });
+
+        modelBuilder.Entity<DownloadRequest>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId);
+            entity.HasMany(e => e.DownloadImages)
+                .WithOne(e => e.DownloadRequest);
+            entity.ToTable("DownloadRequests");
+        });
+
+        modelBuilder.Entity<DownloadImage>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.HasOne(e => e.EventPhoto)
+                .WithMany()
+                .HasForeignKey(e => e.EventPhotoId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.DownloadRequest)
+                .WithMany(r => r.DownloadImages)
+                .HasForeignKey(e => e.DownloadRequestId);
+            entity.ToTable("DownloadImages");
         });
     }   
 }

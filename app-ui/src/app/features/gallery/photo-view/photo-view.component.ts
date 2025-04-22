@@ -9,7 +9,6 @@ import {
 import { SvgIconSrc } from '../../../components/svg-icon/svg-icon.types';
 import { ButtonType } from '../../../components/button/button.types';
 import {
-  BulkActionType,
   OpenPhotoData,
   PhotoAction,
   PhotoDetailDto,
@@ -24,6 +23,7 @@ import { formatLithuanianDateWithSeconds } from '../../../helpers/formatLithuani
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { SnackbarType } from '../../../services/snackbar/snackbar.types';
 import { IconButtonComponent } from '../../../components/icon-button/icon-button.component';
+import { BlobService } from '../../../services/blob/blob.service';
 
 @Component({
   selector: 'app-photo-view',
@@ -46,6 +46,7 @@ export class PhotoViewComponent
   constructor(
     private readonly imageService: ImageService,
     private readonly snackbarService: SnackbarService,
+    private readonly blobService: BlobService,
   ) {
     super();
   }
@@ -62,7 +63,7 @@ export class PhotoViewComponent
     if (!this.photoDetails) return;
 
     this.imageService
-      .bulkAction(BulkActionType.Delete, [this.photoDetails.id])
+      .bulkDelete([this.photoDetails.id])
       .pipe(
         tap(() => {
           this.snackbarService.addSnackbar(
@@ -108,9 +109,9 @@ export class PhotoViewComponent
       this.openPhotoData.photo.isProcessed &&
       this.openPhotoData.photo.processedFilename
     ) {
-      imageSubscription = this.imageService
+      imageSubscription = this.blobService
         .getFromBlob(
-          this.openPhotoData.eventId,
+          `event-${this.openPhotoData.eventId}`,
           this.openPhotoData.photo.processedFilename,
         )
         .pipe(
@@ -131,6 +132,11 @@ export class PhotoViewComponent
         }),
       )
       .subscribe();
+  }
+
+  override ngOnDestroy() {
+    super.ngOnDestroy();
+    if (this.imageDataUrl) URL.revokeObjectURL(this.imageDataUrl);
   }
 
   protected readonly SvgIconSrc = SvgIconSrc;

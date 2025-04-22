@@ -1,9 +1,10 @@
 ﻿using System.Net;
 using EventFoto.Core.Events;
-using EventFoto.Core.PhotoProcessing;
+using EventFoto.Core.Processing;
+using EventFoto.Data.BlobStorage;
 using EventFoto.Data.DTOs;
+using EventFoto.Data.Enums;
 using EventFoto.Data.Models;
-using EventFoto.Data.PhotoStorage;
 using EventFoto.Data.Repositories;
 using Microsoft.Extensions.Configuration;
 
@@ -13,20 +14,23 @@ public class EventPhotoService : IEventPhotoService
 {
     private readonly IConfiguration _configuration;
     private readonly IEventService  _eventService;
-    private readonly IPhotoBlobStorage _photoBlobStorage;
+    private readonly IBlobStorage _blobStorage;
     private readonly IEventPhotoRepository _eventPhotoRepository;
-    private readonly IPhotoProcessingQueue _processingQueue;
+    private readonly IProcessingQueue _processingQueue;
+    private readonly IDownloadRequestRepository _downloadRequestRepository;
 
     public EventPhotoService(IEventService eventService,
-        IPhotoBlobStorage photoBlobStorage,
+        IBlobStorage blobStorage,
         IEventPhotoRepository  eventPhotoRepository,
-        IPhotoProcessingQueue processingQueue,
+        IProcessingQueue processingQueue,
+        IDownloadRequestRepository downloadRequestRepository,
         IConfiguration configuration)
     {
         _eventService = eventService;
-        _photoBlobStorage = photoBlobStorage;
+        _blobStorage = blobStorage;
         _eventPhotoRepository = eventPhotoRepository;
         _processingQueue = processingQueue;
+        _downloadRequestRepository = downloadRequestRepository;
         _configuration = configuration;
     }
 
@@ -53,9 +57,10 @@ public class EventPhotoService : IEventPhotoService
         };
 
         await _eventPhotoRepository.AddEventPhotoAsync(eventPhoto);
-        await _processingQueue.EnqueuePhotoAsync(new ProcessingMessage
+        await _processingQueue.EnqueueMessage(new ProcessingMessage
         {
-            EventId = uploadPhotoData.EventId,
+            Type = ProcessingMessageType.Image,
+            EntityId = uploadPhotoData.EventId,
             Filename = uploadPhotoData.Filename,
         });
         return ServiceResult<EventPhoto>.Ok(eventPhoto);
@@ -71,8 +76,8 @@ public class EventPhotoService : IEventPhotoService
         }
 
         var tokenExpiryInMinutes = int.Parse(_configuration["AzureStorage:TokenExpiryInMinutes"] ?? "20");
-        var containerName = _photoBlobStorage.GetContainerName(eventId);
-        var sasResult = await _photoBlobStorage.GetUploadSasUri(containerName, tokenExpiryInMinutes);
+        var containerName = _blobStorage.GetContainerName(eventId);
+        var sasResult = await _blobStorage.GetUploadSasUri(containerName, tokenExpiryInMinutes);
         if (!sasResult.Success)
         {
             return ServiceResult<SasUriResponseDto>.Fail(sasResult.ErrorMessage,
@@ -91,7 +96,7 @@ public class EventPhotoService : IEventPhotoService
     public ServiceResult<SasUriResponseDto> GetReadOnlySasUri()
     {
         var tokenExpiryInMinutes = int.Parse(_configuration["AzureStorage:TokenExpiryInMinutes"] ?? "20");
-        var sasUriResult = _photoBlobStorage.GetReadOnlySasUri(tokenExpiryInMinutes);
+        var sasUriResult = _blobStorage.GetReadOnlySasUri(tokenExpiryInMinutes);
         if (!sasUriResult.Success)
             return ServiceResult<SasUriResponseDto>.Fail(sasUriResult.ErrorMessage,
                 sasUriResult.StatusCode ?? HttpStatusCode.InternalServerError);
@@ -132,11 +137,44 @@ public class EventPhotoService : IEventPhotoService
                 .Where(x => x.IsProcessed)
                 .Select(x => $"thumb-{x.ProcessedFilename}"));
 
-            var containerName = _photoBlobStorage.GetContainerName(eventGroup.Key);
-            await _photoBlobStorage.DeleteImagesAsync(containerName, filenames, cancellationToken);
+            var containerName = _blobStorage.GetContainerName(eventGroup.Key);
+            await _blobStorage.DeleteFilesAsync(containerName, filenames, cancellationToken);
         }
 
         await _eventPhotoRepository.DeleteEventPhotosAsync(photos, cancellationToken);
         return ServiceResult<int>.Ok(photos.Count);
+    }
+
+    public async Task<ServiceResult<DownloadRequest>> DownloadPhotosAsync(Guid userId, IList<int> photoIds)
+    {
+        var createDate = DateTime.UtcNow;
+        var request = new DownloadRequest
+        {
+            UserId = userId,
+            Filename = createDate.ToString("yyyy-MM-dd HHmmss") + ".zip",
+            DownloadImages = photoIds.Select(p => new DownloadImage
+            {
+                EventPhotoId = p
+            }).ToList()
+        };
+        var downloadRequest = await _downloadRequestRepository.CreateAsync(request);
+
+        await _processingQueue.EnqueueMessage(new ProcessingMessage
+        {
+            Type = ProcessingMessageType.DownloadZip,
+            EntityId = downloadRequest.Id,
+            Filename = request.Filename,
+        });
+
+        return ServiceResult<DownloadRequest>.Ok(downloadRequest);
+    }
+
+    public async Task<ServiceResult<DownloadRequest>> GetDownloadRequestAsync(Guid userId, int requestId)
+    {
+        var request = await _downloadRequestRepository.GetByIdAsync(requestId);
+        if (request is null || request.UserId != userId)
+            return ServiceResult<DownloadRequest>.Fail("Download request not found", HttpStatusCode.NotFound);
+
+        return ServiceResult<DownloadRequest>.Ok(request);
     }
 }

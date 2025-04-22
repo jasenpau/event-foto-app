@@ -27,18 +27,22 @@ public class ImageController : AppControllerBase
         return result.Success ? Ok(EventPhotoDto.FromEventPhoto(result.Data)) : result.ToErrorResponse();
     }
 
-    [HttpPost("bulk-action")]
-    public async Task<ActionResult<int>> BulkAction([FromBody] BulkPhotoModifyParams bulkPhotoModifyParams,
+    [HttpPost("bulk-delete")]
+    public async Task<ActionResult<int>> BulkDelete([FromBody] BulkPhotoModifyParams bulkPhotoModifyParams,
         CancellationToken cancellationToken)
     {
-        switch (bulkPhotoModifyParams.Action)
-        {
-            case "delete":
-                var result = await _eventPhotoService.DeletePhotosAsync(bulkPhotoModifyParams.PhotoIds, cancellationToken);
-                return result.Success ? Ok(result.Data) : result.ToErrorResponse();
-            default:
-                return BadRequest();
-        }
+        var deleteResult = await _eventPhotoService.DeletePhotosAsync(bulkPhotoModifyParams.PhotoIds, cancellationToken);
+        return deleteResult.Success ? Ok(deleteResult.Data) : deleteResult.ToErrorResponse();
+    }
+
+    [HttpPost("bulk-download")]
+    public async Task<ActionResult<DownloadRequestDto>> BulkDownload([FromBody] BulkPhotoModifyParams bulkPhotoModifyParams)
+    {
+        var userId = RequestUserId();
+        var downloadResult = await _eventPhotoService.DownloadPhotosAsync(userId, bulkPhotoModifyParams.PhotoIds);
+        return downloadResult.Success
+            ? Ok(DownloadRequestDto.FromModel(downloadResult.Data))
+            : downloadResult.ToErrorResponse();
     }
 
     [HttpPost("upload")]
@@ -79,5 +83,12 @@ public class ImageController : AppControllerBase
 
         var result = searchResult.Data.ToDto(EventPhotoListDto.FromEventPhoto);
         return Ok(result);
+    }
+
+    [HttpGet("archive-download/{id:int}")]
+    public async Task<ActionResult<EventPhotoDto>> GetArchiveDownloadById(int id)
+    {
+        var result = await _eventPhotoService.GetDownloadRequestAsync(RequestUserId(), id);
+        return result.Success ? Ok(DownloadRequestDto.FromModel(result.Data)) : result.ToErrorResponse();
     }
 }
