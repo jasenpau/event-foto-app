@@ -22,6 +22,11 @@ export const useLoader = <T>(
           finalize(() => {
             loaderService.finishLoading(loadingKey);
           }),
+          tap({
+            error: () => {
+              loaderService.finishLoading(loadingKey);
+            },
+          }),
         ),
       ),
     );

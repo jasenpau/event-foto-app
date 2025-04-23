@@ -49,6 +49,11 @@ export class LoginRedirectComponent
       .subscribe();
   }
 
+  override ngOnDestroy() {
+    super.ngOnDestroy();
+    this.loaderService.finishLoading(COMPONENT_LOADING_KEY);
+  }
+
   private initializeUserData() {
     this.userService
       .fetchCurrentUserData()

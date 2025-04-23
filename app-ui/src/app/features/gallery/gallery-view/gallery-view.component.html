@@ -3,6 +3,19 @@
     <div class="gallery__header">
       <app-button [link]="'/event/' + eventId" [type]="ButtonType.Text">Grįžti į renginio informaciją</app-button>
       <h2 class="text-headline-large no-margin">{{ galleryDetails?.name }}</h2>
+      <div>
+        <app-button
+          [type]="ButtonType.Text"
+          (click)="openGalleryEditForm()">
+          Pervadinti
+        </app-button>
+        <app-button
+          [type]="ButtonType.Text"
+          [disabled]="imageData.length !== 0"
+          (click)="deleteGallery()">
+          Ištrinti galeriją
+        </app-button>
+      </div>
     </div>
   </div>
   <div class="gallery__toolbar">
@@ -35,3 +48,10 @@
   </div>
 </div>
 <app-photo-view *ngIf="openedPhotoData" [openPhotoData]="openedPhotoData" (photoAction)="handlePhotoViewAction($event)" />
+<app-side-view *ngIf="showGalleryEditForm && galleryDetails">
+  <app-create-gallery-form
+    [eventId]="galleryDetails.eventId"
+    [galleryToEdit]="galleryDetails"
+    (formEvent)="handleGalleryEditFormEvent($event)"
+  />
+</app-side-view>

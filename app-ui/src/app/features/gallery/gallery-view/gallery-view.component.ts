@@ -8,7 +8,7 @@ import {
 import { ButtonComponent } from '../../../components/button/button.component';
 import { ButtonType } from '../../../components/button/button.types';
 import { NgClass, NgForOf, NgIf } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   OpenPhotoData,
   PhotoAction,
@@ -23,6 +23,7 @@ import {
   forkJoin,
   of,
   switchMap,
+  take,
   takeUntil,
   tap,
 } from 'rxjs';
@@ -36,6 +37,11 @@ import { BackgroundTasksService } from '../../../services/background-tasks/backg
 import { GalleryService } from '../../../services/gallery/gallery.service';
 import { GalleryDto } from '../../../services/gallery/gallery.types';
 import { LoaderService } from '../../../services/loader/loader.service';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
+import { SnackbarType } from '../../../services/snackbar/snackbar.types';
+import { SideViewComponent } from '../../../components/side-view/side-view.component';
+import { CreateEditGalleryFormComponent } from '../../events/create-gallery-form/create-edit-gallery-form.component';
+import { handleApiError } from '../../../helpers/handleApiError';
 
 const COMPONENT_LOADING_KEY = 'gallery-view';
 
@@ -48,6 +54,8 @@ const COMPONENT_LOADING_KEY = 'gallery-view';
     PhotoViewComponent,
     NgClass,
     SpinnerComponent,
+    SideViewComponent,
+    CreateEditGalleryFormComponent,
   ],
   templateUrl: './gallery-view.component.html',
   styleUrl: './gallery-view.component.scss',
@@ -67,6 +75,7 @@ export class GalleryViewComponent
   protected isLoading = false;
   protected openedPhotoData?: OpenPhotoData;
   protected sasUri?: ReadOnlySasUri;
+  protected showGalleryEditForm = false;
 
   private lastKey = '';
   private observer?: IntersectionObserver;
@@ -80,6 +89,8 @@ export class GalleryViewComponent
     private readonly backgroundTasksService: BackgroundTasksService,
     private readonly galleryService: GalleryService,
     private readonly loaderService: LoaderService,
+    private readonly snackbarService: SnackbarService,
+    private readonly router: Router,
   ) {
     super();
     this.loaderService.startLoading(COMPONENT_LOADING_KEY);
@@ -88,7 +99,6 @@ export class GalleryViewComponent
 
   ngAfterViewInit(): void {
     this.viewLoaded.next(true);
-    this.viewLoaded.complete();
   }
 
   protected loadMore() {
@@ -117,8 +127,6 @@ export class GalleryViewComponent
               this.lastKey = `${images.data[images.data.length - 1].captureDate}|${images.data[images.data.length - 1].id}`;
             }
             this.isLoading = false;
-            this.observer?.disconnect();
-            this.loaderService.finishLoading(COMPONENT_LOADING_KEY);
             this.setupObserver();
           }),
           takeUntil(this.destroy$),
@@ -194,7 +202,6 @@ export class GalleryViewComponent
       })
       .pipe(
         switchMap((result) => {
-          console.log('result');
           if (result === ModalActions.Confirm) {
             this.imageData = [];
             this.isLoading = true;
@@ -218,8 +225,47 @@ export class GalleryViewComponent
       .pipe(
         tap((downloadReq) => {
           this.backgroundTasksService.startDownloadTask(downloadReq.id);
-          this.selectedImageIds.clear();
-          this.reload();
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+  }
+
+  protected openGalleryEditForm() {
+    this.showGalleryEditForm = true;
+  }
+
+  protected handleGalleryEditFormEvent($event: string) {
+    if ($event === 'cancel') {
+      this.showGalleryEditForm = false;
+    } else if ($event === 'updated') {
+      this.showGalleryEditForm = false;
+      this.snackbarService.addSnackbar(
+        SnackbarType.Success,
+        'Galerija atnaujinta.',
+      );
+      this.getGalleryDetails(this.galleryId!);
+    }
+  }
+
+  protected deleteGallery() {
+    this.galleryService
+      .deleteGallery(this.galleryId!)
+      .pipe(
+        tap(() => {
+          this.snackbarService.addSnackbar(
+            SnackbarType.Info,
+            'Galerija ištrinta.',
+          );
+          this.router.navigate(['/event', this.eventId!]);
+        }),
+        handleApiError((error) => {
+          if (error.title === 'default-gallery') {
+            this.snackbarService.addSnackbar(
+              SnackbarType.Error,
+              'Negalima ištrinti pagrindinės renginio galerijos',
+            );
+          }
         }),
         takeUntil(this.destroy$),
       )
@@ -238,11 +284,15 @@ export class GalleryViewComponent
 
   private getGalleryDetails(galleryId: number) {
     const gallery$ = this.galleryService.getGalleryDetails(galleryId);
-    const viewLoaded$ = this.viewLoaded.pipe(filter((value) => value));
+    const viewLoaded$ = this.viewLoaded.pipe(
+      filter((value) => value),
+      take(1),
+    );
 
     forkJoin([gallery$, viewLoaded$])
       .pipe(
         tap(([gallery]) => {
+          this.loaderService.finishLoading(COMPONENT_LOADING_KEY);
           this.galleryDetails = gallery;
           this.eventId = gallery.eventId;
           this.setupObserver();
@@ -253,6 +303,7 @@ export class GalleryViewComponent
   }
 
   private setupObserver() {
+    if (this.observer) this.observer.disconnect();
     this.observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
@@ -279,6 +330,8 @@ export class GalleryViewComponent
   override ngOnDestroy(): void {
     super.ngOnDestroy();
     this.observer?.disconnect();
+    this.loaderService.finishLoading(COMPONENT_LOADING_KEY);
+    this.viewLoaded.complete();
   }
 
   protected readonly ButtonType = ButtonType;

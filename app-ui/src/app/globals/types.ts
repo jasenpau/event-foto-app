@@ -1,4 +1,5 @@
 export interface ErrorDetails {
-  title: string;
+  title?: string;
+  detail: string;
   status: number;
 }

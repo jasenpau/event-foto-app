@@ -1,7 +1,5 @@
-using System.Data.Common;
 using System.Net;
 using EventFoto.Data.BlobStorage;
-using EventFoto.Data.DatabaseProjections;
 using EventFoto.Data.DTOs;
 using EventFoto.Data.Extensions;
 using EventFoto.Data.Models;
@@ -16,17 +14,14 @@ public class EventService : IEventService
     private readonly IEventRepository _eventRepository;
     private readonly IUserRepository _userRepository;
     private readonly IBlobStorage _blobStorage;
-    private readonly IGalleryRepository _galleryRepository;
 
     public EventService(IEventRepository eventRepository,
         IUserRepository userRepository,
-        IBlobStorage  blobStorage,
-        IGalleryRepository galleryRepository)
+        IBlobStorage  blobStorage)
     {
         _eventRepository = eventRepository;
         _userRepository = userRepository;
         _blobStorage = blobStorage;
-        _galleryRepository = galleryRepository;
     }
 
     public async Task<ServiceResult<Event>> GetById(int id)
@@ -124,36 +119,6 @@ public class EventService : IEventService
         return result is not null
             ? ServiceResult<PagedData<string, Event>>.Ok(result)
             : ServiceResult<PagedData<string, Event>>.Fail("Query failed", HttpStatusCode.InternalServerError);
-    }
-
-    public async Task<ServiceResult<Gallery>> CreateGalleryAsync(int eventId, string name)
-    {
-        var eventData = await _eventRepository.GetByIdAsync(eventId);
-        if (eventData == null)
-        {
-            return ServiceResult<Gallery>.Fail($"Event with ID {eventId} not found", HttpStatusCode.NotFound);
-        }
-
-        var nameExists = await _galleryRepository.NameExistsAsync(name, eventId);
-        if (nameExists)
-        {
-            return ServiceResult<Gallery>.Fail($"Event already has gallery with given name", HttpStatusCode.Conflict);
-        }
-
-        var gallery = new Gallery
-        {
-            EventId = eventId,
-            Name = name,
-        };
-
-        var createdGallery = await _galleryRepository.CreateAsync(gallery);
-        return ServiceResult<Gallery>.Ok(createdGallery);
-    }
-
-    public async Task<ServiceResult<List<EventGalleryProjection>>> GetGalleriesAsync(int eventId)
-    {
-        var galleries = await _galleryRepository.GetPagedByEventIdAsync(eventId);
-        return ServiceResult<List<EventGalleryProjection>>.Ok(galleries);
     }
 
     private IList<EventPhotographerDto> MapAssignedPhotographersToDto(IList<User> photographers)

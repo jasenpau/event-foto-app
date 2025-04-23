@@ -19,10 +19,32 @@ public class GalleryController : AppControllerBase
         _galleryService = galleryService;
     }
 
+    [HttpGet("event/{eventId:int}")]
+    public async Task<ActionResult<List<GalleryDto>>> GetGalleriesForEvent([FromRoute] int eventId)
+    {
+        var result = await _galleryService.GetGalleriesAsync(eventId);
+        return result.Success ? Ok(result.Data.Select(GalleryDto.FromProjection)) : result.ToErrorResponse();
+    }
+
+    [HttpPost("event/{eventId:int}")]
+    public async Task<ActionResult<GalleryDto>> CreateGallery([FromRoute] int eventId,
+        [FromBody] CreateEditGalleryRequestDto request)
+    {
+        var result = await _galleryService.CreateGalleryAsync(eventId, request.Name);
+        return result.Success ? Ok(GalleryDto.FromModel(result.Data)) : result.ToErrorResponse();
+    }
+
     [HttpGet("{galleryId:int}")]
     public async Task<ActionResult<GalleryDto>> GetGalleryAsync([FromRoute] int galleryId)
     {
         var result = await _galleryService.GetGalleryAsync(galleryId);
+        return result.Success ? Ok(GalleryDto.FromModel(result.Data)) : result.ToErrorResponse();
+    }
+
+    [HttpPut("{galleryId:int}")]
+    public async Task<ActionResult<GalleryDto>> UpdateGalleryAsync([FromRoute] int galleryId, [FromBody] CreateEditGalleryRequestDto request)
+    {
+        var result = await _galleryService.UpdateGalleryAsync(galleryId, request.Name);
         return result.Success ? Ok(GalleryDto.FromModel(result.Data)) : result.ToErrorResponse();
     }
 

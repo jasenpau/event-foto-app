@@ -26,6 +26,9 @@ import { handleApiError } from '../../../helpers/handleApiError';
 import { invalidValues } from '../../../components/forms/validators/invalidValues';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { SnackbarType } from '../../../services/snackbar/snackbar.types';
+import { LoaderOverlayComponent } from '../../../components/loader-overlay/loader-overlay.component';
+import { NgIf } from '@angular/common';
+import { useLocalLoader } from '../../../helpers/useLoader';
 
 @Component({
   selector: 'app-create-event',
@@ -37,6 +40,8 @@ import { SnackbarType } from '../../../services/snackbar/snackbar.types';
     ReactiveFormsModule,
     DatePickerComponent,
     TextAreaComponent,
+    LoaderOverlayComponent,
+    NgIf,
   ],
   templateUrl: './create-event.component.html',
   styleUrl: './create-event.component.scss',
@@ -52,6 +57,7 @@ export class CreateEventComponent
   protected minEventEndDate = new Date();
   protected createEventForm: FormGroup;
   protected existingNames: string[] = [];
+  protected isLoading = false;
 
   constructor(
     private readonly eventService: EventService,
@@ -105,6 +111,7 @@ export class CreateEventComponent
           note: formData.note,
         })
         .pipe(
+          useLocalLoader((value) => (this.isLoading = value)),
           tap((event) => {
             if (event.id) {
               this.snackbarService.addSnackbar(

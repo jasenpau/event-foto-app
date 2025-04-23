@@ -22,4 +22,39 @@ export class GalleryService {
       ...getAuthHeaders(),
     });
   }
+
+  getEventGalleries(eventId: number) {
+    return this.http.get<GalleryDto[]>(
+      `${this.apiBaseUrl}/gallery/event/${eventId}`,
+      {
+        ...getAuthHeaders(),
+      },
+    );
+  }
+
+  createEventGallery(eventId: number, galleryName: string) {
+    return this.http.post<GalleryDto>(
+      `${this.apiBaseUrl}/gallery/event/${eventId}`,
+      {
+        name: galleryName,
+      },
+      {
+        ...getAuthHeaders(),
+      },
+    );
+  }
+
+  updateGallery(galleryId: number, name: string) {
+    return this.http.put<GalleryDto>(
+      `${this.apiBaseUrl}/gallery/${galleryId}`,
+      { name },
+      { ...getAuthHeaders() },
+    );
+  }
+
+  deleteGallery(galleryId: number) {
+    return this.http.delete(`${this.apiBaseUrl}/gallery/${galleryId}`, {
+      ...getAuthHeaders(),
+    });
+  }
 }

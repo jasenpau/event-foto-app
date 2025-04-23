@@ -27,12 +27,13 @@ import { CardItemComponent } from '../../../components/cards/card-item/card-item
 import { PluralDefinition, pluralizeLt } from '../../../helpers/pluralizeLt';
 import { ReadOnlySasUri } from '../../../services/image/image.types';
 import { BlobService } from '../../../services/blob/blob.service';
-import { CreateGalleryFormComponent } from '../create-gallery-form/create-gallery-form.component';
+import { CreateEditGalleryFormComponent } from '../create-gallery-form/create-edit-gallery-form.component';
 import { AppSvgIconComponent } from '../../../components/svg-icon/app-svg-icon.component';
 import {
   SvgIconSize,
   SvgIconSrc,
 } from '../../../components/svg-icon/svg-icon.types';
+import { GalleryService } from '../../../services/gallery/gallery.service';
 
 const COMPONENT_LOADING_KEY = 'event-preview';
 
@@ -49,7 +50,7 @@ const COMPONENT_LOADING_KEY = 'event-preview';
     AssignPhotographerFormComponent,
     CardGridComponent,
     CardItemComponent,
-    CreateGalleryFormComponent,
+    CreateEditGalleryFormComponent,
     AppSvgIconComponent,
   ],
   templateUrl: './event-preview.component.html',
@@ -80,6 +81,7 @@ export class EventPreviewComponent
     private readonly snackbarService: SnackbarService,
     private readonly loaderService: LoaderService,
     private readonly blobService: BlobService,
+    private readonly galleryService: GalleryService,
   ) {
     super();
     this.loaderService.startLoading(COMPONENT_LOADING_KEY);
@@ -89,6 +91,11 @@ export class EventPreviewComponent
   ngOnInit() {
     this.userId = this.userService.getCurrentUserData()?.id;
     this.updateViewPermissions();
+  }
+
+  override ngOnDestroy() {
+    super.ngOnDestroy();
+    this.loaderService.finishLoading(COMPONENT_LOADING_KEY);
   }
 
   protected formatDate(dateString: string): string {
@@ -228,7 +235,7 @@ export class EventPreviewComponent
   }
 
   private loadGalleries(eventId: number) {
-    const galleries$ = this.eventService.getEventGalleries(eventId);
+    const galleries$ = this.galleryService.getEventGalleries(eventId);
     const sas$ = this.blobService.getReadOnlySasUri();
 
     forkJoin([galleries$, sas$])

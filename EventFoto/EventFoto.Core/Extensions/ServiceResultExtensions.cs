@@ -22,7 +22,8 @@ public static class ServiceResultExtensions
         return new ProblemDetails
         {
             Status = (int?)result.StatusCode,
-            Title = result.ErrorMessage,
+            Detail = result.ErrorMessage,
+            Title = result.ErrorKey,
         };
     }
 }

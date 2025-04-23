@@ -11,7 +11,6 @@ import {
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
 import { PagedData } from '../../components/paged-table/paged-table.types';
 import { EnvService } from '../environment/env.service';
-import { GalleryDto } from '../gallery/gallery.types';
 
 @Injectable({
   providedIn: 'root',
@@ -89,27 +88,6 @@ export class EventService {
       {
         ...getAuthHeaders(),
         params,
-      },
-    );
-  }
-
-  getEventGalleries(eventId: number) {
-    return this.http.get<GalleryDto[]>(
-      `${this.apiBaseUrl}/event/${eventId}/gallery`,
-      {
-        ...getAuthHeaders(),
-      },
-    );
-  }
-
-  createEventGallery(eventId: number, galleryName: string) {
-    return this.http.post<GalleryDto>(
-      `${this.apiBaseUrl}/event/${eventId}/gallery`,
-      {
-        name: galleryName,
-      },
-      {
-        ...getAuthHeaders(),
       },
     );
   }

@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Input,
   OnDestroy,
+  OnInit,
   Output,
 } from '@angular/core';
 import { ButtonComponent } from '../../../components/button/button.component';
@@ -17,12 +18,13 @@ import {
 } from '@angular/forms';
 import { invalidValues } from '../../../components/forms/validators/invalidValues';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
-import { EventService } from '../../../services/event/event.service';
 import { takeUntil, tap } from 'rxjs';
 import { handleApiError } from '../../../helpers/handleApiError';
 import { NgIf } from '@angular/common';
-import { SpinnerComponent } from '../../../components/spinner/spinner.component';
 import { useLocalLoader } from '../../../helpers/useLoader';
+import { LoaderOverlayComponent } from '../../../components/loader-overlay/loader-overlay.component';
+import { GalleryService } from '../../../services/gallery/gallery.service';
+import { GalleryDto } from '../../../services/gallery/gallery.types';
 
 @Component({
   selector: 'app-create-gallery-form',
@@ -31,17 +33,18 @@ import { useLocalLoader } from '../../../helpers/useLoader';
     InputFieldComponent,
     FormsModule,
     NgIf,
-    SpinnerComponent,
     ReactiveFormsModule,
+    LoaderOverlayComponent,
   ],
-  templateUrl: './create-gallery-form.component.html',
-  styleUrl: './create-gallery-form.component.scss',
+  templateUrl: './create-edit-gallery-form.component.html',
+  styleUrl: './create-edit-gallery-form.component.scss',
 })
-export class CreateGalleryFormComponent
+export class CreateEditGalleryFormComponent
   extends DisposableComponent
-  implements OnDestroy
+  implements OnDestroy, OnInit
 {
   @Input({ required: true }) eventId!: number;
+  @Input() galleryToEdit?: GalleryDto;
   @Output() formEvent = new EventEmitter<string>();
 
   protected readonly ButtonType = ButtonType;
@@ -50,7 +53,7 @@ export class CreateGalleryFormComponent
 
   private existingNames: string[] = [];
 
-  constructor(private readonly eventService: EventService) {
+  constructor(private readonly galleryService: GalleryService) {
     super();
     this.form = new FormGroup({
       name: new FormControl('', [
@@ -63,30 +66,44 @@ export class CreateGalleryFormComponent
     });
   }
 
+  ngOnInit() {
+    if (this.galleryToEdit) {
+      this.form.patchValue({
+        name: this.galleryToEdit.name,
+      });
+
+      this.existingNames.push(this.galleryToEdit.name);
+    }
+  }
+
   protected cancel() {
     this.formEvent.emit('cancel');
   }
 
   protected onSubmit() {
     this.form.markAllAsTouched();
-    if (this.form.valid) {
-      const galleryName = this.form.value.name;
-      this.eventService
-        .createEventGallery(this.eventId, galleryName)
-        .pipe(
-          useLocalLoader((value) => (this.isLoading = value)),
-          tap(() => {
-            this.formEvent.emit('created');
-          }),
-          handleApiError((error) => {
-            if (error.status === 409) {
-              this.addConflictingName(galleryName);
-            }
-          }),
-          takeUntil(this.destroy$),
-        )
-        .subscribe();
-    }
+    if (!this.form.valid) return;
+
+    const galleryName = this.form.value.name.trim();
+
+    const request$ = this.galleryToEdit
+      ? this.galleryService.updateGallery(this.galleryToEdit.id, galleryName)
+      : this.galleryService.createEventGallery(this.eventId, galleryName);
+
+    request$
+      .pipe(
+        useLocalLoader((value) => (this.isLoading = value)),
+        tap(() => {
+          this.formEvent.emit(this.galleryToEdit ? 'updated' : 'created');
+        }),
+        handleApiError((error) => {
+          if (error.status === 409) {
+            this.addConflictingName(galleryName);
+          }
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
   }
 
   private addConflictingName(name: string) {

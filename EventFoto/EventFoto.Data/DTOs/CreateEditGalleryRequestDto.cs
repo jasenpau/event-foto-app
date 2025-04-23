@@ -1,6 +1,6 @@
 ﻿namespace EventFoto.Data.DTOs;
 
-public record CreateGalleryRequestDto
+public record CreateEditGalleryRequestDto
 {
     public string Name { get; set; }
 }

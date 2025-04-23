@@ -17,6 +17,8 @@ import { EventService } from '../../../services/event/event.service';
 import { UserService } from '../../../services/user/user.service';
 import { debounceTime, takeUntil, tap } from 'rxjs';
 import { NgForOf, NgIf } from '@angular/common';
+import { LoaderOverlayComponent } from '../../../components/loader-overlay/loader-overlay.component';
+import { useLocalLoader } from '../../../helpers/useLoader';
 
 const USER_TABLE_PAGE_SIZE = 10;
 
@@ -28,6 +30,7 @@ const USER_TABLE_PAGE_SIZE = 10;
     NgIf,
     NgForOf,
     ReactiveFormsModule,
+    LoaderOverlayComponent,
   ],
   templateUrl: './assign-photographer-form.component.html',
   styleUrl: './assign-photographer-form.component.scss',
@@ -42,6 +45,7 @@ export class AssignPhotographerFormComponent
 
   protected userTableData: PagedDataTable<string, UserData>;
   protected searchControl = new FormControl('', [Validators.max(100)]);
+  protected isLoading = false;
 
   constructor(
     private eventService: EventService,
@@ -75,6 +79,7 @@ export class AssignPhotographerFormComponent
     this.eventService
       .assignPhotographerToEvent(this.eventId, id)
       .pipe(
+        useLocalLoader((value) => (this.isLoading = value)),
         tap(() => {
           this.formEvent.emit('assigned');
         }),

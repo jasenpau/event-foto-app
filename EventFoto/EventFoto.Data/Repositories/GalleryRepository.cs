@@ -37,15 +37,9 @@ public class GalleryRepository : IGalleryRepository
 
     public async Task<Gallery> UpdateAsync(Gallery gallery)
     {
-        var existingGallery = await Galleries.FindAsync(gallery.Id);
-        if (existingGallery == null)
-        {
-            throw new KeyNotFoundException($"Gallery with ID {gallery.Id} not found");
-        }
-
-        _context.Entry(existingGallery).CurrentValues.SetValues(gallery);
+        _context.Update(gallery);
         await _context.SaveChangesAsync();
-        return existingGallery;
+        return gallery;
     }
 
     public async Task<bool> DeleteAsync(int id)
