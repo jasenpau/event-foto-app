@@ -1,3 +1,5 @@
+@use "colors";
+
 .event {
   &__header {
     display: flex;
@@ -37,5 +39,37 @@
 
   &__photographers {
     width: 100%;
+  }
+
+  &__add-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid colors.$outline;
+    border-radius: 8px;
+    background: colors.$surface;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      transform: translateY(-4px);
+    }
+
+    &:focus-visible {
+      border: 2px solid colors.$primary;
+    }
+  }
+
+  &__add-gallery-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: colors.$primary;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    fill: colors.$on-primary;
   }
 }

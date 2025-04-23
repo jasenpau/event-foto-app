@@ -4,7 +4,7 @@
     <app-button
       *ngIf="showCreateEvent"
       [icon]="buttonIcon.Add"
-      link="/event/create">
+      (click)="openEventCreateForm()">
       Sukurti renginį
     </app-button>
   </div>
@@ -61,3 +61,6 @@
     <app-spinner />
   </div>
 </div>
+<app-side-view *ngIf="showEventCreateForm">
+  <app-create-event (formEvent)="handleCreateEventFormEvent($event)" />
+</app-side-view>

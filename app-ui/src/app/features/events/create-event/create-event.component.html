@@ -1,7 +1,7 @@
 <div class="create-event">
   <div class="page-header">
     <h2 class="text-headline-large no-margin">Naujas renginys</h2>
-    <app-button [type]="buttonType.Text" link="/event">Atšaukti</app-button>
+    <app-button [type]="buttonType.Text" (click)="cancel()">Atšaukti</app-button>
   </div>
   <form [formGroup]="createEventForm" (ngSubmit)="onSubmit()">
     <app-form-input-section

@@ -9,9 +9,15 @@
   background-color: colors.$surface;
   height: 100%;
   outline: 1px solid colors.$outline;
+  cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     transform: translateY(-4px);
+  }
+
+  &:focus-visible {
+    border: 2px solid colors.$primary;
   }
 
   &__image {

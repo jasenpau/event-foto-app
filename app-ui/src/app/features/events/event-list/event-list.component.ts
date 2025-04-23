@@ -28,6 +28,8 @@ import { getStartOfDay } from '../../../helpers/getStartOfDay';
 import { CheckboxComponent } from '../../../components/forms/checkbox/checkbox.component';
 import { SpinnerComponent } from '../../../components/spinner/spinner.component';
 import { PaginationControlsComponent } from '../../../components/pagination-controls/pagination-controls.component';
+import { SideViewComponent } from '../../../components/side-view/side-view.component';
+import { CreateEventComponent } from '../create-event/create-event.component';
 
 const EVENT_TABLE_PAGE_SIZE = 20;
 
@@ -44,6 +46,8 @@ const EVENT_TABLE_PAGE_SIZE = 20;
     CheckboxComponent,
     SpinnerComponent,
     PaginationControlsComponent,
+    SideViewComponent,
+    CreateEventComponent,
   ],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',
@@ -59,6 +63,7 @@ export class EventListComponent
   protected searchForm: FormGroup;
   protected showCreateEvent = false;
   protected minFromDate: Date = new Date(0);
+  protected showEventCreateForm = false;
 
   constructor(
     private eventService: EventService,
@@ -88,6 +93,16 @@ export class EventListComponent
 
   protected formatDate(dateString: string) {
     return formatLithuanianDate(new Date(dateString));
+  }
+
+  protected openEventCreateForm() {
+    this.showEventCreateForm = true;
+  }
+
+  protected handleCreateEventFormEvent($event: string) {
+    if ($event === 'cancel') {
+      this.showEventCreateForm = false;
+    }
   }
 
   private initializeSearch() {

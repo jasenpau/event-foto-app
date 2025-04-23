@@ -14,6 +14,7 @@ export enum SvgIconSrc {
 }
 
 export enum SvgIconSize {
+  Large = '32px',
   Regular = '24px',
   Small = '18px',
 }

@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { ButtonComponent } from '../../../components/button/button.component';
 import { Router } from '@angular/router';
 import { ButtonType } from '../../../components/button/button.types';
@@ -39,6 +45,8 @@ export class CreateEventComponent
   extends DisposableComponent
   implements OnDestroy, OnInit
 {
+  @Output() formEvent = new EventEmitter<string>();
+
   protected readonly buttonType = ButtonType;
   protected minEventStartDate = new Date();
   protected minEventEndDate = new Date();
@@ -99,7 +107,11 @@ export class CreateEventComponent
         .pipe(
           tap((event) => {
             if (event.id) {
-              this.onCreateSuccess();
+              this.snackbarService.addSnackbar(
+                SnackbarType.Success,
+                'Renginys sukurtas',
+              );
+              this.router.navigate(['/event', event.id]);
             }
           }),
           handleApiError((error) => {
@@ -113,13 +125,12 @@ export class CreateEventComponent
     }
   }
 
+  protected cancel() {
+    this.formEvent.emit('cancel');
+  }
+
   private addConflictingName(name: string) {
     this.existingNames.push(name.trim());
     this.createEventForm.controls['name'].updateValueAndValidity();
-  }
-
-  private onCreateSuccess() {
-    this.snackbarService.addSnackbar(SnackbarType.Success, 'Renginys sukurtas');
-    this.router.navigate(['event']);
   }
 }

@@ -3,7 +3,6 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { LayoutType } from './components/layouts/layout.types';
 import { EventListComponent } from './features/events/event-list/event-list.component';
 import { AuthGuard } from './guards/auth.guard';
-import { CreateEventComponent } from './features/events/create-event/create-event.component';
 import { CameraMainComponent } from './features/camera/camera-main/camera-main.component';
 import { EventPreviewComponent } from './features/events/event-preview/event-preview.component';
 import { LoginRedirectComponent } from './features/auth/login-redirect/login-redirect.component';
@@ -32,15 +31,6 @@ export const routes: Routes = [
     component: EventListComponent,
     data: { layout: LayoutType.Main },
     canActivate: [AuthGuard],
-  },
-  {
-    path: 'event/create',
-    component: CreateEventComponent,
-    data: {
-      layout: LayoutType.Main,
-      requiredGroup: UserGroup.EventAdmin,
-    },
-    canActivate: [AuthGuard, GroupPermissionGuard],
   },
   {
     path: 'event/:eventId',

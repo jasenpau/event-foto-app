@@ -27,6 +27,12 @@ import { CardItemComponent } from '../../../components/cards/card-item/card-item
 import { PluralDefinition, pluralizeLt } from '../../../helpers/pluralizeLt';
 import { ReadOnlySasUri } from '../../../services/image/image.types';
 import { BlobService } from '../../../services/blob/blob.service';
+import { CreateGalleryFormComponent } from '../create-gallery-form/create-gallery-form.component';
+import { AppSvgIconComponent } from '../../../components/svg-icon/app-svg-icon.component';
+import {
+  SvgIconSize,
+  SvgIconSrc,
+} from '../../../components/svg-icon/svg-icon.types';
 
 const COMPONENT_LOADING_KEY = 'event-preview';
 
@@ -43,6 +49,8 @@ const COMPONENT_LOADING_KEY = 'event-preview';
     AssignPhotographerFormComponent,
     CardGridComponent,
     CardItemComponent,
+    CreateGalleryFormComponent,
+    AppSvgIconComponent,
   ],
   templateUrl: './event-preview.component.html',
   styleUrl: './event-preview.component.scss',
@@ -59,6 +67,7 @@ export class EventPreviewComponent
   protected isAssignedSelf = false;
   protected showAssignUsers = false;
   protected showAssignUsersForm = false;
+  protected showGalleryCreateForm = false;
   protected userId?: string;
   protected galleries: GalleryDto[] = [];
   protected sasUri?: ReadOnlySasUri;
@@ -126,6 +135,10 @@ export class EventPreviewComponent
     this.showAssignUsersForm = true;
   }
 
+  protected openGalleryForm() {
+    this.showGalleryCreateForm = true;
+  }
+
   protected handlePhotographerFormEvent($event: string) {
     if ($event === 'cancel') {
       this.showAssignUsersForm = false;
@@ -136,6 +149,19 @@ export class EventPreviewComponent
         'Fotografas pridėtas prie renginio.',
       );
       this.loadPhotographers(this.event!.id);
+    }
+  }
+
+  protected handleGalleryCreateFormEvent($event: string) {
+    if ($event === 'cancel') {
+      this.showGalleryCreateForm = false;
+    } else if ($event === 'created') {
+      this.showGalleryCreateForm = false;
+      this.snackbarService.addSnackbar(
+        SnackbarType.Success,
+        'Galerija sukurta.',
+      );
+      this.loadGalleries(this.event!.id);
     }
   }
 
@@ -167,22 +193,18 @@ export class EventPreviewComponent
       if (!isNaN(id) && id > 0) {
         this.loadEvent(id);
         this.loadPhotographers(id);
+        this.loadGalleries(id);
       }
     });
   }
 
   private loadEvent(eventId: number) {
-    const event$ = this.eventService.getEventDetails(eventId);
-    const galleries$ = this.eventService.getEventGalleries(eventId);
-    const sas$ = this.blobService.getReadOnlySasUri();
-
-    forkJoin([event$, galleries$, sas$])
+    this.eventService
+      .getEventDetails(eventId)
       .pipe(
-        tap(([event, galleries, sas]) => {
-          this.event = event;
-          this.galleries = galleries;
-          this.sasUri = sas;
+        tap((event) => {
           this.loaderService.finishLoading(COMPONENT_LOADING_KEY);
+          this.event = event;
         }),
         takeUntil(this.destroy$),
       )
@@ -205,6 +227,22 @@ export class EventPreviewComponent
       .subscribe();
   }
 
+  private loadGalleries(eventId: number) {
+    const galleries$ = this.eventService.getEventGalleries(eventId);
+    const sas$ = this.blobService.getReadOnlySasUri();
+
+    forkJoin([galleries$, sas$])
+      .pipe(
+        useLoader(`${COMPONENT_LOADING_KEY}_galleries`, this.loaderService),
+        tap(([galleries, sas]) => {
+          this.galleries = galleries;
+          this.sasUri = sas;
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+  }
+
   private updateViewPermissions() {
     const groups = this.userService.getUserGroups();
     this.showAssignSelf = groups.includes(UserGroup.Photographer);
@@ -217,4 +255,7 @@ export class EventPreviewComponent
       ? photographers.some((u) => this.userId === u.id)
       : false;
   }
+
+  protected readonly SvgIconSrc = SvgIconSrc;
+  protected readonly SvgIconSize = SvgIconSize;
 }

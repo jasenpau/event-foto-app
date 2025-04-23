@@ -1,0 +1,9 @@
+<div class="create-gallery-header">
+  <h3>Sukurti galeriją</h3>
+  <app-button [type]="ButtonType.Text" (click)="cancel()">Uždaryti</app-button>
+</div>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <app-input-field id="name" label="Galerijos pavadinimas" formControlName="name" />
+  <app-button [disabled]="isLoading">Sukurti</app-button>
+</form>
+<app-spinner *ngIf="isLoading" />

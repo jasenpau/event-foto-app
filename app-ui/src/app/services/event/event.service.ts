@@ -101,4 +101,16 @@ export class EventService {
       },
     );
   }
+
+  createEventGallery(eventId: number, galleryName: string) {
+    return this.http.post<GalleryDto>(
+      `${this.apiBaseUrl}/event/${eventId}/gallery`,
+      {
+        name: galleryName,
+      },
+      {
+        ...getAuthHeaders(),
+      },
+    );
+  }
 }
