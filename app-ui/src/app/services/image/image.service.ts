@@ -26,8 +26,8 @@ export class ImageService {
 
   searchPhotos(searchParams: PhotoSearchParamsDto) {
     let params = new HttpParams().append(
-      'eventId',
-      searchParams.eventId.toString(),
+      'galleryId',
+      searchParams.galleryId.toString(),
     );
 
     if (searchParams.keyOffset)

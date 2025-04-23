@@ -13,7 +13,7 @@ import { NoAccessComponent } from './components/no-access/no-access.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { EventCalendarComponent } from './features/events/event-calendar/event-calendar.component';
 import { UserListComponent } from './features/user-admin/user-list/user-list.component';
-import { EventGalleryViewComponent } from './features/gallery/event-gallery-view/event-gallery-view.component';
+import { GalleryViewComponent } from './features/gallery/gallery-view/gallery-view.component';
 
 // Routes and their respective layouts. If layout is left blank, empty-layout is used.
 export const routes: Routes = [
@@ -49,8 +49,8 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'event/:eventId/gallery',
-    component: EventGalleryViewComponent,
+    path: 'gallery/:galleryId',
+    component: GalleryViewComponent,
     data: { layout: LayoutType.Main },
     canActivate: [AuthGuard],
   },

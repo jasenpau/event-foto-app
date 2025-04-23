@@ -1,8 +1,8 @@
 ﻿namespace EventFoto.Data.DTOs;
 
-public record EventPhotoSearchParams : BaseSearchParams
+public record EventPhotoSearchParams : PagedParams
 {
-    public int EventId { get; init; }
+    public int? GalleryId { get; init; }
     public DateTime? FromDate { get; init; }
     public DateTime? ToDate { get; init; }
 }

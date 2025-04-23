@@ -28,21 +28,28 @@ public class ImageController : AppControllerBase
     }
 
     [HttpPost("bulk-delete")]
-    public async Task<ActionResult<int>> BulkDelete([FromBody] BulkPhotoModifyParams bulkPhotoModifyParams,
+    public async Task<ActionResult<int>> BulkDelete([FromBody] BulkPhotoModifyDto bulkPhotoModifyDto,
         CancellationToken cancellationToken)
     {
-        var deleteResult = await _eventPhotoService.DeletePhotosAsync(bulkPhotoModifyParams.PhotoIds, cancellationToken);
+        var deleteResult = await _eventPhotoService.DeletePhotosAsync(bulkPhotoModifyDto.PhotoIds, cancellationToken);
         return deleteResult.Success ? Ok(deleteResult.Data) : deleteResult.ToErrorResponse();
     }
 
     [HttpPost("bulk-download")]
-    public async Task<ActionResult<DownloadRequestDto>> BulkDownload([FromBody] BulkPhotoModifyParams bulkPhotoModifyParams)
+    public async Task<ActionResult<DownloadRequestDto>> BulkDownload([FromBody] BulkPhotoModifyDto bulkPhotoModifyDto)
     {
         var userId = RequestUserId();
-        var downloadResult = await _eventPhotoService.DownloadPhotosAsync(userId, bulkPhotoModifyParams.PhotoIds);
+        var downloadResult = await _eventPhotoService.DownloadPhotosAsync(userId, bulkPhotoModifyDto.PhotoIds);
         return downloadResult.Success
             ? Ok(DownloadRequestDto.FromModel(downloadResult.Data))
             : downloadResult.ToErrorResponse();
+    }
+
+    [HttpPost("bulk-move")]
+    public async Task<ActionResult<int>> BulkMove([FromBody] BulkPhotoMoveDto bulkPhotoMoveDto)
+    {
+        var result = await _eventPhotoService.MovePhotos(bulkPhotoMoveDto.PhotoIds, bulkPhotoMoveDto.DestinationGalleryId);
+        return result.Success ? Ok(result.Data) : result.ToErrorResponse();
     }
 
     [HttpPost("upload")]
@@ -75,7 +82,7 @@ public class ImageController : AppControllerBase
     public async Task<ActionResult<PagedData<string, EventPhotoListDto>>> SearchEventPhotos(
         [FromQuery] EventPhotoSearchParams searchParams)
     {
-        var searchResult = await _eventPhotoService.SearchEventPhotosAsync(searchParams);
+        var searchResult = await _eventPhotoService.SearchPhotosAsync(searchParams);
         if (!searchResult.Success)
         {
             return searchResult.ToErrorResponse();

@@ -85,4 +85,19 @@ public class EventController : AppControllerBase
         var result = await _eventService.UnassignPhotographerAsync(eventId, userId);
         return result.Success ? Ok(result.Data) : result.ToErrorResponse();
     }
+
+    [HttpGet("{eventId:int}/gallery")]
+    public async Task<ActionResult<List<GalleryDto>>> GetGalleriesForEvent([FromRoute] int eventId)
+    {
+        var result = await _eventService.GetGalleriesAsync(eventId);
+        return result.Success ? Ok(result.Data.Select(GalleryDto.FromProjection)) : result.ToErrorResponse();
+    }
+
+    [HttpPost("{eventId:int}/gallery")]
+    public async Task<ActionResult<GalleryDto>> CreateGallery([FromRoute] int eventId,
+        [FromBody] CreateGalleryRequestDto request)
+    {
+        var result = await _eventService.CreateGalleryAsync(eventId, request.Name);
+        return result.Success ? Ok(GalleryDto.FromModel(result.Data)) : result.ToErrorResponse();
+    }
 }

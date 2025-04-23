@@ -24,10 +24,18 @@ import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { SnackbarType } from '../../../services/snackbar/snackbar.types';
 import { IconButtonComponent } from '../../../components/icon-button/icon-button.component';
 import { BlobService } from '../../../services/blob/blob.service';
+import { useLocalLoader } from '../../../helpers/useLoader';
+import { SpinnerComponent } from '../../../components/spinner/spinner.component';
 
 @Component({
   selector: 'app-photo-view',
-  imports: [NgIf, RouterLink, ButtonComponent, IconButtonComponent],
+  imports: [
+    NgIf,
+    RouterLink,
+    ButtonComponent,
+    IconButtonComponent,
+    SpinnerComponent,
+  ],
   templateUrl: './photo-view.component.html',
   styleUrl: './photo-view.component.scss',
 })
@@ -95,7 +103,7 @@ export class PhotoViewComponent
 
     this.isLoading = true;
 
-    const detailsSubscription = this.imageService
+    const details$ = this.imageService
       .getPhotoDetails(this.openPhotoData.photo.id)
       .pipe(
         tap((details) => {
@@ -104,12 +112,12 @@ export class PhotoViewComponent
         takeUntil(this.destroy$),
       );
 
-    let imageSubscription: Observable<Blob | null> = of(null);
+    let image$: Observable<Blob | null> = of(null);
     if (
       this.openPhotoData.photo.isProcessed &&
       this.openPhotoData.photo.processedFilename
     ) {
-      imageSubscription = this.blobService
+      image$ = this.blobService
         .getFromBlob(
           `event-${this.openPhotoData.eventId}`,
           this.openPhotoData.photo.processedFilename,
@@ -123,14 +131,10 @@ export class PhotoViewComponent
     }
 
     forkJoin({
-      detailsSubscription,
-      imageSubscription,
+      detailsSubscription: details$,
+      imageSubscription: image$,
     })
-      .pipe(
-        tap(() => {
-          this.isLoading = false;
-        }),
-      )
+      .pipe(useLocalLoader((value) => (this.isLoading = value)))
       .subscribe();
   }
 

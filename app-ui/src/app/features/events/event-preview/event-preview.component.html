@@ -62,7 +62,15 @@
   </div>
   <div class="event__photos">
     <h3>Renginio nuotraukų galerijos</h3>
-    <p>Pagrindinė galerija <a [routerLink]="'/event/' + event.id + '/gallery'">Atidaryti</a></p>
+    <app-card-grid>
+      <app-card-item
+        *ngFor="let gallery of galleries"
+        [imageUrl]="getGalleryThumbnail(gallery)"
+        [title]="gallery.name"
+        [description]="getPhotoCountString(gallery.photoCount)"
+        (click)="openGallery(gallery)"
+      />
+    </app-card-grid>
   </div>
 </div>
 <app-side-view *ngIf="showAssignUsersForm && event">

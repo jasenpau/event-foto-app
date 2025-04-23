@@ -7,8 +7,8 @@ import {
 } from '../../../services/event/event.types';
 import { NgForOf, NgIf } from '@angular/common';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { takeUntil, tap } from 'rxjs';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { forkJoin, takeUntil, tap } from 'rxjs';
 import { formatLithuanianDate } from '../../../helpers/formatLithuanianDate';
 import { ButtonComponent } from '../../../components/button/button.component';
 import { ButtonType } from '../../../components/button/button.types';
@@ -20,6 +20,13 @@ import { SnackbarType } from '../../../services/snackbar/snackbar.types';
 import { SideViewComponent } from '../../../components/side-view/side-view.component';
 import { AssignPhotographerFormComponent } from '../assign-photographer-form/assign-photographer-form.component';
 import { LoaderService } from '../../../services/loader/loader.service';
+import { GalleryDto } from '../../../services/gallery/gallery.types';
+import { useLoader } from '../../../helpers/useLoader';
+import { CardGridComponent } from '../../../components/cards/card-grid/card-grid.component';
+import { CardItemComponent } from '../../../components/cards/card-item/card-item.component';
+import { PluralDefinition, pluralizeLt } from '../../../helpers/pluralizeLt';
+import { ReadOnlySasUri } from '../../../services/image/image.types';
+import { BlobService } from '../../../services/blob/blob.service';
 
 const COMPONENT_LOADING_KEY = 'event-preview';
 
@@ -34,6 +41,8 @@ const COMPONENT_LOADING_KEY = 'event-preview';
     NgForOf,
     SideViewComponent,
     AssignPhotographerFormComponent,
+    CardGridComponent,
+    CardItemComponent,
   ],
   templateUrl: './event-preview.component.html',
   styleUrl: './event-preview.component.scss',
@@ -51,13 +60,17 @@ export class EventPreviewComponent
   protected showAssignUsers = false;
   protected showAssignUsersForm = false;
   protected userId?: string;
+  protected galleries: GalleryDto[] = [];
+  protected sasUri?: ReadOnlySasUri;
 
   constructor(
     private readonly eventService: EventService,
     private readonly userService: UserService,
     private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly snackbarService: SnackbarService,
     private readonly loaderService: LoaderService,
+    private readonly blobService: BlobService,
   ) {
     super();
     this.loaderService.startLoading(COMPONENT_LOADING_KEY);
@@ -126,6 +139,28 @@ export class EventPreviewComponent
     }
   }
 
+  protected getGalleryThumbnail(gallery: GalleryDto) {
+    if (gallery.filename)
+      return `${this.sasUri?.baseUri}/event-${gallery.eventId}/thumb-${gallery.filename}?${this.sasUri?.params}`;
+
+    return `/assets/default-cover.jpg`;
+  }
+
+  protected getPhotoCountString(photoCount: number) {
+    if (photoCount === 0) return 'Nėra nuotraukų';
+
+    const photoDefinition: PluralDefinition = {
+      singular: 'nuotrauka',
+      smallPlural: 'nuotraukos',
+      largePlural: 'nuotraukų',
+    };
+    return pluralizeLt(photoCount, photoDefinition);
+  }
+
+  protected openGallery(gallery: GalleryDto) {
+    this.router.navigate(['/gallery', gallery.id]);
+  }
+
   private readRouteParams() {
     this.route.paramMap.subscribe((params) => {
       const id = Number(params.get('eventId'));
@@ -136,12 +171,17 @@ export class EventPreviewComponent
     });
   }
 
-  private loadEvent(id: number) {
-    this.eventService
-      .getEventDetails(id)
+  private loadEvent(eventId: number) {
+    const event$ = this.eventService.getEventDetails(eventId);
+    const galleries$ = this.eventService.getEventGalleries(eventId);
+    const sas$ = this.blobService.getReadOnlySasUri();
+
+    forkJoin([event$, galleries$, sas$])
       .pipe(
-        tap((event) => {
+        tap(([event, galleries, sas]) => {
           this.event = event;
+          this.galleries = galleries;
+          this.sasUri = sas;
           this.loaderService.finishLoading(COMPONENT_LOADING_KEY);
         }),
         takeUntil(this.destroy$),
@@ -153,6 +193,10 @@ export class EventPreviewComponent
     this.eventService
       .getEventPhotographers(eventId)
       .pipe(
+        useLoader(
+          `${COMPONENT_LOADING_KEY}_photographers-data`,
+          this.loaderService,
+        ),
         tap((data) => {
           this.setPhotographerList(data);
         }),

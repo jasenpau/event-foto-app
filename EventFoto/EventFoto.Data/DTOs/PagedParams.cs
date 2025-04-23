@@ -1,6 +1,6 @@
 ﻿namespace EventFoto.Data.DTOs;
 
-public record BaseSearchParams
+public record PagedParams
 {
     private static readonly int DefaultPageSize = 20;
 

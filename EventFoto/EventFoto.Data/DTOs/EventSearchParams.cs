@@ -1,6 +1,6 @@
 ﻿namespace EventFoto.Data.DTOs;
 
-public record EventSearchParams : BaseSearchParams
+public record EventSearchParams : PagedParams
 {
     public string Query { get; init; } = null;
     public DateTime? FromDate { get; init; } = null;

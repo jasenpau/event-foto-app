@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using EventFoto.Core.Events;
+using EventFoto.Core.Galleries;
 using EventFoto.Core.Processing;
 using EventFoto.Data.BlobStorage;
 using EventFoto.Data.DTOs;
@@ -18,12 +19,14 @@ public class EventPhotoService : IEventPhotoService
     private readonly IEventPhotoRepository _eventPhotoRepository;
     private readonly IProcessingQueue _processingQueue;
     private readonly IDownloadRequestRepository _downloadRequestRepository;
+    private readonly IGalleryRepository _galleryRepository;
 
     public EventPhotoService(IEventService eventService,
         IBlobStorage blobStorage,
         IEventPhotoRepository  eventPhotoRepository,
         IProcessingQueue processingQueue,
         IDownloadRequestRepository downloadRequestRepository,
+        IGalleryRepository galleryRepository,
         IConfiguration configuration)
     {
         _eventService = eventService;
@@ -31,6 +34,7 @@ public class EventPhotoService : IEventPhotoService
         _eventPhotoRepository = eventPhotoRepository;
         _processingQueue = processingQueue;
         _downloadRequestRepository = downloadRequestRepository;
+        _galleryRepository = galleryRepository;
         _configuration = configuration;
     }
 
@@ -109,11 +113,11 @@ public class EventPhotoService : IEventPhotoService
         return ServiceResult<SasUriResponseDto>.Ok(result);
     }
 
-    public async Task<ServiceResult<PagedData<string, EventPhoto>>> SearchEventPhotosAsync(
+    public async Task<ServiceResult<PagedData<string, EventPhoto>>> SearchPhotosAsync(
         EventPhotoSearchParams searchParams)
 
     {
-        var result = await _eventPhotoRepository.SearchEventPhotosAsync(searchParams);
+        var result = await _eventPhotoRepository.SearchPhotosAsync(searchParams);
         return result is not null
             ? ServiceResult<PagedData<string, EventPhoto>>.Ok(result)
             : ServiceResult<PagedData<string, EventPhoto>>.Fail("Query failed", HttpStatusCode.InternalServerError);
@@ -176,5 +180,24 @@ public class EventPhotoService : IEventPhotoService
             return ServiceResult<DownloadRequest>.Fail("Download request not found", HttpStatusCode.NotFound);
 
         return ServiceResult<DownloadRequest>.Ok(request);
+    }
+
+    public async Task<ServiceResult<int>> MovePhotos(IList<int> photoIds, int galleryId)
+    {
+        var destinationGallery = await _galleryRepository.GetByIdAsync(galleryId);
+        if (destinationGallery == null)
+        {
+            return ServiceResult<int>.Fail($"Gallery with ID {galleryId} does not exist", HttpStatusCode.NotFound);
+        }
+
+        var photos = await _eventPhotoRepository.GetByIdsAsync(photoIds);
+        foreach (var photo in photos)
+        {
+            photo.GalleryId = destinationGallery.Id;
+            photo.Gallery = destinationGallery;
+        }
+
+        await _eventPhotoRepository.UpdateEventPhotosAsync(photos);
+        return ServiceResult<int>.Ok(photos.Count);
     }
 }

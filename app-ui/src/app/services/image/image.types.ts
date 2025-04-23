@@ -22,7 +22,7 @@ export interface PhotoDetailDto {
 export interface PhotoSearchParamsDto {
   keyOffset?: string | null;
   pageSize?: number;
-  eventId: number;
+  galleryId: number;
   fromDate?: Date;
   toDate?: Date;
 }

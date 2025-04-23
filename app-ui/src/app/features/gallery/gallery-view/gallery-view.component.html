@@ -2,7 +2,7 @@
   <div class="page-header">
     <div class="gallery__header">
       <app-button [link]="'/event/' + eventId" [type]="ButtonType.Text">Grįžti į renginio informaciją</app-button>
-      <h2 class="text-headline-large no-margin">Nuotraukų galerija</h2>
+      <h2 class="text-headline-large no-margin">{{ galleryDetails?.name }}</h2>
     </div>
   </div>
   <div class="gallery__toolbar">

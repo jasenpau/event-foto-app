@@ -62,9 +62,6 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
             entity.Property(e => e.Filename)
                 .IsRequired()
                 .HasMaxLength(255);
-            entity.Property(e => e.IsDeleted)
-                .IsRequired()
-                .HasDefaultValue(false);
             entity.Property(e => e.UploadDate)
                 .IsRequired();
             entity.Property(e => e.CaptureDate)

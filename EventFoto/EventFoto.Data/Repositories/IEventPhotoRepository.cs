@@ -9,7 +9,9 @@ public interface IEventPhotoRepository
     public Task<EventPhoto> AddEventPhotoAsync(EventPhoto eventPhoto);
     public Task<EventPhoto> MarkAsProcessed(EventPhoto eventPhoto, string processedFilename);
     public Task<EventPhoto> GetByEventAndFilename(int eventId, string filename);
-    public Task<PagedData<string, EventPhoto>> SearchEventPhotosAsync(EventPhotoSearchParams searchParams);
+    public Task<PagedData<string, EventPhoto>> SearchPhotosAsync(EventPhotoSearchParams searchParams);
     public Task<List<EventPhoto>> GetByIdsAsync(IList<int> photoIds);
     public Task DeleteEventPhotosAsync(IList<EventPhoto> photos, CancellationToken cancellationToken);
+    public Task UpdateEventPhotosAsync(IList<EventPhoto> photos);
+    public Task MoveAllGalleryPhotosAsync(int sourceGalleryId, int destinationGalleryId);
 }

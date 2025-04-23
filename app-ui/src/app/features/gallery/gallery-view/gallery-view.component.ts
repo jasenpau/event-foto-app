@@ -17,7 +17,15 @@ import {
 } from '../../../services/image/image.types';
 import { ImageService } from '../../../services/image/image.service';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
-import { forkJoin, of, switchMap, takeUntil, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  filter,
+  forkJoin,
+  of,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { PhotoViewComponent } from '../photo-view/photo-view.component';
 import { ModalService } from '../../../services/modal/modal.service';
 import { PluralDefinition, pluralizeLt } from '../../../helpers/pluralizeLt';
@@ -25,9 +33,14 @@ import { ModalActions } from '../../../services/modal/modal.types';
 import { SpinnerComponent } from '../../../components/spinner/spinner.component';
 import { BlobService } from '../../../services/blob/blob.service';
 import { BackgroundTasksService } from '../../../services/background-tasks/background-tasks.service';
+import { GalleryService } from '../../../services/gallery/gallery.service';
+import { GalleryDto } from '../../../services/gallery/gallery.types';
+import { LoaderService } from '../../../services/loader/loader.service';
+
+const COMPONENT_LOADING_KEY = 'gallery-view';
 
 @Component({
-  selector: 'app-event-gallery-view',
+  selector: 'app-gallery-view',
   imports: [
     ButtonComponent,
     NgForOf,
@@ -36,16 +49,18 @@ import { BackgroundTasksService } from '../../../services/background-tasks/backg
     NgClass,
     SpinnerComponent,
   ],
-  templateUrl: './event-gallery-view.component.html',
-  styleUrl: './event-gallery-view.component.scss',
+  templateUrl: './gallery-view.component.html',
+  styleUrl: './gallery-view.component.scss',
 })
-export class EventGalleryViewComponent
+export class GalleryViewComponent
   extends DisposableComponent
   implements OnDestroy, AfterViewInit
 {
   @ViewChild('scrollAnchor', { static: false }) scrollAnchor?: ElementRef;
 
   protected eventId?: number;
+  protected galleryId?: number;
+  protected galleryDetails?: GalleryDto;
   protected imageData: PhotoListDto[] = [];
   protected selectedImageIds = new Set<number>();
   protected hasMoreImages = true;
@@ -55,6 +70,7 @@ export class EventGalleryViewComponent
 
   private lastKey = '';
   private observer?: IntersectionObserver;
+  private viewLoaded = new BehaviorSubject(false);
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -62,26 +78,33 @@ export class EventGalleryViewComponent
     private readonly modalService: ModalService,
     private readonly blobService: BlobService,
     private readonly backgroundTasksService: BackgroundTasksService,
+    private readonly galleryService: GalleryService,
+    private readonly loaderService: LoaderService,
   ) {
     super();
+    this.loaderService.startLoading(COMPONENT_LOADING_KEY);
     this.readRouteParams();
   }
 
   ngAfterViewInit(): void {
-    if (this.scrollAnchor) {
-      this.setupObserver();
-    }
+    this.viewLoaded.next(true);
+    this.viewLoaded.complete();
   }
 
   protected loadMore() {
-    if (this.eventId && this.hasMoreImages && !this.isLoading) {
+    if (
+      this.galleryId &&
+      this.eventId &&
+      this.hasMoreImages &&
+      !this.isLoading
+    ) {
       this.isLoading = true;
 
       const sas = this.blobService.getReadOnlySasUri();
 
       const imageData = this.imageService.searchPhotos({
         keyOffset: this.lastKey === '' ? null : this.lastKey,
-        eventId: this.eventId,
+        galleryId: this.galleryId,
       });
 
       forkJoin([imageData, sas])
@@ -95,6 +118,7 @@ export class EventGalleryViewComponent
             }
             this.isLoading = false;
             this.observer?.disconnect();
+            this.loaderService.finishLoading(COMPONENT_LOADING_KEY);
             this.setupObserver();
           }),
           takeUntil(this.destroy$),
@@ -121,8 +145,7 @@ export class EventGalleryViewComponent
   }
 
   protected handlePhotoClick(image: PhotoListDto) {
-    if (this.selectedImageIds.size === 0) this.openPhoto(image);
-    else this.togglePhotoSelect(image);
+    this.openPhoto(image);
   }
 
   protected handlePhotoKeyboard($event: KeyboardEvent, image: PhotoListDto) {
@@ -205,11 +228,28 @@ export class EventGalleryViewComponent
 
   private readRouteParams() {
     this.route.paramMap.subscribe((params) => {
-      const eventId = Number(params.get('eventId'));
-      if (!isNaN(eventId) && eventId > 0) {
-        this.eventId = eventId;
+      const galleryId = Number(params.get('galleryId'));
+      if (!isNaN(galleryId) && galleryId > 0) {
+        this.galleryId = galleryId;
+        this.getGalleryDetails(galleryId);
       }
     });
+  }
+
+  private getGalleryDetails(galleryId: number) {
+    const gallery$ = this.galleryService.getGalleryDetails(galleryId);
+    const viewLoaded$ = this.viewLoaded.pipe(filter((value) => value));
+
+    forkJoin([gallery$, viewLoaded$])
+      .pipe(
+        tap(([gallery]) => {
+          this.galleryDetails = gallery;
+          this.eventId = gallery.eventId;
+          this.setupObserver();
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
   }
 
   private setupObserver() {

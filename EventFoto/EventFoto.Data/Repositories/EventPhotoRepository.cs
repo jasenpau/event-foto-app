@@ -48,11 +48,14 @@ public class EventPhotoRepository : IEventPhotoRepository
             .SingleOrDefaultAsync();
     }
 
-    public async Task<PagedData<string, EventPhoto>> SearchEventPhotosAsync(EventPhotoSearchParams searchParams)
+    public async Task<PagedData<string, EventPhoto>> SearchPhotosAsync(EventPhotoSearchParams searchParams)
     {
-        IQueryable<EventPhoto> query = EventPhotos
-            .Include(p => p.Gallery).ThenInclude(g => g.Event)
-            .Where(p => !p.IsDeleted && p.Gallery.EventId == searchParams.EventId);
+        IQueryable<EventPhoto> query = EventPhotos.Where(p => p.IsProcessed);
+
+        if (searchParams.GalleryId.HasValue)
+        {
+            query = query.Where(p => p.GalleryId == searchParams.GalleryId.Value);
+        }
 
         if (!string.IsNullOrWhiteSpace(searchParams.KeyOffset))
         {
@@ -102,7 +105,21 @@ public class EventPhotoRepository : IEventPhotoRepository
 
     public async Task DeleteEventPhotosAsync(IList<EventPhoto> photos, CancellationToken cancellationToken)
     {
-        _context.EventPhotos.RemoveRange(photos);
+        EventPhotos.RemoveRange(photos);
         await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public Task UpdateEventPhotosAsync(IList<EventPhoto> photos)
+    {
+        EventPhotos.UpdateRange(photos);
+        return _context.SaveChangesAsync();
+    }
+
+    public Task MoveAllGalleryPhotosAsync(int sourceGalleryId, int destinationGalleryId)
+    {
+        return EventPhotos
+            .Where(p => p.GalleryId == sourceGalleryId)
+            .ExecuteUpdateAsync(setters => setters
+                .SetProperty(p => p.GalleryId, destinationGalleryId));
     }
 }
