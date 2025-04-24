@@ -16,6 +16,7 @@
           Ištrinti galeriją
         </app-button>
       </div>
+      <app-button [type]="ButtonType.Filled" (click)="uploadPhotos()">Įkelti nuotraukas</app-button>
     </div>
   </div>
   <div class="gallery__toolbar">
@@ -46,6 +47,9 @@
   <div class="gallery__loader" *ngIf="isLoading">
     <app-spinner />
   </div>
+</div>
+<div class="photo-upload-hidden-form">
+  <form></form>
 </div>
 <app-photo-view *ngIf="openedPhotoData" [openPhotoData]="openedPhotoData" (photoAction)="handlePhotoViewAction($event)" />
 <app-side-view *ngIf="showGalleryEditForm && galleryDetails">

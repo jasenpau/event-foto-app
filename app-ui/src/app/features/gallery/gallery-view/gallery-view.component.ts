@@ -42,7 +42,7 @@ import { SnackbarType } from '../../../services/snackbar/snackbar.types';
 import { SideViewComponent } from '../../../components/side-view/side-view.component';
 import { CreateEditGalleryFormComponent } from '../../events/create-gallery-form/create-edit-gallery-form.component';
 import { handleApiError } from '../../../helpers/handleApiError';
-import { MovePhotosFormComponent } from '../../events/move-photos-form/move-photos-form.component';
+import { MovePhotosFormComponent } from '../move-photos-form/move-photos-form.component';
 
 const COMPONENT_LOADING_KEY = 'gallery-view';
 
@@ -241,6 +241,8 @@ export class GalleryViewComponent
   protected openMovePhotosForm() {
     this.showMovePhotosForm = true;
   }
+
+  protected uploadPhotos() {}
 
   protected handleGalleryEditFormEvent($event: string) {
     if ($event === 'cancel') {
