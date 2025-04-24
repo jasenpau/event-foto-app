@@ -69,6 +69,22 @@ export class ImageService {
       .pipe(map((x) => Number(x)));
   }
 
+  bulkMovePhotos(photoIds: number[], targetGalleryId: number) {
+    console.log(photoIds, targetGalleryId);
+    return this.http
+      .post<string>(
+        `${this.apiBaseUrl}/image/bulk-move`,
+        {
+          photoIds,
+          targetGalleryId,
+        },
+        {
+          ...getAuthHeaders(),
+        },
+      )
+      .pipe(map((x) => Number(x)));
+  }
+
   bulkDownload(photoIds: number[]) {
     return this.http.post<DownloadRequestDto>(
       `${this.apiBaseUrl}/image/bulk-download`,

@@ -1,0 +1,19 @@
+<div class="move-photos-header">
+  <h3>Perkelti nuotraukas</h3>
+  <app-button [type]="ButtonType.Text" (click)="cancel()">Uždaryti</app-button>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <app-select
+    id="targetGallery"
+    label="Pasirinkite galeriją"
+    formControlName="targetGallery">
+    <option *ngFor="let opt of galleryOptions" [value]="opt.id">
+      {{ opt.name }}
+    </option>
+  </app-select>
+
+  <app-button>Perkelti</app-button>
+</form>
+
+<app-loader-overlay *ngIf="isLoading" />

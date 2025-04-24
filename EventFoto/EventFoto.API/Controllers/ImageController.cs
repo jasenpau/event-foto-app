@@ -48,7 +48,7 @@ public class ImageController : AppControllerBase
     [HttpPost("bulk-move")]
     public async Task<ActionResult<int>> BulkMove([FromBody] BulkPhotoMoveDto bulkPhotoMoveDto)
     {
-        var result = await _eventPhotoService.MovePhotos(bulkPhotoMoveDto.PhotoIds, bulkPhotoMoveDto.DestinationGalleryId);
+        var result = await _eventPhotoService.MovePhotos(bulkPhotoMoveDto.PhotoIds, bulkPhotoMoveDto.TargetGalleryId);
         return result.Success ? Ok(result.Data) : result.ToErrorResponse();
     }
 

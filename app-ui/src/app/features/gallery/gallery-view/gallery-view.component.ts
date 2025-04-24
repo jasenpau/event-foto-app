@@ -42,6 +42,7 @@ import { SnackbarType } from '../../../services/snackbar/snackbar.types';
 import { SideViewComponent } from '../../../components/side-view/side-view.component';
 import { CreateEditGalleryFormComponent } from '../../events/create-gallery-form/create-edit-gallery-form.component';
 import { handleApiError } from '../../../helpers/handleApiError';
+import { MovePhotosFormComponent } from '../../events/move-photos-form/move-photos-form.component';
 
 const COMPONENT_LOADING_KEY = 'gallery-view';
 
@@ -56,6 +57,7 @@ const COMPONENT_LOADING_KEY = 'gallery-view';
     SpinnerComponent,
     SideViewComponent,
     CreateEditGalleryFormComponent,
+    MovePhotosFormComponent,
   ],
   templateUrl: './gallery-view.component.html',
   styleUrl: './gallery-view.component.scss',
@@ -76,6 +78,7 @@ export class GalleryViewComponent
   protected openedPhotoData?: OpenPhotoData;
   protected sasUri?: ReadOnlySasUri;
   protected showGalleryEditForm = false;
+  protected showMovePhotosForm = false;
 
   private lastKey = '';
   private observer?: IntersectionObserver;
@@ -235,6 +238,10 @@ export class GalleryViewComponent
     this.showGalleryEditForm = true;
   }
 
+  protected openMovePhotosForm() {
+    this.showMovePhotosForm = true;
+  }
+
   protected handleGalleryEditFormEvent($event: string) {
     if ($event === 'cancel') {
       this.showGalleryEditForm = false;
@@ -245,6 +252,19 @@ export class GalleryViewComponent
         'Galerija atnaujinta.',
       );
       this.getGalleryDetails(this.galleryId!);
+    }
+  }
+
+  protected handleMovePhotosFormEvent(event: string) {
+    if (event === 'cancel') {
+      this.showMovePhotosForm = false;
+    } else if (event === 'moved') {
+      this.showMovePhotosForm = false;
+      this.snackbarService.addSnackbar(
+        SnackbarType.Success,
+        'Nuotraukos perkeltos.',
+      );
+      this.reload();
     }
   }
 

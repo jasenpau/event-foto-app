@@ -2,5 +2,5 @@
 
 public record BulkPhotoMoveDto : BulkPhotoModifyDto
 {
-    public int DestinationGalleryId { get; init; }
+    public int TargetGalleryId { get; init; }
 }
