@@ -25,7 +25,7 @@ import { useLoader } from '../../../helpers/useLoader';
 import { CardGridComponent } from '../../../components/cards/card-grid/card-grid.component';
 import { CardItemComponent } from '../../../components/cards/card-item/card-item.component';
 import { PluralDefinition, pluralizeLt } from '../../../helpers/pluralizeLt';
-import { ReadOnlySasUri } from '../../../services/image/image.types';
+import { SasUri } from '../../../services/image/image.types';
 import { BlobService } from '../../../services/blob/blob.service';
 import { CreateEditGalleryFormComponent } from '../create-gallery-form/create-edit-gallery-form.component';
 import { AppSvgIconComponent } from '../../../components/svg-icon/app-svg-icon.component';
@@ -71,7 +71,7 @@ export class EventPreviewComponent
   protected showGalleryCreateForm = false;
   protected userId?: string;
   protected galleries: GalleryDto[] = [];
-  protected sasUri?: ReadOnlySasUri;
+  protected sasUri?: SasUri;
 
   constructor(
     private readonly eventService: EventService,

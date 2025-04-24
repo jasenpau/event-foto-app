@@ -2,7 +2,7 @@ export enum SnackbarType {
   Error = 'error',
   Info = 'info',
   Success = 'success',
-  Downloading = 'loading',
+  Loading = 'loading',
 }
 
 export enum SnackbarAction {

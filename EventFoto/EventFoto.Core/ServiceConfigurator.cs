@@ -19,6 +19,7 @@ public static class ServiceConfigurator
         services.AddScoped<IEventPhotoRepository, EventPhotoRepository>();
         services.AddScoped<IDownloadRequestRepository, DownloadRequestRepository>();
         services.AddScoped<IGalleryRepository, GalleryRepository>();
+        services.AddScoped<IUploadBatchRepository, UploadBatchRepository>();
 
         services.AddScoped<IEventService, EventService>();
         services.AddScoped<IUserService, UserService>();

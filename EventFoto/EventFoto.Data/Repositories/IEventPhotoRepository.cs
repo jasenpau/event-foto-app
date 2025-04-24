@@ -6,7 +6,7 @@ namespace EventFoto.Data.Repositories;
 public interface IEventPhotoRepository
 {
     public Task<EventPhoto> GetByIdAsync(int photoId);
-    public Task<EventPhoto> AddEventPhotoAsync(EventPhoto eventPhoto);
+    public Task<IList<EventPhoto>> AddEventPhotosAsync(IList<EventPhoto> eventPhotos);
     public Task<EventPhoto> MarkAsProcessed(EventPhoto eventPhoto, string processedFilename);
     public Task<EventPhoto> GetByEventAndFilename(int eventId, string filename);
     public Task<PagedData<string, EventPhoto>> SearchPhotosAsync(EventPhotoSearchParams searchParams);

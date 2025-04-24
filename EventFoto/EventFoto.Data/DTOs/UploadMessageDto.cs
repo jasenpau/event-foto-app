@@ -2,7 +2,8 @@
 
 public record UploadMessageDto
 {
-    public int EventId { get; set; }
-    public string Filename { get; set; }
-    public DateTime CaptureDate { get; set; }
+    public int EventId { get; init; }
+    public int? GalleryId { get; init; }
+    public IList<string> PhotoFilenames { get; init; }
+    public DateTime CaptureDate { get; init; }
 }

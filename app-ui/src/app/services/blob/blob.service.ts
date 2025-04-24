@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ReadOnlySasUri, SasUriResponse } from '../image/image.types';
+import { SasUri, SasUriResponse } from '../image/image.types';
 import { HttpClient } from '@angular/common/http';
 import { EnvService } from '../environment/env.service';
 import { map, of, switchMap } from 'rxjs';
@@ -10,7 +10,7 @@ import { getAuthHeaders } from '../../helpers/getAuthHeaders';
 })
 export class BlobService {
   private readonly apiBaseUrl;
-  private readOnlySasUri?: ReadOnlySasUri;
+  private readOnlySasUri?: SasUri;
 
   constructor(
     private readonly http: HttpClient,

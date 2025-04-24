@@ -2,6 +2,6 @@
 
 public enum ProcessingMessageType
 {
-    Image,
+    UploadBatch,
     DownloadZip,
 }

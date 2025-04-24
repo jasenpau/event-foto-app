@@ -31,8 +31,8 @@ public class ProcessImageFunction
 
         switch (message.Type)
         {
-            case ProcessingMessageType.Image:
-                await _imageProcessor.ProcessImageAsync(message, cancellationToken);
+            case ProcessingMessageType.UploadBatch:
+                await _imageProcessor.ProcessImagesAsync(message, cancellationToken);
                 return;
             case ProcessingMessageType.DownloadZip:
                 await _downloadZipProcessor.ProcessDownloadAsync(message, cancellationToken);

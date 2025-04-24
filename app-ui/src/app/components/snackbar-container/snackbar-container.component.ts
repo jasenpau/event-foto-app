@@ -51,7 +51,7 @@ export class SnackbarContainerComponent
         return SvgIconSrc.InfoCircle;
       case SnackbarType.Success:
         return SvgIconSrc.CheckCircle;
-      case SnackbarType.Downloading:
+      case SnackbarType.Loading:
         return SvgIconSrc.Downloading;
     }
   }

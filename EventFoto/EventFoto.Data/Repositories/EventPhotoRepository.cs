@@ -23,11 +23,11 @@ public class EventPhotoRepository : IEventPhotoRepository
             .FirstOrDefaultAsync(p => p.Id == photoId);
     }
 
-    public async Task<EventPhoto> AddEventPhotoAsync(EventPhoto eventPhoto)
+    public async Task<IList<EventPhoto>> AddEventPhotosAsync(IList<EventPhoto> eventPhotos)
     {
-        EventPhotos.Add(eventPhoto);
+        await EventPhotos.AddRangeAsync(eventPhotos);
         await _context.SaveChangesAsync();
-        return eventPhoto;
+        return eventPhotos;
     }
 
     public async Task<EventPhoto> MarkAsProcessed(EventPhoto eventPhoto, string processedFilename)

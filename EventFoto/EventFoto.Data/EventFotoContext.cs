@@ -10,7 +10,7 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
     public DbSet<EventPhoto> EventPhotos { get; set; }
     public DbSet<Gallery> Galleries { get; set; }
     public DbSet<DownloadRequest> DownloadRequests { get; set; }
-    public DbSet<DownloadImage> DownloadImages { get; set; }
+    public DbSet<UploadBatch> UploadBatches { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -74,6 +74,10 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
                 .WithMany(e => e.Photos)
                 .HasForeignKey(e => e.GalleryId)
                 .HasPrincipalKey(e => e.Id);
+            entity.HasOne(e => e.UploadBatch)
+                .WithMany(e => e.EventPhotos)
+                .HasForeignKey(e => e.UploadBatchId)
+                .OnDelete(DeleteBehavior.SetNull);
             entity.ToTable("EventPhotos");
         });
 
@@ -112,6 +116,15 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
                 .WithMany(r => r.DownloadImages)
                 .HasForeignKey(e => e.DownloadRequestId);
             entity.ToTable("DownloadImages");
+        });
+
+        modelBuilder.Entity<UploadBatch>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId);
+            entity.ToTable("UploadBatches");
         });
     }   
 }

@@ -40,13 +40,14 @@ export enum PhotoAction {
 export interface SasUriResponse {
   sasUri: string;
   expiresOn: string;
-  eventId: number;
+  eventId?: number;
 }
 
-export interface ReadOnlySasUri {
+export interface SasUri {
   baseUri: string;
   params: string;
   expiresOn: Date;
+  eventId?: number;
 }
 
 export interface DownloadRequestDto {
@@ -55,4 +56,10 @@ export interface DownloadRequestDto {
   userId: string;
   createdOn: string;
   isReady: boolean;
+}
+
+export interface BatchResponse {
+  id: number;
+  photoCount: number;
+  ready: boolean;
 }

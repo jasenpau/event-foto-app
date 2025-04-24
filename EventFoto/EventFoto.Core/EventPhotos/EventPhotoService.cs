@@ -20,6 +20,7 @@ public class EventPhotoService : IEventPhotoService
     private readonly IProcessingQueue _processingQueue;
     private readonly IDownloadRequestRepository _downloadRequestRepository;
     private readonly IGalleryRepository _galleryRepository;
+    private readonly IUploadBatchRepository _uploadBatchRepository;
 
     public EventPhotoService(IEventService eventService,
         IBlobStorage blobStorage,
@@ -27,6 +28,7 @@ public class EventPhotoService : IEventPhotoService
         IProcessingQueue processingQueue,
         IDownloadRequestRepository downloadRequestRepository,
         IGalleryRepository galleryRepository,
+        IUploadBatchRepository uploadBatchRepository,
         IConfiguration configuration)
     {
         _eventService = eventService;
@@ -35,6 +37,7 @@ public class EventPhotoService : IEventPhotoService
         _processingQueue = processingQueue;
         _downloadRequestRepository = downloadRequestRepository;
         _galleryRepository = galleryRepository;
+        _uploadBatchRepository = uploadBatchRepository;
         _configuration = configuration;
     }
 
@@ -46,28 +49,41 @@ public class EventPhotoService : IEventPhotoService
             : ServiceResult<EventPhoto>.Fail("Photo not found", HttpStatusCode.NotFound);
     }
 
-    public async Task<ServiceResult<EventPhoto>> UploadPhoto(Guid userId, UploadMessageDto uploadPhotoData)
+    public async Task<ServiceResult<UploadBatch>> UploadPhotoBatch(Guid userId, UploadMessageDto uploadPhotoData)
     {
         var eventResult = await _eventService.GetById(uploadPhotoData.EventId);
-        if (!eventResult.Success) return ServiceResult<EventPhoto>.Fail("Event not found", HttpStatusCode.NotFound);
+        if (!eventResult.Success) return ServiceResult<UploadBatch>.Fail("Event not found", HttpStatusCode.NotFound);
 
-        var eventPhoto = new EventPhoto
+        var uploadBatch = await _uploadBatchRepository.CreateAsync(new UploadBatch
+        {
+            UserId = userId,
+        });
+
+        var eventPhotos = uploadPhotoData.PhotoFilenames.Select(photo => new EventPhoto
         {
             UserId = userId,
             CaptureDate = uploadPhotoData.CaptureDate,
-            GalleryId = eventResult.Data.DefaultGalleryId,
-            Filename = uploadPhotoData.Filename,
+            GalleryId = uploadPhotoData.GalleryId ?? eventResult.Data.DefaultGalleryId,
+            Filename = photo,
             UploadDate = DateTime.UtcNow,
-        };
+            UploadBatchId = uploadBatch.Id,
+        }).ToList();
 
-        await _eventPhotoRepository.AddEventPhotoAsync(eventPhoto);
+        await _eventPhotoRepository.AddEventPhotosAsync(eventPhotos);
         await _processingQueue.EnqueueMessage(new ProcessingMessage
         {
-            Type = ProcessingMessageType.Image,
-            EntityId = uploadPhotoData.EventId,
-            Filename = uploadPhotoData.Filename,
+            Type = ProcessingMessageType.UploadBatch,
+            EntityId = uploadBatch.Id,
         });
-        return ServiceResult<EventPhoto>.Ok(eventPhoto);
+        return ServiceResult<UploadBatch>.Ok(uploadBatch);
+    }
+
+    public async Task<ServiceResult<UploadBatch>> GetUploadBatchById(int batchId)
+    {
+        var batch = await _uploadBatchRepository.GetByIdAsync(batchId);
+        return batch is null
+            ? ServiceResult<UploadBatch>.Fail("Batch not found", HttpStatusCode.NotFound)
+            : ServiceResult<UploadBatch>.Ok(batch);
     }
 
     public async Task<ServiceResult<SasUriResponseDto>> GetUploadSasUri(int eventId)

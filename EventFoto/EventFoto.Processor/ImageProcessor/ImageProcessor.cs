@@ -13,54 +13,74 @@ public class ImageProcessor : IImageProcessor
 {
     private readonly IBlobStorage _blobStorage;
     private readonly IEventPhotoRepository _photoRepository;
+    private readonly IUploadBatchRepository _uploadBatchRepository;
     private readonly IConfiguration _configuration;
 
     public ImageProcessor(IBlobStorage blobStorage,
         IEventPhotoRepository photoRepository,
+        IUploadBatchRepository uploadBatchRepository,
         IConfiguration configuration)
     {
         _blobStorage = blobStorage;
         _photoRepository = photoRepository;
+        _uploadBatchRepository = uploadBatchRepository;
         _configuration = configuration;
     }
 
-    public async Task ProcessImageAsync(ProcessingMessage message, CancellationToken cancellationToken = default)
+    public async Task ProcessImagesAsync(ProcessingMessage message, CancellationToken cancellationToken = default)
     {
-        var eventId = message.EntityId;
-        var containerName = _blobStorage.GetContainerName(eventId);
-        var imageStream = await _blobStorage.DownloadFileAsync(containerName, message.Filename, cancellationToken);
-        if (!imageStream.Success)
+        var uploadBatch = await _uploadBatchRepository.GetByIdAsync(message.EntityId);
+        if (uploadBatch == null)
         {
-            throw new InvalidOperationException("Could not load image.");
+            throw new InvalidOperationException("Upload batch not found.");
         }
 
-        using var image = await Image.LoadAsync(imageStream.Data, cancellationToken);
-        await imageStream.Data.DisposeAsync();
+        var eventBatches = uploadBatch.EventPhotos.GroupBy(p => p.Gallery.EventId);
+        foreach (var eventPhotoBatch in eventBatches)
+        {
+            var  eventId = eventPhotoBatch.Key;
+            var containerName = _blobStorage.GetContainerName(eventId);
 
-        var processedFilename = $"out-{message.Filename}";
+            foreach (var photo in eventPhotoBatch)
+            {
+                var originalFilename = photo.Filename;
+                var imageStream = await _blobStorage.DownloadFileAsync(containerName, originalFilename, cancellationToken);
+                if (!imageStream.Success)
+                {
+                    throw new InvalidOperationException("Could not load image.");
+                }
 
-        // Add image watermark processing here
-        // ...
+                using var image = await Image.LoadAsync(imageStream.Data, cancellationToken);
+                await imageStream.Data.DisposeAsync();
 
-        // Thumbnail processing
-        await GeneratePreviewImage(image, eventId, processedFilename, cancellationToken);
+                var processedFilename = $"out-{originalFilename}";
 
-        // Output processing
-        using var processedImageStream = new MemoryStream();
-        await image.SaveAsJpegAsync(processedImageStream, cancellationToken);
-        processedImageStream.Position = 0;
+                // Add image watermark processing here
+                // ...
 
-        // Add EXIF metadata
-        var eventPhoto = await _photoRepository.GetByEventAndFilename(eventId, message.Filename);
-        var outputFile = await AddExifData(eventPhoto, processedImageStream);
+                // Thumbnail processing
+                await GeneratePreviewImage(image, eventId, processedFilename, cancellationToken);
 
-        // Save final image to stream
-        using var outputStream = new MemoryStream();
-        await outputFile.SaveAsync(outputStream);
-        outputStream.Position = 0;
+                // Output processing
+                using var processedImageStream = new MemoryStream();
+                await image.SaveAsJpegAsync(processedImageStream, cancellationToken);
+                processedImageStream.Position = 0;
 
-        await _blobStorage.UploadFileAsync(containerName, processedFilename, outputStream, cancellationToken);
-        await _photoRepository.MarkAsProcessed(eventPhoto, processedFilename);
+                // Add EXIF metadata
+                var eventPhoto = await _photoRepository.GetByEventAndFilename(eventId, originalFilename);
+                var outputFile = await AddExifData(eventPhoto, processedImageStream);
+
+                // Save final image to stream
+                using var outputStream = new MemoryStream();
+                await outputFile.SaveAsync(outputStream);
+                outputStream.Position = 0;
+
+                await _blobStorage.UploadFileAsync(containerName, processedFilename, outputStream, cancellationToken);
+                await _photoRepository.MarkAsProcessed(eventPhoto, processedFilename);
+            }
+        }
+
+        await _uploadBatchRepository.MarkAsReadyAsync(uploadBatch.Id);
     }
 
     private async Task<ImageFile> AddExifData(EventPhoto photo, MemoryStream imageStream)

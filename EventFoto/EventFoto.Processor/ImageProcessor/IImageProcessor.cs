@@ -4,5 +4,5 @@ namespace EventFoto.Processor.ImageProcessor;
 
 public interface IImageProcessor
 {
-    public Task ProcessImageAsync(ProcessingMessage message, CancellationToken cancellationToken);
+    public Task ProcessImagesAsync(ProcessingMessage message, CancellationToken cancellationToken);
 }

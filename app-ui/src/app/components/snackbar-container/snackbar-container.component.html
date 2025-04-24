@@ -2,15 +2,15 @@
   <div class="snackbar__message" *ngFor="let msg of snackbarMessages" [ngClass]="{
   'snackbar__message--success': msg.type === SnackbarType.Success,
   'snackbar__message--error': msg.type === SnackbarType.Error,
-  'snackbar__message--downloading': msg.type === SnackbarType.Downloading
+  'snackbar__message--downloading': msg.type === SnackbarType.Loading
   }">
     <app-svg-icon [iconSrc]="getIcon(msg.type)" />
     <p class="snackbar__title">{{msg.message}}</p>
     <app-icon-button
       class="snackbar__close-button"
-      *ngIf="msg.type !== SnackbarType.Downloading"
+      *ngIf="msg.type !== SnackbarType.Loading"
       (click)="closeSnackbar(msg.id)"
       [icon]="svgIconSrc.Close" />
-    <div class="snackbar__loading-bar" *ngIf="msg.type === SnackbarType.Downloading"></div>
+    <div class="snackbar__loading-bar" *ngIf="msg.type === SnackbarType.Loading"></div>
   </div>
 </div>

@@ -7,14 +7,17 @@ namespace EventFoto.Processor.CleanupProcessor;
 public class CleanupProcessor : ICleanupProcessor
 {
     private readonly IDownloadRequestRepository _downloadRequestRepository;
+    private readonly IUploadBatchRepository _uploadBatchRepository;
     private readonly IBlobStorage _blobStorage;
     private readonly IConfiguration _configuration;
 
     public CleanupProcessor(IDownloadRequestRepository downloadRequestRepository,
+        IUploadBatchRepository uploadBatchRepository,
         IBlobStorage blobStorage,
         IConfiguration configuration)
     {
         _downloadRequestRepository = downloadRequestRepository;
+        _uploadBatchRepository = uploadBatchRepository;
         _blobStorage = blobStorage;
         _configuration = configuration;
     }
@@ -28,8 +31,9 @@ public class CleanupProcessor : ICleanupProcessor
 
         var blobDeletionTask = _blobStorage.DeleteFilesAsync(archiveContainerName, blobs, cancellationToken);
         var dbDeletionTask = _downloadRequestRepository.DeleteAsync(downloadRequests);
+        var uploadBatchDeletionTask = _uploadBatchRepository.DeleteBeforeDateAsync(deletionDate);
 
-        await Task.WhenAll(blobDeletionTask, dbDeletionTask);
+        await Task.WhenAll(blobDeletionTask, dbDeletionTask, uploadBatchDeletionTask);
         return downloadRequests.Count;
     }
 }

@@ -25,11 +25,11 @@ export class UploadTrackerComponent {
         this.activeUploads.add(message.filename);
         this.totalUploads += 1;
         break;
-      case 'upload-complete':
+      case UploadEventType.UploadComplete:
         this.activeUploads.delete(message.filename);
         this.successfulUploads += 1;
         break;
-      case 'upload-error':
+      case UploadEventType.UploadError:
         this.activeUploads.delete(message.filename);
         this.erroredUploads.add(message.filename);
         break;

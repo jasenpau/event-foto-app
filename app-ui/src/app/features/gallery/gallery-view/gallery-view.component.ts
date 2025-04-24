@@ -13,7 +13,7 @@ import {
   OpenPhotoData,
   PhotoAction,
   PhotoListDto,
-  ReadOnlySasUri,
+  SasUri,
 } from '../../../services/image/image.types';
 import { ImageService } from '../../../services/image/image.service';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
@@ -33,7 +33,6 @@ import { PluralDefinition, pluralizeLt } from '../../../helpers/pluralizeLt';
 import { ModalActions } from '../../../services/modal/modal.types';
 import { SpinnerComponent } from '../../../components/spinner/spinner.component';
 import { BlobService } from '../../../services/blob/blob.service';
-import { BackgroundTasksService } from '../../../services/background-tasks/background-tasks.service';
 import { GalleryService } from '../../../services/gallery/gallery.service';
 import { GalleryDto } from '../../../services/gallery/gallery.types';
 import { LoaderService } from '../../../services/loader/loader.service';
@@ -43,6 +42,8 @@ import { SideViewComponent } from '../../../components/side-view/side-view.compo
 import { CreateEditGalleryFormComponent } from '../../events/create-gallery-form/create-edit-gallery-form.component';
 import { handleApiError } from '../../../helpers/handleApiError';
 import { MovePhotosFormComponent } from '../move-photos-form/move-photos-form.component';
+import { SvgIconSrc } from '../../../components/svg-icon/svg-icon.types';
+import { UploadPhotoFormComponent } from '../upload-photo-form/upload-photo-form.component';
 
 const COMPONENT_LOADING_KEY = 'gallery-view';
 
@@ -58,6 +59,7 @@ const COMPONENT_LOADING_KEY = 'gallery-view';
     SideViewComponent,
     CreateEditGalleryFormComponent,
     MovePhotosFormComponent,
+    UploadPhotoFormComponent,
   ],
   templateUrl: './gallery-view.component.html',
   styleUrl: './gallery-view.component.scss',
@@ -76,7 +78,7 @@ export class GalleryViewComponent
   protected hasMoreImages = true;
   protected isLoading = false;
   protected openedPhotoData?: OpenPhotoData;
-  protected sasUri?: ReadOnlySasUri;
+  protected sasUri?: SasUri;
   protected showGalleryEditForm = false;
   protected showMovePhotosForm = false;
 
@@ -89,7 +91,6 @@ export class GalleryViewComponent
     private readonly imageService: ImageService,
     private readonly modalService: ModalService,
     private readonly blobService: BlobService,
-    private readonly backgroundTasksService: BackgroundTasksService,
     private readonly galleryService: GalleryService,
     private readonly loaderService: LoaderService,
     private readonly snackbarService: SnackbarService,
@@ -212,6 +213,10 @@ export class GalleryViewComponent
               tap(() => {
                 this.selectedImageIds.clear();
                 this.reload();
+                this.snackbarService.addSnackbar(
+                  SnackbarType.Info,
+                  'Nuotraukos ištrintos',
+                );
               }),
             );
           }
@@ -222,12 +227,17 @@ export class GalleryViewComponent
   }
 
   protected bulkDownload() {
+    const snackbarId = this.snackbarService.addSnackbar(
+      SnackbarType.Loading,
+      'Nuotraukų archyvas yra ruošiamas.',
+      false,
+    );
     const selectedImages = Array.from(this.selectedImageIds);
     this.imageService
       .bulkDownload(selectedImages)
       .pipe(
         tap((downloadReq) => {
-          this.backgroundTasksService.startDownloadTask(downloadReq.id);
+          this.imageService.startDownloadTask(downloadReq.id, snackbarId);
         }),
         takeUntil(this.destroy$),
       )
@@ -242,7 +252,16 @@ export class GalleryViewComponent
     this.showMovePhotosForm = true;
   }
 
-  protected uploadPhotos() {}
+  protected handlePhotoUpload() {
+    this.imageService.photoUploadFinished$
+      .pipe(
+        tap((reload) => {
+          if (reload) window.location.reload();
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+  }
 
   protected handleGalleryEditFormEvent($event: string) {
     if ($event === 'cancel') {
@@ -357,4 +376,5 @@ export class GalleryViewComponent
   }
 
   protected readonly ButtonType = ButtonType;
+  protected readonly SvgIconSrc = SvgIconSrc;
 }

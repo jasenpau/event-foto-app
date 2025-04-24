@@ -6,7 +6,8 @@ namespace EventFoto.Core.EventPhotos;
 public interface IEventPhotoService
 {
     public Task<ServiceResult<EventPhoto>> GetByIdAsync(int photoId);
-    public Task<ServiceResult<EventPhoto>> UploadPhoto(Guid userId, UploadMessageDto uploadPhotoData);
+    public Task<ServiceResult<UploadBatch>> UploadPhotoBatch(Guid userId, UploadMessageDto uploadPhotoData);
+    public Task<ServiceResult<UploadBatch>> GetUploadBatchById(int batchId);
     public Task<ServiceResult<SasUriResponseDto>> GetUploadSasUri(int eventId);
     public ServiceResult<SasUriResponseDto> GetReadOnlySasUri();
     public Task<ServiceResult<PagedData<string, EventPhoto>>> SearchPhotosAsync(EventPhotoSearchParams searchParams);

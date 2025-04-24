@@ -1,0 +1,4 @@
+<form class="upload">
+  <label for="images" class="upload__label"><app-svg-icon [iconSrc]="SvgIconSrc.Upload"/>Įkelti nuotraukas</label>
+  <input class="upload__input" type="file" id="images" #fileInput multiple (change)="onFilesSelected($event)" />
+</form>

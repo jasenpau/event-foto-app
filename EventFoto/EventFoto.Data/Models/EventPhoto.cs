@@ -10,7 +10,9 @@ public record EventPhoto
     public string ProcessedFilename { get; set; }
     public int GalleryId { get; set; }
     public Guid UserId { get; set; }
+    public int? UploadBatchId { get; set; }
 
     public User User { get; set; }
     public Gallery Gallery { get; set; }
+    public UploadBatch UploadBatch { get; set; }
 }

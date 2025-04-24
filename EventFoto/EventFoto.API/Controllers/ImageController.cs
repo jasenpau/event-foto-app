@@ -53,15 +53,32 @@ public class ImageController : AppControllerBase
     }
 
     [HttpPost("upload")]
-    public async Task<IActionResult> UploadImage([FromBody] UploadMessageDto uploadMessage)
+    public async Task<ActionResult<UploadBatchDto>> UploadImages([FromBody] UploadMessageDto uploadMessage)
     {
         if (uploadMessage.EventId <= 0)
         {
             return BadRequest("Invalid event ID.");
         }
 
-        var result = await _eventPhotoService.UploadPhoto(RequestUserId(), uploadMessage);
-        return result.Success ? Ok(result.Data) : result.ToErrorResponse();
+        var result = await _eventPhotoService.UploadPhotoBatch(RequestUserId(), uploadMessage);
+        return result.Success ? Ok(new UploadBatchDto
+        {
+            Id = result.Data.Id,
+            PhotoCount = uploadMessage.PhotoFilenames.Count,
+            Ready = result.Data.IsReady,
+        }) : result.ToErrorResponse();
+    }
+
+    [HttpGet("batch/{batchId:int}")]
+    public async Task<ActionResult<UploadBatchDto>> GetBatch(int batchId)
+    {
+        var result = await _eventPhotoService.GetUploadBatchById(batchId);
+        return result.Success ? Ok(new UploadBatchDto
+        {
+            Id = result.Data.Id,
+            PhotoCount = result.Data.EventPhotos.Count,
+            Ready = result.Data.IsReady,
+        }) : result.ToErrorResponse();
     }
 
     [HttpGet("sas")]
