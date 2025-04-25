@@ -85,6 +85,7 @@ jobs:
               AzureAd__Instance="${{ vars.AZURE_AD_INSTANCE }}" \
               AzureAd__TenantId="${{ vars.AZURE_AD_TENANT_ID }}" \
               AzureAd__ClientId="${{ vars.AZURE_AD_CLIENT_ID }}" \
+              AzureAd__ClientSecret="@Microsoft.KeyVault(SecretUri=https://dev-eventfoto-keyvault.vault.azure.net/secrets/ClientSecret/)" \
               Groups__SystemAdminGroupId="${{ vars.GROUPS_SYSTEM_ADMIN_ID }}" \
               Groups__EventAdminGroupId="${{ vars.GROUPS_EVENT_ADMIN_ID }}" \
               Groups__PhotographerGroupId="${{ vars.GROUPS_PHOTOGRAPHER_ID }}" \
