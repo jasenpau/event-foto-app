@@ -1,4 +1,5 @@
 <button class="icon-button" [ngClass]="{
   'icon-button--dark': theme === 'dark',
   'icon-button--light': theme === 'light',
-}"><app-svg-icon [iconSrc]="icon" /></button>
+  'icon-button--large': size === 'large',
+}"><app-svg-icon [iconSrc]="icon" [size]="svgSize" /></button>

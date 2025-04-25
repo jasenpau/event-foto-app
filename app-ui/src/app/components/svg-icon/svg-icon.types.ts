@@ -12,6 +12,8 @@ export enum SvgIconSrc {
   Camera = 'assets/icons/camera.svg',
   Downloading = 'assets/icons/downloading.svg',
   Upload = 'assets/icons/upload.svg',
+  ArrowForward = 'assets/icons/arrow-forward.svg',
+  ArrowBack = 'assets/icons/arrow-back.svg',
 }
 
 export enum SvgIconSize {

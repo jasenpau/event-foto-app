@@ -11,7 +11,6 @@ export class LoaderService {
   public loading$ = this.loadingSubject.asObservable();
 
   public startLoading(key: string) {
-    console.log('startLoading', key);
     if (this.loadingKeys.size === 0) {
       this.loadingSubject.next(true);
     }
@@ -19,7 +18,6 @@ export class LoaderService {
   }
 
   public finishLoading(key: string) {
-    console.log('finishLoading', key);
     this.loadingKeys.delete(key);
     if (this.loadingKeys.size === 0) {
       this.loadingSubject.next(false);

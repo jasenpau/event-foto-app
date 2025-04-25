@@ -30,11 +30,15 @@ export interface PhotoSearchParamsDto {
 export interface OpenPhotoData {
   photo: PhotoListDto;
   eventId: number;
+  showNext: boolean;
+  showPrevious: boolean;
 }
 
 export enum PhotoAction {
   Close = 'close',
   Delete = 'delete',
+  Previous = 'previous',
+  Next = 'next',
 }
 
 export interface SasUriResponse {

@@ -1,10 +1,13 @@
 import {
   AfterViewInit,
   Component,
+  effect,
+  ElementRef,
   EventEmitter,
-  Input,
+  input,
   OnDestroy,
   Output,
+  ViewChild,
 } from '@angular/core';
 import { SvgIconSrc } from '../../../components/svg-icon/svg-icon.types';
 import { ButtonType } from '../../../components/button/button.types';
@@ -15,7 +18,7 @@ import {
 } from '../../../services/image/image.types';
 import { ImageService } from '../../../services/image/image.service';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
-import { forkJoin, Observable, of, takeUntil, tap } from 'rxjs';
+import { forkJoin, fromEvent, Observable, of, takeUntil, tap } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ButtonComponent } from '../../../components/button/button.component';
@@ -25,7 +28,7 @@ import { SnackbarType } from '../../../services/snackbar/snackbar.types';
 import { IconButtonComponent } from '../../../components/icon-button/icon-button.component';
 import { BlobService } from '../../../services/blob/blob.service';
 import { useLocalLoader } from '../../../helpers/useLoader';
-import { SpinnerComponent } from '../../../components/spinner/spinner.component';
+import { LoaderOverlayComponent } from '../../../components/loader-overlay/loader-overlay.component';
 
 @Component({
   selector: 'app-photo-view',
@@ -34,7 +37,7 @@ import { SpinnerComponent } from '../../../components/spinner/spinner.component'
     RouterLink,
     ButtonComponent,
     IconButtonComponent,
-    SpinnerComponent,
+    LoaderOverlayComponent,
   ],
   templateUrl: './photo-view.component.html',
   styleUrl: './photo-view.component.scss',
@@ -43,9 +46,12 @@ export class PhotoViewComponent
   extends DisposableComponent
   implements OnDestroy, AfterViewInit
 {
-  @Input({ required: true }) openPhotoData!: OpenPhotoData;
-  @Input() showEventNavigation = false;
+  // @Input({ required: true }) openPhotoData!: OpenPhotoData;
+  openPhotoData = input.required<OpenPhotoData>();
+  externalLoader = input.required<boolean>();
   @Output() photoAction = new EventEmitter<PhotoAction>();
+
+  @ViewChild('photoOverlay') photoOverlay!: ElementRef;
 
   protected photoDetails?: PhotoDetailDto;
   protected imageDataUrl?: string;
@@ -57,10 +63,20 @@ export class PhotoViewComponent
     private readonly blobService: BlobService,
   ) {
     super();
+    effect(() => {
+      this.loadImage(this.openPhotoData());
+    });
   }
 
   ngAfterViewInit() {
-    this.loadImage();
+    fromEvent<KeyboardEvent>(document.body, 'keyup')
+      .pipe(
+        tap((event) => {
+          this.handleKeyboardEvent(event);
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
   }
 
   protected close() {
@@ -98,13 +114,39 @@ export class PhotoViewComponent
     return formatLithuanianDateWithSeconds(new Date(dateString));
   }
 
-  private loadImage() {
-    if (!this.openPhotoData) return;
+  protected overlayClick($event: MouseEvent) {
+    if ($event.target === this.photoOverlay.nativeElement) {
+      this.close();
+    }
+  }
 
+  protected nextNavigate() {
+    this.photoAction.emit(PhotoAction.Next);
+  }
+
+  protected previousNavigate() {
+    this.photoAction.emit(PhotoAction.Previous);
+  }
+
+  private handleKeyboardEvent($event: KeyboardEvent) {
+    switch ($event.key) {
+      case 'Escape':
+        this.close();
+        return;
+      case 'ArrowLeft':
+        this.previousNavigate();
+        return;
+      case 'ArrowRight':
+        this.nextNavigate();
+        return;
+    }
+  }
+
+  private loadImage(openPhotoData: OpenPhotoData) {
     this.isLoading = true;
 
     const details$ = this.imageService
-      .getPhotoDetails(this.openPhotoData.photo.id)
+      .getPhotoDetails(openPhotoData.photo.id)
       .pipe(
         tap((details) => {
           this.photoDetails = details;
@@ -114,13 +156,13 @@ export class PhotoViewComponent
 
     let image$: Observable<Blob | null> = of(null);
     if (
-      this.openPhotoData.photo.isProcessed &&
-      this.openPhotoData.photo.processedFilename
+      openPhotoData.photo.isProcessed &&
+      openPhotoData.photo.processedFilename
     ) {
       image$ = this.blobService
         .getFromBlob(
-          `event-${this.openPhotoData.eventId}`,
-          this.openPhotoData.photo.processedFilename,
+          `event-${openPhotoData.eventId}`,
+          openPhotoData.photo.processedFilename,
         )
         .pipe(
           tap((blob) => {

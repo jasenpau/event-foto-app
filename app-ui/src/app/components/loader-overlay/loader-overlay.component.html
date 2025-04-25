@@ -1,3 +1,5 @@
-<div class="loader-overlay">
+<div class="loader-overlay" [ngClass]="{
+  'loader-overlay--white': theme === 'white',
+}">
   <app-spinner />
 </div>

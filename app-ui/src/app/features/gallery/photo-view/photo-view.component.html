@@ -1,36 +1,59 @@
-<div class="photo">
-  <div class="photo__container">
-    <div class="photo__viewer" *ngIf="!isLoading">
-      <app-icon-button class="photo__close" [icon]="SvgIconSrc.Close" (click)="close()" />
-      <img class="photo__image" *ngIf="imageDataUrl" [src]="imageDataUrl" [alt]="openPhotoData.photo.processedFilename" />
-      <div class="photo__details" *ngIf="photoDetails">
-        <div class="photo__detail-line">
-          <p class="photo__detail-line-title text-label-large no-margin">Renginio pavadinimas</p>
-          <p class="text-title-large no-margin">{{ photoDetails.eventName }}</p>
-          <a [routerLink]="'/event/' + photoDetails.eventId " *ngIf="showEventNavigation">Eiti į renginį</a>
-        </div>
-        <div class="photo__detail-line">
-          <p class="photo__detail-line-title text-label-large no-margin">Fotografas</p>
-          <a class="text-body-large no-margin" [routerLink]="'/user/' + photoDetails.userId ">{{ photoDetails.userName }}</a>
-        </div>
-        <div class="photo__detail-line">
-          <p class="photo__detail-line-title text-label-large no-margin">Nuotrauka sukurta</p>
-          <p class="text-body-large no-margin">{{ formatLtDate(photoDetails.captureDate) }}</p>
-        </div>
-        <div class="photo__detail-line">
-          <p class="photo__detail-line-title text-label-large no-margin">Nuotrauka įkelta</p>
-          <p class="text-body-large no-margin">{{ formatLtDate(photoDetails.uploadDate) }}</p>
-        </div>
-        <div class="photo__detail-line">
-          <p class="photo__detail-line-title text-label-large no-margin">Failo pavadinimas</p>
-          <p class="text-body-medium no-margin">{{ photoDetails.processedFilename }}</p>
-        </div>
-        <div class="photo__actions">
-          <app-button [type]="ButtonType.Text" (click)="deletePhoto()">Ištrinti</app-button>
-          <app-button [type]="ButtonType.Filled" (click)="downloadPhoto()">Atsisiųsti</app-button>
-        </div>
+<!-- eslint-disable-next-line -->
+<div class="photo" (click)="overlayClick($event)" #photoOverlay>
+  <div>
+    <app-icon-button
+      *ngIf="openPhotoData().showPrevious"
+      theme="light"
+      size="large"
+      [icon]="SvgIconSrc.ArrowBack"
+      (click)="this.previousNavigate()"
+    />
+  </div>
+  <div class="photo__viewer">
+    <div class="photo__image-container" *ngIf="!isLoading && !externalLoader()">
+      <img
+        class="photo__image"
+        *ngIf="imageDataUrl"
+        [src]="imageDataUrl"
+        [alt]="openPhotoData().photo.processedFilename"
+      />
+    </div>
+    <div class="photo__details" *ngIf="photoDetails && !isLoading && !externalLoader()">
+      <div class="photo__detail-header">
+        <p class="photo__detail-header-title text-label-large no-margin">Renginio pavadinimas</p>
+        <app-icon-button [icon]="SvgIconSrc.Close" (click)="close()" />
+        <p class="photo__detail-header-content text-title-large no-margin">{{ photoDetails.eventName }}</p>
+      </div>
+      <div class="photo__detail-line">
+        <p class="photo__detail-line-title text-label-large no-margin">Fotografas</p>
+        <a class="text-body-large no-margin" [routerLink]="'/user/' + photoDetails.userId ">{{ photoDetails.userName }}</a>
+      </div>
+      <div class="photo__detail-line">
+        <p class="photo__detail-line-title text-label-large no-margin">Nuotrauka sukurta</p>
+        <p class="text-body-large no-margin">{{ formatLtDate(photoDetails.captureDate) }}</p>
+      </div>
+      <div class="photo__detail-line">
+        <p class="photo__detail-line-title text-label-large no-margin">Nuotrauka įkelta</p>
+        <p class="text-body-large no-margin">{{ formatLtDate(photoDetails.uploadDate) }}</p>
+      </div>
+      <div class="photo__detail-line">
+        <p class="photo__detail-line-title text-label-large no-margin">Failo pavadinimas</p>
+        <p class="text-body-medium no-margin">{{ photoDetails.processedFilename }}</p>
+      </div>
+      <div class="photo__actions">
+        <app-button [type]="ButtonType.Text" (click)="deletePhoto()">Ištrinti</app-button>
+        <app-button [type]="ButtonType.Filled" (click)="downloadPhoto()">Atsisiųsti</app-button>
       </div>
     </div>
-    <app-spinner *ngIf="isLoading" />
+  </div>
+  <div>
+    <app-icon-button
+      *ngIf="openPhotoData().showNext"
+      theme="light"
+      size="large"
+      [icon]="SvgIconSrc.ArrowForward"
+      (click)="this.nextNavigate()"
+    />
   </div>
 </div>
+<app-loader-overlay *ngIf="isLoading || externalLoader()" theme="transparent" />

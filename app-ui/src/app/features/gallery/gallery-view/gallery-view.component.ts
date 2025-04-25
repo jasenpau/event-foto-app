@@ -44,6 +44,7 @@ import { handleApiError } from '../../../helpers/handleApiError';
 import { MovePhotosFormComponent } from '../move-photos-form/move-photos-form.component';
 import { SvgIconSrc } from '../../../components/svg-icon/svg-icon.types';
 import { UploadPhotoFormComponent } from '../upload-photo-form/upload-photo-form.component';
+import { EMPTY_SUBSCRIPTION } from 'rxjs/internal/Subscription';
 
 const COMPONENT_LOADING_KEY = 'gallery-view';
 
@@ -121,7 +122,7 @@ export class GalleryViewComponent
         galleryId: this.galleryId,
       });
 
-      forkJoin([imageData, sas])
+      return forkJoin([imageData, sas])
         .pipe(
           tap(([images, sas]) => {
             this.sasUri = sas;
@@ -137,13 +138,16 @@ export class GalleryViewComponent
         )
         .subscribe();
     }
+
+    return EMPTY_SUBSCRIPTION;
   }
 
-  protected openPhoto(image: PhotoListDto) {
+  protected openPhoto(image: PhotoListDto, index: number) {
     if (this.eventId) {
       this.openedPhotoData = {
         photo: image,
         eventId: this.eventId,
+        ...this.showControls(index),
       };
     }
   }
@@ -156,13 +160,17 @@ export class GalleryViewComponent
     }
   }
 
-  protected handlePhotoClick(image: PhotoListDto) {
-    this.openPhoto(image);
+  protected handlePhotoClick(image: PhotoListDto, index: number) {
+    this.openPhoto(image, index);
   }
 
-  protected handlePhotoKeyboard($event: KeyboardEvent, image: PhotoListDto) {
+  protected handlePhotoKeyboard(
+    $event: KeyboardEvent,
+    image: PhotoListDto,
+    index: number,
+  ) {
     if ($event.key === 'Enter') {
-      this.openPhoto(image);
+      this.openPhoto(image, index);
     } else if ($event.key === ' ') {
       // handle Space
       $event.preventDefault();
@@ -174,11 +182,42 @@ export class GalleryViewComponent
     switch (event) {
       case PhotoAction.Close:
         this.openedPhotoData = undefined;
-        break;
+        return;
       case PhotoAction.Delete:
         this.openedPhotoData = undefined;
         this.reload();
-        break;
+        return;
+      case PhotoAction.Next:
+        this.shiftOpenedImageIndex(1);
+        return;
+      case PhotoAction.Previous:
+        this.shiftOpenedImageIndex(-1);
+        return;
+    }
+  }
+
+  private shiftOpenedImageIndex(offset: number) {
+    const photo = this.openedPhotoData?.photo;
+    if (photo) {
+      const index = this.imageData.indexOf(photo);
+      if (index === -1) return;
+
+      const newIndex = index + offset;
+      if (newIndex >= 0 && newIndex < this.imageData.length) {
+        this.openedPhotoData = {
+          eventId: this.eventId!,
+          photo: this.imageData[newIndex],
+          ...this.showControls(newIndex),
+        };
+      } else if (newIndex == this.imageData.length && this.hasMoreImages) {
+        this.loadMore().add(() => {
+          this.openedPhotoData = {
+            eventId: this.eventId!,
+            photo: this.imageData[newIndex],
+            ...this.showControls(newIndex),
+          };
+        });
+      }
     }
   }
 
@@ -366,6 +405,13 @@ export class GalleryViewComponent
     this.isLoading = false;
     this.lastKey = '';
     this.loadMore();
+  }
+
+  private showControls(index: number) {
+    return {
+      showNext: index < this.imageData.length - 1 || this.hasMoreImages,
+      showPrevious: index > 0,
+    };
   }
 
   override ngOnDestroy(): void {
