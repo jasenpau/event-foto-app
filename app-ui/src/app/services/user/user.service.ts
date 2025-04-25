@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, map, Observable, of, OperatorFunction, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
-import { AppGroupsDto, RegisterDto, UserData } from './user.types';
+import { AppGroupsDto, RegisterDto, UserData, UserListDto } from './user.types';
 import { AuthService } from '../auth/auth.service';
 import { UserGroup } from '../../globals/userGroups';
 import { PagedData } from '../../components/paged-table/paged-table.types';
 import { EnvService } from '../environment/env.service';
-import { handleApiError } from '../../helpers/handleApiError';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -95,7 +94,7 @@ export class UserService {
     if (pageSize) params = params.append('pageSize', pageSize.toString());
     if (excludeEventId)
       params = params.append('excludeEventId', excludeEventId.toString());
-    return this.http.get<PagedData<string, UserData>>(
+    return this.http.get<PagedData<string, UserListDto>>(
       `${this.apiBaseUrl}/user/search`,
       {
         ...getAuthHeaders(),

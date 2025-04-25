@@ -8,12 +8,16 @@ public record UserListDto
     public string Name { get; init; }
     public string Email { get; init; }
     public Guid? GroupAssignment { get; init; }
+    public bool IsActive { get; init; }
+    public DateTime? InvitedAt { get; init; }
 
     public static UserListDto FromUser(User user) => new()
     {
         Id = user.Id,
         Name = user.Name,
         Email = user.Email,
-        GroupAssignment = user.GroupAssignment
+        GroupAssignment = user.GroupAssignment,
+        IsActive = user.IsActive,
+        InvitedAt = user.InvitedAt
     };
 }

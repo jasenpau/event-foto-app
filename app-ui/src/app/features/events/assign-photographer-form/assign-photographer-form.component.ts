@@ -12,7 +12,7 @@ import { ButtonType } from '../../../components/button/button.types';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PagedDataTable } from '../../../components/paged-table/paged-table';
-import { UserData } from '../../../services/user/user.types';
+import { UserListDto } from '../../../services/user/user.types';
 import { EventService } from '../../../services/event/event.service';
 import { UserService } from '../../../services/user/user.service';
 import { debounceTime, takeUntil, tap } from 'rxjs';
@@ -43,7 +43,7 @@ export class AssignPhotographerFormComponent
   @Output() formEvent = new EventEmitter<string>();
   protected readonly ButtonType = ButtonType;
 
-  protected userTableData: PagedDataTable<string, UserData>;
+  protected userTableData: PagedDataTable<string, UserListDto>;
   protected searchControl = new FormControl('', [Validators.max(100)]);
   protected isLoading = false;
 
@@ -52,7 +52,7 @@ export class AssignPhotographerFormComponent
     private userService: UserService,
   ) {
     super();
-    this.userTableData = new PagedDataTable<string, UserData>(
+    this.userTableData = new PagedDataTable<string, UserListDto>(
       (searchTerm, keyOffset, pageSize) => {
         return this.userService.searchUsers(
           searchTerm,

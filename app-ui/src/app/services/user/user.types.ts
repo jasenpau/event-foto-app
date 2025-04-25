@@ -4,6 +4,16 @@ export interface UserData {
   name: string;
   groupAssignment?: string;
   isActive: boolean;
+  invitedAt?: string;
+}
+
+export interface UserListDto {
+  id: string;
+  email: string;
+  name: string;
+  groupAssignment?: string;
+  isActive: boolean;
+  invitedAt?: string;
 }
 
 export interface AppGroupsDto {

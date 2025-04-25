@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PagedDataTable } from '../../../components/paged-table/paged-table';
-import { AppGroupsDto, UserData } from '../../../services/user/user.types';
+import { AppGroupsDto, UserListDto } from '../../../services/user/user.types';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../../services/user/user.service';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
@@ -14,6 +14,7 @@ import { SpinnerComponent } from '../../../components/spinner/spinner.component'
 import { PaginationControlsComponent } from '../../../components/pagination-controls/pagination-controls.component';
 import { SideViewComponent } from '../../../components/side-view/side-view.component';
 import { UserInviteFormComponent } from '../user-invite-form/user-invite-form.component';
+import { formatLithuanianDate } from '../../../helpers/formatLithuanianDate';
 
 const USER_TABLE_PAGE_SIZE = 20;
 
@@ -40,7 +41,7 @@ export class UserListComponent
   protected readonly buttonType = ButtonType;
   protected readonly buttonIcon = SvgIconSrc;
 
-  protected userTableData: PagedDataTable<string, UserData>;
+  protected userTableData: PagedDataTable<string, UserListDto>;
   protected searchControl = new FormControl('', [Validators.max(100)]);
   protected appGroups: AppGroupsDto;
   protected showUserInviteForm = false;
@@ -48,7 +49,7 @@ export class UserListComponent
   constructor(private userService: UserService) {
     super();
     this.appGroups = this.userService.getAppGroups();
-    this.userTableData = new PagedDataTable<string, UserData>(
+    this.userTableData = new PagedDataTable<string, UserListDto>(
       (searchTerm, keyOffset, pageSize) => {
         return this.userService.searchUsers(searchTerm, keyOffset, pageSize);
       },
@@ -88,6 +89,16 @@ export class UserListComponent
 
   protected openInviteForm() {
     this.showUserInviteForm = true;
+  }
+
+  protected getInviteDate(dateString?: string) {
+    if (dateString) {
+      const date = new Date(dateString);
+      date.setDate(date.getDate() + 7);
+      return `Galioja iki ${formatLithuanianDate(date)}`;
+    }
+
+    return 'Nėra pakvietimo';
   }
 
   private initializeSearch() {
