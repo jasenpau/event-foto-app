@@ -30,7 +30,7 @@
         {{ getUserGroupName(user.groupAssignment) }}
       </td>
       <td class="table__no-wrap">
-        {{ getInviteDate(user.invitedAt) }}
+        {{ user.isActive ? 'Priimtas' : getInviteDate(user.invitedAt) }}
       </td>
       <td class="table__pad-row-end">
         <app-button [link]="'/users/' + user.id" [type]="buttonType.Text">
