@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { catchError, map, Observable, of, OperatorFunction, tap } from 'rxjs';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
 import { AppGroupsDto, RegisterDto, UserData } from './user.types';
 import { AuthService } from '../auth/auth.service';
 import { UserGroup } from '../../globals/userGroups';
 import { PagedData } from '../../components/paged-table/paged-table.types';
 import { EnvService } from '../environment/env.service';
+import { handleApiError } from '../../helpers/handleApiError';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -20,19 +22,20 @@ export class UserService {
     private readonly http: HttpClient,
     private readonly authService: AuthService,
     private readonly envService: EnvService,
+    private readonly router: Router,
   ) {
     this.apiBaseUrl = this.envService.getConfig().apiBaseUrl;
     this.appGroups = this.envService.getConfig().groups;
   }
 
-  fetchCurrentUserData(): Observable<UserData> {
+  fetchCurrentUserData() {
     const userId = this.authService.getUserTokenData()?.uniqueId;
     if (!userId) {
       this.authService.msalLogin();
     }
 
     return this.http
-      .get<UserData>(`${this.apiBaseUrl}/user/${userId}`, getAuthHeaders())
+      .get<UserData>(`${this.apiBaseUrl}/user/current`, getAuthHeaders())
       .pipe(
         tap((userData) => {
           this.currentUser = userData;
@@ -99,5 +102,21 @@ export class UserService {
         params,
       },
     );
+  }
+
+  inviteUser(props: {
+    name: string;
+    email: string;
+    groupAssignment: string | null;
+  }) {
+    return this.http.post<string>(`${this.apiBaseUrl}/user/invite`, props, {
+      ...getAuthHeaders(),
+    });
+  }
+
+  validateInvite(inviteKey: string) {
+    return this.http.post<boolean>(`${this.apiBaseUrl}/user/validate-invite`, {
+      inviteKey,
+    });
   }
 }

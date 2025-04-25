@@ -24,6 +24,7 @@
       <PackageReference Include="Azure.Storage.Queues" Version="12.22.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.2" />
       <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="9.0.2" />
+      <PackageReference Include="Microsoft.Graph" Version="5.77.0" />
       <PackageReference Include="Microsoft.Identity.Web.TokenAcquisition" Version="3.8.0" />
     </ItemGroup>
 

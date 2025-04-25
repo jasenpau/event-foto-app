@@ -1,9 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { InputFieldComponent } from '../../../components/forms/input-field/input-field.component';
 import { ButtonComponent } from '../../../components/button/button.component';
-import { ButtonSize, ButtonType } from '../../../components/button/button.types';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../../services/auth/auth.service';
+import {
+  ButtonSize,
+  ButtonType,
+} from '../../../components/button/button.types';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { UserService } from '../../../services/user/user.service';
 import { takeUntil, tap } from 'rxjs';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
@@ -15,14 +22,16 @@ import { Router } from '@angular/router';
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
-export class RegisterComponent extends DisposableComponent implements OnInit, OnDestroy {
+export class RegisterComponent
+  extends DisposableComponent
+  implements OnInit, OnDestroy
+{
   buttonType = ButtonType.Filled;
   buttonSize = ButtonSize.Wide;
 
   form: FormGroup;
 
   constructor(
-    private authService: AuthService,
     private userService: UserService,
     private router: Router,
   ) {
@@ -32,7 +41,10 @@ export class RegisterComponent extends DisposableComponent implements OnInit, On
         Validators.required,
         Validators.maxLength(40),
       ]),
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl({ value: '', disabled: true }, [
+        Validators.required,
+        Validators.email,
+      ]),
     });
   }
 
@@ -41,7 +53,7 @@ export class RegisterComponent extends DisposableComponent implements OnInit, On
   }
 
   loadFormData() {
-    const user = this.authService.getUserTokenData();
+    const user = this.userService.getCurrentUserData();
     if (user) {
       this.form.patchValue({
         name: user.name,
@@ -59,7 +71,8 @@ export class RegisterComponent extends DisposableComponent implements OnInit, On
           tap(() => {
             this.router.navigate(['/']);
           }),
-          takeUntil(this.destroy$))
+          takeUntil(this.destroy$),
+        )
         .subscribe();
     }
   }

@@ -12,6 +12,8 @@ import { ButtonType } from '../../../components/button/button.types';
 import { SvgIconSrc } from '../../../components/svg-icon/svg-icon.types';
 import { SpinnerComponent } from '../../../components/spinner/spinner.component';
 import { PaginationControlsComponent } from '../../../components/pagination-controls/pagination-controls.component';
+import { SideViewComponent } from '../../../components/side-view/side-view.component';
+import { UserInviteFormComponent } from '../user-invite-form/user-invite-form.component';
 
 const USER_TABLE_PAGE_SIZE = 20;
 
@@ -25,6 +27,8 @@ const USER_TABLE_PAGE_SIZE = 20;
     ReactiveFormsModule,
     SpinnerComponent,
     PaginationControlsComponent,
+    SideViewComponent,
+    UserInviteFormComponent,
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',
@@ -39,6 +43,7 @@ export class UserListComponent
   protected userTableData: PagedDataTable<string, UserData>;
   protected searchControl = new FormControl('', [Validators.max(100)]);
   protected appGroups: AppGroupsDto;
+  protected showUserInviteForm = false;
 
   constructor(private userService: UserService) {
     super();
@@ -57,10 +62,12 @@ export class UserListComponent
     this.initializeSearch();
   }
 
-  protected getUserGroupName(groupId: string): string {
+  protected getUserGroupName(groupId?: string): string {
     if (!this.appGroups) return '';
 
     switch (groupId) {
+      case undefined:
+        return 'Žiūrėtojas';
       case this.appGroups.systemAdministrators:
         return 'Sistemos administratorius';
       case this.appGroups.eventAdministrators:
@@ -70,6 +77,17 @@ export class UserListComponent
       default:
         return '';
     }
+  }
+
+  protected handleUserInviteFormEvent($event: string) {
+    if ($event === 'invited' || $event === 'cancel') {
+      this.showUserInviteForm = false;
+      this.userTableData.setSearchTerm('');
+    }
+  }
+
+  protected openInviteForm() {
+    this.showUserInviteForm = true;
   }
 
   private initializeSearch() {

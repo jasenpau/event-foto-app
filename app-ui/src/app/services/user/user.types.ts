@@ -2,7 +2,8 @@ export interface UserData {
   id: string;
   email: string;
   name: string;
-  groupAssignment: string;
+  groupAssignment?: string;
+  isActive: boolean;
 }
 
 export interface AppGroupsDto {

@@ -17,9 +17,22 @@ public class UserRepository : IUserRepository
     public Task<User> GetUserByIdAsync(Guid userId) =>
         Users.SingleOrDefaultAsync(u => u.Id == userId);
 
+    public Task<User> GetByInvitationKeyAsync(string invitationKey) =>
+        Users.SingleOrDefaultAsync(u => u.InvitationKey == invitationKey);
+
+    public Task<User> GetUserByEmailAsync(string email) =>
+        Users.SingleOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+
     public async Task<User> CreateUserAsync(User user)
     {
         Users.Add(user);
+        await _context.SaveChangesAsync();
+        return user;
+    }
+
+    public async Task<User> UpdateUserAsync(User user)
+    {
+        _context.Entry(user).State = EntityState.Modified;
         await _context.SaveChangesAsync();
         return user;
     }

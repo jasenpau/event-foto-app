@@ -10,6 +10,7 @@ import {
 import { AuthService } from '../services/auth/auth.service';
 import { UserService } from '../services/user/user.service';
 import { map } from 'rxjs';
+import { UserData } from '../services/user/user.types';
 
 @Injectable({
   providedIn: 'root',
@@ -31,14 +32,18 @@ export class AuthGuard implements CanActivate {
       });
     }
 
-    if (this.userService.getCurrentUserData() === null) {
-      return this.userService.fetchCurrentUserData().pipe(
-        map((data) => {
-          return Boolean(data);
-        }),
-      );
-    }
+    const userData = this.userService.getCurrentUserData();
+    if (userData) return this.userActiveCheck(userData, route);
 
-    return true;
+    return this.userService
+      .fetchCurrentUserData()
+      .pipe(map((user) => this.userActiveCheck(user, route)));
   }
+
+  private userActiveCheck = (user: UserData, route: ActivatedRouteSnapshot) => {
+    if (route.routeConfig?.data?.['ignoreActiveCheck'] === true) return true;
+
+    const registerPath = this.router.parseUrl('/register');
+    return user.isActive ? true : new RedirectCommand(registerPath);
+  };
 }

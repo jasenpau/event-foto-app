@@ -27,6 +27,14 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
             entity.Property(u => u.Name)
                 .IsRequired()
                 .HasMaxLength(100);
+            entity.Property(u => u.IsActive)
+                .IsRequired()
+                .HasDefaultValue(false);
+            entity.Property(u => u.InvitationKey)
+                .IsRequired(false)
+                .HasMaxLength(255);
+            entity.HasIndex(u => u.InvitationKey)
+                .IsUnique();
         });
 
         modelBuilder.Entity<Event>(entity =>

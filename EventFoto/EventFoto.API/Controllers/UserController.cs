@@ -1,8 +1,10 @@
 using EventFoto.Core.ControllerBase;
 using EventFoto.Core.Extensions;
+using EventFoto.Core.Providers;
 using EventFoto.Core.Users;
 using EventFoto.Data.DTOs;
 using EventFoto.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventFoto.API.Controllers;
@@ -12,40 +14,32 @@ namespace EventFoto.API.Controllers;
 public class UserController : AppControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IGroupSettingsProvider _groupProvider;
 
     public UserController(
-        IUserService userService)
+        IUserService userService,
+        IGroupSettingsProvider groupProvider)
     {
         _userService = userService;
+        _groupProvider = groupProvider;
     }
 
-    [HttpGet("{id:guid}")]
-    public async Task<ActionResult<UserDto>> GetUser(Guid id)
+    [HttpGet("current")]
+    public async Task<ActionResult<UserDto>> GetCurrentUserAsync()
     {
         var userId = RequestUserId();
-        if (userId != id) return Unauthorized();
-        
         var result = await _userService.GetUserAsync(userId);
-        return result.Success ? Ok(result.Data) : result.ToErrorResponse();
+
+        return result.Success ? Ok(UserDto.FromModel(result.Data)) : result.ToErrorResponse();
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<UserDto>> Register([FromBody] RegisterDto registerDto)
+    public async Task<ActionResult<UserDto>> InviteRegister([FromBody] RegisterDto registerDto)
     {
         var userId = RequestUserId();
-        var userCreateDetails = new UserCreateDetails
-        {
-            Email = registerDto.Email,
-            Name = registerDto.Name,
-        };
-        var result = await _userService.CreateUserAsync(userCreateDetails, userId);
+        var result = await _userService.InviteRegisterAsync(registerDto, userId);
         return result.Success
-            ? Ok(new UserDto()
-            {
-                Id = result.Data.Id,
-                Email = result.Data.Email,
-                Name = result.Data.Name,
-            })
+            ? Ok(UserDto.FromModel(result.Data))
             : result.ToErrorResponse();
     }
 
@@ -60,5 +54,30 @@ public class UserController : AppControllerBase
 
         var result = searchResult.Data.ToDto(UserListDto.FromUser);
         return Ok(result);
+    }
+
+    [HttpPost("invite")]
+    public async Task<ActionResult<Guid>> InviteUser([FromBody] UserInviteRequestDto inviteDto)
+    {
+        if (!string.IsNullOrEmpty(inviteDto.GroupAssignment) &&
+            !_groupProvider.IsValidGroupId(inviteDto.GroupAssignment))
+        {
+            return BadRequest(new ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Detail = "Group assignment is invalid."
+            });
+        }
+
+        var result = await _userService.InviteUserAsync(inviteDto);
+        return result.Success ? Ok(result.Data) : result.ToErrorResponse();
+    }
+
+    [HttpPost("validate-invite")]
+    [AllowAnonymous]
+    public async Task<ActionResult<bool>> ValidateInvite([FromBody] InviteValidateRequestDto dto)
+    {
+        var result = await _userService.ValidateInviteKey(dto.InviteKey);
+        return result.Success ? Ok(result.Data) : result.ToErrorResponse();
     }
 }

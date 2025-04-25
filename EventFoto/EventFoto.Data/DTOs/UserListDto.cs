@@ -7,7 +7,7 @@ public record UserListDto
     public Guid Id { get; init; }
     public string Name { get; init; }
     public string Email { get; init; }
-    public Guid GroupAssignment { get; init; }
+    public Guid? GroupAssignment { get; init; }
 
     public static UserListDto FromUser(User user) => new()
     {

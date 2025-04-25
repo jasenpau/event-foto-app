@@ -173,8 +173,8 @@ export class EventPreviewComponent
   }
 
   protected getGalleryThumbnail(gallery: GalleryDto) {
-    if (gallery.filename)
-      return `${this.sasUri?.baseUri}/event-${gallery.eventId}/thumb-${gallery.filename}?${this.sasUri?.params}`;
+    if (gallery.thumbnail)
+      return `${this.sasUri?.baseUri}/event-${gallery.eventId}/thumb-${gallery.thumbnail}?${this.sasUri?.params}`;
 
     return `/assets/default-cover.jpg`;
   }

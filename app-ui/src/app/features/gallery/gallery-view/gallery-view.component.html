@@ -11,7 +11,7 @@
         </app-button>
         <app-button
           [type]="ButtonType.Text"
-          [disabled]="imageData.length !== 0"
+          [disabled]="imageData.length !== 0 || galleryDetails?.isMainGallery"
           (click)="deleteGallery()">
           Ištrinti galeriją
         </app-button>

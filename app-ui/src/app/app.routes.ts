@@ -13,6 +13,8 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { EventCalendarComponent } from './features/events/event-calendar/event-calendar.component';
 import { UserListComponent } from './features/user-admin/user-list/user-list.component';
 import { GalleryViewComponent } from './features/gallery/gallery-view/gallery-view.component';
+import { RegisterComponent } from './features/auth/register/register.component';
+import { InviteEntryComponent } from './features/auth/invite-entry/invite-entry.component';
 
 // Routes and their respective layouts. If layout is left blank, empty-layout is used.
 export const routes: Routes = [
@@ -64,6 +66,20 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+    data: { layout: LayoutType.CenterColumn },
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    data: {
+      layout: LayoutType.CenterColumn,
+      ignoreActiveCheck: true,
+    },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'invite/:inviteKey',
+    component: InviteEntryComponent,
     data: { layout: LayoutType.CenterColumn },
   },
   {

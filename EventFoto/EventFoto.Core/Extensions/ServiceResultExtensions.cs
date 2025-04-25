@@ -11,6 +11,7 @@ public static class ServiceResultExtensions
         var problemDetails = ToProblemDetails(result);
         return result.StatusCode switch
         {
+            HttpStatusCode.Unauthorized => new UnauthorizedObjectResult(problemDetails),
             HttpStatusCode.NotFound => new NotFoundObjectResult(problemDetails),
             HttpStatusCode.Conflict => new ConflictObjectResult(problemDetails),
             _ => new BadRequestObjectResult(problemDetails)

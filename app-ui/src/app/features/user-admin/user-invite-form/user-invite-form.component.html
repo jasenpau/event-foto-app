@@ -1,0 +1,30 @@
+<div class="invite-user">
+  <div class="page-header">
+    <h2 class="text-headline-large no-margin">Naujas naudotojas</h2>
+    <app-button [type]="ButtonType.Text" (click)="cancel()">Atšaukti</app-button>
+  </div>
+  <form *ngIf="inviteUserForm" [formGroup]="inviteUserForm" (ngSubmit)="onSubmit()">
+    <app-form-input-section
+      inputId="name"
+      label="Vardas ir pavardė"
+      description="Naudotojo vardas ir pavardė">
+      <app-input-field id="name" formControlName="name" supportingText="Privaloma" />
+    </app-form-input-section>
+    <app-form-input-section
+      inputId="email"
+      label="El. paštas"
+      description="Naudotojo el. pašto adresas">
+      <app-input-field id="email" formControlName="email" supportingText="Privaloma" type="email" />
+    </app-form-input-section>
+    <app-form-input-section
+      inputId="group"
+      label="Grupė"
+      description="Naudotojo teisių grupė">
+      <app-select id="group" formControlName="group">
+        <option *ngFor="let group of userGroups" [value]="group.id">{{ group.name }}</option>
+      </app-select>
+    </app-form-input-section>
+    <app-button>Pakviesti</app-button>
+  </form>
+</div>
+<app-loader-overlay *ngIf="isLoading" />

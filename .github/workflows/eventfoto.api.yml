@@ -87,5 +87,6 @@ jobs:
               AzureAd__ClientId="${{ vars.AZURE_AD_CLIENT_ID }}" \
               Groups__SystemAdminGroupId="${{ vars.GROUPS_SYSTEM_ADMIN_ID }}" \
               Groups__EventAdminGroupId="${{ vars.GROUPS_EVENT_ADMIN_ID }}" \
-              Groups__PhotographerGroupId="${{ vars.GROUPS_PHOTOGRAPHER_ID }}"
+              Groups__PhotographerGroupId="${{ vars.GROUPS_PHOTOGRAPHER_ID }}" \
+              PublicAppUrl=${{ vars.APP_BASE_URL }}
           

@@ -8,15 +8,17 @@ public record GalleryDto
     public int Id { get; init; }
     public string Name { get; init; }
     public int EventId { get; init; }
-    public string Filename { get; init; }
+    public bool? IsMainGallery { get; init; }
+    public string Thumbnail { get; init; }
     public int PhotoCount { get; init; }
 
     public static GalleryDto FromModel(Gallery gallery) => new()
     {
         Id = gallery.Id,
         Name = gallery.Name,
+        IsMainGallery = gallery.Event?.DefaultGalleryId == gallery.Id,
         EventId = gallery.EventId,
-        Filename = null,
+        Thumbnail = null,
         PhotoCount = 0,
     };
 
@@ -25,7 +27,7 @@ public record GalleryDto
         Id = projection.Id,
         Name = projection.Name,
         EventId = projection.EventId,
-        Filename = projection.Filename,
+        Thumbnail = projection.Filename,
         PhotoCount = projection.PhotoCount ?? 0,
     };
 }

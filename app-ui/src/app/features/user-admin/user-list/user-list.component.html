@@ -1,7 +1,7 @@
 <div class="user-list">
   <div class="page-header">
     <h2 class="text-headline-large no-margin">Naudotojai</h2>
-    <app-button link="/users/invite">
+    <app-button (click)="openInviteForm()">
       Pakviesti naudotoją
     </app-button>
   </div>
@@ -39,3 +39,6 @@
     <app-spinner />
   </div>
 </div>
+<app-side-view *ngIf="showUserInviteForm">
+  <app-invite-user-form (formEvent)="handleUserInviteFormEvent($event)" />
+</app-side-view>

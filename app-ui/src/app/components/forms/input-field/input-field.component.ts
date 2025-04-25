@@ -3,7 +3,7 @@ import { NgClass, NgIf } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormElementBaseComponent } from '../form-element-base/form-element-base.component';
 
-type SupportedFieldTypes = 'text' | 'password';
+type SupportedFieldTypes = 'text' | 'password' | 'email';
 
 @Component({
   selector: 'app-input-field',

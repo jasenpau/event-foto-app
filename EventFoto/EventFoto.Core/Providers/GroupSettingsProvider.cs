@@ -27,4 +27,11 @@ public class GroupSettingsProvider : IGroupSettingsProvider
     }
     
     public AppGroups GetGroups() => _groups;
+
+    public bool IsValidGroupId(string groupId)
+    {
+        return groupId == _groups.SystemAdministrators ||
+               groupId == _groups.EventAdministrators ||
+               groupId == _groups.Photographers;
+    }
 }

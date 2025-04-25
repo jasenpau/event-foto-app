@@ -58,18 +58,12 @@ export class LoginRedirectComponent
     this.userService
       .fetchCurrentUserData()
       .pipe(
-        tap(async (exists) => {
+        tap((userData) => {
           this.loaderService.finishLoading(COMPONENT_LOADING_KEY);
-          if (exists) {
-            await this.router.navigate([
-              this.redirectUrl ? this.redirectUrl : '/',
-            ]);
-          }
-        }),
-        handleApiError((error) => {
-          this.loaderService.finishLoading(COMPONENT_LOADING_KEY);
-          if (error.status === 404) {
-            this.showRegisterForm = true;
+          if (userData.isActive) {
+            this.router.navigate([this.redirectUrl ? this.redirectUrl : '/']);
+          } else {
+            this.router.navigate(['/register']);
           }
         }),
         takeUntil(this.destroy$),
