@@ -21,8 +21,15 @@ public class CleanupFunction
         FunctionContext context, CancellationToken cancellationToken)
     {
         var executionDateTime = DateTime.UtcNow;
-        var deletedEntries = await _cleanupProcessor.CleanupAsync(executionDateTime, cancellationToken);
-        _logger.Log(LogLevel.Information, "Clean up processor executed at: {time}. Deleted {count} entries.",
-            executionDateTime.ToString("yyyy-MM-dd HH:mm:ss"), deletedEntries);
+        var result = await _cleanupProcessor.CleanupAsync(executionDateTime, cancellationToken);
+        _logger.Log(LogLevel.Information,
+            "Clean up processor executed at: {time}. " +
+            "Deleted {downloadReq} download requests, " +
+            "{downloadZips} download zips, " +
+            "{uploadBatches} upload batches.",
+            executionDateTime.ToString("yyyy-MM-dd HH:mm:ss"),
+            result.DownloadRequests,
+            result.DownloadZips,
+            result.UploadBatches);
     }
 }

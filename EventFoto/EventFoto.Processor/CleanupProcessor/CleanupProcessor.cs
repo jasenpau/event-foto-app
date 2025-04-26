@@ -22,7 +22,7 @@ public class CleanupProcessor : ICleanupProcessor
         _configuration = configuration;
     }
 
-    public async Task<int> CleanupAsync(DateTime executionDateTime, CancellationToken cancellationToken)
+    public async Task<CleanupResult> CleanupAsync(DateTime executionDateTime, CancellationToken cancellationToken)
     {
         var deletionDate = executionDateTime.AddDays(-1);
         var downloadRequests = await _downloadRequestRepository.GetBeforeDate(deletionDate);
@@ -34,6 +34,11 @@ public class CleanupProcessor : ICleanupProcessor
         var uploadBatchDeletionTask = _uploadBatchRepository.DeleteBeforeDateAsync(deletionDate);
 
         await Task.WhenAll(blobDeletionTask, dbDeletionTask, uploadBatchDeletionTask);
-        return downloadRequests.Count;
+        return new CleanupResult
+        {
+            DownloadRequests = downloadRequests.Count,
+            DownloadZips = blobDeletionTask.Result.Success ? blobDeletionTask.Result.Data : 0,
+            UploadBatches = uploadBatchDeletionTask.Result
+        };
     }
 }

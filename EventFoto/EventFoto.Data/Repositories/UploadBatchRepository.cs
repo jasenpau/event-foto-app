@@ -37,10 +37,12 @@ public class UploadBatchRepository : IUploadBatchRepository
         await _context.SaveChangesAsync();
     }
 
-    public Task DeleteBeforeDateAsync(DateTime date)
+    public async Task<int> DeleteBeforeDateAsync(DateTime date)
     {
         var batches = UploadBatches.Where(x => x.ProcessedOn < date);
         UploadBatches.RemoveRange(batches);
-        return _context.SaveChangesAsync();
+        var count = batches.Count();
+        await _context.SaveChangesAsync();
+        return count;
     }
 }

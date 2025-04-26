@@ -2,5 +2,5 @@
 
 public interface ICleanupProcessor
 {
-    public Task<int> CleanupAsync(DateTime executionDateTime, CancellationToken cancellationToken);
+    public Task<CleanupResult> CleanupAsync(DateTime executionDateTime, CancellationToken cancellationToken);
 }
