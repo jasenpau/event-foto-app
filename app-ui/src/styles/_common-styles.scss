@@ -7,23 +7,6 @@
   margin: 0;
 }
 
-.page-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 48px;
-  height: 40px;
-
-  @media (max-width: breakpoints.$mobile-large) {
-    padding-left: 48px;
-
-    .text-headline-large {
-      font-size: 1.5rem;
-    }
-  }
-}
-
 .side-view-header {
   width: 100%;
   display: flex;
@@ -33,6 +16,8 @@
   height: 40px;
 
   @media (max-width: breakpoints.$mobile-large) {
+    margin-bottom: 24px;
+
     .text-headline-large {
       font-size: 1.5rem;
     }

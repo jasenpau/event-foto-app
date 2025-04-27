@@ -1,11 +1,11 @@
 <div class="event" *ngIf="event">
-  <div class="page-header">
+  <app-page-header [disableStyles]="true">
     <div class="event__header">
-      <app-button link="/event" [type]="ButtonType.Text">Grįžti į renginius</app-button>
+      <app-button class="event__header-back" link="/event" [type]="ButtonType.Text">Grįžti į renginius</app-button>
       <h2 class="text-headline-large no-margin">{{event.name}}</h2>
       <app-event-badge [event]="event" />
     </div>
-  </div>
+  </app-page-header>
   <div class="event__details">
     <div class="event__details-column">
       <div class="event__details-row">
@@ -28,7 +28,7 @@
     <div class="event__details-column">
       <div class="event__details-row">
         <div class="event__photographers-header">
-          <p class="text-title-medium">Fotografai</p>
+          <p class="text-title-large">Fotografai</p>
           <div class="event__photographers-actions">
             <app-button *ngIf="showAssignSelf && !isAssignedSelf" [type]="ButtonType.Filled" (click)="assignSelf()">
               Pridėti save
@@ -60,8 +60,8 @@
       </div>
     </div>
   </div>
-  <div class="event__photos">
-    <h3>Renginio nuotraukų galerijos</h3>
+  <div>
+    <h3 class="event__galleries-header text-title-large no-margin">Renginio nuotraukų galerijos</h3>
     <app-card-grid>
       <app-card-item
         *ngFor="let gallery of galleries"
@@ -70,6 +70,7 @@
         [description]="getPhotoCountString(gallery.photoCount)"
         (click)="openGallery(gallery)"
       />
+      <!-- eslint-disable-next-line -->
       <div class="event__add-gallery" (click)="openGalleryForm()">
         <div class="event__add-gallery-icon">
           <app-svg-icon [iconSrc]="SvgIconSrc.Add" [size]="SvgIconSize.Large" />

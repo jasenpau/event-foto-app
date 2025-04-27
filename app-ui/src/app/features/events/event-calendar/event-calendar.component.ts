@@ -18,6 +18,7 @@ import {
 } from '../../../helpers/formatLithuanianDate';
 import { isSameLocalDay } from '../../../helpers/isSameLocalDay';
 import { RouterLink } from '@angular/router';
+import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
 
 interface CalendarDisplayEvent {
   event: EventListDto;
@@ -34,6 +35,7 @@ interface CalendarDisplayEvent {
     ReactiveFormsModule,
     NgIf,
     RouterLink,
+    PageHeaderComponent,
   ],
   templateUrl: './event-calendar.component.html',
   styleUrl: './event-calendar.component.scss',

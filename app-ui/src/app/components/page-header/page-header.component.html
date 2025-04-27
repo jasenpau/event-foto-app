@@ -1,0 +1,4 @@
+<div class="page-header" [ngClass]="{'page-header--defaults': !disableStyles}">
+  <app-icon-button class="page-header__menu-button" [icon]="SvgIconSrc.Menu" (click)="toggleSidenav()" />
+  <ng-content />
+</div>

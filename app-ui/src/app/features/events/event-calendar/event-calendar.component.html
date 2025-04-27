@@ -1,9 +1,7 @@
 <div class="calendar">
-  <div class="page-header">
-    <div>
-      <h2 class="text-headline-large no-margin">Renginių kalendorius</h2>
-    </div>
-  </div>
+  <app-page-header>
+    <h2 class="text-headline-large no-margin">Renginių kalendorius</h2>
+  </app-page-header>
 
   <form class="calendar__controls" [formGroup]="calendarForm">
     <app-select id="year" label="Metai" formControlName="year">

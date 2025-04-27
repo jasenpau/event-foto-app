@@ -34,6 +34,7 @@ import {
   SvgIconSrc,
 } from '../../../components/svg-icon/svg-icon.types';
 import { GalleryService } from '../../../services/gallery/gallery.service';
+import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
 
 const COMPONENT_LOADING_KEY = 'event-preview';
 
@@ -52,6 +53,7 @@ const COMPONENT_LOADING_KEY = 'event-preview';
     CardItemComponent,
     CreateEditGalleryFormComponent,
     AppSvgIconComponent,
+    PageHeaderComponent,
   ],
   templateUrl: './event-preview.component.html',
   styleUrl: './event-preview.component.scss',

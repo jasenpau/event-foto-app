@@ -1,5 +1,6 @@
 @use "sass:color";
 @use "colors";
+@use "breakpoints";
 
 .photo {
   position: absolute;
@@ -13,16 +14,25 @@
   padding: 32px 0;
   justify-items: center;
   align-items: center;
+  z-index: 5;
 
   &__viewer {
     display: flex;
     height: 100%;
     min-height: 0;
 
+    @media (max-width: breakpoints.$screen-small) {
+      flex-direction: column;
+      overflow: scroll;
+    }
   }
 
   &__image-container{
     flex: 1;
+
+    @media (max-width: breakpoints.$screen-small) {
+      flex: unset;
+    }
   }
 
   &__image {

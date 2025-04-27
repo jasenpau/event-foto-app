@@ -1,10 +1,10 @@
 <div class="user-list">
-  <div class="page-header">
+  <app-page-header>
     <h2 class="text-headline-large no-margin">Naudotojai</h2>
     <app-button (click)="openInviteForm()">
       Pakviesti naudotoją
     </app-button>
-  </div>
+  </app-page-header>
   <div>
     <app-input-field id="search" label="Paieška" [formControl]="searchControl" />
     <app-pagination-controls [tableData]="userTableData" />

@@ -1,5 +1,6 @@
 @use "colors";
 @use "functions";
+@use "breakpoints";
 
 .snackbar {
   &__container {
@@ -10,6 +11,13 @@
     right: 48px;
     gap: 16px;
     min-width: 350px;
+
+    @media (max-width: breakpoints.$mobile-large) {
+      min-width: 0;
+      width: calc(100vw - 32px);
+      top: 32px;
+      right: 16px;
+    }
   }
 
   &__message {

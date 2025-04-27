@@ -3,11 +3,11 @@ import { SidenavComponent } from '../../sidenav/sidenav.component';
 import { SpinnerComponent } from '../../spinner/spinner.component';
 import { DisposableComponent } from '../../disposable/disposable.component';
 import { LoaderService } from '../../../services/loader/loader.service';
-import { filter, takeUntil, tap } from 'rxjs';
+import { takeUntil, tap } from 'rxjs';
 import { NgClass, NgIf } from '@angular/common';
 import { IconButtonComponent } from '../../icon-button/icon-button.component';
 import { SvgIconSrc } from '../../svg-icon/svg-icon.types';
-import { NavigationEnd, Router } from '@angular/router';
+import { LayoutService } from '../../../services/layout/layout.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -30,7 +30,7 @@ export class MainLayoutComponent
 
   constructor(
     private readonly loaderService: LoaderService,
-    private router: Router,
+    private readonly layoutService: LayoutService,
   ) {
     super();
   }
@@ -45,12 +45,9 @@ export class MainLayoutComponent
       )
       .subscribe();
 
-    this.router.events
+    this.layoutService.showSidenav$
       .pipe(
-        filter((event) => event instanceof NavigationEnd),
-        tap(() => {
-          this.showSidenav = false;
-        }),
+        tap((value) => (this.showSidenav = value)),
         takeUntil(this.destroy$),
       )
       .subscribe();
@@ -59,6 +56,6 @@ export class MainLayoutComponent
   protected readonly SvgIconSrc = SvgIconSrc;
 
   toggleSidenav() {
-    this.showSidenav = !this.showSidenav;
+    this.layoutService.toggleSideNav();
   }
 }

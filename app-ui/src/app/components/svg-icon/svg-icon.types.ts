@@ -15,6 +15,10 @@ export enum SvgIconSrc {
   ArrowForward = 'assets/icons/arrow-forward.svg',
   ArrowBack = 'assets/icons/arrow-back.svg',
   Menu = 'assets/icons/menu.svg',
+  Delete = 'assets/icons/delete.svg',
+  Download = 'assets/icons/download.svg',
+  FileMove = 'assets/icons/file-move.svg',
+  RemoveSelection = 'assets/icons/remove-selection.svg',
 }
 
 export enum SvgIconSize {

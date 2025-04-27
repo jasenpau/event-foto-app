@@ -1,7 +1,13 @@
 @use "sass:color";
 @use "colors";
+@use "functions";
 
 :host {
+  display: block;
+  position: relative;
+}
+
+:host:hover .icon-button__tooltip {
   display: block;
 }
 
@@ -17,6 +23,10 @@
 
   &--dark {
     fill: colors.$on-surface;
+
+    &:disabled {
+      fill: colors.$outline;
+    }
 
     &:hover,
     &:focus-visible {
@@ -36,5 +46,25 @@
   &--large {
     width: 40px;
     height: 40px;
+  }
+
+  &__tooltip {
+    display: none;
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: functions.rem-size(14px);
+    font-weight: 500;
+    height: 32px;
+    line-height: 32px;
+    background: colors.$surface-tint-3;
+    padding: 0 10px;
+    border-radius: 4px;
+    text-wrap: nowrap;
+  }
+
+  &:focus-visible ~ &__tooltip {
+    display: block;
   }
 }

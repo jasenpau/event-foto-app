@@ -30,6 +30,7 @@ import { SpinnerComponent } from '../../../components/spinner/spinner.component'
 import { PaginationControlsComponent } from '../../../components/pagination-controls/pagination-controls.component';
 import { SideViewComponent } from '../../../components/side-view/side-view.component';
 import { CreateEventComponent } from '../create-event/create-event.component';
+import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
 
 const EVENT_TABLE_PAGE_SIZE = 20;
 
@@ -49,6 +50,7 @@ const EVENT_TABLE_PAGE_SIZE = 20;
     SideViewComponent,
     CreateEventComponent,
     NgClass,
+    PageHeaderComponent,
   ],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',

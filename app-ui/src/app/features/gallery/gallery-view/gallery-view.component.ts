@@ -45,6 +45,8 @@ import { MovePhotosFormComponent } from '../move-photos-form/move-photos-form.co
 import { SvgIconSrc } from '../../../components/svg-icon/svg-icon.types';
 import { UploadPhotoFormComponent } from '../upload-photo-form/upload-photo-form.component';
 import { EMPTY_SUBSCRIPTION } from 'rxjs/internal/Subscription';
+import { IconButtonComponent } from '../../../components/icon-button/icon-button.component';
+import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
 
 const COMPONENT_LOADING_KEY = 'gallery-view';
 
@@ -61,6 +63,8 @@ const COMPONENT_LOADING_KEY = 'gallery-view';
     CreateEditGalleryFormComponent,
     MovePhotosFormComponent,
     UploadPhotoFormComponent,
+    IconButtonComponent,
+    PageHeaderComponent,
   ],
   templateUrl: './gallery-view.component.html',
   styleUrl: './gallery-view.component.scss',
@@ -160,8 +164,16 @@ export class GalleryViewComponent
     }
   }
 
-  protected handlePhotoClick(image: PhotoListDto, index: number) {
-    this.openPhoto(image, index);
+  protected handlePhotoClick(
+    $event: MouseEvent,
+    image: PhotoListDto,
+    index: number,
+  ) {
+    if ($event.ctrlKey) {
+      this.togglePhotoSelect(image);
+    } else {
+      this.openPhoto(image, index);
+    }
   }
 
   protected handlePhotoKeyboard(

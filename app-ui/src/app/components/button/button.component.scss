@@ -19,6 +19,7 @@ button.button {
   height: 40px;
   justify-content: center;
   padding: 8px 12px;
+  text-wrap: nowrap;
 
   transition-property: background-color, box-shadow;
   transition-duration: 150ms;

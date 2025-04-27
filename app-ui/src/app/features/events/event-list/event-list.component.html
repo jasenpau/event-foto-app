@@ -1,5 +1,5 @@
 <div class="event-list">
-  <div class="page-header">
+  <app-page-header>
     <h2 class="text-headline-large no-margin">Renginiai</h2>
     <app-button
       *ngIf="showCreateEvent"
@@ -7,7 +7,7 @@
       (click)="openEventCreateForm()">
       Sukurti renginį
     </app-button>
-  </div>
+  </app-page-header>
   <app-button class="event-list__collapsable-filters-button" (click)="toggleFilters()">Filtrai</app-button>
   <div class="event-list__collapsable-filters" [ngClass]="{ 'event-list__collapsable-filters--open': showFilters }">
     <form class="event-list__controls" [formGroup]="searchForm">
@@ -30,8 +30,8 @@
         label="Rodyti archyvuotus renginius"
       />
     </form>
-    <app-pagination-controls [tableData]="eventsTableData" />
   </div>
+  <app-pagination-controls [tableData]="eventsTableData" />
   <table
     class="event-list__table table"
     *ngIf="!eventsTableData.loading">

@@ -1,5 +1,15 @@
-<button class="icon-button" [ngClass]="{
-  'icon-button--dark': theme === 'dark',
-  'icon-button--light': theme === 'light',
-  'icon-button--large': size === 'large',
-}"><app-svg-icon [iconSrc]="icon" [size]="svgSize" /></button>
+<button
+  class="icon-button"
+  [ngClass]="{
+    'icon-button--dark': theme === 'dark',
+    'icon-button--light': theme === 'light',
+    'icon-button--large': size === 'large',
+  }"
+  [disabled]="disabled"
+>
+  <app-svg-icon
+    [iconSrc]="icon"
+    [size]="svgSize"
+  />
+</button>
+<span *ngIf="tooltip" class="icon-button__tooltip">{{ tooltip }}</span>

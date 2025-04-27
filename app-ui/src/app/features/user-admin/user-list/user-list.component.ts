@@ -15,6 +15,7 @@ import { PaginationControlsComponent } from '../../../components/pagination-cont
 import { SideViewComponent } from '../../../components/side-view/side-view.component';
 import { UserInviteFormComponent } from '../user-invite-form/user-invite-form.component';
 import { formatLithuanianDate } from '../../../helpers/formatLithuanianDate';
+import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
 
 const USER_TABLE_PAGE_SIZE = 20;
 
@@ -30,6 +31,7 @@ const USER_TABLE_PAGE_SIZE = 20;
     PaginationControlsComponent,
     SideViewComponent,
     UserInviteFormComponent,
+    PageHeaderComponent,
   ],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',

@@ -20,6 +20,7 @@
     color: colors.$on-primary;
     fill: colors.$on-primary;
     padding: 8px 24px 8px 16px;
+    text-wrap: nowrap;
 
     transition-property: background-color, box-shadow;
     transition-duration: 150ms;

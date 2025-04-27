@@ -30,11 +30,11 @@ $sidenav-width: 80px;
   }
 
   &__content {
-    padding: 32px 40px 0;
+    padding: 32px 40px;
     overflow: scroll;
 
     @media (max-width: breakpoints.$mobile-large) {
-      padding: 24px 16px 0;
+      padding: 24px 16px;
     }
   }
 
@@ -49,17 +49,10 @@ $sidenav-width: 80px;
     align-items: center;
     height: 100vh;
     width: calc(100vw - $sidenav-width);
-  }
-
-  &__menu-button {
-    display: none;
-    position: absolute;
-    top: 28px;
-    left: 16px;
-    fill: colors.$on-surface;
 
     @media (max-width: breakpoints.$mobile-large) {
-      display: block;
+      left: 0;
+      width: 100vw;
     }
   }
 
