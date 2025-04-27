@@ -2,6 +2,7 @@
 @use "colors";
 @use "typography";
 @use "functions";
+@use "breakpoints";
 
 .sidenav {
   background: colors.$surface;
@@ -9,6 +10,10 @@
   padding: 32px 0;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: breakpoints.$mobile-large) {
+    padding-top: 48px;
+  }
 
   &__list {
     flex: 1;
@@ -30,7 +35,7 @@
     text-decoration: none;
 
     &:hover,
-    &:focus {
+    &:focus-visible {
       color: colors.$on-surface;
 
       .sidenav__list-item-pill {
@@ -38,7 +43,7 @@
       }
     }
 
-    &:focus {
+    &:focus-visible {
       outline: 2px solid colors.$primary;
     }
 
@@ -50,6 +55,12 @@
         background: colors.$primary-container;
         fill: colors.$primary-on-container;
       }
+    }
+
+    @media (max-width: breakpoints.$mobile-large) {
+      flex-direction: row;
+      gap: 16px;
+      padding: 4px 32px;
     }
   }
 

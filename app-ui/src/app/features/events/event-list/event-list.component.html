@@ -8,7 +8,8 @@
       Sukurti renginį
     </app-button>
   </div>
-  <div>
+  <app-button class="event-list__collapsable-filters-button" (click)="toggleFilters()">Filtrai</app-button>
+  <div class="event-list__collapsable-filters" [ngClass]="{ 'event-list__collapsable-filters--open': showFilters }">
     <form class="event-list__controls" [formGroup]="searchForm">
       <app-input-field id="search" label="Paieška" formControlName="search" />
       <app-date-picker

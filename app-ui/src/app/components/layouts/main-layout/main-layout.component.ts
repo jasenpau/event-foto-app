@@ -3,12 +3,21 @@ import { SidenavComponent } from '../../sidenav/sidenav.component';
 import { SpinnerComponent } from '../../spinner/spinner.component';
 import { DisposableComponent } from '../../disposable/disposable.component';
 import { LoaderService } from '../../../services/loader/loader.service';
-import { takeUntil, tap } from 'rxjs';
-import { NgIf } from '@angular/common';
+import { filter, takeUntil, tap } from 'rxjs';
+import { NgClass, NgIf } from '@angular/common';
+import { IconButtonComponent } from '../../icon-button/icon-button.component';
+import { SvgIconSrc } from '../../svg-icon/svg-icon.types';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-layout',
-  imports: [SidenavComponent, SpinnerComponent, NgIf],
+  imports: [
+    SidenavComponent,
+    SpinnerComponent,
+    NgIf,
+    IconButtonComponent,
+    NgClass,
+  ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',
 })
@@ -17,8 +26,12 @@ export class MainLayoutComponent
   implements OnInit, OnDestroy
 {
   protected showLoader = false;
+  protected showSidenav = false;
 
-  constructor(private readonly loaderService: LoaderService) {
+  constructor(
+    private readonly loaderService: LoaderService,
+    private router: Router,
+  ) {
     super();
   }
 
@@ -31,5 +44,21 @@ export class MainLayoutComponent
         takeUntil(this.destroy$),
       )
       .subscribe();
+
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        tap(() => {
+          this.showSidenav = false;
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+  }
+
+  protected readonly SvgIconSrc = SvgIconSrc;
+
+  toggleSidenav() {
+    this.showSidenav = !this.showSidenav;
   }
 }

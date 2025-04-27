@@ -1,4 +1,5 @@
 @use "colors";
+@use "breakpoints";
 
 $sidenav-width: 80px;
 
@@ -7,15 +8,34 @@ $sidenav-width: 80px;
   grid-template-columns: $sidenav-width 1fr;
   height: 100vh;
 
+  @media (max-width: breakpoints.$mobile-large) {
+    grid-template-columns: 1fr;
+  }
+
   &__sidenav {
-    grid-column: 1 / 2;
     border-right: 1px solid colors.$outline;
+
+    @media (max-width: breakpoints.$mobile-large) {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      width: 100vw;
+      height: 100vh;
+
+      &--open {
+        display: block;
+      }
+    }
   }
 
   &__content {
-    padding: 32px 40px;
-    grid-column: 2 / 3;
+    padding: 32px 40px 0;
     overflow: scroll;
+
+    @media (max-width: breakpoints.$mobile-large) {
+      padding: 24px 16px 0;
+    }
   }
 
   &__loader {
@@ -29,5 +49,36 @@ $sidenav-width: 80px;
     align-items: center;
     height: 100vh;
     width: calc(100vw - $sidenav-width);
+  }
+
+  &__menu-button {
+    display: none;
+    position: absolute;
+    top: 28px;
+    left: 16px;
+    fill: colors.$on-surface;
+
+    @media (max-width: breakpoints.$mobile-large) {
+      display: block;
+    }
+  }
+
+  &__close-button {
+    display: none;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    fill: colors.$on-surface;
+    z-index: 3;
+  }
+
+  @media (max-width: breakpoints.$mobile-large) {
+    .hide-mobile-sidenav {
+      display: none;
+
+      &--open {
+        display: block;
+      }
+    }
   }
 }

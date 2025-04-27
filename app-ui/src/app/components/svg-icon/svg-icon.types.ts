@@ -14,6 +14,7 @@ export enum SvgIconSrc {
   Upload = 'assets/icons/upload.svg',
   ArrowForward = 'assets/icons/arrow-forward.svg',
   ArrowBack = 'assets/icons/arrow-back.svg',
+  Menu = 'assets/icons/menu.svg',
 }
 
 export enum SvgIconSize {

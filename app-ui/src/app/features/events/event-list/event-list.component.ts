@@ -6,7 +6,7 @@ import {
 } from '../../../services/event/event.types';
 import { ButtonComponent } from '../../../components/button/button.component';
 import { ButtonType } from '../../../components/button/button.types';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { SvgIconSrc } from '../../../components/svg-icon/svg-icon.types';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { UserService } from '../../../services/user/user.service';
@@ -48,6 +48,7 @@ const EVENT_TABLE_PAGE_SIZE = 20;
     PaginationControlsComponent,
     SideViewComponent,
     CreateEventComponent,
+    NgClass,
   ],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',
@@ -64,6 +65,7 @@ export class EventListComponent
   protected showCreateEvent = false;
   protected minFromDate: Date = new Date(0);
   protected showEventCreateForm = false;
+  protected showFilters = false;
 
   constructor(
     private eventService: EventService,
@@ -158,5 +160,9 @@ export class EventListComponent
   private updateViewPermissions() {
     const groups = this.userService.getUserGroups();
     this.showCreateEvent = groups.includes(UserGroup.EventAdmin);
+  }
+
+  toggleFilters() {
+    this.showFilters = !this.showFilters;
   }
 }

@@ -1,5 +1,12 @@
 <div class="main-layout">
-  <app-sidenav class="main-layout__sidenav" />
+  <app-icon-button class="main-layout__menu-button" [icon]="SvgIconSrc.Menu" (click)="toggleSidenav()" />
+  <app-icon-button
+    class="main-layout__close-button hide-mobile-sidenav"
+    [ngClass]="{ 'hide-mobile-sidenav--open': showSidenav }"
+    [icon]="SvgIconSrc.Close"
+    (click)="toggleSidenav()"
+  />
+  <app-sidenav class="main-layout__sidenav hide-mobile-sidenav" [ngClass]="{ 'hide-mobile-sidenav--open': showSidenav }" />
   <div class="main-layout__content">
     <ng-content />
   </div>

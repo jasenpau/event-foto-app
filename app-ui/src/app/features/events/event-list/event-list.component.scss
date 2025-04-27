@@ -6,6 +6,30 @@
     grid-template-columns: minmax(150px, 1fr) minmax(250px, 0.5fr) minmax(250px, 0.5fr) minmax(180px, 0.3fr);
     gap: 1rem;
     width: 100%;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+  }
+
+  @media (max-width: 900px) {
+   &__collapsable-filters {
+     display: none;
+
+     &--open {
+       display: block;
+     }
+   }
+  }
+
+  &__collapsable-filters-button {
+    display: none;
+    margin-bottom: 16px;
+
+    @media (max-width: 900px) {
+      display: inline-block;
+    }
   }
 
   &__table {
