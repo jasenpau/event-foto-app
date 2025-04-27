@@ -1,6 +1,33 @@
 <div class="watermarks-search">
-  <form class="watermarks-search__controls">
-    <app-input-field id="query" formControlName="query" label="Pavadinimas" />
-  </form>
-  <app-pagination-controls />
+  <div>
+    <app-input-field id="query" label="Paieška" [formControl]="searchControl" />
+    <app-pagination-controls [tableData]="watermarkTableData" />
+  </div>
+  <table
+    class="watermarks-search__table table"
+    *ngIf="!watermarkTableData.loading">
+    <tr>
+      <th class="table__pad-row-start">Pavadinimas</th>
+      <th>Peržiūra</th>
+      <th class="table__pad-row-end"></th>
+    </tr>
+    <tr *ngFor="let watermark of watermarkTableData.pageData">
+      <td class="table__pad-row-start">
+        {{ watermark.name }}
+      </td>
+      <td class="watermarks-search__preview">
+        <img [src]="getWatermarkUrl(watermark)" [alt]="watermark.name">
+      </td>
+      <td class="table__pad-row-end">
+        <app-button
+          [type]="buttonType.Text"
+          (click)="triggerActionEvent(watermark.id)">
+          {{ actionButtonLabel }}
+        </app-button>
+      </td>
+    </tr>
+  </table>
+  <div class="watermarks-search__table-loader" *ngIf="watermarkTableData.loading">
+    <app-spinner />
+  </div>
 </div>

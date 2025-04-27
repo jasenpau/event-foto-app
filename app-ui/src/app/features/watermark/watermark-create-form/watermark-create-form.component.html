@@ -1,1 +1,12 @@
-<p>watermark-create-form works!</p>
+<div class="side-view-header">
+  <h3 class="text-headline-large no-margin">Pridėti vandenženklį</h3>
+  <app-button [type]="ButtonType.Text" (click)="cancel()">Uždaryti</app-button>
+</div>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <app-input-field id="name" label="Vandenženklio pavadinimas" formControlName="name" />
+  <input type="file" id="file" formControlName="file" #fileInput>
+  <app-button [disabled]="isLoading">
+    Pridėti
+  </app-button>
+</form>
+<app-loader-overlay *ngIf="isLoading" />

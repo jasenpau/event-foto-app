@@ -2,6 +2,7 @@
   "baseUrl": "",
   "apiBaseUrl": "",
   "archiveDownloadsContainer": "",
+  "watermarksContainer": "",
   "auth": {
     "clientId": "",
     "authority": ""

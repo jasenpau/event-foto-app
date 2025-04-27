@@ -54,8 +54,8 @@ public class WatermarkController : AppControllerBase
             : result.ToErrorResponse();
     }
 
-    [HttpPost("search")]
-    public ActionResult<PagedData<string, WatermarkDto>> SearchWatermarks([FromBody] WatermarkSearchParams searchParams)
+    [HttpGet("search")]
+    public ActionResult<PagedData<string, WatermarkDto>> SearchWatermarks([FromQuery] WatermarkSearchParams searchParams)
     {
         var result = _watermarkService.SearchWatermarksAsync(searchParams);
         return result.Success ? Ok(result.Data.ToDto(WatermarkDto.FromModel)) : result.ToErrorResponse();

@@ -7,5 +7,12 @@
       Sukurti vandens ženklą
     </app-button>
   </app-page-header>
-  <app-watermark-search />
+  <app-watermark-search
+    [refresh]="refreshEvent"
+    actionButtonLabel="Ištrinti"
+    (actionWatermarkId)="handleAction($event)"
+  />
 </div>
+<app-side-view *ngIf="showCreateForm">
+  <app-watermark-create-form (formEvent)="handleCreateFormEvent($event)" />
+</app-side-view>
