@@ -55,6 +55,11 @@ export class SidenavComponent {
 
     if (groups.includes(UserGroup.EventAdmin)) {
       sidenavItems.push({
+        title: 'Vandens ženklai',
+        link: '/watermark',
+        icon: SvgIconSrc.Watermark,
+      });
+      sidenavItems.push({
         title: 'Naudotojai',
         link: '/users',
         icon: SvgIconSrc.Users,

@@ -16,19 +16,6 @@ public record ServiceResult<T>
         Success = true,
         Data = data,
     };
-    
-    public static ServiceResult<T> Ok(T data, HttpStatusCode statusCode) => new()
-    {
-        Success = true,
-        Data = data,
-        StatusCode = statusCode
-    };
-    
-    public static ServiceResult<T> Fail(string error) => new()
-    {
-        Success = false,
-        ErrorMessage = error,
-    };
 
     public static ServiceResult<T> Fail(string error, HttpStatusCode statusCode) => new()
     {
@@ -43,5 +30,13 @@ public record ServiceResult<T>
         ErrorMessage = error,
         ErrorKey = errorKey,
         StatusCode = statusCode,
+    };
+
+    public static ServiceResult<T> Fail<TSource>(ServiceResult<TSource> result) => new()
+    {
+        Success = false,
+        ErrorMessage = result.ErrorMessage,
+        ErrorKey = result.ErrorKey,
+        StatusCode = result.StatusCode,
     };
 }

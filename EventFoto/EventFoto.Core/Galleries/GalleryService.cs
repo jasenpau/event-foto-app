@@ -61,7 +61,7 @@ public class GalleryService : IGalleryService
     public async Task<ServiceResult<Gallery>> UpdateGalleryAsync(int id, string name)
     {
         var gallery = await _galleryRepository.GetByIdAsync(id);
-        if (gallery == null) return ServiceResult<Gallery>.Fail($"Gallery with ID {id} not found");
+        if (gallery == null) return ServiceResult<Gallery>.Fail($"Gallery with ID {id} not found", HttpStatusCode.NotFound);
 
         gallery.Name = name;
         var result = await _galleryRepository.UpdateAsync(gallery);

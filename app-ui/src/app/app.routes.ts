@@ -17,6 +17,7 @@ import { RegisterComponent } from './features/auth/register/register.component';
 import { InviteEntryComponent } from './features/auth/invite-entry/invite-entry.component';
 import { PrivacyPolicyComponent } from './features/static-pages/privacy-policy/privacy-policy.component';
 import { TermsOfServiceComponent } from './features/static-pages/terms-of-service/terms-of-service.component';
+import { WatermarkPageComponent } from './features/watermark/watermark-page/watermark-page.component';
 
 // Routes and their respective layouts. If layout is left blank, empty-layout is used.
 export const routes: Routes = [
@@ -105,6 +106,13 @@ export const routes: Routes = [
     component: PrivacyPolicyComponent,
     data: {
       layout: LayoutType.Empty,
+    },
+  },
+  {
+    path: 'watermark',
+    component: WatermarkPageComponent,
+    data: {
+      layout: LayoutType.Main,
     },
   },
   {

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { BadgeComponent } from '../badge/badge.component';
 import { BadgeType } from '../badge/badge.types';
-import { EventListDto } from '../../services/event/event.types';
+import { EventDto, EventListDto } from '../../services/event/event.types';
 import { getStartOfDay } from '../../helpers/getStartOfDay';
 
 @Component({
@@ -10,11 +10,11 @@ import { getStartOfDay } from '../../helpers/getStartOfDay';
   templateUrl: './event-badge.component.html',
 })
 export class EventBadgeComponent {
-  @Input({ required: true }) event!: EventListDto;
+  @Input({ required: true }) event!: EventListDto | EventDto;
 
   protected readonly badgeType = BadgeType;
 
-  protected isActive(event: EventListDto) {
+  protected isActive(event: EventListDto | EventDto) {
     const now = new Date();
     const normalizedStartDate = this.normalizeDate(event.startDate);
     const normalizedEndDate = event.endDate
@@ -24,7 +24,7 @@ export class EventBadgeComponent {
     return normalizedStartDate <= now && now <= normalizedEndDate;
   }
 
-  protected isPast(event: EventListDto) {
+  protected isPast(event: EventListDto | EventDto) {
     const now = new Date();
     const normalizedEndDate = event.endDate
       ? this.normalizeDate(event.endDate)

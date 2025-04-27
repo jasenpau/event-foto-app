@@ -19,6 +19,7 @@ export enum SvgIconSrc {
   Download = 'assets/icons/download.svg',
   FileMove = 'assets/icons/file-move.svg',
   RemoveSelection = 'assets/icons/remove-selection.svg',
+  Watermark = 'assets/icons/watermark.svg',
 }
 
 export enum SvgIconSize {

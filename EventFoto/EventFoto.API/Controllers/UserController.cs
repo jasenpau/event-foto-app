@@ -11,6 +11,7 @@ namespace EventFoto.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class UserController : AppControllerBase
 {
     private readonly IUserService _userService;

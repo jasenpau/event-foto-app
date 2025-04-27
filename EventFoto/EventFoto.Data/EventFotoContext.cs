@@ -11,6 +11,7 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
     public DbSet<Gallery> Galleries { get; set; }
     public DbSet<DownloadRequest> DownloadRequests { get; set; }
     public DbSet<UploadBatch> UploadBatches { get; set; }
+    public DbSet<Watermark> Watermarks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -61,6 +62,9 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
                 .OnDelete(DeleteBehavior.Restrict);
             entity.HasMany(e => e.Photographers)
                 .WithMany(u => u.AssignedPhotographerEvents);
+            entity.HasOne(e => e.Watermark)
+                .WithMany()
+                .OnDelete(DeleteBehavior.SetNull);
             entity.ToTable("Events");
         });
 
@@ -99,6 +103,9 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
                 .WithMany(e => e.Galleries)
                 .HasForeignKey(g => g.EventId)
                 .HasPrincipalKey(e => e.Id);
+            entity.HasOne(g => g.Watermark)
+                .WithMany()
+                .OnDelete(DeleteBehavior.SetNull);
             entity.ToTable("Gallery");
         });
 

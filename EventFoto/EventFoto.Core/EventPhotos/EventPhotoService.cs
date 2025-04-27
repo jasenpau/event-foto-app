@@ -91,8 +91,7 @@ public class EventPhotoService : IEventPhotoService
         var eventResult = await _eventService.GetById(eventId);
         if (!eventResult.Success)
         {
-            return ServiceResult<SasUriResponseDto>.Fail(eventResult.ErrorMessage,
-                eventResult.StatusCode ?? HttpStatusCode.NotFound);
+            return ServiceResult<SasUriResponseDto>.Fail(eventResult);
         }
 
         var tokenExpiryInMinutes = int.Parse(_configuration["AzureStorage:TokenExpiryInMinutes"] ?? "20");
@@ -100,8 +99,7 @@ public class EventPhotoService : IEventPhotoService
         var sasResult = await _blobStorage.GetUploadSasUri(containerName, tokenExpiryInMinutes);
         if (!sasResult.Success)
         {
-            return ServiceResult<SasUriResponseDto>.Fail(sasResult.ErrorMessage,
-                sasResult.StatusCode ?? HttpStatusCode.InternalServerError);
+            return ServiceResult<SasUriResponseDto>.Fail(sasResult);
         }
 
         var result = new SasUriResponseDto
@@ -118,8 +116,7 @@ public class EventPhotoService : IEventPhotoService
         var tokenExpiryInMinutes = int.Parse(_configuration["AzureStorage:TokenExpiryInMinutes"] ?? "20");
         var sasUriResult = _blobStorage.GetReadOnlySasUri(tokenExpiryInMinutes);
         if (!sasUriResult.Success)
-            return ServiceResult<SasUriResponseDto>.Fail(sasUriResult.ErrorMessage,
-                sasUriResult.StatusCode ?? HttpStatusCode.InternalServerError);
+            return ServiceResult<SasUriResponseDto>.Fail(sasUriResult);
 
         var result = new SasUriResponseDto
         {
