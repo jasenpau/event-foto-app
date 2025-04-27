@@ -55,7 +55,7 @@ public class GalleryRepository : IGalleryRepository
         return true;
     }
 
-    public Task<List<EventGalleryProjection>> GetPagedByEventIdAsync(int eventId)
+    public Task<List<EventGalleryProjection>> GetByEventIdAsync(int eventId)
     {
         return _context.Database
             .SqlQuery<EventGalleryProjection>($"SELECT * FROM get_event_galleries({eventId})")

@@ -94,7 +94,7 @@ public class GalleryService : IGalleryService
 
     public async Task<ServiceResult<List<EventGalleryProjection>>> GetGalleriesAsync(int eventId)
     {
-        var galleries = await _galleryRepository.GetPagedByEventIdAsync(eventId);
+        var galleries = await _galleryRepository.GetByEventIdAsync(eventId);
         return ServiceResult<List<EventGalleryProjection>>.Ok(galleries);
     }
 }

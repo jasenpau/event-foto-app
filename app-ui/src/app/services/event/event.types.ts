@@ -4,6 +4,8 @@ export interface EventListDto {
   isArchived: boolean;
   startDate: string;
   endDate?: string;
+  thumbnail?: string;
+  photoCount: number;
 }
 
 export interface EventCreateDto {

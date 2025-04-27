@@ -1,3 +1,4 @@
+using EventFoto.Data.DatabaseProjections;
 using EventFoto.Data.DTOs;
 using EventFoto.Data.Models;
 
@@ -10,5 +11,5 @@ public interface IEventRepository
     public Task<IList<User>> GetEventPhotographersAsync(int eventId);
     public Task<Event> CreateAsync(Event eventData, Gallery defaultGallery);
     public Task<Event> SaveEventAsync(Event eventData);
-    public Task<PagedData<string, Event>> SearchEventsAsync(EventSearchParams searchParams);
+    public Task<PagedData<string, EventListProjection>> SearchEventsAsync(EventSearchParams searchParams);
 }

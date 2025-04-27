@@ -1,4 +1,5 @@
 using System.Globalization;
+using EventFoto.Data.DatabaseProjections;
 using EventFoto.Data.DTOs;
 using EventFoto.Data.Models;
 using Microsoft.EntityFrameworkCore;
@@ -79,58 +80,36 @@ public class EventRepository : IEventRepository
         return eventData;
     }
 
-    public async Task<PagedData<string, Event>> SearchEventsAsync(EventSearchParams searchParams)
+    public async Task<PagedData<string, EventListProjection>> SearchEventsAsync(EventSearchParams searchParams)
     {
-        IQueryable<Event> query = Events.Include(e => e.CreatedByUser);
-
+        var idOffset = 0;
+        var dateOffset = DateTime.MinValue.ToUniversalTime();
         if (!string.IsNullOrWhiteSpace(searchParams.KeyOffset))
         {
             var offset = searchParams.KeyOffset.Split('|');
-            var offsetDate = DateTime.Parse(offset[0], CultureInfo.InvariantCulture,
+            dateOffset = DateTime.Parse(offset[0], CultureInfo.InvariantCulture,
                 DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
-            var offsetId = int.Parse(offset[1]);
-            query = query.Where(e => e.StartDate >= offsetDate && e.Id > offsetId);
+            idOffset = int.Parse(offset[1]);
         }
 
-        if (!string.IsNullOrWhiteSpace(searchParams.Query))
-        {
-            query = query.Where(e => EF.Functions.ILike(e.Name, $"%{searchParams.Query}%"));
-        }
+        var nameQuery = string.IsNullOrWhiteSpace(searchParams.Query) ? null : searchParams.Query;
+        var fromDate = searchParams.FromDate;
+        var toDate = searchParams.ToDate;
+        var showArchived = searchParams.ShowArchived;
+        // Add one more element to check for next page
+        var pageSize = searchParams.PageSize + 1;
 
-        if (searchParams.FromDate.HasValue)
-        {
-            query = query.Where(e =>
-                e.StartDate >= searchParams.FromDate.Value ||
-                (e.EndDate.HasValue && e.EndDate.Value >= searchParams.FromDate.Value)
-            );
-        }
+        var queryResult = await _context.Database
+            .SqlQuery<EventListProjection>($"SELECT * FROM event_list_search({idOffset}, {dateOffset}, {nameQuery}, {fromDate}, {toDate}, {showArchived}, {pageSize})")
+            .ToListAsync();
 
-        if (searchParams.ToDate.HasValue)
-        {
-            query = query.Where(e =>
-                e.StartDate <= searchParams.ToDate.Value ||
-                (e.EndDate.HasValue && e.EndDate.Value <= searchParams.ToDate.Value)
-            );
-        }
-
-        if (searchParams.ShowArchived is null or false)
-        {
-            query = query.Where(e => e.IsArchived == false);
-        }
-
-        query = query.OrderBy(e => e.StartDate).ThenBy(e => e.Id);
-        // Add +1 to the query to check, if we have the next page.
-        query = query.Take(searchParams.PageSize + 1);
-
-        var queryResult = await query.ToListAsync();
         var hasNextPage = queryResult.Count > searchParams.PageSize;
         // Remove last element to constrain to the queried page size.
         if (hasNextPage) queryResult.RemoveAt(queryResult.Count - 1);
 
-        return new PagedData<string, Event>
+        return new PagedData<string, EventListProjection>
         {
             Data = queryResult,
-
             PageSize = searchParams.PageSize,
             KeyOffset = searchParams.KeyOffset,
             HasNextPage = hasNextPage

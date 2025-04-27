@@ -1,5 +1,6 @@
 using System.Net;
 using EventFoto.Data.BlobStorage;
+using EventFoto.Data.DatabaseProjections;
 using EventFoto.Data.DTOs;
 using EventFoto.Data.Extensions;
 using EventFoto.Data.Models;
@@ -113,12 +114,14 @@ public class EventService : IEventService
         }
     }
 
-    public async Task<ServiceResult<PagedData<string, Event>>> SearchEventsAsync(EventSearchParams searchParams)
+    public async Task<ServiceResult<PagedData<string, EventListProjection>>> SearchEventsAsync(
+        EventSearchParams searchParams)
     {
         var result = await _eventRepository.SearchEventsAsync(searchParams);
         return result is not null
-            ? ServiceResult<PagedData<string, Event>>.Ok(result)
-            : ServiceResult<PagedData<string, Event>>.Fail("Query failed", HttpStatusCode.InternalServerError);
+            ? ServiceResult<PagedData<string, EventListProjection>>.Ok(result)
+            : ServiceResult<PagedData<string, EventListProjection>>.Fail("Query failed",
+                HttpStatusCode.InternalServerError);
     }
 
     private IList<EventPhotographerDto> MapAssignedPhotographersToDto(IList<User> photographers)

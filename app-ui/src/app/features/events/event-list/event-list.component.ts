@@ -21,7 +21,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { debounceTime, takeUntil, tap } from 'rxjs';
+import { debounceTime, forkJoin, map, takeUntil, tap } from 'rxjs';
 import { DatePickerComponent } from '../../../components/forms/date-picker/date-picker.component';
 import { PagedDataLoader } from '../../../components/paged-table/paged-table.types';
 import { getStartOfDay } from '../../../helpers/getStartOfDay';
@@ -31,6 +31,12 @@ import { PaginationControlsComponent } from '../../../components/pagination-cont
 import { SideViewComponent } from '../../../components/side-view/side-view.component';
 import { CreateEventComponent } from '../create-event/create-event.component';
 import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
+import { CardGridComponent } from '../../../components/cards/card-grid/card-grid.component';
+import { CardItemComponent } from '../../../components/cards/card-item/card-item.component';
+import { SasUri } from '../../../services/image/image.types';
+import { BlobService } from '../../../services/blob/blob.service';
+import { PluralDefinition, pluralizeLt } from '../../../helpers/pluralizeLt';
+import { RouterLink } from '@angular/router';
 
 const EVENT_TABLE_PAGE_SIZE = 20;
 
@@ -51,6 +57,9 @@ const EVENT_TABLE_PAGE_SIZE = 20;
     CreateEventComponent,
     NgClass,
     PageHeaderComponent,
+    CardGridComponent,
+    CardItemComponent,
+    RouterLink,
   ],
   templateUrl: './event-list.component.html',
   styleUrl: './event-list.component.scss',
@@ -68,10 +77,12 @@ export class EventListComponent
   protected minFromDate: Date = new Date(0);
   protected showEventCreateForm = false;
   protected showFilters = false;
+  protected sasUri?: SasUri;
 
   constructor(
     private eventService: EventService,
     private userService: UserService,
+    private readonly blobService: BlobService,
   ) {
     super();
     this.eventsTableData = new PagedDataTable<string, EventListDto>(
@@ -107,6 +118,24 @@ export class EventListComponent
     if ($event === 'cancel') {
       this.showEventCreateForm = false;
     }
+  }
+
+  protected getEventThumbnail(event: EventListDto) {
+    if (event.thumbnail)
+      return `${this.sasUri?.baseUri}/event-${event.id}/thumb-${event.thumbnail}?${this.sasUri?.params}`;
+
+    return `/assets/default-cover.jpg`;
+  }
+
+  protected getPhotoCountString(photoCount: number) {
+    if (photoCount === 0) return 'Nėra nuotraukų';
+
+    const photoDefinition: PluralDefinition = {
+      singular: 'nuotrauka',
+      smallPlural: 'nuotraukos',
+      largePlural: 'nuotraukų',
+    };
+    return pluralizeLt(photoCount, photoDefinition);
   }
 
   private initializeSearch() {
@@ -156,7 +185,15 @@ export class EventListComponent
       searchParams['showArchived'] = formValue['showArchived'];
     }
 
-    return this.eventService.searchEvents(searchParams);
+    const sas = this.blobService.getReadOnlySasUri();
+    const events = this.eventService.searchEvents(searchParams);
+
+    return forkJoin([sas, events]).pipe(
+      map(([sas, events]) => {
+        this.sasUri = sas;
+        return events;
+      }),
+    );
   };
 
   private updateViewPermissions() {

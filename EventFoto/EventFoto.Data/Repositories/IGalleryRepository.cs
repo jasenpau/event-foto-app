@@ -11,5 +11,5 @@ public interface IGalleryRepository
     public Task<Gallery> CreateAsync(Gallery gallery);
     public Task<Gallery> UpdateAsync(Gallery gallery);
     public Task<bool> DeleteAsync(int id);
-    public Task<List<EventGalleryProjection>> GetPagedByEventIdAsync(int eventId);
+    public Task<List<EventGalleryProjection>> GetByEventIdAsync(int eventId);
 }

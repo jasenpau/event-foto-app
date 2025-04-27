@@ -1,4 +1,4 @@
-using EventFoto.Data.Models;
+using EventFoto.Data.DatabaseProjections;
 
 namespace EventFoto.Data.DTOs;
 
@@ -9,13 +9,17 @@ public record EventListDto
     public DateTime StartDate { get; init; }
     public DateTime? EndDate { get; init; }
     public bool IsArchived { get; init; }
+    public string Thumbnail { get; init; }
+    public int PhotoCount { get; init; }
 
-    public static EventListDto FromEvent(Event eventData) => new()
+    public static EventListDto FromProjection(EventListProjection eventData) => new()
     {
         Id = eventData.Id,
         Name = eventData.Name,
         StartDate = eventData.StartDate,
         EndDate = eventData.EndDate,
-        IsArchived = eventData.IsArchived
+        IsArchived = eventData.IsArchived,
+        Thumbnail = eventData.Filename,
+        PhotoCount = eventData.PhotoCount ?? 0,
     };
 }

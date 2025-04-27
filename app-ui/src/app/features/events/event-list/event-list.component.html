@@ -32,32 +32,28 @@
     </form>
   </div>
   <app-pagination-controls [tableData]="eventsTableData" />
-  <table
-    class="event-list__table table"
-    *ngIf="!eventsTableData.loading">
-    <tr>
-      <th class="event-list__table-name table__pad-row-start">Pavadinimas</th>
-      <th class="table__no-wrap">Pradžios data ir laikas</th>
-      <th>Būsena</th>
-      <th class="table__pad-row-end"></th>
-    </tr>
-    <tr *ngFor="let event of eventsTableData.pageData">
-      <td class="event-list__table-name table__pad-row-start">
-        {{ event.name }}
-      </td>
-      <td class="table__no-wrap">
-        {{ formatDate(event.startDate) }}
-      </td>
-      <td>
-        <app-event-badge [event]="event" />
-      </td>
-      <td class="table__pad-row-end">
-        <app-button [link]="'/event/' + event.id" [type]="buttonType.Text">
-          Peržiūrėti
-        </app-button>
-      </td>
-    </tr>
-  </table>
+  <app-card-grid class="event-list__card-grid" *ngIf="!eventsTableData.loading">
+    <app-card-item
+      *ngFor="let event of eventsTableData.pageData"
+      [title]="event.name"
+      [imageUrl]="getEventThumbnail(event)"
+      [hasContent]="true"
+      [routerLink]="'/event/' + event.id"
+    >
+      <div class="event-list__card-content">
+        <div>
+          <p class="text-label-medium no-margin">Pradžia</p>
+          <p class="text-body-large no-margin">{{formatDate(event.startDate)}}</p>
+        </div>
+        <div *ngIf="event.endDate">
+          <p class="text-label-medium no-margin">Pabaiga</p>
+          <p class="text-body-large no-margin">{{formatDate(event.endDate)}}</p>
+        </div>
+        <p class="text-body-large no-margin">{{ getPhotoCountString(event.photoCount) }}</p>
+        <app-event-badge class="event-list__status" [event]="event" />
+      </div>
+    </app-card-item>
+  </app-card-grid>
   <div class="event-list__table-loader" *ngIf="eventsTableData.loading">
     <app-spinner />
   </div>

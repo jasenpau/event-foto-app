@@ -31,12 +31,12 @@ public class EventController : AppControllerBase
             return searchResult.ToErrorResponse();
         }
 
-        var result = searchResult.Data.ToDto(EventListDto.FromEvent);
+        var result = searchResult.Data.ToDto(EventListDto.FromProjection);
         return Ok(result);
     }
     
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<EventListDto[]>> GetEventById(int id)
+    public async Task<ActionResult<EventDto>> GetEventById(int id)
     {
         var result = await _eventService.GetById(id);
         return result.Success ? Ok(EventDto.FromEvent(result.Data)) : result.ToErrorResponse();

@@ -3,7 +3,10 @@
     <img [src]="imageUrl" [alt]="title">
   </div>
   <div class="card__content">
-    <h2 class="card__title text-title-medium no-margin">{{ title }}</h2>
-    <p class="card__description text-body-large no-margin">{{ description }}</p>
+    <h2 class="card__title text-title-medium no-margin" *ngIf="title">{{ title }}</h2>
+    <p class="card__description text-body-large no-margin" *ngIf="description">{{ description }}</p>
+    @if (hasContent) {
+      <ng-content />
+    }
   </div>
 </div>

@@ -36,8 +36,11 @@ public static class Program
             options.SuppressModelStateInvalidFilter = true;
         });
 
-        builder.Services.AddDbContextPool<EventFotoContext>(opt => 
-            opt.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
+        builder.Services.AddDbContextPool<EventFotoContext>(opt =>
+        {
+            opt.UseNpgsql(builder.Configuration.GetConnectionString("Database"));
+            opt.EnableSensitiveDataLogging();
+        });
 
         ConfigureServices(builder.Services, builder.Configuration);
         ConfigureAuthentication(builder.Services, builder.Configuration);
