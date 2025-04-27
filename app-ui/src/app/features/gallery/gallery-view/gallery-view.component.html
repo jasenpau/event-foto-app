@@ -59,7 +59,11 @@
     </div>
   </div>
   <div class="gallery__grid">
-    <div class="gallery__item" *ngFor="let image of imageData; index as i">
+    <div
+      *ngFor="let image of imageData; index as i"
+      class="gallery__item"
+      [ngClass]="{ 'gallery__item--selected': selectedImageIds.has(image.id) }"
+    >
       <!-- eslint-disable-next-line -->
       <div class="gallery__item-selector" (click)="togglePhotoSelect(image)">
         <div class="gallery__item-selector-check" [ngClass]="{ 'gallery__item-selector-check--selected': selectedImageIds.has(image.id) }"></div>
