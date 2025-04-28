@@ -7,7 +7,6 @@ import { AuthService } from '../auth/auth.service';
 import { UserGroup } from '../../globals/userGroups';
 import { PagedData } from '../../components/paged-table/paged-table.types';
 import { EnvService } from '../environment/env.service';
-import { Router } from '@angular/router';
 import { LoaderService } from '../loader/loader.service';
 import { useLoader } from '../../helpers/useLoader';
 
