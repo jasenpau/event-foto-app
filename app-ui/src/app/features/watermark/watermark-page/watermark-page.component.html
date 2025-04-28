@@ -1,4 +1,4 @@
-<div class="watermarks">
+<div>
   <app-page-header>
     <h2 class="text-headline-large no-margin">Vandens ženklai</h2>
     <app-button
@@ -7,12 +7,15 @@
       Sukurti vandens ženklą
     </app-button>
   </app-page-header>
-  <app-watermark-search
-    [refresh]="refreshEvent"
-    [showLarge]="true"
-    actionButtonLabel="Ištrinti"
-    (actionWatermarkId)="handleAction($event)"
-  />
+  <div class="watermarks">
+    <app-watermark-search
+      [refresh]="refreshEvent"
+      [showLarge]="true"
+      actionButtonLabel="Ištrinti"
+      (actionWatermarkId)="handleAction($event)"
+    />
+    <app-loader-overlay *ngIf="isLoading" />
+  </div>
 </div>
 <app-side-view *ngIf="showCreateForm">
   <app-watermark-create-form (formEvent)="handleCreateFormEvent($event)" />

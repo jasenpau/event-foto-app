@@ -12,5 +12,6 @@ export class FormInputSectionComponent {
   @Input({ required: true }) label!: string;
   @Input() description?: string;
   @Input() subtext?: string;
+  @Input() error?: string;
   @Input() disableBottomPadding = false;
 }

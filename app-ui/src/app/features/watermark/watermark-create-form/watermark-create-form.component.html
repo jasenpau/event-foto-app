@@ -1,12 +1,43 @@
 <div class="side-view-header">
-  <h3 class="text-headline-large no-margin">Pridėti vandenženklį</h3>
+  <h3 class="text-headline-large no-margin">Pridėti vandens ženklą</h3>
   <app-button [type]="ButtonType.Text" (click)="cancel()">Uždaryti</app-button>
 </div>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <app-input-field id="name" label="Vandenženklio pavadinimas" formControlName="name" />
-  <input type="file" id="file" formControlName="file" #fileInput>
-  <app-button [disabled]="isLoading">
-    Pridėti
-  </app-button>
+  <app-form-input-section
+    inputId="name"
+    label="Pavadinimas"
+    description="Vandens ženklo pavadinimas atvaizduojamas sistemoje">
+    <app-input-field id="name" formControlName="name" supportingText="Privaloma" />
+  </app-form-input-section>
+
+  <app-form-input-section
+    inputId="file"
+    label="Vandens ženklo failas"
+    [error]="fileError"
+    description="Pasirinkite PNG formato failą">
+    <input
+      type="file"
+      id="file"
+      class="file-input"
+      #fileInput
+      (change)="onFileSelected($event)"
+      accept="image/png">
+    <div class="file-upload-field">
+      <img *ngIf="previewUrl" [src]="previewUrl" alt="Watermark preview">
+      <span *ngIf="selectedFileName" class="file-name">{{ selectedFileName }}</span>
+      <app-button
+        [type]="ButtonType.Text"
+        [disableFormSubmit]="true"
+        (click)="fileInput.click()">
+        {{ previewUrl ? 'Pakeisti' : 'Pasirinkti failą' }}
+      </app-button>
+    </div>
+  </app-form-input-section>
+
+  <div class="form-controls">
+    <app-button [disabled]="isLoading">
+      Pridėti
+    </app-button>
+  </div>
 </form>
 <app-loader-overlay *ngIf="isLoading" />

@@ -1,5 +1,52 @@
+@use "colors";
+
 form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+}
+
+.file-upload-field {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.file-preview {
+  width: 64px;
+  height: 64px;
+
+  img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+  }
+}
+
+.file-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.file-name {
+  color: colors.$on-surface;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.form-controls {
+  padding-top: 16px;
 }

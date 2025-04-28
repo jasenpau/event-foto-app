@@ -9,6 +9,8 @@ import { NgIf } from '@angular/common';
 import { takeUntil, tap } from 'rxjs';
 import { WatermarkService } from '../../../services/watermark/watermark.service';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
+import { useLocalLoader } from '../../../helpers/useLoader';
+import { LoaderOverlayComponent } from '../../../components/loader-overlay/loader-overlay.component';
 
 @Component({
   selector: 'app-watermark-page',
@@ -19,6 +21,7 @@ import { DisposableComponent } from '../../../components/disposable/disposable.c
     WatermarkCreateFormComponent,
     SideViewComponent,
     NgIf,
+    LoaderOverlayComponent,
   ],
   templateUrl: './watermark-page.component.html',
   styleUrl: './watermark-page.component.scss',
@@ -31,6 +34,7 @@ export class WatermarkPageComponent
 
   protected showCreateForm = false;
   protected refreshEvent = '';
+  protected isLoading = false;
 
   constructor(private watermarkService: WatermarkService) {
     super();
@@ -43,7 +47,7 @@ export class WatermarkPageComponent
   protected handleCreateFormEvent(event: string) {
     if (event === 'created') {
       this.showCreateForm = false;
-      this.refreshEvent = event;
+      this.refreshEvent = `${event}-${Date.now()}`;
     } else if (event === 'cancel') {
       this.showCreateForm = false;
     }
@@ -58,8 +62,9 @@ export class WatermarkPageComponent
     this.watermarkService
       .deleteWatermark(id)
       .pipe(
+        useLocalLoader((value) => (this.isLoading = value)),
         tap(() => {
-          this.refreshEvent = 'deleted';
+          this.refreshEvent = `deleted-${Date.now()}`;
         }),
         takeUntil(this.destroy$),
       )

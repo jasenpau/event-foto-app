@@ -3,6 +3,7 @@
     <label [for]="inputId" class="text-title-medium">{{label}}</label>
     <p *ngIf="description" class="form-input-section__description text-body-medium">{{description}}</p>
     <p *ngIf="subtext" class="form-input-section__subtext text-body-small">{{subtext}}</p>
+    <p *ngIf="error" class="form-input-section__error text-body-small">{{error}}</p>
   </div>
   <div>
     <ng-content />

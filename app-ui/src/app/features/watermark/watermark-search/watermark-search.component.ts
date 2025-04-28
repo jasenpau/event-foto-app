@@ -45,7 +45,7 @@ export class WatermarkSearchComponent
   implements OnInit, OnDestroy
 {
   @Input() set refresh(event: string) {
-    if (event === 'created' || event === 'deleted') {
+    if (event.startsWith('created') || event.startsWith('deleted')) {
       this.watermarkTableData.setSearchTerm(this.searchControl.value);
     }
   }

@@ -21,6 +21,7 @@ import { NgIf } from '@angular/common';
 import { useLocalLoader } from '../../../helpers/useLoader';
 import { LoaderOverlayComponent } from '../../../components/loader-overlay/loader-overlay.component';
 import { WatermarkService } from '../../../services/watermark/watermark.service';
+import { FormInputSectionComponent } from '../../../components/forms/form-input-section/form-input-section.component';
 
 @Component({
   selector: 'app-watermark-create-form',
@@ -31,6 +32,7 @@ import { WatermarkService } from '../../../services/watermark/watermark.service'
     NgIf,
     ReactiveFormsModule,
     LoaderOverlayComponent,
+    FormInputSectionComponent,
   ],
   templateUrl: './watermark-create-form.component.html',
   styleUrl: './watermark-create-form.component.scss',
@@ -45,12 +47,14 @@ export class WatermarkCreateFormComponent
   protected readonly ButtonType = ButtonType;
   protected form: FormGroup;
   protected isLoading = false;
+  protected previewUrl: string | null = null;
+  protected selectedFileName: string | null = null;
+  protected fileError: string | undefined;
 
   constructor(private readonly watermarkService: WatermarkService) {
     super();
     this.form = new FormGroup({
       name: new FormControl('', [Validators.required]),
-      file: new FormControl(null, [Validators.required]),
     });
   }
 
@@ -58,10 +62,31 @@ export class WatermarkCreateFormComponent
     this.formEvent.emit('cancel');
   }
 
+  protected onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.selectedFileName = file.name;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewUrl = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+      this.fileError = undefined;
+    } else {
+      this.fileError = 'Prašome pasirinkti nuotraukos failą';
+    }
+  }
+
   protected onSubmit() {
     this.form.markAllAsTouched();
     const fileList = this.fileInput.nativeElement.files;
-    if (!this.form.valid || !fileList) return;
+    if (!this.form.valid) return;
+    if (!fileList || fileList.length === 0) {
+      this.fileError = 'Prašome pasirinkti nuotraukos failą';
+      return;
+    }
 
     const { name } = this.form.value;
     const file = fileList[0];

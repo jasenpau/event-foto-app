@@ -25,4 +25,9 @@
   &__subtext {
     margin: 8px 0;
   }
+
+  &__error {
+    color: colors.$error;
+    margin: 8px 0;
+  }
 }
