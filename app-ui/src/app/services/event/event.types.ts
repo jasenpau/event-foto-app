@@ -14,6 +14,7 @@ export interface EventCreateDto {
   endDate?: Date;
   location?: string;
   note?: string;
+  watermarkId?: number | null;
 }
 
 export interface EventDto {
@@ -27,6 +28,7 @@ export interface EventDto {
   createdAt: Date;
   createdByUser: string;
   createdBy: string;
+  watermarkId?: number | null;
 }
 
 export interface EventPhotographer {

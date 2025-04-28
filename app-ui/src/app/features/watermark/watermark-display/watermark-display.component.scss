@@ -5,6 +5,7 @@
 }
 
 .watermark-display {
+  height: 64px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -12,6 +13,7 @@
   max-width: 300px;
 
   img {
+    padding: 4px;
     width: 64px;
     height: 64px;
     object-fit: contain;
@@ -21,10 +23,9 @@
     flex: 1;
   }
 
-  &__empty {
+  &__palceholder {
+    padding: 4px;
+    width: 64px;
     height: 64px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
   }
 }

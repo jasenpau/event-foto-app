@@ -31,6 +31,8 @@ import { LoaderOverlayComponent } from '../../../components/loader-overlay/loade
 import { NgIf } from '@angular/common';
 import { useLocalLoader } from '../../../helpers/useLoader';
 import { EventDto } from '../../../services/event/event.types';
+import { WatermarkSearchComponent } from '../../watermark/watermark-search/watermark-search.component';
+import { WatermarkDisplayComponent } from '../../watermark/watermark-display/watermark-display.component';
 
 @Component({
   selector: 'app-create-event',
@@ -44,6 +46,8 @@ import { EventDto } from '../../../services/event/event.types';
     TextAreaComponent,
     LoaderOverlayComponent,
     NgIf,
+    WatermarkSearchComponent,
+    WatermarkDisplayComponent,
   ],
   templateUrl: './create-event.component.html',
   styleUrl: './create-event.component.scss',
@@ -61,6 +65,8 @@ export class CreateEventComponent
   protected createEventForm: FormGroup;
   protected existingNames: string[] = [];
   protected isLoading = false;
+  protected selectedWatermarkId: number | null = null;
+  protected showWatermarkSearch = false;
 
   constructor(
     private readonly eventService: EventService,
@@ -110,7 +116,21 @@ export class CreateEventComponent
         location: this.eventToEdit.location || '',
         note: this.eventToEdit.note || '',
       });
+      this.selectedWatermarkId = this.eventToEdit.watermarkId || null;
     }
+  }
+
+  protected toggleWatermarkSearch() {
+    this.showWatermarkSearch = !this.showWatermarkSearch;
+  }
+
+  protected onWatermarkSelected(watermarkId: number | null) {
+    this.selectedWatermarkId = watermarkId;
+    this.showWatermarkSearch = false;
+  }
+
+  protected removeWatermark() {
+    this.selectedWatermarkId = null;
   }
 
   onSubmit() {
@@ -123,6 +143,7 @@ export class CreateEventComponent
         endDate: formData.endDate,
         location: formData.location,
         note: formData.note,
+        watermarkId: this.selectedWatermarkId,
       };
 
       const request$ = this.eventToEdit

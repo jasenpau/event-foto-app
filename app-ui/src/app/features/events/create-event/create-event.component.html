@@ -46,7 +46,40 @@
       subtext="iki 500 simbolių">
       <app-text-area id="note" formControlName="note" />
     </app-form-input-section>
-    <app-button>{{ eventToEdit ? 'Išsaugoti' : 'Sukurti' }}</app-button>
+
+    <app-form-input-section
+      inputId="watermark"
+      label="Vandens ženklas"
+      description="Vandens ženklas taikomas visoms nuotraukoms, išskyrus galerijas su kitu vandens ženklu"
+      [disableBottomPadding]="true"
+    >
+      <app-watermark-display class="watermark-field__display-component" [watermarkId]="selectedWatermarkId" />
+    </app-form-input-section>
+    <div class="watermark-controls">
+      <app-button
+        [type]="buttonType.Text"
+        (click)="toggleWatermarkSearch()"
+        [disableFormSubmit]="true">
+        Pakeisti
+      </app-button>
+      <app-button
+        *ngIf="selectedWatermarkId"
+        [type]="buttonType.Text"
+        (click)="removeWatermark()"
+        [disableFormSubmit]="true">
+        Pašalinti
+      </app-button>
+    </div>
+
+    <app-watermark-search
+      *ngIf="showWatermarkSearch"
+      actionButtonLabel="Pasirinkti"
+      (actionWatermarkId)="onWatermarkSelected($event)"
+    />
+
+    <div class="form-controls">
+      <app-button>{{ eventToEdit ? 'Išsaugoti' : 'Sukurti' }}</app-button>
+    </div>
   </form>
 </div>
 <app-loader-overlay *ngIf="isLoading" />

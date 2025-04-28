@@ -1,10 +1,11 @@
-<div class="watermark-display" *ngIf="watermark && sasUri && !loading">
-  <img class="chess-background" [src]="getWatermarkUrl()" [alt]="watermark.name">
-  <span class="watermark-display__name text-body-large">{{ watermark.name }}</span>
+<div class="watermark-display">
+  @if (watermark && sasUri && !loading) {
+    <img class="chess-background" [src]="getWatermarkUrl()" [alt]="watermark.name">
+    <span class="watermark-display__name text-body-large">{{ watermark.name }}</span>
+  } @else if (!watermark && !loading) {
+    <div class="watermark-display__palceholder chess-background"></div>
+    <span class="text-body-large">Vandens ženklas nepasirinktas</span>
+  }
 </div>
 
 <app-spinner *ngIf="loading" />
-
-<div class="watermark-display__empty" *ngIf="!watermark && !loading">
-  <span >Vandens ženklas nepasirinktas</span>
-</div>
