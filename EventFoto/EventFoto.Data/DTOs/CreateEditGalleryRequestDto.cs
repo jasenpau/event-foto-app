@@ -3,4 +3,5 @@
 public record CreateEditGalleryRequestDto
 {
     public string Name { get; set; }
+    public int? WatermarkId { get; set; }
 }

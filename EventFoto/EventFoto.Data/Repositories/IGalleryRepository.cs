@@ -7,7 +7,7 @@ namespace EventFoto.Data.Repositories;
 public interface IGalleryRepository
 {
     public Task<Gallery> GetByIdAsync(int id);
-    public Task<bool> NameExistsAsync(string name, int eventId);
+    public Task<bool> NameExistsAsync(string name, int eventId, int? galleryId);
     public Task<Gallery> CreateAsync(Gallery gallery);
     public Task<Gallery> UpdateAsync(Gallery gallery);
     public Task<bool> DeleteAsync(int id);

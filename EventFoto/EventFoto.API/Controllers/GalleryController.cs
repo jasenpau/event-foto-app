@@ -30,7 +30,7 @@ public class GalleryController : AppControllerBase
     public async Task<ActionResult<GalleryDto>> CreateGallery([FromRoute] int eventId,
         [FromBody] CreateEditGalleryRequestDto request)
     {
-        var result = await _galleryService.CreateGalleryAsync(eventId, request.Name);
+        var result = await _galleryService.CreateGalleryAsync(eventId, request.Name, request.WatermarkId);
         return result.Success ? Ok(GalleryDto.FromModel(result.Data)) : result.ToErrorResponse();
     }
 
@@ -44,7 +44,7 @@ public class GalleryController : AppControllerBase
     [HttpPut("{galleryId:int}")]
     public async Task<ActionResult<GalleryDto>> UpdateGalleryAsync([FromRoute] int galleryId, [FromBody] CreateEditGalleryRequestDto request)
     {
-        var result = await _galleryService.UpdateGalleryAsync(galleryId, request.Name);
+        var result = await _galleryService.UpdateGalleryAsync(galleryId, request.Name, request.WatermarkId);
         return result.Success ? Ok(GalleryDto.FromModel(result.Data)) : result.ToErrorResponse();
     }
 

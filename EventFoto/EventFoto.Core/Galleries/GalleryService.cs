@@ -58,17 +58,24 @@ public class GalleryService : IGalleryService
         return ServiceResult<bool>.Ok(true);
     }
 
-    public async Task<ServiceResult<Gallery>> UpdateGalleryAsync(int id, string name)
+    public async Task<ServiceResult<Gallery>> UpdateGalleryAsync(int id, string name, int? watermarkId)
     {
         var gallery = await _galleryRepository.GetByIdAsync(id);
         if (gallery == null) return ServiceResult<Gallery>.Fail($"Gallery with ID {id} not found", HttpStatusCode.NotFound);
 
+        var nameExists = await _galleryRepository.NameExistsAsync(name, gallery.EventId, id);
+        if (nameExists)
+        {
+            return ServiceResult<Gallery>.Fail($"Event already has gallery with given name", HttpStatusCode.Conflict);
+        }
+
         gallery.Name = name;
+        gallery.WatermarkId = watermarkId;
         var result = await _galleryRepository.UpdateAsync(gallery);
         return ServiceResult<Gallery>.Ok(result);
     }
 
-    public async Task<ServiceResult<Gallery>> CreateGalleryAsync(int eventId, string name)
+    public async Task<ServiceResult<Gallery>> CreateGalleryAsync(int eventId, string name, int? watermarkId)
     {
         var eventData = await _eventRepository.GetByIdAsync(eventId);
         if (eventData == null)
@@ -76,7 +83,7 @@ public class GalleryService : IGalleryService
             return ServiceResult<Gallery>.Fail($"Event with ID {eventId} not found", HttpStatusCode.NotFound);
         }
 
-        var nameExists = await _galleryRepository.NameExistsAsync(name, eventId);
+        var nameExists = await _galleryRepository.NameExistsAsync(name, eventId, null);
         if (nameExists)
         {
             return ServiceResult<Gallery>.Fail($"Event already has gallery with given name", HttpStatusCode.Conflict);
@@ -86,6 +93,7 @@ public class GalleryService : IGalleryService
         {
             EventId = eventId,
             Name = name,
+            WatermarkId = watermarkId
         };
 
         var createdGallery = await _galleryRepository.CreateAsync(gallery);

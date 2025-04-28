@@ -22,9 +22,14 @@ public class GalleryRepository : IGalleryRepository
             .FirstOrDefaultAsync(g => g.Id == id);
     }
 
-    public async Task<bool> NameExistsAsync(string name, int eventId)
+    public async Task<bool> NameExistsAsync(string name, int eventId, int? galleryId)
     {
         var existingGallery = await Galleries.FirstOrDefaultAsync(g => g.Name == name && g.EventId == eventId);
+        if (galleryId.HasValue && existingGallery != null)
+        {
+            return existingGallery.Id != galleryId.Value;
+        }
+
         return existingGallery != null;
     }
 

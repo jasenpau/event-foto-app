@@ -11,6 +11,7 @@ public record GalleryDto
     public bool? IsMainGallery { get; init; }
     public string Thumbnail { get; init; }
     public int PhotoCount { get; init; }
+    public int? WatermarkId { get; init; }
 
     public static GalleryDto FromModel(Gallery gallery) => new()
     {
@@ -20,6 +21,7 @@ public record GalleryDto
         EventId = gallery.EventId,
         Thumbnail = null,
         PhotoCount = 0,
+        WatermarkId = gallery.WatermarkId
     };
 
     public static GalleryDto FromProjection(EventGalleryProjection projection) => new()
@@ -29,5 +31,6 @@ public record GalleryDto
         EventId = projection.EventId,
         Thumbnail = projection.Filename,
         PhotoCount = projection.PhotoCount ?? 0,
+        WatermarkId = null
     };
 }
