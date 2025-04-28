@@ -42,6 +42,7 @@
       </div>
       <div class="photo__actions">
         <app-button [type]="ButtonType.Text" (click)="deletePhoto()">Ištrinti</app-button>
+        <app-button [type]="ButtonType.Filled" (click)="downloadOriginalPhoto()">Atsisiųsti originalą</app-button>
         <app-button [type]="ButtonType.Filled" (click)="downloadPhoto()">Atsisiųsti</app-button>
       </div>
     </div>

@@ -28,16 +28,17 @@ public class DownloadZipProcessor : IDownloadZipProcessor
 
         var tempFilePath = Path.GetTempFileName();
         var outputZipPath = Path.ChangeExtension(tempFilePath, ".zip");
+        var useProcessedPhotos = request.DownloadProcessedPhotos;
 
         await using (var zipStream = new FileStream(outputZipPath, FileMode.Create))
         using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create, leaveOpen: false))
         {
             foreach (var item in request.DownloadImages)
             {
-                if (!item.EventPhoto.IsProcessed) continue;
+                if (useProcessedPhotos && !item.EventPhoto.IsProcessed) continue;
 
                 var container = _blobStorage.GetContainerName(item.EventPhoto.Gallery.EventId);
-                var filename = item.EventPhoto.ProcessedFilename;
+                var filename = useProcessedPhotos ? item.EventPhoto.ProcessedFilename : item.EventPhoto.Filename;
 
                 var imageResult = await _blobStorage.DownloadFileAsync(container, filename, cancellationToken);
                 await using var imageStream = imageResult.Data;

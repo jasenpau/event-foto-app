@@ -162,13 +162,14 @@ public class EventPhotoService : IEventPhotoService
         return ServiceResult<int>.Ok(photos.Count);
     }
 
-    public async Task<ServiceResult<DownloadRequest>> DownloadPhotosAsync(Guid userId, IList<int> photoIds)
+    public async Task<ServiceResult<DownloadRequest>> DownloadPhotosAsync(Guid userId, IList<int> photoIds, bool processed)
     {
         var createDate = DateTime.UtcNow;
         var request = new DownloadRequest
         {
             UserId = userId,
             Filename = createDate.ToString("yyyy-MM-dd HHmmss") + ".zip",
+            DownloadProcessedPhotos = processed,
             DownloadImages = photoIds.Select(p => new DownloadImage
             {
                 EventPhotoId = p

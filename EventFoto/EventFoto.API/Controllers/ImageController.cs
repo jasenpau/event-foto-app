@@ -28,27 +28,27 @@ public class ImageController : AppControllerBase
     }
 
     [HttpPost("bulk-delete")]
-    public async Task<ActionResult<int>> BulkDelete([FromBody] BulkPhotoModifyDto bulkPhotoModifyDto,
+    public async Task<ActionResult<int>> BulkDelete([FromBody] BulkPhotoModifyDto dto,
         CancellationToken cancellationToken)
     {
-        var deleteResult = await _eventPhotoService.DeletePhotosAsync(bulkPhotoModifyDto.PhotoIds, cancellationToken);
+        var deleteResult = await _eventPhotoService.DeletePhotosAsync(dto.PhotoIds, cancellationToken);
         return deleteResult.Success ? Ok(deleteResult.Data) : deleteResult.ToErrorResponse();
     }
 
     [HttpPost("bulk-download")]
-    public async Task<ActionResult<DownloadRequestDto>> BulkDownload([FromBody] BulkPhotoModifyDto bulkPhotoModifyDto)
+    public async Task<ActionResult<DownloadRequestDto>> BulkDownload([FromBody] BulkPhotoDownloadDto dto)
     {
         var userId = RequestUserId();
-        var downloadResult = await _eventPhotoService.DownloadPhotosAsync(userId, bulkPhotoModifyDto.PhotoIds);
+        var downloadResult = await _eventPhotoService.DownloadPhotosAsync(userId, dto.PhotoIds, dto.Processed);
         return downloadResult.Success
             ? Ok(DownloadRequestDto.FromModel(downloadResult.Data))
             : downloadResult.ToErrorResponse();
     }
 
     [HttpPost("bulk-move")]
-    public async Task<ActionResult<int>> BulkMove([FromBody] BulkPhotoMoveDto bulkPhotoMoveDto)
+    public async Task<ActionResult<int>> BulkMove([FromBody] BulkPhotoMoveDto dto)
     {
-        var result = await _eventPhotoService.MovePhotos(bulkPhotoMoveDto.PhotoIds, bulkPhotoMoveDto.TargetGalleryId);
+        var result = await _eventPhotoService.MovePhotos(dto.PhotoIds, dto.TargetGalleryId);
         return result.Success ? Ok(result.Data) : result.ToErrorResponse();
     }
 

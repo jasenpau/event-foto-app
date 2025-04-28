@@ -121,11 +121,12 @@ export class ImageService {
       .pipe(map((x) => Number(x)));
   }
 
-  bulkDownload(photoIds: number[]) {
+  bulkDownload(photoIds: number[], processed: boolean) {
     return this.http.post<DownloadRequestDto>(
       `${this.apiBaseUrl}/image/bulk-download`,
       {
         photoIds,
+        processed,
       },
       {
         ...getAuthHeaders(),

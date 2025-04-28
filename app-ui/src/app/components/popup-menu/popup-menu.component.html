@@ -1,0 +1,7 @@
+<div class="popup-menu">
+  <ul class="popup-menu__list">
+    <li *ngFor="let item of items" class="popup-menu__item" (click)="onItemClick(item)">
+      {{ item.text }}
+    </li>
+  </ul>
+</div>

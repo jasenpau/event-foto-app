@@ -47,6 +47,10 @@ import { UploadPhotoFormComponent } from '../upload-photo-form/upload-photo-form
 import { EMPTY_SUBSCRIPTION } from 'rxjs/internal/Subscription';
 import { IconButtonComponent } from '../../../components/icon-button/icon-button.component';
 import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
+import {
+  PopupMenuComponent,
+  PopupMenuItem,
+} from '../../../components/popup-menu/popup-menu.component';
 
 const COMPONENT_LOADING_KEY = 'gallery-view';
 
@@ -65,6 +69,7 @@ const COMPONENT_LOADING_KEY = 'gallery-view';
     UploadPhotoFormComponent,
     IconButtonComponent,
     PageHeaderComponent,
+    PopupMenuComponent,
   ],
   templateUrl: './gallery-view.component.html',
   styleUrl: './gallery-view.component.scss',
@@ -86,6 +91,21 @@ export class GalleryViewComponent
   protected sasUri?: SasUri;
   protected showGalleryEditForm = false;
   protected showMovePhotosForm = false;
+  protected downloadOptions: PopupMenuItem[] = [
+    {
+      text: 'Originalios nuotraukos',
+      action: () => {
+        this.bulkDownload(false);
+      },
+    },
+    {
+      text: 'Apdirbtos nuotraukos',
+      action: () => {
+        this.bulkDownload(true);
+      },
+    },
+  ];
+  protected showDownloadOptions = false;
 
   private lastKey = '';
   private observer?: IntersectionObserver;
@@ -277,24 +297,6 @@ export class GalleryViewComponent
       .subscribe();
   }
 
-  protected bulkDownload() {
-    const snackbarId = this.snackbarService.addSnackbar(
-      SnackbarType.Loading,
-      'Nuotraukų archyvas yra ruošiamas.',
-      false,
-    );
-    const selectedImages = Array.from(this.selectedImageIds);
-    this.imageService
-      .bulkDownload(selectedImages)
-      .pipe(
-        tap((downloadReq) => {
-          this.imageService.startDownloadTask(downloadReq.id, snackbarId);
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe();
-  }
-
   protected openGalleryEditForm() {
     this.showGalleryEditForm = true;
   }
@@ -417,6 +419,24 @@ export class GalleryViewComponent
     this.isLoading = false;
     this.lastKey = '';
     this.loadMore();
+  }
+
+  private bulkDownload(processed: boolean) {
+    const snackbarId = this.snackbarService.addSnackbar(
+      SnackbarType.Loading,
+      'Nuotraukų archyvas yra ruošiamas.',
+      false,
+    );
+    const selectedImages = Array.from(this.selectedImageIds);
+    this.imageService
+      .bulkDownload(selectedImages, processed)
+      .pipe(
+        tap((downloadReq) => {
+          this.imageService.startDownloadTask(downloadReq.id, snackbarId);
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
   }
 
   private showControls(index: number) {

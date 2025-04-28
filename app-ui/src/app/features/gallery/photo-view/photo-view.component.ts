@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   Component,
+  computed,
   effect,
   ElementRef,
   EventEmitter,
@@ -108,6 +109,27 @@ export class PhotoViewComponent
     a.href = this.imageDataUrl;
     a.download = this.photoDetails.processedFilename ?? 'image.jpg';
     a.click();
+  }
+
+  protected downloadOriginalPhoto() {
+    if (!this.photoDetails) return;
+
+    const filename = this.photoDetails.filename;
+
+    this.blobService
+      .getFromBlob(`event-${this.photoDetails.eventId}`, filename)
+      .pipe(
+        tap((blob) => {
+          const originalUri = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = originalUri;
+          a.download = filename;
+          a.click();
+          URL.revokeObjectURL(originalUri);
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
   }
 
   protected formatLtDate(dateString: string) {

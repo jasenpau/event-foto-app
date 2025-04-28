@@ -44,12 +44,19 @@
         (click)="openMovePhotosForm()"
         tooltip="Perkelti į kitą galeriją"
       />
-      <app-icon-button
-        [icon]="SvgIconSrc.Download"
-        [disabled]="selectedImageIds.size === 0"
-        (click)="bulkDownload()"
-        tooltip="Atsisiųsti"
-      />
+      <div>
+        <app-icon-button
+          [icon]="SvgIconSrc.Download"
+          [disabled]="selectedImageIds.size === 0"
+          (click)="showDownloadOptions = true"
+          tooltip="Atsisiųsti"
+        />
+        <app-popup-menu
+          *ngIf="showDownloadOptions"
+          [items]="downloadOptions"
+          (close)="showDownloadOptions = false"
+        />
+      </div>
       <app-icon-button
         [icon]="SvgIconSrc.Delete"
         [disabled]="selectedImageIds.size === 0"
