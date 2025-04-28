@@ -3,26 +3,35 @@
   <app-button [type]="ButtonType.Text" (click)="cancel()">Uždaryti</app-button>
 </div>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <app-input-field id="name" label="Galerijos pavadinimas" formControlName="name" />
+  <app-form-input-section
+    inputId="name"
+    label="Galerijos pavadinimas"
+    description="Unikalus galerijos pavadinimas">
+    <app-input-field id="name" formControlName="name" supportingText="Privaloma" />
+  </app-form-input-section>
 
-  <div class="watermark-field">
-  <p class="text-label-large no-margin watermark-field__label">Vandens ženklas</p>
-    <div class="watermark-field__display">
+  <app-form-input-section
+    inputId="watermark"
+    label="Vandens ženklas"
+    description="Nuotraukoms pridedamas vandens ženklas"
+    [disableBottomPadding]="true"
+  >
       <app-watermark-display class="watermark-field__display-component" [watermarkId]="selectedWatermarkId" />
-      <app-button
-        [type]="ButtonType.Text"
-        (click)="toggleWatermarkSearch()"
-        [disableFormSubmit]="true">
-        Pakeisti
-      </app-button>
-      <app-button
-        *ngIf="selectedWatermarkId"
-        [type]="ButtonType.Text"
-        (click)="removeWatermark()"
-        [disableFormSubmit]="true">
-        Pašalinti
-      </app-button>
-    </div>
+  </app-form-input-section>
+  <div class="watermark-controls">
+    <app-button
+      [type]="ButtonType.Text"
+      (click)="toggleWatermarkSearch()"
+      [disableFormSubmit]="true">
+      Pakeisti
+    </app-button>
+    <app-button
+      *ngIf="selectedWatermarkId"
+      [type]="ButtonType.Text"
+      (click)="removeWatermark()"
+      [disableFormSubmit]="true">
+      Pašalinti
+    </app-button>
   </div>
 
   <app-watermark-search
@@ -31,9 +40,11 @@
     (actionWatermarkId)="onWatermarkSelected($event)"
   />
 
-  <app-button [disabled]="isLoading">
-    {{ galleryToEdit ? 'Išsaugoti' : 'Sukurti' }}
-  </app-button>
+  <div class="form-controls">
+    <app-button [disabled]="isLoading">
+      {{ galleryToEdit ? 'Išsaugoti' : 'Sukurti' }}
+    </app-button>
+  </div>
 </form>
 
 <app-loader-overlay *ngIf="isLoading" />

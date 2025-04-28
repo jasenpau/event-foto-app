@@ -27,6 +27,7 @@ import { GalleryService } from '../../../services/gallery/gallery.service';
 import { GalleryDto } from '../../../services/gallery/gallery.types';
 import { WatermarkSearchComponent } from '../../watermark/watermark-search/watermark-search.component';
 import { WatermarkDisplayComponent } from '../../watermark/watermark-display/watermark-display.component';
+import { FormInputSectionComponent } from '../../../components/forms/form-input-section/form-input-section.component';
 
 @Component({
   selector: 'app-create-gallery-form',
@@ -39,6 +40,7 @@ import { WatermarkDisplayComponent } from '../../watermark/watermark-display/wat
     LoaderOverlayComponent,
     WatermarkSearchComponent,
     WatermarkDisplayComponent,
+    FormInputSectionComponent,
   ],
   templateUrl: './create-edit-gallery-form.component.html',
   styleUrl: './create-edit-gallery-form.component.scss',
