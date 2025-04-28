@@ -1,4 +1,5 @@
-﻿using EventFoto.Data.BlobStorage;
+﻿using EventFoto.Core.Watermarks;
+using EventFoto.Data.BlobStorage;
 using EventFoto.Data.Models;
 using EventFoto.Data.Repositories;
 using ExifLibrary;
@@ -14,16 +15,22 @@ public class ImageProcessor : IImageProcessor
     private readonly IBlobStorage _blobStorage;
     private readonly IEventPhotoRepository _photoRepository;
     private readonly IUploadBatchRepository _uploadBatchRepository;
+    private readonly IWatermarkService _watermarkService;
     private readonly IConfiguration _configuration;
+
+    private const int MarginPixels = 20;
+    private const float DefaultOpacity = 0.8f;
 
     public ImageProcessor(IBlobStorage blobStorage,
         IEventPhotoRepository photoRepository,
         IUploadBatchRepository uploadBatchRepository,
+        IWatermarkService watermarkService,
         IConfiguration configuration)
     {
         _blobStorage = blobStorage;
         _photoRepository = photoRepository;
         _uploadBatchRepository = uploadBatchRepository;
+        _watermarkService = watermarkService;
         _configuration = configuration;
     }
 
@@ -38,45 +45,70 @@ public class ImageProcessor : IImageProcessor
         var eventBatches = uploadBatch.EventPhotos.GroupBy(p => p.Gallery.EventId);
         foreach (var eventPhotoBatch in eventBatches)
         {
-            var  eventId = eventPhotoBatch.Key;
+            var eventId = eventPhotoBatch.Key;
             var containerName = _blobStorage.GetContainerName(eventId);
 
-            foreach (var photo in eventPhotoBatch)
+            var eventWatermarkStream = await _watermarkService.GetWatermarkFileForEventAsync(eventId, cancellationToken);
+            Image? eventWatermarkImage = null;
+            if (eventWatermarkStream.Success)
             {
-                var originalFilename = photo.Filename;
-                var imageStream = await _blobStorage.DownloadFileAsync(containerName, originalFilename, cancellationToken);
-                if (!imageStream.Success)
+                eventWatermarkImage = await Image.LoadAsync(eventWatermarkStream.Data, cancellationToken);
+            }
+
+            var galleryBatches = eventPhotoBatch.GroupBy(p => p.GalleryId);
+            foreach (var galleryBatch in galleryBatches)
+            {
+                var galleryWatermarkStream =
+                    await _watermarkService.GetWatermarkFileForGalleryAsync(galleryBatch.Key, cancellationToken);
+                Image? galleryWatermarkImage = null;
+                if (galleryWatermarkStream.Success)
                 {
-                    throw new InvalidOperationException("Could not load image.");
+                    galleryWatermarkImage = await Image.LoadAsync(galleryWatermarkStream.Data, cancellationToken);
                 }
 
-                using var image = await Image.LoadAsync(imageStream.Data, cancellationToken);
-                await imageStream.Data.DisposeAsync();
+                foreach (var photo in galleryBatch)
+                {
+                    var originalFilename = photo.Filename;
+                    var imageStream =
+                        await _blobStorage.DownloadFileAsync(containerName, originalFilename, cancellationToken);
+                    if (!imageStream.Success)
+                    {
+                        throw new InvalidOperationException("Could not load image.");
+                    }
 
-                var processedFilename = $"out-{originalFilename}";
+                    using var image = await Image.LoadAsync(imageStream.Data, cancellationToken);
+                    await imageStream.Data.DisposeAsync();
 
-                // Add image watermark processing here
-                // ...
+                    var processedFilename = $"out-{originalFilename}";
 
-                // Thumbnail processing
-                await GeneratePreviewImage(image, eventId, processedFilename, cancellationToken);
+                    // Add image watermark processing here
+                    var watermarkImage = eventWatermarkImage ?? galleryWatermarkImage;
+                    if (watermarkImage != null)
+                    {
+                        ApplyWatermark(image, watermarkImage);
+                    }
 
-                // Output processing
-                using var processedImageStream = new MemoryStream();
-                await image.SaveAsJpegAsync(processedImageStream, cancellationToken);
-                processedImageStream.Position = 0;
+                    // Thumbnail processing
+                    await GeneratePreviewImage(image, eventId, processedFilename, cancellationToken);
 
-                // Add EXIF metadata
-                var eventPhoto = await _photoRepository.GetByEventAndFilename(eventId, originalFilename);
-                var outputFile = await AddExifData(eventPhoto, processedImageStream);
+                    // Output processing
+                    using var processedImageStream = new MemoryStream();
+                    await image.SaveAsJpegAsync(processedImageStream, cancellationToken);
+                    processedImageStream.Position = 0;
 
-                // Save final image to stream
-                using var outputStream = new MemoryStream();
-                await outputFile.SaveAsync(outputStream);
-                outputStream.Position = 0;
+                    // Add EXIF metadata
+                    var eventPhoto = await _photoRepository.GetByEventAndFilename(eventId, originalFilename);
+                    var outputFile = await AddExifData(eventPhoto, processedImageStream);
 
-                await _blobStorage.UploadFileAsync(containerName, processedFilename, outputStream, cancellationToken);
-                await _photoRepository.MarkAsProcessed(eventPhoto, processedFilename);
+                    // Save final image to stream
+                    using var outputStream = new MemoryStream();
+                    await outputFile.SaveAsync(outputStream);
+                    outputStream.Position = 0;
+
+                    await _blobStorage.UploadFileAsync(containerName, processedFilename, outputStream,
+                        cancellationToken);
+                    await _photoRepository.MarkAsProcessed(eventPhoto, processedFilename);
+                }
             }
         }
 
@@ -111,5 +143,28 @@ public class ImageProcessor : IImageProcessor
         var containerName = _blobStorage.GetContainerName(eventId);
         var thumbnailFilename = $"thumb-{filename}";
         await _blobStorage.UploadFileAsync(containerName, thumbnailFilename, thumbnailStream, cancellationToken);
+    }
+
+    private static void ApplyWatermark(Image sourceImage, Image watermark, float opacity = DefaultOpacity)
+    {
+        var maxWatermarkWidth = sourceImage.Width / 4;
+        var maxWatermarkHeight = sourceImage.Height / 4;
+
+        var scale = 1.0f;
+        if (watermark.Width > maxWatermarkWidth || watermark.Height > maxWatermarkHeight)
+        {
+            var scaleX = (float)maxWatermarkWidth / watermark.Width;
+            var scaleY = (float)maxWatermarkHeight / watermark.Height;
+            scale = Math.Min(scaleX, scaleY);
+        }
+
+        var newWidth = (int)(watermark.Width * scale);
+        var newHeight = (int)(watermark.Height * scale);
+
+        var posX = sourceImage.Width - newWidth - MarginPixels;
+        var posY = sourceImage.Height - newHeight - MarginPixels;
+
+        watermark.Mutate(x => x.Resize(newWidth, newHeight));
+        sourceImage.Mutate(x => x.DrawImage(watermark, new Point(posX, posY), opacity));
     }
 }

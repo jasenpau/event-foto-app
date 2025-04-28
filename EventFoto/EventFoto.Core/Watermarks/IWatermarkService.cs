@@ -9,5 +9,7 @@ public interface IWatermarkService
     public Task<ServiceResult<bool>> DeleteWatermarkAsync(int id, CancellationToken cancellationToken);
     public ServiceResult<Watermark> GetWatermarkAsync(int id);
     public ServiceResult<PagedData<string, Watermark>> SearchWatermarksAsync(WatermarkSearchParams searchParams);
+    public Task<ServiceResult<MemoryStream>> GetWatermarkFileForEventAsync(int eventId, CancellationToken cancellationToken);
+    public Task<ServiceResult<MemoryStream>> GetWatermarkFileForGalleryAsync(int galleryId, CancellationToken cancellationToken);
 }
 
