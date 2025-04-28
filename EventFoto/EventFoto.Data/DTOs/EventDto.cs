@@ -15,6 +15,7 @@ public record EventDto
     public string CreatedByName { get; set; }
     public DateTime CreatedOn { get; set; }
     public int? WatermarkId { get; set; }
+    public int DefaultGalleryId { get; set; }
 
     public static EventDto FromEvent(Event eventData) => new()
     {
@@ -29,5 +30,6 @@ public record EventDto
         CreatedOn = eventData.CreatedOn,
         CreatedByName = eventData.CreatedByUser.Name,
         WatermarkId = eventData.WatermarkId,
+        DefaultGalleryId = eventData.DefaultGalleryId
     };
 }

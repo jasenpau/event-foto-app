@@ -5,7 +5,7 @@ import {
   EventCreateDto,
   EventListDto,
   EventDto,
-  EventPhotographer,
+  PhotographerAssignment,
   EventSearchParamsDto,
 } from './event.types';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
@@ -32,8 +32,8 @@ export class EventService {
     );
   }
 
-  getEventPhotographers(id: number): Observable<EventPhotographer[]> {
-    return this.http.get<EventPhotographer[]>(
+  getEventPhotographers(id: number): Observable<PhotographerAssignment[]> {
+    return this.http.get<PhotographerAssignment[]>(
       `${this.apiBaseUrl}/event/${id}/photographers`,
       getAuthHeaders(),
     );
@@ -41,20 +41,18 @@ export class EventService {
 
   assignPhotographerToEvent(
     eventId: number,
+    galleryId: number,
     userId: string,
-  ): Observable<EventPhotographer[]> {
-    return this.http.post<EventPhotographer[]>(
+  ) {
+    return this.http.post(
       `${this.apiBaseUrl}/event/${eventId}/photographers`,
-      { userId },
+      { userId, galleryId },
       getAuthHeaders(),
     );
   }
 
-  unassignPhotographerFromEvent(
-    eventId: number,
-    userId: string,
-  ): Observable<EventPhotographer[]> {
-    return this.http.delete<EventPhotographer[]>(
+  unassignPhotographerFromEvent(eventId: number, userId: string) {
+    return this.http.delete(
       `${this.apiBaseUrl}/event/${eventId}/photographers/${userId}`,
       getAuthHeaders(),
     );

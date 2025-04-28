@@ -23,21 +23,6 @@ public class EventRepository : IEventRepository
             .FirstOrDefaultAsync(e => e.Id == id);
     }
 
-    public Task<Event> GetByIdWithPhotographersAsync(int id)
-    {
-        return Events
-            .Include(e => e.CreatedByUser)
-            .Include(e => e.Photographers)
-            .FirstOrDefaultAsync(e => e.Id == id);
-    }
-
-    public async Task<IList<User>> GetEventPhotographersAsync(int eventId)
-    {
-        var selectedEvent = await Events.Include(e => e.Photographers)
-            .FirstOrDefaultAsync(e => e.Id == eventId);
-        return selectedEvent?.Photographers;
-    }
-
     public async Task<Event> CreateAsync(Event eventData, Gallery defaultGallery)
     {
         eventData.CreatedOn = DateTime.UtcNow;
@@ -48,9 +33,11 @@ public class EventRepository : IEventRepository
             {
                 Events.Add(eventData);
                 await _context.SaveChangesAsync();
+
                 defaultGallery.EventId = eventData.Id;
                 _context.Galleries.Add(defaultGallery);
                 await _context.SaveChangesAsync();
+
                 eventData.DefaultGalleryId = defaultGallery.Id;
                 _context.Entry(eventData).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
@@ -66,18 +53,6 @@ public class EventRepository : IEventRepository
                 throw;
             }
         }
-
-        // eventData.CreatedOn = DateTime.UtcNow;
-        // Events.Add(eventData);
-        // await _context.SaveChangesAsync();
-
-    }
-
-    public async Task<Event> SaveEventAsync(Event eventData)
-    {
-        _context.Entry(eventData).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
-        return eventData;
     }
 
     public async Task<PagedData<string, EventListProjection>> SearchEventsAsync(EventSearchParams searchParams)

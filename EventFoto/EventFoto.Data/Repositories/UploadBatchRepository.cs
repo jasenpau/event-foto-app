@@ -18,6 +18,7 @@ public class UploadBatchRepository : IUploadBatchRepository
         return UploadBatches
             .Include(e => e.EventPhotos)
             .ThenInclude(e => e.Gallery)
+            .ThenInclude(g => g.Event)
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 

@@ -1,4 +1,5 @@
-﻿using EventFoto.Core.EventPhotos;
+﻿using EventFoto.Core.Assignments;
+using EventFoto.Core.EventPhotos;
 using EventFoto.Core.Events;
 using EventFoto.Core.Galleries;
 using EventFoto.Core.PhotoProcessing;
@@ -22,12 +23,14 @@ public static class ServiceConfigurator
         services.AddScoped<IGalleryRepository, GalleryRepository>();
         services.AddScoped<IUploadBatchRepository, UploadBatchRepository>();
         services.AddScoped<IWatermarkRepository, WatermarkRepository>();
+        services.AddScoped<IPhotographerAssignmentRepository, PhotographerAssignmentRepository>();
 
         services.AddScoped<IEventService, EventService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IEventPhotoService, EventPhotoService>();
         services.AddScoped<IGalleryService, GalleryService>();
         services.AddScoped<IWatermarkService, WatermarkService>();
+        services.AddScoped<IAssignmentService, AssignmentService>();
 
         services.AddScoped<IBlobStorage, BlobStorage>();
         services.AddScoped<IProcessingQueue, ProcessingQueue>();

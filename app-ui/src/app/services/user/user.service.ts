@@ -8,6 +8,10 @@ import { UserGroup } from '../../globals/userGroups';
 import { PagedData } from '../../components/paged-table/paged-table.types';
 import { EnvService } from '../environment/env.service';
 import { Router } from '@angular/router';
+import { LoaderService } from '../loader/loader.service';
+import { useLoader } from '../../helpers/useLoader';
+
+const USER_LOADING_KEY = 'user-loading';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +25,7 @@ export class UserService {
     private readonly http: HttpClient,
     private readonly authService: AuthService,
     private readonly envService: EnvService,
-    private readonly router: Router,
+    private readonly loaderService: LoaderService,
   ) {
     this.apiBaseUrl = this.envService.getConfig().apiBaseUrl;
     this.appGroups = this.envService.getConfig().groups;
@@ -36,6 +40,7 @@ export class UserService {
     return this.http
       .get<UserData>(`${this.apiBaseUrl}/user/current`, getAuthHeaders())
       .pipe(
+        useLoader(USER_LOADING_KEY, this.loaderService),
         tap((userData) => {
           this.currentUser = userData;
         }),

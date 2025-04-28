@@ -3,7 +3,23 @@
   <app-button [type]="ButtonType.Text" (click)="cancel()">Uždaryti</app-button>
 </div>
 <div>
+  <app-form-input-section
+    inputId="name"
+    label="Galerija"
+    description="Fotografo nuotraukos bus priskirtos šiai galerijai">
+    <app-select
+      id="targetGallery"
+      label="Galerija"
+      [formControl]="galleryControl"
+    >
+      <option *ngFor="let opt of galleries" [value]="opt.id">
+        {{ opt.name }}
+      </option>
+    </app-select>
+  </app-form-input-section>
+
   <app-input-field id="photographer-search" label="Paieška" [formControl]="searchControl" />
+  <app-pagination-controls [tableData]="userTableData" />
   <table class="table assign-photographer-table" *ngIf="!userTableData.loading">
     <tr>
       <th>Vardas</th>

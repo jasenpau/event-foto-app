@@ -55,8 +55,8 @@ public class UserRepository : IUserRepository
 
         if (searchParams.ExcludeEventId.HasValue && searchParams.ExcludeEventId.Value > 0)
         {
-            query.Include(u => u.AssignedPhotographerEvents);
-            query = query.Where(u => u.AssignedPhotographerEvents.All(e => e.Id != searchParams.ExcludeEventId.Value));
+            query.Include(u => u.Assignments).ThenInclude(a => a.Gallery);
+            query = query.Where(u => u.Assignments.All(e => e.Gallery.EventId != searchParams.ExcludeEventId.Value));
         }
 
         query = query.OrderBy(u => u.Name).ThenBy(u => u.Email);

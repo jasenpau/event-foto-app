@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using EventFoto.Core.Assignments;
 using EventFoto.Core.Events;
 using EventFoto.Core.Galleries;
 using EventFoto.Core.Processing;
@@ -21,6 +22,7 @@ public class EventPhotoService : IEventPhotoService
     private readonly IDownloadRequestRepository _downloadRequestRepository;
     private readonly IGalleryRepository _galleryRepository;
     private readonly IUploadBatchRepository _uploadBatchRepository;
+    private readonly IPhotographerAssignmentRepository _assignmentRepository;
 
     public EventPhotoService(IEventService eventService,
         IBlobStorage blobStorage,
@@ -29,6 +31,7 @@ public class EventPhotoService : IEventPhotoService
         IDownloadRequestRepository downloadRequestRepository,
         IGalleryRepository galleryRepository,
         IUploadBatchRepository uploadBatchRepository,
+        IPhotographerAssignmentRepository assignmentRepository,
         IConfiguration configuration)
     {
         _eventService = eventService;
@@ -38,6 +41,7 @@ public class EventPhotoService : IEventPhotoService
         _downloadRequestRepository = downloadRequestRepository;
         _galleryRepository = galleryRepository;
         _uploadBatchRepository = uploadBatchRepository;
+        _assignmentRepository = assignmentRepository;
         _configuration = configuration;
     }
 
@@ -59,11 +63,18 @@ public class EventPhotoService : IEventPhotoService
             UserId = userId,
         });
 
+        var galleryId = uploadPhotoData.GalleryId;
+        if (galleryId is null)
+        {
+            var assignment = await _assignmentRepository.GetForEventAsync(uploadPhotoData.EventId, userId);
+            galleryId = assignment?.GalleryId ?? eventResult.Data.DefaultGalleryId;
+        }
+
         var eventPhotos = uploadPhotoData.PhotoFilenames.Select(photo => new EventPhoto
         {
             UserId = userId,
             CaptureDate = uploadPhotoData.CaptureDate,
-            GalleryId = uploadPhotoData.GalleryId ?? eventResult.Data.DefaultGalleryId,
+            GalleryId = galleryId.Value,
             Filename = photo,
             UploadDate = DateTime.UtcNow,
             UploadBatchId = uploadBatch.Id,

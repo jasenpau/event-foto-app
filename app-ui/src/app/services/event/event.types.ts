@@ -29,12 +29,14 @@ export interface EventDto {
   createdByUser: string;
   createdBy: string;
   watermarkId?: number | null;
+  defaultGalleryId: number;
 }
 
-export interface EventPhotographer {
-  id: string;
-  name: string;
-  photoCount: number;
+export interface PhotographerAssignment {
+  userId: string;
+  userName: string;
+  galleryId: number;
+  galleryName: string;
 }
 
 export interface EventSearchParamsDto {

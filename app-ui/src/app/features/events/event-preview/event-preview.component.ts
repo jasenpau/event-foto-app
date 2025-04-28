@@ -3,11 +3,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { EventService } from '../../../services/event/event.service';
 import {
   EventDto,
-  EventPhotographer,
+  PhotographerAssignment,
 } from '../../../services/event/event.types';
 import { NgForOf, NgIf } from '@angular/common';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, takeUntil, tap } from 'rxjs';
 import { formatLithuanianDate } from '../../../helpers/formatLithuanianDate';
 import { ButtonComponent } from '../../../components/button/button.component';
@@ -21,7 +21,7 @@ import { SideViewComponent } from '../../../components/side-view/side-view.compo
 import { AssignPhotographerFormComponent } from '../assign-photographer-form/assign-photographer-form.component';
 import { LoaderService } from '../../../services/loader/loader.service';
 import { GalleryDto } from '../../../services/gallery/gallery.types';
-import { useLoader } from '../../../helpers/useLoader';
+import { useLoader, useLocalLoader } from '../../../helpers/useLoader';
 import { CardGridComponent } from '../../../components/cards/card-grid/card-grid.component';
 import { CardItemComponent } from '../../../components/cards/card-item/card-item.component';
 import { PluralDefinition, pluralizeLt } from '../../../helpers/pluralizeLt';
@@ -36,6 +36,7 @@ import {
 import { GalleryService } from '../../../services/gallery/gallery.service';
 import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
 import { CreateEventComponent } from '../create-event/create-event.component';
+import { SpinnerComponent } from '../../../components/spinner/spinner.component';
 
 const COMPONENT_LOADING_KEY = 'event-preview';
 
@@ -44,7 +45,6 @@ const COMPONENT_LOADING_KEY = 'event-preview';
   imports: [
     ReactiveFormsModule,
     NgIf,
-    RouterLink,
     ButtonComponent,
     EventBadgeComponent,
     NgForOf,
@@ -56,6 +56,7 @@ const COMPONENT_LOADING_KEY = 'event-preview';
     AppSvgIconComponent,
     PageHeaderComponent,
     CreateEventComponent,
+    SpinnerComponent,
   ],
   templateUrl: './event-preview.component.html',
   styleUrl: './event-preview.component.scss',
@@ -67,7 +68,7 @@ export class EventPreviewComponent
   protected readonly ButtonType = ButtonType;
 
   protected event?: EventDto;
-  protected eventPhotographers?: EventPhotographer[];
+  protected eventPhotographers?: PhotographerAssignment[];
   protected showAssignSelf = false;
   protected isAssignedSelf = false;
   protected showAssignUsers = false;
@@ -77,6 +78,7 @@ export class EventPreviewComponent
   protected userId?: string;
   protected galleries: GalleryDto[] = [];
   protected sasUri?: SasUri;
+  protected assignmentsLoading = false;
 
   constructor(
     private readonly eventService: EventService,
@@ -112,12 +114,13 @@ export class EventPreviewComponent
       this.eventService
         .unassignPhotographerFromEvent(this.event.id, userId)
         .pipe(
-          tap((data) => {
-            this.setPhotographerList(data);
+          useLocalLoader((value) => (this.assignmentsLoading = value)),
+          tap(() => {
             this.snackbarService.addSnackbar(
               SnackbarType.Success,
               'Fotografas buvo pašalintas.',
             );
+            this.loadPhotographers(this.event!.id);
           }),
           takeUntil(this.destroy$),
         )
@@ -126,16 +129,24 @@ export class EventPreviewComponent
   }
 
   protected assignSelf() {
-    if (this.event && this.userId) {
+    const defaultGallery = this.galleries.find((g) => g.isMainGallery);
+    console.log(defaultGallery);
+    console.log(this.galleries);
+    if (this.event && this.userId && defaultGallery) {
       this.eventService
-        .assignPhotographerToEvent(this.event.id, this.userId)
+        .assignPhotographerToEvent(
+          this.event.id,
+          defaultGallery.id,
+          this.userId,
+        )
         .pipe(
-          tap((data) => {
-            this.setPhotographerList(data);
+          useLocalLoader((value) => (this.assignmentsLoading = value)),
+          tap(() => {
             this.snackbarService.addSnackbar(
               SnackbarType.Success,
               'Jūs buvote pridėtas prie renginio kaip fotografas.',
             );
+            this.loadPhotographers(this.event!.id);
           }),
           takeUntil(this.destroy$),
         )
@@ -244,10 +255,7 @@ export class EventPreviewComponent
     this.eventService
       .getEventPhotographers(eventId)
       .pipe(
-        useLoader(
-          `${COMPONENT_LOADING_KEY}_photographers-data`,
-          this.loaderService,
-        ),
+        useLocalLoader((value) => (this.assignmentsLoading = value)),
         tap((data) => {
           this.setPhotographerList(data);
         }),
@@ -278,10 +286,10 @@ export class EventPreviewComponent
     this.showAssignUsers = groups.includes(UserGroup.EventAdmin);
   }
 
-  private setPhotographerList(photographers: EventPhotographer[]) {
-    this.eventPhotographers = photographers;
+  private setPhotographerList(assignment: PhotographerAssignment[]) {
+    this.eventPhotographers = assignment;
     this.isAssignedSelf = this.userId
-      ? photographers.some((u) => this.userId === u.id)
+      ? assignment.some((u) => this.userId === u.userId)
       : false;
   }
 

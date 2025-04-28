@@ -31,6 +31,7 @@ public record GalleryDto
         EventId = projection.EventId,
         Thumbnail = projection.Filename,
         PhotoCount = projection.PhotoCount ?? 0,
+        IsMainGallery = projection.DefaultGalleryId == projection.Id,
         WatermarkId = null
     };
 }

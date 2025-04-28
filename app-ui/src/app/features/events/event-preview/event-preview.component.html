@@ -37,34 +37,43 @@
       <div class="event__details-row">
         <div class="event__photographers-header">
           <p class="text-title-large">Fotografai</p>
-          <div class="event__photographers-actions">
-            <app-button *ngIf="showAssignSelf && !isAssignedSelf" [type]="ButtonType.Filled" (click)="assignSelf()">
+          <div class="event__photographers-actions" *ngIf="!assignmentsLoading">
+            <app-button
+              *ngIf="showAssignSelf && !isAssignedSelf"
+              [type]="ButtonType.Filled"
+              (click)="assignSelf()"
+            >
               Pridėti save
             </app-button>
-            <app-button *ngIf="showAssignUsers" [type]="ButtonType.Filled" (click)="openPhotographerForm()">
+            <app-button
+              *ngIf="showAssignUsers"
+              [type]="ButtonType.Filled"
+              (click)="openPhotographerForm()"
+            >
               Pridėti fotografą
             </app-button>
           </div>
         </div>
-        <table class="table event__photographers">
+        <table class="table event__photographers" *ngIf="!assignmentsLoading">
           <tr>
             <th>Vardas</th>
-            <th>Nuotraukos</th>
+            <th>Priskirta galerija</th>
             <th></th>
           </tr>
-          <tr *ngFor="let photographer of eventPhotographers">
-            <td>{{photographer.name}}</td>
-            <td><a [routerLink]="'/event/' + event.id + '/gallery?user=' + photographer.id">{{photographer.photoCount}}</a></td>
+          <tr *ngFor="let assignment of eventPhotographers">
+            <td>{{assignment.userName}}</td>
+            <td>{{ assignment.galleryName }}</td>
             <td>
               <app-button
-                (click)="removePhotographer(photographer.id)"
-                *ngIf="showAssignUsers || photographer.id === userId"
+                (click)="removePhotographer(assignment.userId)"
+                *ngIf="showAssignUsers || assignment.userId === userId"
                 [type]="ButtonType.Text">
                 Pašalinti
               </app-button>
             </td>
           </tr>
         </table>
+        <app-spinner *ngIf="assignmentsLoading" />
       </div>
     </div>
   </div>
@@ -89,7 +98,10 @@
   </div>
 </div>
 <app-side-view *ngIf="showAssignUsersForm && event">
-  <app-assign-photographer-form [eventId]="event.id" (formEvent)="handlePhotographerFormEvent($event)" />
+  <app-assign-photographer-form
+    [eventId]="event.id"
+    [galleries]="galleries"
+    (formEvent)="handlePhotographerFormEvent($event)" />
 </app-side-view>
 <app-side-view *ngIf="showGalleryCreateForm && event">
   <app-create-gallery-form [eventId]="event.id" (formEvent)="handleGalleryCreateFormEvent($event)" />

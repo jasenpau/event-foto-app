@@ -7,6 +7,7 @@ using EventFoto.Data.Enums;
 using EventFoto.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using EventFoto.Core.Assignments;
 
 namespace EventFoto.API.Controllers;
 
@@ -16,10 +17,12 @@ namespace EventFoto.API.Controllers;
 public class EventController : AppControllerBase
 {
     private readonly IEventService _eventService;
+    private readonly IAssignmentService _assignmentService;
 
-    public EventController(IEventService eventService)
+    public EventController(IEventService eventService, IAssignmentService assignmentService)
     {
         _eventService = eventService;
+        _assignmentService = assignmentService;
     }
 
     [HttpGet("search")]
@@ -60,15 +63,21 @@ public class EventController : AppControllerBase
     }
 
     [HttpGet("{eventId:int}/photographers")]
-    public async Task<ActionResult<IList<EventPhotographerDto>>> GetEventPhotographers(int eventId)
+    public async Task<ActionResult<IList<AssignmentResponseDto>>> GetEventPhotographers(int eventId)
     {
-        var result =  await _eventService.GetEventPhotographersAsync(eventId);
-        return result.Success ? Ok(result.Data) : result.ToErrorResponse();
+        var result = await _assignmentService.GetAssignmentsForEvent(eventId);
+        if (!result.Success)
+        {
+            return result.ToErrorResponse();
+        }
+
+        var response = result.Data.Select(AssignmentResponseDto.FromModel).ToList();
+        return Ok(response);
     }
 
     [HttpPost("{eventId:int}/photographers")]
     [AccessGroupFilter(UserGroup.Photographer)]
-    public async Task<ActionResult<bool>> AssignPhotographer(int eventId, [FromBody] PhotographerAssignmentRequestDto requestDto)
+    public async Task<ActionResult<bool>> AssignPhotographer(int eventId, [FromBody] AssignmentRequestDto requestDto)
     {
         var userGroup = RequestHighestUserGroup();
         if (userGroup is null || (userGroup == UserGroup.Photographer && requestDto.UserId != RequestUserId()))
@@ -76,7 +85,7 @@ public class EventController : AppControllerBase
             return Unauthorized("User does not have permission to assign others.");
         }
 
-        var result = await _eventService.AssignPhotographerAsync(eventId, requestDto.UserId);
+        var result = await _assignmentService.AssignPhotographerAsync(requestDto.GalleryId, requestDto.UserId);
         return result.Success ? Ok(result.Data) : result.ToErrorResponse();
     }
 
@@ -90,7 +99,7 @@ public class EventController : AppControllerBase
             return Unauthorized("User does not have permission to unassign others.");
         }
 
-        var result = await _eventService.UnassignPhotographerAsync(eventId, userId);
+        var result = await _assignmentService.RemovePhotographerAssignmentAsync(eventId, userId);
         return result.Success ? Ok(result.Data) : result.ToErrorResponse();
     }
 }

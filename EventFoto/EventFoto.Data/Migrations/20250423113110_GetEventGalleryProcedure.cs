@@ -18,13 +18,14 @@ namespace EventFoto.Data.Migrations
                     Id INTEGER,
                     Name VARCHAR(255),
                     EventId INTEGER,
+                    DefaultGalleryId INTEGER,
                     Filename TEXT,
                     PhotoCount BIGINT
                 )
                 AS $$
                 BEGIN
                     RETURN QUERY
-                    SELECT g.""Id"", g.""Name"", g.""EventId"", ext.""Filename"", ext.""PhotoCount""
+                    SELECT g.""Id"", g.""Name"", g.""EventId"", e.""DefaultGalleryId"", ext.""Filename"", ext.""PhotoCount""
                     FROM public.""Gallery"" g
                     LEFT JOIN (
                         SELECT ""GalleryId"", MIN(""ProcessedFilename"") AS ""Filename"", COUNT(""Id"") AS ""PhotoCount""
@@ -32,6 +33,7 @@ namespace EventFoto.Data.Migrations
                         WHERE ""ProcessedFilename"" IS NOT NULL
                         GROUP BY ""GalleryId""
                     ) ext ON g.""Id"" = ext.""GalleryId""
+                    LEFT JOIN public.""Events"" e ON e.""Id"" = g.""EventId""
                     WHERE g.""EventId"" = input_event_id
                     ORDER BY g.""Id"" ASC;
                 END;
@@ -42,7 +44,7 @@ namespace EventFoto.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("DROP FUNCTION IF EXISTS get_event_galleries(INTEGER, INTEGER, INTEGER);");
+            migrationBuilder.Sql("DROP FUNCTION IF EXISTS get_event_galleries(INTEGER);");
         }
     }
 }

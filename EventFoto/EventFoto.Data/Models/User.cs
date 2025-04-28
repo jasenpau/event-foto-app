@@ -10,5 +10,5 @@ public record User
     public DateTime InvitedAt { get; set; }
     public string InvitationKey { get; set; }
 
-    public IList<Event> AssignedPhotographerEvents { get; set; }
+    public IList<PhotographerAssignment> Assignments { get; set; }
 }

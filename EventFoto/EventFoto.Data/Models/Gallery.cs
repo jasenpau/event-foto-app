@@ -10,4 +10,5 @@ public record Gallery
     public Event Event { get; set; }
     public IList<EventPhoto> Photos { get; set; }
     public Watermark Watermark { get; set; }
+    public IList<PhotographerAssignment> Assignments { get; set; }
 }

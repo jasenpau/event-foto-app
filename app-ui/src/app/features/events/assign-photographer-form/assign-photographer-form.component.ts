@@ -19,6 +19,10 @@ import { debounceTime, takeUntil, tap } from 'rxjs';
 import { NgForOf, NgIf } from '@angular/common';
 import { LoaderOverlayComponent } from '../../../components/loader-overlay/loader-overlay.component';
 import { useLocalLoader } from '../../../helpers/useLoader';
+import { GalleryDto } from '../../../services/gallery/gallery.types';
+import { SelectComponent } from '../../../components/forms/select/select.component';
+import { FormInputSectionComponent } from '../../../components/forms/form-input-section/form-input-section.component';
+import { PaginationControlsComponent } from '../../../components/pagination-controls/pagination-controls.component';
 
 const USER_TABLE_PAGE_SIZE = 10;
 
@@ -31,6 +35,9 @@ const USER_TABLE_PAGE_SIZE = 10;
     NgForOf,
     ReactiveFormsModule,
     LoaderOverlayComponent,
+    SelectComponent,
+    FormInputSectionComponent,
+    PaginationControlsComponent,
   ],
   templateUrl: './assign-photographer-form.component.html',
   styleUrl: './assign-photographer-form.component.scss',
@@ -40,11 +47,15 @@ export class AssignPhotographerFormComponent
   implements OnInit, OnDestroy
 {
   @Input({ required: true }) eventId!: number;
+  @Input({ required: true }) galleries!: GalleryDto[];
   @Output() formEvent = new EventEmitter<string>();
   protected readonly ButtonType = ButtonType;
 
   protected userTableData: PagedDataTable<string, UserListDto>;
   protected searchControl = new FormControl('', [Validators.max(100)]);
+  protected galleryControl = new FormControl<number | null>(null, [
+    Validators.required,
+  ]);
   protected isLoading = false;
 
   constructor(
@@ -69,6 +80,11 @@ export class AssignPhotographerFormComponent
 
   ngOnInit() {
     this.initializeSearch();
+
+    const defaultGallery = this.galleries.find((g) => g.isMainGallery);
+    if (defaultGallery) {
+      this.galleryControl.patchValue(defaultGallery.id);
+    }
   }
 
   protected cancel() {
@@ -76,8 +92,11 @@ export class AssignPhotographerFormComponent
   }
 
   protected assignUser(id: string) {
+    const selectedGalleryId = this.galleryControl.value;
+    if (!selectedGalleryId) return;
+
     this.eventService
-      .assignPhotographerToEvent(this.eventId, id)
+      .assignPhotographerToEvent(this.eventId, selectedGalleryId, id)
       .pipe(
         useLocalLoader((value) => (this.isLoading = value)),
         tap(() => {

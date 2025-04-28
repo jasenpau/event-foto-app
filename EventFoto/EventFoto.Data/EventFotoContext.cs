@@ -12,6 +12,7 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
     public DbSet<DownloadRequest> DownloadRequests { get; set; }
     public DbSet<UploadBatch> UploadBatches { get; set; }
     public DbSet<Watermark> Watermarks { get; set; }
+    public DbSet<PhotographerAssignment> PhotographerAssignments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -60,8 +61,6 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
                 .WithOne()
                 .HasForeignKey<Event>(e => e.DefaultGalleryId)
                 .OnDelete(DeleteBehavior.Restrict);
-            entity.HasMany(e => e.Photographers)
-                .WithMany(u => u.AssignedPhotographerEvents);
             entity.HasOne(e => e.Watermark)
                 .WithMany()
                 .OnDelete(DeleteBehavior.SetNull);
@@ -141,5 +140,18 @@ public class EventFotoContext(DbContextOptions options) : DbContext(options)
                 .HasForeignKey(e => e.UserId);
             entity.ToTable("UploadBatches");
         });
-    }   
+
+        modelBuilder.Entity<PhotographerAssignment>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.HasOne(e => e.User)
+                .WithMany(u => u.Assignments)
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.Gallery)
+                .WithMany(u => u.Assignments)
+                .HasForeignKey(e => e.GalleryId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+    }
 }
