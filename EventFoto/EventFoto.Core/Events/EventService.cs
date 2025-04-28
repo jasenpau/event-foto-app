@@ -80,7 +80,7 @@ public class EventService : IEventService
 
     }
 
-    public async Task<ServiceResult<Event>> CreateEventAsync(CreateEventDto eventDto, Guid userId)
+    public async Task<ServiceResult<Event>> CreateEventAsync(CreateEditEventDto eventDto, Guid userId)
     {
         var eventData = new Event
         {
@@ -91,6 +91,7 @@ public class EventService : IEventService
             Note = eventDto.Note?.Trim(),
             CreatedBy = userId,
             IsArchived = false,
+            WatermarkId = eventDto.WatermarkId,
         };
         var defaultGallery = new Gallery
         {
@@ -102,6 +103,35 @@ public class EventService : IEventService
             var containerName = _blobStorage.GetContainerName(eventData.Id);
             await _blobStorage.CreateContainerAsync(containerName);
             return ServiceResult<Event>.Ok(eventData);
+        }
+        catch (DbUpdateException ex)
+        {
+            if (ex.InnerException is PostgresException { SqlState: "23505" })
+            {
+                return ServiceResult<Event>.Fail("Duplicate event title", HttpStatusCode.Conflict);
+            }
+
+            throw;
+        }
+    }
+
+    public async Task<ServiceResult<Event>> UpdateEventAsync(int id, CreateEditEventDto eventDto)
+    {
+        try
+        {
+            var existingEvent = await _eventRepository.GetByIdAsync(id);
+            if (existingEvent == null)
+                return ServiceResult<Event>.Fail("Event not found", HttpStatusCode.NotFound);
+
+            existingEvent.Name = eventDto.Name.Trim();
+            existingEvent.StartDate = eventDto.StartDate;
+            existingEvent.EndDate = eventDto.EndDate;
+            existingEvent.Location = eventDto.Location?.Trim();
+            existingEvent.Note = eventDto.Note?.Trim();
+            existingEvent.WatermarkId = eventDto.WatermarkId;
+
+            var updatedEvent = await _eventRepository.UpdateAsync(existingEvent);
+            return ServiceResult<Event>.Ok(updatedEvent);
         }
         catch (DbUpdateException ex)
         {

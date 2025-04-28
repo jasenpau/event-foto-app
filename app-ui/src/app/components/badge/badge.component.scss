@@ -4,6 +4,7 @@
 .badge {
   @include typography.label-large;
 
+  display: block;
   padding: 6px 8px;
   border-radius: 4px;
 

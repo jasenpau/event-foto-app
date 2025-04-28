@@ -35,6 +35,7 @@ import {
 } from '../../../components/svg-icon/svg-icon.types';
 import { GalleryService } from '../../../services/gallery/gallery.service';
 import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
+import { CreateEventComponent } from '../create-event/create-event.component';
 
 const COMPONENT_LOADING_KEY = 'event-preview';
 
@@ -54,6 +55,7 @@ const COMPONENT_LOADING_KEY = 'event-preview';
     CreateEditGalleryFormComponent,
     AppSvgIconComponent,
     PageHeaderComponent,
+    CreateEventComponent,
   ],
   templateUrl: './event-preview.component.html',
   styleUrl: './event-preview.component.scss',
@@ -71,6 +73,7 @@ export class EventPreviewComponent
   protected showAssignUsers = false;
   protected showAssignUsersForm = false;
   protected showGalleryCreateForm = false;
+  protected showEventEditForm = false;
   protected userId?: string;
   protected galleries: GalleryDto[] = [];
   protected sasUri?: SasUri;
@@ -148,6 +151,10 @@ export class EventPreviewComponent
     this.showGalleryCreateForm = true;
   }
 
+  protected openEventEditForm() {
+    this.showEventEditForm = true;
+  }
+
   protected handlePhotographerFormEvent($event: string) {
     if ($event === 'cancel') {
       this.showAssignUsersForm = false;
@@ -171,6 +178,19 @@ export class EventPreviewComponent
         'Galerija sukurta.',
       );
       this.loadGalleries(this.event!.id);
+    }
+  }
+
+  protected handleEventEditFormEvent($event: string) {
+    if ($event === 'cancel') {
+      this.showEventEditForm = false;
+    } else if ($event === 'updated') {
+      this.showEventEditForm = false;
+      this.snackbarService.addSnackbar(
+        SnackbarType.Success,
+        'Renginys atnaujintas.',
+      );
+      this.loadEvent(this.event!.id);
     }
   }
 

@@ -2,6 +2,11 @@
   &__table {
     width: 100%;
     margin-top: 1rem;
+
+    &--large td {
+      padding-top: 24px;
+      padding-bottom: 24px;
+    }
   }
 
   &__table-loader {
@@ -10,13 +15,17 @@
     padding: 2rem;
   }
 
+  &__row {
+    padding: 24px 0;
+  }
+
   &__preview {
-    width: 200px;
-    padding: 0.5rem;
+    width: 132px;
 
     img {
-      max-width: 100%;
-      max-height: 100px;
+      padding: 4px;
+      width: 68px;
+      height: 68px;
       object-fit: contain;
     }
   }

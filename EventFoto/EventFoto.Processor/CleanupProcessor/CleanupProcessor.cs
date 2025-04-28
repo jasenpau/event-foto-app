@@ -29,16 +29,15 @@ public class CleanupProcessor : ICleanupProcessor
         var blobs = downloadRequests.Select(r => r.Filename).ToList();
         var archiveContainerName = _configuration["ProcessorOptions:ArchiveDownloadContainer"];
 
-        var blobDeletionTask = _blobStorage.DeleteFilesAsync(archiveContainerName, blobs, cancellationToken);
-        var dbDeletionTask = _downloadRequestRepository.DeleteAsync(downloadRequests);
-        var uploadBatchDeletionTask = _uploadBatchRepository.DeleteBeforeDateAsync(deletionDate);
+        await _downloadRequestRepository.DeleteAsync(downloadRequests);
+        var blobDeletionResult = await _blobStorage.DeleteFilesAsync(archiveContainerName, blobs, cancellationToken);
+        var uploadBatchesDeleted = await _uploadBatchRepository.DeleteBeforeDateAsync(deletionDate);
 
-        await Task.WhenAll(blobDeletionTask, dbDeletionTask, uploadBatchDeletionTask);
         return new CleanupResult
         {
             DownloadRequests = downloadRequests.Count,
-            DownloadZips = blobDeletionTask.Result.Success ? blobDeletionTask.Result.Data : 0,
-            UploadBatches = uploadBatchDeletionTask.Result
+            DownloadZips = blobDeletionResult.Success ? blobDeletionResult.Data : 0,
+            UploadBatches = uploadBatchesDeleted
         };
     }
 }

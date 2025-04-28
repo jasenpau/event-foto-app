@@ -5,18 +5,14 @@
   </div>
   <table
     class="watermarks-search__table table"
+    [ngClass]="{ 'watermarks-search__table--large': showLarge }"
     *ngIf="!watermarkTableData.loading">
-    <tr>
-      <th class="table__pad-row-start">Pavadinimas</th>
-      <th>Peržiūra</th>
-      <th class="table__pad-row-end"></th>
-    </tr>
     <tr *ngFor="let watermark of watermarkTableData.pageData">
-      <td class="table__pad-row-start">
-        {{ watermark.name }}
+      <td class="table__pad-row-start watermarks-search__preview">
+        <img class="chess-background" [src]="getWatermarkUrl(watermark)" [alt]="watermark.name">
       </td>
-      <td class="watermarks-search__preview">
-        <img [src]="getWatermarkUrl(watermark)" [alt]="watermark.name">
+      <td>
+        {{ watermark.name }}
       </td>
       <td class="table__pad-row-end">
         <app-button

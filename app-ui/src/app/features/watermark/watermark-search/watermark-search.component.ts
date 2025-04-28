@@ -14,7 +14,7 @@ import { WatermarkDto } from '../../../services/watermark/watermark.types';
 import { WatermarkService } from '../../../services/watermark/watermark.service';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { debounceTime, takeUntil, tap } from 'rxjs';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { SpinnerComponent } from '../../../components/spinner/spinner.component';
 import { ButtonComponent } from '../../../components/button/button.component';
 import { ButtonType } from '../../../components/button/button.types';
@@ -35,6 +35,7 @@ const WATERMARK_TABLE_PAGE_SIZE = 20;
     NgIf,
     SpinnerComponent,
     ButtonComponent,
+    NgClass,
   ],
   templateUrl: './watermark-search.component.html',
   styleUrl: './watermark-search.component.scss',
@@ -49,6 +50,7 @@ export class WatermarkSearchComponent
     }
   }
   @Input() actionButtonLabel = '';
+  @Input() showLarge = false;
   @Output() actionWatermarkId = new EventEmitter<number | null>();
 
   protected readonly buttonType = ButtonType;

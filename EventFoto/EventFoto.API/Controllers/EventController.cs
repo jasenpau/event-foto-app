@@ -44,10 +44,18 @@ public class EventController : AppControllerBase
     
     [HttpPost]
     [AccessGroupFilter(UserGroup.EventAdmin)]
-    public async Task<ActionResult<EventDto>> CreateEvent([FromBody] CreateEventDto createEventDto)
+    public async Task<ActionResult<EventDto>> CreateEvent([FromBody] CreateEditEventDto createEventDto)
     {
         var userId = RequestUserId();
         var result = await _eventService.CreateEventAsync(createEventDto, userId);
+        return result.Success ? Ok(EventDto.FromEvent(result.Data)) : result.ToErrorResponse();
+    }
+
+    [HttpPut("{id:int}")]
+    [AccessGroupFilter(UserGroup.EventAdmin)]
+    public async Task<ActionResult<EventDto>> UpdateEvent(int id, [FromBody] CreateEditEventDto updateEventDto)
+    {
+        var result = await _eventService.UpdateEventAsync(id, updateEventDto);
         return result.Success ? Ok(EventDto.FromEvent(result.Data)) : result.ToErrorResponse();
     }
 

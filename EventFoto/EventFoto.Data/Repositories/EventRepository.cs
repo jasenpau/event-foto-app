@@ -115,4 +115,11 @@ public class EventRepository : IEventRepository
             HasNextPage = hasNextPage
         };
     }
+
+    public async Task<Event> UpdateAsync(Event eventData)
+    {
+        _context.Entry(eventData).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
+        return await GetByIdAsync(eventData.Id);
+    }
 }

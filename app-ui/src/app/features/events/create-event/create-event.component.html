@@ -1,7 +1,7 @@
 <div class="create-event">
   <div class="side-view-header">
-    <h2 class="text-headline-large no-margin">Naujas renginys</h2>
-    <app-button [type]="buttonType.Text" (click)="cancel()">Atšaukti</app-button>
+    <h2 class="text-headline-large no-margin">{{ eventToEdit ? 'Redaguoti renginį' : 'Naujas renginys' }}</h2>
+    <app-button [type]="buttonType.Text" (click)="cancel()">{{ eventToEdit ? 'Uždaryti' : 'Atšaukti' }}</app-button>
   </div>
   <form [formGroup]="createEventForm" (ngSubmit)="onSubmit()">
     <app-form-input-section
@@ -46,7 +46,7 @@
       subtext="iki 500 simbolių">
       <app-text-area id="note" formControlName="note" />
     </app-form-input-section>
-    <app-button>Sukurti</app-button>
+    <app-button>{{ eventToEdit ? 'Išsaugoti' : 'Sukurti' }}</app-button>
   </form>
 </div>
 <app-loader-overlay *ngIf="isLoading" />

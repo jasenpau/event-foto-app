@@ -68,6 +68,14 @@ export class EventService {
     );
   }
 
+  updateEvent(id: number, event: EventCreateDto): Observable<EventDto> {
+    return this.http.put<EventDto>(
+      `${this.apiBaseUrl}/event/${id}`,
+      event,
+      getAuthHeaders(),
+    );
+  }
+
   searchEvents(searchParams: EventSearchParamsDto) {
     let params = new HttpParams();
     if (searchParams.searchTerm)

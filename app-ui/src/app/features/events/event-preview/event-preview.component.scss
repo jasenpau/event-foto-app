@@ -9,6 +9,13 @@
     margin-bottom: 24px;
   }
 
+  &__header-controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+
   @media (max-width: breakpoints.$mobile-large) {
     &__header-back {
       margin-left: 40px;

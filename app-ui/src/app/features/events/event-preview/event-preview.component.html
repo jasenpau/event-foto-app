@@ -3,7 +3,15 @@
     <div class="event__header">
       <app-button class="event__header-back" link="/event" [type]="ButtonType.Text">Grįžti į renginius</app-button>
       <h2 class="text-headline-large no-margin">{{event.name}}</h2>
-      <app-event-badge [event]="event" />
+      <div class="event__header-controls">
+        <app-event-badge [event]="event" />
+        <app-button
+          *ngIf="showAssignUsers"
+          [type]="ButtonType.Text"
+          (click)="openEventEditForm()">
+          Redaguoti
+        </app-button>
+      </div>
     </div>
   </app-page-header>
   <div class="event__details">
@@ -85,4 +93,7 @@
 </app-side-view>
 <app-side-view *ngIf="showGalleryCreateForm && event">
   <app-create-gallery-form [eventId]="event.id" (formEvent)="handleGalleryCreateFormEvent($event)" />
+</app-side-view>
+<app-side-view *ngIf="showEventEditForm && event">
+  <app-create-event [eventToEdit]="event" (formEvent)="handleEventEditFormEvent($event)" />
 </app-side-view>

@@ -10,6 +10,7 @@ public interface IEventService
     public Task<ServiceResult<IList<EventPhotographerDto>>> GetEventPhotographersAsync(int eventId);
     public Task<ServiceResult<IList<EventPhotographerDto>>> AssignPhotographerAsync(int eventId, Guid userId);
     public Task<ServiceResult<IList<EventPhotographerDto>>> UnassignPhotographerAsync(int eventId, Guid userId);
-    public Task<ServiceResult<Event>> CreateEventAsync(CreateEventDto eventDto, Guid userId);
+    public Task<ServiceResult<Event>> CreateEventAsync(CreateEditEventDto eventDto, Guid userId);
     public Task<ServiceResult<PagedData<string, EventListProjection>>> SearchEventsAsync(EventSearchParams searchParams);
+    public Task<ServiceResult<Event>> UpdateEventAsync(int id, CreateEditEventDto eventDto);
 }
