@@ -1,1 +1,10 @@
-<p>watermark-display works!</p>
+<div class="watermark-display" *ngIf="watermark && sasUri && !loading">
+  <img class="chess-background" [src]="getWatermarkUrl()" [alt]="watermark.name">
+  <span class="watermark-display__name text-body-large">{{ watermark.name }}</span>
+</div>
+
+<app-spinner *ngIf="loading" />
+
+<div class="watermark-display__empty" *ngIf="!watermark && !loading">
+  <span >Vandens ženklas nepasirinktas</span>
+</div>

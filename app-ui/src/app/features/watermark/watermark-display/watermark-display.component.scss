@@ -1,0 +1,30 @@
+@use "colors";
+
+:host {
+  display: block;
+}
+
+.watermark-display {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 32px;
+  max-width: 300px;
+
+  img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+  }
+
+  &__name {
+    flex: 1;
+  }
+
+  &__empty {
+    height: 64px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+}

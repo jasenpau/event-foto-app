@@ -1,11 +1,39 @@
 <div class="side-view-header">
-  <h3 class="text-headline-large no-margin">{{ galleryToEdit ? 'Pervadinti galeriją' : 'Sukurti galeriją' }}</h3>
+  <h3 class="text-headline-large no-margin">{{ galleryToEdit ? 'Redaguoti galeriją' : 'Sukurti galeriją' }}</h3>
   <app-button [type]="ButtonType.Text" (click)="cancel()">Uždaryti</app-button>
 </div>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <app-input-field id="name" label="Galerijos pavadinimas" formControlName="name" />
+
+  <div class="watermark-field">
+  <p class="text-label-large no-margin watermark-field__label">Vandens ženklas</p>
+    <div class="watermark-field__display">
+      <app-watermark-display class="watermark-field__display-component" [watermarkId]="selectedWatermarkId" />
+      <app-button
+        [type]="ButtonType.Text"
+        (click)="toggleWatermarkSearch()"
+        [disableFormSubmit]="true">
+        Pakeisti
+      </app-button>
+      <app-button
+        *ngIf="selectedWatermarkId"
+        [type]="ButtonType.Text"
+        (click)="removeWatermark()"
+        [disableFormSubmit]="true">
+        Pašalinti
+      </app-button>
+    </div>
+  </div>
+
+  <app-watermark-search
+    *ngIf="showWatermarkSearch"
+    actionButtonLabel="Pasirinkti"
+    (actionWatermarkId)="onWatermarkSelected($event)"
+  />
+
   <app-button [disabled]="isLoading">
-    {{ galleryToEdit ? 'Atnaujinti' : 'Sukurti' }}
+    {{ galleryToEdit ? 'Išsaugoti' : 'Sukurti' }}
   </app-button>
 </form>
+
 <app-loader-overlay *ngIf="isLoading" />

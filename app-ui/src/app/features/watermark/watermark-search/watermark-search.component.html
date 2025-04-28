@@ -21,7 +21,9 @@
       <td class="table__pad-row-end">
         <app-button
           [type]="buttonType.Text"
-          (click)="triggerActionEvent(watermark.id)">
+          (click)="triggerActionEvent(watermark.id)"
+          [disableFormSubmit]="true"
+        >
           {{ actionButtonLabel }}
         </app-button>
       </td>

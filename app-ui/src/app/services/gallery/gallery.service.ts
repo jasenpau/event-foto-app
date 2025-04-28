@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { EnvService } from '../environment/env.service';
-import { GalleryDto } from './gallery.types';
+import { GalleryDataDto, GalleryDto } from './gallery.types';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
 
 @Injectable({
@@ -32,22 +32,20 @@ export class GalleryService {
     );
   }
 
-  createEventGallery(eventId: number, galleryName: string) {
+  createEventGallery(eventId: number, galleryData: GalleryDataDto) {
     return this.http.post<GalleryDto>(
       `${this.apiBaseUrl}/gallery/event/${eventId}`,
-      {
-        name: galleryName,
-      },
+      galleryData,
       {
         ...getAuthHeaders(),
       },
     );
   }
 
-  updateGallery(galleryId: number, name: string) {
+  updateGallery(galleryId: number, galleryData: GalleryDataDto) {
     return this.http.put<GalleryDto>(
       `${this.apiBaseUrl}/gallery/${galleryId}`,
-      { name },
+      galleryData,
       { ...getAuthHeaders() },
     );
   }

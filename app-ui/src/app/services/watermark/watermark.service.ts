@@ -53,6 +53,12 @@ export class WatermarkService {
     );
   }
 
+  getWatermark(id: number) {
+    return this.http.get<WatermarkDto>(`${this.apiBaseUrl}/watermark/${id}`, {
+      ...getAuthHeaders(),
+    });
+  }
+
   deleteWatermark(id: number) {
     return this.http.delete<void>(`${this.apiBaseUrl}/watermark/${id}`, {
       ...getAuthHeaders(),

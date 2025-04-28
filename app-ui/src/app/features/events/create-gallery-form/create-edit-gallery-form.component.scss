@@ -1,0 +1,21 @@
+@use "colors";
+
+.watermark-field {
+  margin-bottom: 32px;
+
+  &__label {
+    color: colors.$on-surface-variant;
+    margin-bottom: 8px;
+  }
+
+  &__display {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    align-items: center;
+  }
+
+  &__display-component {
+    flex: 1;
+  }
+}

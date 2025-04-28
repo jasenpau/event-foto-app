@@ -113,3 +113,9 @@ th.table__pad-row-end {
     }
   }
 }
+
+.chess-background {
+  background:
+    repeating-conic-gradient(#fff 0 90deg, #d9d9d9 0 180deg)
+    0 0/25% 25%;
+}

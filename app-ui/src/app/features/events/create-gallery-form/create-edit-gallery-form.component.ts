@@ -25,6 +25,8 @@ import { useLocalLoader } from '../../../helpers/useLoader';
 import { LoaderOverlayComponent } from '../../../components/loader-overlay/loader-overlay.component';
 import { GalleryService } from '../../../services/gallery/gallery.service';
 import { GalleryDto } from '../../../services/gallery/gallery.types';
+import { WatermarkSearchComponent } from '../../watermark/watermark-search/watermark-search.component';
+import { WatermarkDisplayComponent } from '../../watermark/watermark-display/watermark-display.component';
 
 @Component({
   selector: 'app-create-gallery-form',
@@ -35,6 +37,8 @@ import { GalleryDto } from '../../../services/gallery/gallery.types';
     NgIf,
     ReactiveFormsModule,
     LoaderOverlayComponent,
+    WatermarkSearchComponent,
+    WatermarkDisplayComponent,
   ],
   templateUrl: './create-edit-gallery-form.component.html',
   styleUrl: './create-edit-gallery-form.component.scss',
@@ -50,13 +54,15 @@ export class CreateEditGalleryFormComponent
   protected readonly ButtonType = ButtonType;
   protected form: FormGroup;
   protected isLoading = false;
+  protected selectedWatermarkId: number | null = null;
+  protected showWatermarkSearch = false;
 
   private existingNames: string[] = [];
 
   constructor(private readonly galleryService: GalleryService) {
     super();
     this.form = new FormGroup({
-      name: new FormControl('', [
+      name: new FormControl<string>('', [
         Validators.required,
         invalidValues(
           this.existingNames,
@@ -71,9 +77,17 @@ export class CreateEditGalleryFormComponent
       this.form.patchValue({
         name: this.galleryToEdit.name,
       });
-
-      this.existingNames.push(this.galleryToEdit.name);
+      this.selectedWatermarkId = this.galleryToEdit.watermarkId;
     }
+  }
+
+  protected toggleWatermarkSearch() {
+    this.showWatermarkSearch = !this.showWatermarkSearch;
+  }
+
+  protected onWatermarkSelected(watermarkId: number | null) {
+    this.selectedWatermarkId = watermarkId;
+    this.showWatermarkSearch = false;
   }
 
   protected cancel() {
@@ -84,11 +98,14 @@ export class CreateEditGalleryFormComponent
     this.form.markAllAsTouched();
     if (!this.form.valid) return;
 
-    const galleryName = this.form.value.name.trim();
+    const galleryData = {
+      name: this.form.value.name.trim(),
+      watermarkId: this.selectedWatermarkId,
+    };
 
     const request$ = this.galleryToEdit
-      ? this.galleryService.updateGallery(this.galleryToEdit.id, galleryName)
-      : this.galleryService.createEventGallery(this.eventId, galleryName);
+      ? this.galleryService.updateGallery(this.galleryToEdit.id, galleryData)
+      : this.galleryService.createEventGallery(this.eventId, galleryData);
 
     request$
       .pipe(
@@ -98,7 +115,7 @@ export class CreateEditGalleryFormComponent
         }),
         handleApiError((error) => {
           if (error.status === 409) {
-            this.addConflictingName(galleryName);
+            this.addConflictingName(galleryData.name);
           }
         }),
         takeUntil(this.destroy$),
@@ -109,5 +126,9 @@ export class CreateEditGalleryFormComponent
   private addConflictingName(name: string) {
     this.existingNames.push(name.trim());
     this.form.controls['name'].updateValueAndValidity();
+  }
+
+  removeWatermark() {
+    this.selectedWatermarkId = null;
   }
 }
