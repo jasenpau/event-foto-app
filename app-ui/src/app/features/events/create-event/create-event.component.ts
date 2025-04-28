@@ -19,7 +19,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { EventService } from '../../../services/event/event.service';
-import { takeUntil, tap } from 'rxjs';
+import { of, switchMap, takeUntil, tap } from 'rxjs';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { DatePickerComponent } from '../../../components/forms/date-picker/date-picker.component';
 import { TextAreaComponent } from '../../../components/forms/text-area/text-area.component';
@@ -33,6 +33,8 @@ import { useLocalLoader } from '../../../helpers/useLoader';
 import { EventDto } from '../../../services/event/event.types';
 import { WatermarkSearchComponent } from '../../watermark/watermark-search/watermark-search.component';
 import { WatermarkDisplayComponent } from '../../watermark/watermark-display/watermark-display.component';
+import { ModalService } from '../../../services/modal/modal.service';
+import { ModalActions } from '../../../services/modal/modal.types';
 
 @Component({
   selector: 'app-create-event',
@@ -65,12 +67,13 @@ export class CreateEventComponent
   protected createEventForm: FormGroup;
   protected existingNames: string[] = [];
   protected isLoading = false;
-  protected selectedWatermarkId: number | null = null;
+  protected selectedWatermarkId?: number | null;
   protected showWatermarkSearch = false;
 
   constructor(
     private readonly eventService: EventService,
     private readonly snackbarService: SnackbarService,
+    private readonly modalService: ModalService,
     private router: Router,
   ) {
     super();
@@ -116,7 +119,7 @@ export class CreateEventComponent
         location: this.eventToEdit.location || '',
         note: this.eventToEdit.note || '',
       });
-      this.selectedWatermarkId = this.eventToEdit.watermarkId || null;
+      this.selectedWatermarkId = this.eventToEdit.watermarkId;
     }
   }
 
@@ -144,11 +147,27 @@ export class CreateEventComponent
         location: formData.location,
         note: formData.note,
         watermarkId: this.selectedWatermarkId,
+        reprocessPhotos: false,
       };
 
-      const request$ = this.eventToEdit
-        ? this.eventService.updateEvent(this.eventToEdit.id, eventData)
-        : this.eventService.createEvent(eventData);
+      const confirmMessage$ =
+        this.eventToEdit &&
+        this.eventToEdit.watermarkId !== this.selectedWatermarkId
+          ? this.modalService.openConfirmModal({
+              body: 'Ar norite apdoroti visas renginio nuotraukas su nauju vandens ženklu?',
+              confirm: 'Taip',
+              cancel: 'Ne',
+            })
+          : of(ModalActions.Cancel);
+
+      const request$ = confirmMessage$.pipe(
+        switchMap((modalResponse) => {
+          eventData.reprocessPhotos = modalResponse === ModalActions.Confirm;
+          return this.eventToEdit
+            ? this.eventService.updateEvent(this.eventToEdit.id, eventData)
+            : this.eventService.createEvent(eventData);
+        }),
+      );
 
       request$
         .pipe(

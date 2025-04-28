@@ -11,4 +11,5 @@ public record CreateEditEventDto
     public string Location { get; init; }
     public string Note { get; init;}
     public int? WatermarkId { get; init; }
+    public bool ReprocessPhotos { get; init; } = false;
 }

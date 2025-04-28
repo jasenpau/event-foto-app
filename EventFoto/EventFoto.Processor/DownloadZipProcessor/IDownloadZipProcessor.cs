@@ -4,5 +4,5 @@ namespace EventFoto.Processor.DownloadZipProcessor;
 
 public interface IDownloadZipProcessor
 {
-    public Task ProcessDownloadAsync(ProcessingMessage message, CancellationToken cancellationToken);
+    public Task<int> ProcessDownloadAsync(ProcessingMessage message, CancellationToken cancellationToken);
 }

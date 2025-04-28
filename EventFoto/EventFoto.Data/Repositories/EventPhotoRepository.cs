@@ -19,8 +19,27 @@ public class EventPhotoRepository : IEventPhotoRepository
     {
         return EventPhotos
             .Include(p => p.User)
-            .Include(p => p.Gallery).ThenInclude(g => g.Event)
+            .Include(p => p.Gallery)
+            .ThenInclude(g => g.Event)
             .FirstOrDefaultAsync(p => p.Id == photoId);
+    }
+
+    public Task<List<EventPhoto>> GetGalleryPhotosAsync(int galleryId)
+    {
+        return EventPhotos
+            .Include(p => p.User)
+            .Include(p => p.Gallery).ThenInclude(g => g.Event)
+            .Where(p => p.GalleryId == galleryId)
+            .ToListAsync();
+    }
+
+    public Task<List<EventPhoto>> GetEventPhotosAsync(int eventId)
+    {
+        return EventPhotos
+            .Include(p => p.User)
+            .Include(p => p.Gallery).ThenInclude(g => g.Event)
+            .Where(p => p.Gallery.EventId == eventId)
+            .ToListAsync();
     }
 
     public async Task<IList<EventPhoto>> AddEventPhotosAsync(IList<EventPhoto> eventPhotos)
@@ -30,10 +49,11 @@ public class EventPhotoRepository : IEventPhotoRepository
         return eventPhotos;
     }
 
-    public async Task<EventPhoto> MarkAsProcessed(EventPhoto eventPhoto, string processedFilename)
+    public async Task<EventPhoto> MarkAsProcessed(EventPhoto eventPhoto, string processedFilename, int? watermarkId = null)
     {
         eventPhoto.IsProcessed = true;
         eventPhoto.ProcessedFilename = processedFilename;
+        eventPhoto.WatermarkId = watermarkId;
         _context.Entry(eventPhoto).State = EntityState.Modified;
         await _context.SaveChangesAsync();
         return eventPhoto;

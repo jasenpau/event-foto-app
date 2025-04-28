@@ -44,7 +44,7 @@ public class GalleryController : AppControllerBase
     [HttpPut("{galleryId:int}")]
     public async Task<ActionResult<GalleryDto>> UpdateGalleryAsync([FromRoute] int galleryId, [FromBody] CreateEditGalleryRequestDto request)
     {
-        var result = await _galleryService.UpdateGalleryAsync(galleryId, request.Name, request.WatermarkId);
+        var result = await _galleryService.UpdateGalleryAsync(galleryId, request);
         return result.Success ? Ok(GalleryDto.FromModel(result.Data)) : result.ToErrorResponse();
     }
 

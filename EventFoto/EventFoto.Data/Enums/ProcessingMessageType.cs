@@ -4,4 +4,6 @@ public enum ProcessingMessageType
 {
     UploadBatch,
     DownloadZip,
+    ReprocessEvent,
+    ReprocessGallery
 }

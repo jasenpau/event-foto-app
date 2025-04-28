@@ -5,6 +5,7 @@ using EventFoto.Data.Models;
 using EventFoto.Processor.DownloadZipProcessor;
 using EventFoto.Processor.ImageProcessor;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Logging;
 
 namespace EventFoto.Processor.Functions;
 
@@ -12,12 +13,15 @@ public class ProcessImageFunction
 {
     private readonly IImageProcessor _imageProcessor;
     private readonly IDownloadZipProcessor _downloadZipProcessor;
+    private readonly ILogger _logger;
 
     public ProcessImageFunction(IImageProcessor imageProcessor,
-        IDownloadZipProcessor downloadZipProcessor)
+        IDownloadZipProcessor downloadZipProcessor,
+        ILogger<ProcessImageFunction> logger)
     {
         _imageProcessor = imageProcessor;
         _downloadZipProcessor = downloadZipProcessor;
+        _logger = logger;
     }
 
     [Function("ProcessMessage")]
@@ -29,16 +33,20 @@ public class ProcessImageFunction
         var message = JsonSerializer.Deserialize<ProcessingMessage>(queueMessage.MessageText);
         if (message == null) throw new InvalidOperationException("Invalid queue message");
 
-        switch (message.Type)
+        var count = message.Type switch
         {
-            case ProcessingMessageType.UploadBatch:
-                await _imageProcessor.ProcessImagesAsync(message, cancellationToken);
-                return;
-            case ProcessingMessageType.DownloadZip:
-                await _downloadZipProcessor.ProcessDownloadAsync(message, cancellationToken);
-                return;
-            default:
-                throw new InvalidOperationException("Invalid message type");
-        }
+            ProcessingMessageType.UploadBatch => await _imageProcessor.ProcessImagesAsync(message, cancellationToken),
+            ProcessingMessageType.DownloadZip => await _downloadZipProcessor.ProcessDownloadAsync(message,
+                cancellationToken),
+            ProcessingMessageType.ReprocessEvent => await _imageProcessor.ReprocessEventImages(message,
+                cancellationToken),
+            ProcessingMessageType.ReprocessGallery => await _imageProcessor.ReprocessGalleryImages(message,
+                cancellationToken),
+            _ => throw new InvalidOperationException("Invalid message type")
+        };
+        _logger.Log(LogLevel.Information,
+            $"Processed message: {typeof(ProcessingMessageType).GetEnumName(message.Type)} " +
+            $"for ID: {message.EntityId}, enqueued on {message.EnqueuedOn:yyyy-MM-dd HH:mm:ss}. " +
+            $"Entries processed: {count}");
     }
 }

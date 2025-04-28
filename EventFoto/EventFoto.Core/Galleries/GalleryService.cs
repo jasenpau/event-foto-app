@@ -1,6 +1,8 @@
 ﻿using System.Net;
+using EventFoto.Core.Processing;
 using EventFoto.Data.DatabaseProjections;
 using EventFoto.Data.DTOs;
+using EventFoto.Data.Enums;
 using EventFoto.Data.Models;
 using EventFoto.Data.Repositories;
 
@@ -11,15 +13,18 @@ public class GalleryService : IGalleryService
     private readonly IGalleryRepository _galleryRepository;
     private readonly IEventRepository _eventRepository;
     private readonly IEventPhotoRepository _eventPhotoRepository;
+    private readonly IProcessingQueue _processingQueue;
 
     public GalleryService(
         IGalleryRepository galleryRepository,
         IEventRepository eventRepository,
-        IEventPhotoRepository eventPhotoRepository)
+        IEventPhotoRepository eventPhotoRepository,
+        IProcessingQueue processingQueue)
     {
         _galleryRepository = galleryRepository;
         _eventRepository = eventRepository;
         _eventPhotoRepository = eventPhotoRepository;
+        _processingQueue = processingQueue;
     }
 
     public async Task<ServiceResult<Gallery>> GetGalleryAsync(int id)
@@ -58,20 +63,30 @@ public class GalleryService : IGalleryService
         return ServiceResult<bool>.Ok(true);
     }
 
-    public async Task<ServiceResult<Gallery>> UpdateGalleryAsync(int id, string name, int? watermarkId)
+    public async Task<ServiceResult<Gallery>> UpdateGalleryAsync(int id, CreateEditGalleryRequestDto galleryDto)
     {
         var gallery = await _galleryRepository.GetByIdAsync(id);
         if (gallery == null) return ServiceResult<Gallery>.Fail($"Gallery with ID {id} not found", HttpStatusCode.NotFound);
 
-        var nameExists = await _galleryRepository.NameExistsAsync(name, gallery.EventId, id);
+        var nameExists = await _galleryRepository.NameExistsAsync(galleryDto.Name, gallery.EventId, id);
         if (nameExists)
         {
             return ServiceResult<Gallery>.Fail($"Event already has gallery with given name", HttpStatusCode.Conflict);
         }
 
-        gallery.Name = name;
-        gallery.WatermarkId = watermarkId;
+        gallery.Name = galleryDto.Name.Trim();
+        gallery.WatermarkId = galleryDto.WatermarkId;
         var result = await _galleryRepository.UpdateAsync(gallery);
+
+        if (galleryDto.ReprocessPhotos)
+        {
+            await _processingQueue.EnqueueMessage(new ProcessingMessage
+            {
+                Type = ProcessingMessageType.ReprocessGallery,
+                EntityId = id
+            });
+        }
+
         return ServiceResult<Gallery>.Ok(result);
     }
 

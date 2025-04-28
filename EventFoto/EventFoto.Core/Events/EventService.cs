@@ -1,7 +1,9 @@
 using System.Net;
+using EventFoto.Core.Processing;
 using EventFoto.Data.BlobStorage;
 using EventFoto.Data.DatabaseProjections;
 using EventFoto.Data.DTOs;
+using EventFoto.Data.Enums;
 using EventFoto.Data.Extensions;
 using EventFoto.Data.Models;
 using EventFoto.Data.Repositories;
@@ -15,14 +17,17 @@ public class EventService : IEventService
     private readonly IEventRepository _eventRepository;
     private readonly IUserRepository _userRepository;
     private readonly IBlobStorage _blobStorage;
+    private readonly IProcessingQueue _processingQueue;
 
     public EventService(IEventRepository eventRepository,
         IUserRepository userRepository,
-        IBlobStorage  blobStorage)
+        IBlobStorage  blobStorage,
+        IProcessingQueue processingQueue)
     {
         _eventRepository = eventRepository;
         _userRepository = userRepository;
         _blobStorage = blobStorage;
+        _processingQueue = processingQueue;
     }
 
     public async Task<ServiceResult<Event>> GetById(int id)
@@ -131,6 +136,16 @@ public class EventService : IEventService
             existingEvent.WatermarkId = eventDto.WatermarkId;
 
             var updatedEvent = await _eventRepository.UpdateAsync(existingEvent);
+
+            if (eventDto.ReprocessPhotos)
+            {
+                await _processingQueue.EnqueueMessage(new ProcessingMessage()
+                {
+                    Type = ProcessingMessageType.ReprocessEvent,
+                    EntityId = updatedEvent.Id,
+                });
+            }
+
             return ServiceResult<Event>.Ok(updatedEvent);
         }
         catch (DbUpdateException ex)

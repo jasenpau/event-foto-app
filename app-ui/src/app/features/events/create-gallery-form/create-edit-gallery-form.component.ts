@@ -18,7 +18,7 @@ import {
 } from '@angular/forms';
 import { invalidValues } from '../../../components/forms/validators/invalidValues';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
-import { takeUntil, tap } from 'rxjs';
+import { of, switchMap, takeUntil, tap } from 'rxjs';
 import { handleApiError } from '../../../helpers/handleApiError';
 import { NgIf } from '@angular/common';
 import { useLocalLoader } from '../../../helpers/useLoader';
@@ -28,6 +28,8 @@ import { GalleryDto } from '../../../services/gallery/gallery.types';
 import { WatermarkSearchComponent } from '../../watermark/watermark-search/watermark-search.component';
 import { WatermarkDisplayComponent } from '../../watermark/watermark-display/watermark-display.component';
 import { FormInputSectionComponent } from '../../../components/forms/form-input-section/form-input-section.component';
+import { ModalActions } from '../../../services/modal/modal.types';
+import { ModalService } from '../../../services/modal/modal.service';
 
 @Component({
   selector: 'app-create-gallery-form',
@@ -61,7 +63,10 @@ export class CreateEditGalleryFormComponent
 
   private existingNames: string[] = [];
 
-  constructor(private readonly galleryService: GalleryService) {
+  constructor(
+    private readonly galleryService: GalleryService,
+    private readonly modalService: ModalService,
+  ) {
     super();
     this.form = new FormGroup({
       name: new FormControl<string>('', [
@@ -103,11 +108,30 @@ export class CreateEditGalleryFormComponent
     const galleryData = {
       name: this.form.value.name.trim(),
       watermarkId: this.selectedWatermarkId,
+      reprocessPhotos: false,
     };
 
-    const request$ = this.galleryToEdit
-      ? this.galleryService.updateGallery(this.galleryToEdit.id, galleryData)
-      : this.galleryService.createEventGallery(this.eventId, galleryData);
+    const confirmMessage$ =
+      this.galleryToEdit &&
+      this.galleryToEdit.watermarkId !== this.selectedWatermarkId
+        ? this.modalService.openConfirmModal({
+            body: 'Ar norite apdoroti visas galerijos nuotraukas su nauju vandens ženklu?',
+            confirm: 'Taip',
+            cancel: 'Ne',
+          })
+        : of(ModalActions.Cancel);
+
+    const request$ = confirmMessage$.pipe(
+      switchMap((modalResponse) => {
+        galleryData.reprocessPhotos = modalResponse === ModalActions.Confirm;
+        return this.galleryToEdit
+          ? this.galleryService.updateGallery(
+              this.galleryToEdit.id,
+              galleryData,
+            )
+          : this.galleryService.createEventGallery(this.eventId, galleryData);
+      }),
+    );
 
     request$
       .pipe(

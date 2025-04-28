@@ -34,7 +34,7 @@ public class ImageProcessor : IImageProcessor
         _configuration = configuration;
     }
 
-    public async Task ProcessImagesAsync(ProcessingMessage message, CancellationToken cancellationToken = default)
+    public async Task<int> ProcessImagesAsync(ProcessingMessage message, CancellationToken cancellationToken = default)
     {
         var uploadBatch = await _uploadBatchRepository.GetByIdAsync(message.EntityId);
         if (uploadBatch == null)
@@ -42,32 +42,70 @@ public class ImageProcessor : IImageProcessor
             throw new InvalidOperationException("Upload batch not found.");
         }
 
-        var eventBatches = uploadBatch.EventPhotos.GroupBy(p => p.Gallery.EventId);
+        var photos = uploadBatch.EventPhotos;
+        var count = await ProcessImagesAsync(photos, cancellationToken);
+        await _uploadBatchRepository.MarkAsReadyAsync(uploadBatch.Id);
+        return count;
+    }
+
+    public async Task<int> ReprocessEventImages(ProcessingMessage message, CancellationToken cancellationToken = default)
+    {
+        var eventId = message.EntityId;
+        var eventPhotos = await _photoRepository.GetEventPhotosAsync(eventId);
+        var count = await ProcessImagesAsync(eventPhotos, cancellationToken);
+        return count;
+    }
+
+    public async Task<int> ReprocessGalleryImages(ProcessingMessage message, CancellationToken cancellationToken = default)
+    {
+        var galleryId = message.EntityId;
+        var galleryPhotos = await _photoRepository.GetGalleryPhotosAsync(galleryId);
+        var count = await ProcessImagesAsync(galleryPhotos, cancellationToken);
+        return count;
+    }
+
+
+    private async Task<int> ProcessImagesAsync(IList<EventPhoto> messagePhotos, CancellationToken cancellationToken = default)
+    {
+        var processedCount = 0;
+
+        var eventBatches = messagePhotos.GroupBy(p => p.Gallery.EventId);
         foreach (var eventPhotoBatch in eventBatches)
         {
             var eventId = eventPhotoBatch.Key;
             var containerName = _blobStorage.GetContainerName(eventId);
 
-            var eventWatermarkStream = await _watermarkService.GetWatermarkFileForEventAsync(eventId, cancellationToken);
+            var eventWatermarkImageId = eventPhotoBatch.First().Gallery.Event.WatermarkId;
             Image? eventWatermarkImage = null;
-            if (eventWatermarkStream.Success)
+            if (eventWatermarkImageId.HasValue)
             {
+                var eventWatermarkStream =
+                    await _watermarkService.GetWatermarkFileAsync(eventWatermarkImageId.Value, cancellationToken);
                 eventWatermarkImage = await Image.LoadAsync(eventWatermarkStream.Data, cancellationToken);
             }
 
             var galleryBatches = eventPhotoBatch.GroupBy(p => p.GalleryId);
             foreach (var galleryBatch in galleryBatches)
             {
-                var galleryWatermarkStream =
-                    await _watermarkService.GetWatermarkFileForGalleryAsync(galleryBatch.Key, cancellationToken);
+                var galleryWatermarkId = galleryBatch.First().Gallery.WatermarkId;
                 Image? galleryWatermarkImage = null;
-                if (galleryWatermarkStream.Success)
+                if (galleryWatermarkId.HasValue)
                 {
-                    galleryWatermarkImage = await Image.LoadAsync(galleryWatermarkStream.Data, cancellationToken);
+                    var galleryWatermarkStream =
+                        await _watermarkService.GetWatermarkFileAsync(galleryWatermarkId.Value, cancellationToken);
+                    if (galleryWatermarkStream.Success)
+                    {
+                        galleryWatermarkImage = await Image.LoadAsync(galleryWatermarkStream.Data, cancellationToken);
+                    }
                 }
 
                 foreach (var photo in galleryBatch)
                 {
+                    var watermarkId = galleryWatermarkId ?? eventWatermarkImageId;
+                    var watermarkImage = galleryWatermarkImage ?? eventWatermarkImage;
+
+                    if (photo.IsProcessed && watermarkId == photo.WatermarkId) continue;
+
                     var originalFilename = photo.Filename;
                     var imageStream =
                         await _blobStorage.DownloadFileAsync(containerName, originalFilename, cancellationToken);
@@ -81,12 +119,8 @@ public class ImageProcessor : IImageProcessor
 
                     var processedFilename = $"out-{originalFilename}";
 
-                    // Add image watermark processing here
-                    var watermarkImage = eventWatermarkImage ?? galleryWatermarkImage;
-                    if (watermarkImage != null)
-                    {
-                        ApplyWatermark(image, watermarkImage);
-                    }
+                    // Add image watermark processing
+                    if (watermarkImage != null) ApplyWatermark(image, watermarkImage);
 
                     // Thumbnail processing
                     await GeneratePreviewImage(image, eventId, processedFilename, cancellationToken);
@@ -107,12 +141,13 @@ public class ImageProcessor : IImageProcessor
 
                     await _blobStorage.UploadFileAsync(containerName, processedFilename, outputStream,
                         cancellationToken);
-                    await _photoRepository.MarkAsProcessed(eventPhoto, processedFilename);
+                    await _photoRepository.MarkAsProcessed(eventPhoto, processedFilename, watermarkId);
+                    processedCount++;
                 }
             }
         }
 
-        await _uploadBatchRepository.MarkAsReadyAsync(uploadBatch.Id);
+        return processedCount;
     }
 
     private async Task<ImageFile> AddExifData(EventPhoto photo, MemoryStream imageStream)

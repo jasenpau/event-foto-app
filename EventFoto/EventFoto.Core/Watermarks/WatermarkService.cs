@@ -78,33 +78,9 @@ public class WatermarkService : IWatermarkService
         return ServiceResult<PagedData<string, Watermark>>.Ok(results);
     }
 
-    public async Task<ServiceResult<MemoryStream>> GetWatermarkFileForEventAsync(int eventId, CancellationToken cancellationToken)
+    public async Task<ServiceResult<MemoryStream>> GetWatermarkFileAsync(int watermarkId, CancellationToken cancellationToken)
     {
-        var eventData = await _eventRepository.GetByIdAsync(eventId);
-        if (eventData == null)
-            return ServiceResult<MemoryStream>.Fail("Event not found.", HttpStatusCode.NotFound);
-
-        if (eventData.WatermarkId == null)
-            return ServiceResult<MemoryStream>.Fail("No watermark assigned to this event.", HttpStatusCode.NoContent);
-
-        var watermark = await _repository.GetWatermarkAsync(eventData.WatermarkId.Value);
-        if (watermark == null)
-            return ServiceResult<MemoryStream>.Fail("Watermark not found.", HttpStatusCode.NotFound);
-
-        var containerName = _configuration["AzureStorage:WatermarkContainer"];
-        return await _blobStorage.DownloadFileAsync(containerName, watermark.Filename, cancellationToken);
-    }
-
-    public async Task<ServiceResult<MemoryStream>> GetWatermarkFileForGalleryAsync(int galleryId, CancellationToken cancellationToken)
-    {
-        var eventData = await _galleryRepository.GetByIdAsync(galleryId);
-        if (eventData == null)
-            return ServiceResult<MemoryStream>.Fail("Gallery not found.", HttpStatusCode.NotFound);
-
-        if (eventData.WatermarkId == null)
-            return ServiceResult<MemoryStream>.Fail("No watermark assigned to this gallery.", HttpStatusCode.NoContent);
-
-        var watermark = await _repository.GetWatermarkAsync(eventData.WatermarkId.Value);
+        var watermark = await _repository.GetWatermarkAsync(watermarkId);
         if (watermark == null)
             return ServiceResult<MemoryStream>.Fail("Watermark not found.", HttpStatusCode.NotFound);
 

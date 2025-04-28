@@ -21,7 +21,7 @@ public class DownloadZipProcessor : IDownloadZipProcessor
         _configuration = configuration;
     }
 
-    public async Task ProcessDownloadAsync(ProcessingMessage message, CancellationToken cancellationToken)
+    public async Task<int> ProcessDownloadAsync(ProcessingMessage message, CancellationToken cancellationToken)
     {
         var request = await _downloadRequestRepository.GetWithImagesAsync(message.EntityId);
         if (request == null) throw new InvalidOperationException("Download request not found");
@@ -62,5 +62,7 @@ public class DownloadZipProcessor : IDownloadZipProcessor
 
         // Cleanup
         File.Delete(outputZipPath);
+
+        return request.DownloadImages.Count;
     }
 }

@@ -14,6 +14,7 @@ public record EventDto
     public Guid CreatedBy { get; set; }
     public string CreatedByName { get; set; }
     public DateTime CreatedOn { get; set; }
+    public int? WatermarkId { get; set; }
 
     public static EventDto FromEvent(Event eventData) => new()
     {
@@ -27,5 +28,6 @@ public record EventDto
         CreatedBy = eventData.CreatedBy,
         CreatedOn = eventData.CreatedOn,
         CreatedByName = eventData.CreatedByUser.Name,
+        WatermarkId = eventData.WatermarkId,
     };
 }
