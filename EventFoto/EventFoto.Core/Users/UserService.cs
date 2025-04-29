@@ -89,7 +89,7 @@ public class UserService : IUserService
             Id = Guid.Parse(inviteGraphResult.InvitedUser.Id),
             Name = inviteRequestDto.Name,
             Email = inviteRequestDto.Email,
-            GroupAssignment = Guid.Parse(inviteRequestDto.GroupAssignment),
+            GroupAssignment = !string.IsNullOrEmpty(inviteRequestDto.GroupAssignment) ? Guid.Parse(inviteRequestDto.GroupAssignment) : null,
             IsActive = false,
             InvitedAt = DateTime.UtcNow,
             InvitationKey = invitationKey.ToString(),
