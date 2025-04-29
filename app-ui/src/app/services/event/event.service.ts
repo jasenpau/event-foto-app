@@ -58,6 +58,13 @@ export class EventService {
     );
   }
 
+  getAssignment(eventId: number) {
+    return this.http.get<PhotographerAssignment>(
+      `${this.apiBaseUrl}/event/${eventId}/photographers/current`,
+      getAuthHeaders(),
+    );
+  }
+
   createEvent(event: EventCreateDto): Observable<EventDto> {
     return this.http.post<EventDto>(
       `${this.apiBaseUrl}/event`,

@@ -19,6 +19,16 @@ public class AssignmentService : IAssignmentService
         _assignmentRepository = assignmentRepository;
     }
 
+    public async Task<ServiceResult<PhotographerAssignment>> GetUserAssignmentAsync(int eventId, Guid userId)
+    {
+        var assignment = await _assignmentRepository.GetForEventAsync(eventId, userId);
+        if (assignment == null)
+            return ServiceResult<PhotographerAssignment>.Fail("User is not assigned to this event", "not-assigned",
+                HttpStatusCode.NotFound);
+
+        return ServiceResult<PhotographerAssignment>.Ok(assignment);
+    }
+
     public async Task<ServiceResult<bool>> AssignPhotographerAsync(int galleryId, Guid userId)
     {
         var gallery = await _galleryRepository.GetByIdAsync(galleryId);

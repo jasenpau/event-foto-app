@@ -20,7 +20,7 @@ import {
 } from '../cameraSettingsHelper';
 import { EventService } from '../../../services/event/event.service';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
-import { takeUntil, tap } from 'rxjs';
+import { switchMap, takeUntil, tap } from 'rxjs';
 import { AUTH_TOKEN_STORAGE_KEY } from '../../../services/auth/auth.const';
 import { UserService } from '../../../services/user/user.service';
 import { UploadTrackerComponent } from '../../../components/upload-tracker/upload-tracker.component';
@@ -28,6 +28,8 @@ import { EnvService } from '../../../services/environment/env.service';
 import { handleApiError } from '../../../helpers/handleApiError';
 import { IconButtonComponent } from '../../../components/icon-button/icon-button.component';
 import { SvgIconSrc } from '../../../components/svg-icon/svg-icon.types';
+import { PhotographerAssignment } from '../../../services/event/event.types';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-camera-main',
@@ -53,6 +55,7 @@ export class CameraMainComponent
   protected eventLoadingFinished = false;
   protected userOpenSettings = false;
   protected uploadEvent?: UploadMessage;
+  protected assignment?: PhotographerAssignment;
 
   protected cameraInitialized = false;
   protected cameraStream?: MediaStream;
@@ -65,6 +68,7 @@ export class CameraMainComponent
     private readonly eventService: EventService,
     private readonly userService: UserService,
     private readonly envService: EnvService,
+    private readonly router: Router,
   ) {
     super();
     this.apiBaseUrl = this.envService.getConfig().apiBaseUrl;
@@ -172,26 +176,40 @@ export class CameraMainComponent
   private loadEvent() {
     const eventData = loadCameraEvent();
     if (eventData) {
-      this.eventService
-        .getEventDetails(eventData.id)
-        .pipe(
-          tap((event) => {
-            // Check, if event still exists and refresh the name
-            this.event = {
-              id: event.id,
-              name: event.name,
-            };
-            saveCameraEvent({
-              id: event.id,
-              name: event.name,
-            });
+      const event$ = this.eventService.getEventDetails(eventData.id).pipe(
+        tap((event) => {
+          // Check, if event still exists and refresh the name
+          this.event = {
+            id: event.id,
+            name: event.name,
+          };
+          saveCameraEvent({
+            id: event.id,
+            name: event.name,
+          });
+          this.eventLoadingFinished = true;
+        }),
+        handleApiError((error) => {
+          if (error.status === 404) {
+            saveCameraEvent();
             this.eventLoadingFinished = true;
-          }),
-          handleApiError((error) => {
-            if (error.status === 404) {
-              saveCameraEvent();
-              this.eventLoadingFinished = true;
-            }
+          }
+        }),
+      );
+
+      event$
+        .pipe(
+          switchMap((event) => {
+            return this.eventService.getAssignment(event.id).pipe(
+              tap((assignment) => {
+                this.assignment = assignment;
+              }),
+              handleApiError((error) => {
+                if (error.title === 'not-assigned') {
+                  this.assignment = undefined;
+                }
+              }),
+            );
           }),
           takeUntil(this.destroy$),
         )
@@ -251,4 +269,8 @@ export class CameraMainComponent
   }
 
   protected readonly SvgIconSrc = SvgIconSrc;
+
+  goBack() {
+    this.router.navigate(['/event']);
+  }
 }

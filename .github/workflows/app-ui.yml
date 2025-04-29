@@ -80,7 +80,7 @@ jobs:
             "baseUrl": "${{ env.APP_BASE_URL }}",
             "apiBaseUrl": "${{ env.APP_API_BASE_URL }}",
             "archiveDownloadsContainer": "${{ env.APP_PROCESSING_ARCHIVE_CONTAINER }}",
-            "archiveDownloadsContainer": "${{ env.APP_WATERMARK_CONTAINER }}",
+            "watermarksContainer": "${{ env.APP_WATERMARK_CONTAINER }}",
             "auth": {
               "clientId": "${{ env.APP_AUTH_CLIENT_ID }}",
               "authority": "${{ env.APP_AUTH_AUTHORITY }}"

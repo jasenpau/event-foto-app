@@ -34,6 +34,10 @@
     padding-left: 32px;
     height: 56px;
     border-bottom: 1px solid colors.$outline;
+
+    @media (max-width: breakpoints.$tablet) {
+      padding-left: 16px;
+    }
   }
 
   th {
@@ -49,11 +53,19 @@ th.table__no-wrap {
 td.table__pad-row-start,
 th.table__pad-row-start {
   padding-left: 64px;
+
+  @media (max-width: breakpoints.$mobile-large) {
+    padding-left: 32px;
+  }
 }
 
 td.table__pad-row-end,
 th.table__pad-row-end {
   padding-right: 64px;
+
+  @media (max-width: breakpoints.$mobile-large) {
+    padding-right: 32px;
+  }
 }
 
 .input-field {

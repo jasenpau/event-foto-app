@@ -103,6 +103,15 @@ public class EventController : AppControllerBase
         return result.Success ? Ok(result.Data) : result.ToErrorResponse();
     }
 
+    [HttpGet("{eventId:int}/photographers/current")]
+    [AccessGroupFilter(UserGroup.Photographer)]
+    public async Task<ActionResult<AssignmentResponseDto>> GetCurrentPhotographer(int eventId)
+    {
+        var userId = RequestUserId();
+        var result = await _assignmentService.GetUserAssignmentAsync(eventId, userId);
+        return result.Success ? Ok(AssignmentResponseDto.FromModel(result.Data)) : result.ToErrorResponse();
+    }
+
     [HttpPost("{eventId:int}/archive")]
     [AccessGroupFilter(UserGroup.EventAdmin)]
     public async Task<ActionResult<string>> ArchiveEvent(int eventId)

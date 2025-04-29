@@ -4,20 +4,23 @@
     (settingsUpdated)="updateSettings($event)"
   />
   <div class="camera__event-data">
-    <p class="text-label-medium no-margin">Renginys 123</p>
-    <p class="text-label-medium no-margin">Pagrindinė galerija</p>
+    <p class="text-label-medium no-margin" *ngIf="event?.name">{{ event?.name }}</p>
+    <p class="text-label-medium no-margin" *ngIf="assignment">{{ assignment.galleryName }}</p>
   </div>
   <app-upload-tracker class="camera__upload-tracker" [uploadEvent]="uploadEvent" />
   <video class="camera__video" #previewVideo autoplay playsinline></video>
   <canvas class="camera__canvas" #canvas></canvas>
   <div class="camera__controls">
     <div class="camera__control-section">
-      <app-icon-button [icon]="SvgIconSrc.Settings" theme="light" (click)="openSettings()" />
+      <app-icon-button [icon]="SvgIconSrc.ArrowBack" theme="light" (click)="goBack()" />
     </div>
     <div class="camera__control-section" *ngIf="cameraInitialized">
-      <div class="camera__capture">
-        <app-icon-button [icon]="SvgIconSrc.Camera" (click)="capture()" />
+      <div class="camera__capture" (click)="capture()" >
+        <app-icon-button [icon]="SvgIconSrc.Camera"/>
       </div>
+    </div>
+    <div class="camera__control-section">
+      <app-icon-button [icon]="SvgIconSrc.Settings" theme="light" (click)="openSettings()" />
     </div>
   </div>
 </div>

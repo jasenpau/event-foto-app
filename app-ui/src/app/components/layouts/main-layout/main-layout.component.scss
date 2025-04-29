@@ -19,7 +19,7 @@ $sidenav-width: 80px;
       position: absolute;
       top: 0;
       left: 0;
-      z-index: 2;
+      z-index: 5;
       width: 100vw;
       height: 100vh;
 
@@ -62,7 +62,7 @@ $sidenav-width: 80px;
     top: 16px;
     right: 16px;
     fill: colors.$on-surface;
-    z-index: 3;
+    z-index: 6;
   }
 
   @media (max-width: breakpoints.$mobile-large) {

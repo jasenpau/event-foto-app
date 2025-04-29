@@ -53,7 +53,7 @@ export class WatermarkDisplayComponent
 
   protected getWatermarkUrl() {
     if (!this.watermark || !this.sasUri) return '';
-    return `${this.sasUri.baseUri}/watermarks/${this.watermark.filename}?${this.sasUri.params}`;
+    return `${this.sasUri.baseUri}/${this.watermarkService.watermarksContainer}/${this.watermark.filename}?${this.sasUri.params}`;
   }
 
   private fetchWatermark() {

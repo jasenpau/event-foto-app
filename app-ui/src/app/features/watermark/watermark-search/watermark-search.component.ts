@@ -82,7 +82,7 @@ export class WatermarkSearchComponent
   }
 
   protected getWatermarkUrl(watermark: WatermarkDto) {
-    return `${this.sasUri?.baseUri}/watermarks/${watermark.filename}?${this.sasUri?.params}`;
+    return `${this.sasUri?.baseUri}/${this.watermarkService.watermarksContainer}/${watermark.filename}?${this.sasUri?.params}`;
   }
 
   private initializeSearch() {

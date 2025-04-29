@@ -9,6 +9,13 @@ form {
   display: flex;
   align-items: center;
   gap: 16px;
+
+  img {
+    padding: 4px;
+    width: 68px;
+    height: 68px;
+    object-fit: contain;
+  }
 }
 
 .file-input {

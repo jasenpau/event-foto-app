@@ -10,12 +10,19 @@ import { WatermarkDto } from './watermark.types';
 })
 export class WatermarkService {
   private readonly apiBaseUrl;
+  private readonly watermarksContainerSetting;
 
   constructor(
     private readonly http: HttpClient,
     private readonly envService: EnvService,
   ) {
     this.apiBaseUrl = this.envService.getConfig().apiBaseUrl;
+    this.watermarksContainerSetting =
+      this.envService.getConfig().watermarksContainer;
+  }
+
+  get watermarksContainer() {
+    return this.watermarksContainerSetting;
   }
 
   searchWatermarks(

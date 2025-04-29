@@ -66,6 +66,10 @@
     display: flex;
     flex-direction: row;
     gap: 8px;
+
+    @media (max-width: breakpoints.$tablet) {
+      flex-wrap: wrap;
+    }
   }
 
   &__photographers {

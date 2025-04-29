@@ -23,7 +23,7 @@
       (change)="onFileSelected($event)"
       accept="image/png">
     <div class="file-upload-field">
-      <img *ngIf="previewUrl" [src]="previewUrl" alt="Watermark preview">
+      <img class="chess-background" *ngIf="previewUrl" [src]="previewUrl" alt="Watermark preview">
       <span *ngIf="selectedFileName" class="file-name">{{ selectedFileName }}</span>
       <app-button
         [type]="ButtonType.Text"
