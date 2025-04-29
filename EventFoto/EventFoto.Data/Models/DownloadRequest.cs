@@ -8,6 +8,7 @@ public record DownloadRequest
     public bool IsReady { get; set; }
     public string Filename { get; set; }
     public bool DownloadProcessedPhotos { get; set; }
+    public int? Quality { get; set; }
 
     public User User { get; init; }
     public IList<DownloadImage> DownloadImages { get; init; }

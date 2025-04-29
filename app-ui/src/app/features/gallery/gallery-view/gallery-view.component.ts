@@ -101,9 +101,15 @@ export class GalleryViewComponent
       },
     },
     {
-      text: 'Apdirbtos nuotraukos',
+      text: 'Apdorotos nuotraukos – pilna kokybė',
       action: () => {
         this.bulkDownload(true);
+      },
+    },
+    {
+      text: 'Apdorotos nuotraukos – iki 2000px',
+      action: () => {
+        this.bulkDownload(true, 2000);
       },
     },
   ];
@@ -426,7 +432,7 @@ export class GalleryViewComponent
     this.loadMore();
   }
 
-  private bulkDownload(processed: boolean) {
+  private bulkDownload(processed: boolean, quality?: number) {
     const snackbarId = this.snackbarService.addSnackbar(
       SnackbarType.Loading,
       'Nuotraukų archyvas yra ruošiamas.',
@@ -434,7 +440,7 @@ export class GalleryViewComponent
     );
     const selectedImages = Array.from(this.selectedImageIds);
     this.imageService
-      .bulkDownload(selectedImages, processed)
+      .bulkDownload(selectedImages, processed, quality)
       .pipe(
         tap((downloadReq) => {
           this.imageService.startDownloadTask(downloadReq.id, snackbarId);

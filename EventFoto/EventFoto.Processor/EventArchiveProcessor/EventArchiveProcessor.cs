@@ -30,7 +30,7 @@ public class EventArchiveProcessor : IEventArchiveProcessor
 
         // Create zip
         var eventPhotos = await _eventPhotoRepository.GetAllEventPhotosAsync(eventId);
-        await _photoArchiveService.ArchiveImagesAsync(message.Filename, eventPhotos, true,
+        await _photoArchiveService.ArchiveImagesAsync(message.Filename, eventPhotos, true, null,
             cancellationToken);
 
         // Delete photos & container

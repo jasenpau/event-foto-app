@@ -12,7 +12,7 @@ public interface IEventPhotoService
     public ServiceResult<SasUriResponseDto> GetReadOnlySasUri();
     public Task<ServiceResult<PagedData<string, EventPhoto>>> SearchPhotosAsync(EventPhotoSearchParams searchParams);
     public Task<ServiceResult<int>> DeletePhotosAsync(IList<int> photoIds, CancellationToken cancellationToken);
-    public Task<ServiceResult<DownloadRequest>> DownloadPhotosAsync(Guid userId, IList<int> photoIds, bool processed);
+    public Task<ServiceResult<DownloadRequest>> DownloadPhotosAsync(Guid userId, IList<int> photoIds, bool processed, int? quality);
     public Task<ServiceResult<DownloadRequest>> GetDownloadRequestAsync(Guid userId, int requestId);
     public Task<ServiceResult<int>> MovePhotos(IList<int> photoIds, int galleryId);
 }

@@ -39,7 +39,7 @@ public class ImageController : AppControllerBase
     public async Task<ActionResult<DownloadRequestDto>> BulkDownload([FromBody] BulkPhotoDownloadDto dto)
     {
         var userId = RequestUserId();
-        var downloadResult = await _eventPhotoService.DownloadPhotosAsync(userId, dto.PhotoIds, dto.Processed);
+        var downloadResult = await _eventPhotoService.DownloadPhotosAsync(userId, dto.PhotoIds, dto.Processed, dto.Quality);
         return downloadResult.Success
             ? Ok(DownloadRequestDto.FromModel(downloadResult.Data))
             : downloadResult.ToErrorResponse();

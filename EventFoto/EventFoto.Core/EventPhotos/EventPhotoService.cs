@@ -171,7 +171,7 @@ public class EventPhotoService : IEventPhotoService
         return ServiceResult<int>.Ok(photos.Count);
     }
 
-    public async Task<ServiceResult<DownloadRequest>> DownloadPhotosAsync(Guid userId, IList<int> photoIds, bool processed)
+    public async Task<ServiceResult<DownloadRequest>> DownloadPhotosAsync(Guid userId, IList<int> photoIds, bool processed, int? quality)
     {
         var createDate = DateTime.UtcNow;
         var request = new DownloadRequest
@@ -179,6 +179,7 @@ public class EventPhotoService : IEventPhotoService
             UserId = userId,
             Filename = createDate.ToString("yyyy-MM-dd HHmmss") + ".zip",
             DownloadProcessedPhotos = processed,
+            Quality = quality,
             DownloadImages = photoIds.Select(p => new DownloadImage
             {
                 EventPhotoId = p

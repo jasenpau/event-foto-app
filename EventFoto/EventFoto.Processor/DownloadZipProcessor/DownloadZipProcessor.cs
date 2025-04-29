@@ -23,7 +23,8 @@ public class DownloadZipProcessor : IDownloadZipProcessor
 
         // Compress photos
         var photos = request.DownloadImages.Select(i => i.EventPhoto).ToList();
-        await _photoArchiveService.ArchiveImagesAsync(message.Filename, photos, request.DownloadProcessedPhotos, cancellationToken);
+        await _photoArchiveService.ArchiveImagesAsync(message.Filename, photos, request.DownloadProcessedPhotos,
+            request.Quality, cancellationToken);
 
         // Update the request
         await _downloadRequestRepository.MarkAsReady(request.Id);
