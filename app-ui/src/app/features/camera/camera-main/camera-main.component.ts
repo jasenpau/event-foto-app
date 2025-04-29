@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { CameraSetupComponent } from '../camera-setup/camera-setup.component';
 import { NgIf } from '@angular/common';
-import { ButtonComponent } from '../../../components/button/button.component';
 import {
   CameraDevice,
   CameraEvent,
@@ -27,14 +26,16 @@ import { UserService } from '../../../services/user/user.service';
 import { UploadTrackerComponent } from '../../../components/upload-tracker/upload-tracker.component';
 import { EnvService } from '../../../services/environment/env.service';
 import { handleApiError } from '../../../helpers/handleApiError';
+import { IconButtonComponent } from '../../../components/icon-button/icon-button.component';
+import { SvgIconSrc } from '../../../components/svg-icon/svg-icon.types';
 
 @Component({
   selector: 'app-camera-main',
   imports: [
     CameraSetupComponent,
     NgIf,
-    ButtonComponent,
     UploadTrackerComponent,
+    IconButtonComponent,
   ],
   templateUrl: './camera-main.component.html',
   styleUrl: './camera-main.component.scss',
@@ -175,13 +176,15 @@ export class CameraMainComponent
         .getEventDetails(eventData.id)
         .pipe(
           tap((event) => {
-            console.log('event fetched');
             // Check, if event still exists and refresh the name
             this.event = {
               id: event.id,
               name: event.name,
             };
-            saveCameraEvent(eventData);
+            saveCameraEvent({
+              id: event.id,
+              name: event.name,
+            });
             this.eventLoadingFinished = true;
           }),
           handleApiError((error) => {
@@ -246,4 +249,6 @@ export class CameraMainComponent
     console.log(e.data);
     this.uploadEvent = e.data;
   }
+
+  protected readonly SvgIconSrc = SvgIconSrc;
 }

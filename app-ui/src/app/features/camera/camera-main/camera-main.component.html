@@ -3,15 +3,21 @@
     *ngIf="showSettings() || userOpenSettings"
     (settingsUpdated)="updateSettings($event)"
   />
+  <div class="camera__event-data">
+    <p class="text-label-medium no-margin">Renginys 123</p>
+    <p class="text-label-medium no-margin">Pagrindinė galerija</p>
+  </div>
   <app-upload-tracker class="camera__upload-tracker" [uploadEvent]="uploadEvent" />
   <video class="camera__video" #previewVideo autoplay playsinline></video>
   <canvas class="camera__canvas" #canvas></canvas>
   <div class="camera__controls">
     <div class="camera__control-section">
-      <app-button (click)="openSettings()">Nustatymai</app-button>
+      <app-icon-button [icon]="SvgIconSrc.Settings" theme="light" (click)="openSettings()" />
     </div>
     <div class="camera__control-section" *ngIf="cameraInitialized">
-      <app-button (click)="capture()">Fotografuoti</app-button>
+      <div class="camera__capture">
+        <app-icon-button [icon]="SvgIconSrc.Camera" (click)="capture()" />
+      </div>
     </div>
   </div>
 </div>

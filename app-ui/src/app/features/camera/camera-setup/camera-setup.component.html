@@ -38,6 +38,7 @@
   </div>
   <div>
     <app-input-field id="event-search" label="Paieška" [formControl]="searchControl" />
+    <app-pagination-controls [tableData]="eventsTableData" />
     <table class="table camera-settings__event-table" *ngIf="!eventsTableData.loading">
       <tr>
         <th>Pavadinimas</th>

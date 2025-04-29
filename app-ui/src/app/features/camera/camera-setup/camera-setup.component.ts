@@ -38,6 +38,7 @@ import { PagedDataLoader } from '../../../components/paged-table/paged-table.typ
 import { formatLithuanianDate } from '../../../helpers/formatLithuanianDate';
 import { debounceTime, takeUntil, tap } from 'rxjs';
 import { invalidValues } from '../../../components/forms/validators/invalidValues';
+import { PaginationControlsComponent } from '../../../components/pagination-controls/pagination-controls.component';
 
 const EVENT_TABLE_PAGE_SIZE = 20;
 
@@ -52,6 +53,7 @@ const EVENT_TABLE_PAGE_SIZE = 20;
     NgIf,
     InputFieldComponent,
     SideViewComponent,
+    PaginationControlsComponent,
   ],
   templateUrl: './camera-setup.component.html',
   styleUrl: './camera-setup.component.scss',
