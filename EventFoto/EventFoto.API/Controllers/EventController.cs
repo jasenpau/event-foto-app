@@ -8,6 +8,7 @@ using EventFoto.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EventFoto.Core.Assignments;
+using EventFoto.Core.CalendarExport;
 
 namespace EventFoto.API.Controllers;
 
@@ -18,11 +19,15 @@ public class EventController : AppControllerBase
 {
     private readonly IEventService _eventService;
     private readonly IAssignmentService _assignmentService;
+    private readonly ICalendarExportService _calendarExportService;
 
-    public EventController(IEventService eventService, IAssignmentService assignmentService)
+    public EventController(IEventService eventService,
+        IAssignmentService assignmentService,
+        ICalendarExportService calendarExportService)
     {
         _eventService = eventService;
         _assignmentService = assignmentService;
+        _calendarExportService = calendarExportService;
     }
 
     [HttpGet("search")]
@@ -118,5 +123,16 @@ public class EventController : AppControllerBase
     {
         var result = await _eventService.ArchiveEventAsync(eventId);
         return result.Success ? Ok(result.Data) : result.ToErrorResponse();
+    }
+
+    [HttpGet("calendar")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetCalendarFile()
+    {
+        var iCalContent = await _calendarExportService.ExportCalendarAsync();
+        var fileName = $"events_{DateTime.UtcNow:yyyyMMdd_HHmmss}.ics";
+        var fileContent = System.Text.Encoding.UTF8.GetBytes(iCalContent);
+
+        return File(fileContent, "text/calendar", fileName);
     }
 }

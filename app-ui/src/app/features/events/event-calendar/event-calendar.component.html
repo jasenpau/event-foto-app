@@ -3,6 +3,10 @@
     <h2 class="text-headline-large no-margin">Renginių kalendorius</h2>
   </app-page-header>
 
+  <div class="calendar__download">
+    <app-button [type]="ButtonType.Filled" link="http://localhost:5192/api/event/calendar" download="calendar.ics">Atsisiųsti kalendorių</app-button>
+  </div>
+
   <form class="calendar__controls" [formGroup]="calendarForm">
     <app-select id="year" label="Metai" formControlName="year">
       <option *ngFor="let year of years" [value]="year">{{ year }}</option>

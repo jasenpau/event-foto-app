@@ -18,6 +18,7 @@ export class ButtonComponent {
   @Input() link?: string;
   @Input() disabled?: boolean;
   @Input() disableFormSubmit?: boolean = false;
+  @Input() download?: string;
 
   protected readonly buttonType = ButtonType;
   protected readonly buttonSize = ButtonSize;

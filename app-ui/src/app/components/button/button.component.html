@@ -1,31 +1,46 @@
-<a
-  *ngIf="link"
-  [routerLink]="link"
-  class="button type-label-medium"
-  [ngClass]="{
+@if(link && !download) {
+  <a
+    [routerLink]="link"
+    class="button type-label-medium"
+    [ngClass]="{
+      'button--wide': size === buttonSize.Wide,
+      'button--filled': type === buttonType.Filled,
+      'button--text': type === buttonType.Text,
+      'button--icon': !!icon,
+    }"
+  >
+    <ng-container *ngTemplateOutlet="innerContent"></ng-container>
+  </a>
+} @else if (link && download) {
+  <a
+    [href]="link"
+    [download]="download"
+    class="button type-label-medium"
+    [ngClass]="{
+      'button--wide': size === buttonSize.Wide,
+      'button--filled': type === buttonType.Filled,
+      'button--text': type === buttonType.Text,
+      'button--icon': !!icon,
+    }"
+  >
+    <ng-container *ngTemplateOutlet="innerContent"></ng-container>
+  </a>
+} @else {
+  <button
+    class="button type-label-medium"
+    [ngClass]="{
     'button--wide': size === buttonSize.Wide,
     'button--filled': type === buttonType.Filled,
     'button--text': type === buttonType.Text,
     'button--icon': !!icon,
   }"
->
-  <ng-container *ngTemplateOutlet="innerContent"></ng-container>
-</a>
+    [disabled]="disabled"
+    [type]="disableFormSubmit ? 'button' : 'submit'"
+  >
+    <ng-container *ngTemplateOutlet="innerContent"></ng-container>
+  </button>
+}
 
-<button
-  *ngIf="!link"
-  class="button type-label-medium"
-  [ngClass]="{
-    'button--wide': size === buttonSize.Wide,
-    'button--filled': type === buttonType.Filled,
-    'button--text': type === buttonType.Text,
-    'button--icon': !!icon,
-  }"
-  [disabled]="disabled"
-  [type]="disableFormSubmit ? 'button' : 'submit'"
->
-  <ng-container *ngTemplateOutlet="innerContent"></ng-container>
-</button>
 
 <ng-template #innerContent>
   <app-svg-icon *ngIf="icon" [iconSrc]="icon" [size]="iconSize" />

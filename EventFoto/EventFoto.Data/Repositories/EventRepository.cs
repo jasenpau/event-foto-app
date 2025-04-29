@@ -97,4 +97,12 @@ public class EventRepository : IEventRepository
         await _context.SaveChangesAsync();
         return await GetByIdAsync(eventData.Id);
     }
+
+    public Task<List<Event>> GetAllEventsInDatesAsync(DateTime startDate, DateTime endDate)
+    {
+        return Events.Where(e =>
+                (e.StartDate >= startDate || (e.EndDate.HasValue && e.EndDate.Value >= startDate)) &&
+                (e.StartDate <= endDate || (e.EndDate.HasValue && e.EndDate.Value <= endDate)))
+            .ToListAsync();
+    }
 }

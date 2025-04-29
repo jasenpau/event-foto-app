@@ -173,7 +173,7 @@ export class EventPreviewComponent
   protected archiveEvent() {
     this.modalService
       .openConfirmModal({
-        body: 'Ar tikrai norite archyvuoti šį renginį? Renginio originalio nuotraukos bus pašalintos ir bus galima tik atsisiųsti visas apdirbtas nuotraukas.',
+        body: 'Ar tikrai norite archyvuoti šį renginį?\nRenginio originalio nuotraukos bus pašalintos ir bus galima tik atsisiųsti visas apdorotas nuotraukas.',
         confirm: 'Archyvuoti',
         cancel: 'Atšaukti',
       })

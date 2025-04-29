@@ -1,6 +1,7 @@
 using System.Reflection;
 using Azure.Identity;
 using EventFoto.Core;
+using EventFoto.Core.CalendarExport;
 using EventFoto.Core.Filters;
 using EventFoto.Core.Providers;
 using EventFoto.Data;
@@ -60,6 +61,7 @@ public static class Program
     {
         ServiceConfigurator.ConfigureServices(services);
 
+        services.AddScoped<ICalendarExportService, CalendarExportService>();
         services.AddSingleton<IGroupSettingsProvider, GroupSettingsProvider>();
 
         services.AddSingleton<GraphServiceClient>(_ =>

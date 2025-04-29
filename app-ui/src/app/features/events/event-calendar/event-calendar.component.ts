@@ -21,6 +21,8 @@ import { RouterLink } from '@angular/router';
 import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
 import { useLocalLoader } from '../../../helpers/useLoader';
 import { SpinnerComponent } from '../../../components/spinner/spinner.component';
+import { ButtonComponent } from '../../../components/button/button.component';
+import { ButtonType } from '../../../components/button/button.types';
 
 interface CalendarDisplayEvent {
   event: EventListDto;
@@ -40,6 +42,7 @@ interface CalendarDisplayEvent {
     PageHeaderComponent,
     NgClass,
     SpinnerComponent,
+    ButtonComponent,
   ],
   templateUrl: './event-calendar.component.html',
   styleUrl: './event-calendar.component.scss',
@@ -229,4 +232,6 @@ export class EventCalendarComponent
       event,
     };
   }
+
+  protected readonly ButtonType = ButtonType;
 }
