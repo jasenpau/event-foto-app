@@ -19,6 +19,8 @@ import {
 import { isSameLocalDay } from '../../../helpers/isSameLocalDay';
 import { RouterLink } from '@angular/router';
 import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
+import { useLocalLoader } from '../../../helpers/useLoader';
+import { SpinnerComponent } from '../../../components/spinner/spinner.component';
 
 interface CalendarDisplayEvent {
   event: EventListDto;
@@ -37,6 +39,7 @@ interface CalendarDisplayEvent {
     RouterLink,
     PageHeaderComponent,
     NgClass,
+    SpinnerComponent,
   ],
   templateUrl: './event-calendar.component.html',
   styleUrl: './event-calendar.component.scss',
@@ -68,6 +71,7 @@ export class EventCalendarComponent
     events: CalendarDisplayEvent[];
   }[][] = [];
   protected calendarEvents: Record<string, EventListDto[]> = {};
+  protected isLoading = false;
 
   constructor(private readonly eventService: EventService) {
     super();
@@ -173,6 +177,7 @@ export class EventCalendarComponent
         showArchived: true,
       })
       .pipe(
+        useLocalLoader((value) => (this.isLoading = value)),
         tap((events) => {
           this.mapEvents(events.data);
           this.generateCalendar(start, end);

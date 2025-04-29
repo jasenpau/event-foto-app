@@ -13,7 +13,7 @@
     </app-select>
   </form>
 
-  <table class="calendar__table">
+  <table class="calendar__table" *ngIf="!isLoading">
     <tr>
       <th>Pirmadienis</th>
       <th>Antradienis</th>
@@ -65,5 +65,7 @@
       </td>
     </tr>
   </table>
-
+  <div class="calendar__loader" *ngIf="isLoading">
+    <app-spinner />
+  </div>
 </div>

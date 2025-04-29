@@ -39,6 +39,13 @@
     gap: 16px;
   }
 
+  &__event-select-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 32px;
+  }
+
   &__event-table {
     width: 100%;
   }

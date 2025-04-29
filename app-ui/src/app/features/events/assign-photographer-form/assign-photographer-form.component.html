@@ -32,5 +32,8 @@
       <td><app-button [type]="ButtonType.Text" (click)="assignUser(user.id)">Pridėti</app-button></td>
     </tr>
   </table>
+  <div class="assign-photographer-table-loader" *ngIf="userTableData.loading">
+    <app-spinner />
+  </div>
 </div>
 <app-loader-overlay *ngIf="isLoading" />

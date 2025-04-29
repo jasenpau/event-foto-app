@@ -23,6 +23,7 @@ import { GalleryDto } from '../../../services/gallery/gallery.types';
 import { SelectComponent } from '../../../components/forms/select/select.component';
 import { FormInputSectionComponent } from '../../../components/forms/form-input-section/form-input-section.component';
 import { PaginationControlsComponent } from '../../../components/pagination-controls/pagination-controls.component';
+import { SpinnerComponent } from '../../../components/spinner/spinner.component';
 
 const USER_TABLE_PAGE_SIZE = 10;
 
@@ -38,6 +39,7 @@ const USER_TABLE_PAGE_SIZE = 10;
     SelectComponent,
     FormInputSectionComponent,
     PaginationControlsComponent,
+    SpinnerComponent,
   ],
   templateUrl: './assign-photographer-form.component.html',
   styleUrl: './assign-photographer-form.component.scss',

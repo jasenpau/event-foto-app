@@ -51,6 +51,9 @@
         <td><app-button [type]="ButtonType.Text" (click)="selectEvent(event)">Pasirinkti</app-button></td>
       </tr>
     </table>
+    <div class="camera-settings__event-select-loader" *ngIf="eventsTableData.loading">
+      <app-spinner />
+    </div>
   </div>
 
 </app-side-view>
