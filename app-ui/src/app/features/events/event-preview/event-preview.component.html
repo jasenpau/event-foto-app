@@ -51,9 +51,9 @@
           <p class="text-title-large">Fotografai</p>
           <div class="event__photographers-actions" *ngIf="!assignmentsLoading">
             <app-button
-              *ngIf="permissionViews?.photographer && !isAssignedSelf && !isEventArchived"
+              *ngIf="permissionViews?.photographer && !isAssignedSelf && !isEventArchived && userId"
               [type]="ButtonType.Filled"
-              (click)="assignSelf()"
+              (click)="openGalleryAssignmentForm(userId)"
             >
               Pridėti save
             </app-button>
@@ -76,12 +76,20 @@
             <td>{{assignment.userName}}</td>
             <td>{{ assignment.galleryName }}</td>
             <td>
-              <app-button
-                (click)="removePhotographer(assignment.userId)"
-                *ngIf="(permissionViews?.eventAdmin || (assignment.userId === userId && permissionViews?.photographer)) && !isEventArchived"
-                [type]="ButtonType.Text">
-                Pašalinti
-              </app-button>
+              <div class="event__table-actions">
+                <app-button
+                  *ngIf="(permissionViews?.eventAdmin || (assignment.userId === userId && permissionViews?.photographer)) && !isEventArchived"
+                  (click)="openGalleryAssignmentForm(assignment.userId, assignment.galleryId)"
+                  [type]="ButtonType.Text">
+                  Keisti galeriją
+                </app-button>
+                <app-button
+                  (click)="removePhotographer(assignment.userId)"
+                  *ngIf="(permissionViews?.eventAdmin || (assignment.userId === userId && permissionViews?.photographer)) && !isEventArchived"
+                  [type]="ButtonType.Text">
+                  Pašalinti
+                </app-button>
+              </div>
             </td>
           </tr>
         </table>
@@ -120,4 +128,12 @@
 </app-side-view>
 <app-side-view *ngIf="showEventEditForm && event">
   <app-create-event [eventToEdit]="event" (formEvent)="handleEventEditFormEvent($event)" />
+</app-side-view>
+<app-side-view *ngIf="event && assignmentEditData">
+  <app-assign-gallery-form
+    [eventId]="event.id"
+    [photographerId]="assignmentEditData.photographerId"
+    [preselectedGalleryId]="assignmentEditData.galleryId"
+    [galleries]="galleries"
+    (formEvent)="handleGalleryAssignment($event)" />
 </app-side-view>

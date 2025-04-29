@@ -62,6 +62,12 @@
     gap: 16px;
   }
 
+  &__table-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+  }
+
   &__photographers {
     width: 100%;
   }

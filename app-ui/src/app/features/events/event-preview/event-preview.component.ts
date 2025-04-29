@@ -40,8 +40,14 @@ import { SpinnerComponent } from '../../../components/spinner/spinner.component'
 import { ModalService } from '../../../services/modal/modal.service';
 import { ModalActions } from '../../../services/modal/modal.types';
 import { EnvService } from '../../../services/environment/env.service';
+import { AssignGalleryFormComponent } from '../assign-gallery-form/assign-gallery-form.component';
 
 const COMPONENT_LOADING_KEY = 'event-preview';
+
+interface AssignmentEditData {
+  photographerId: string;
+  galleryId?: number;
+}
 
 @Component({
   selector: 'app-event-preview',
@@ -60,6 +66,7 @@ const COMPONENT_LOADING_KEY = 'event-preview';
     PageHeaderComponent,
     CreateEventComponent,
     SpinnerComponent,
+    AssignGalleryFormComponent,
   ],
   templateUrl: './event-preview.component.html',
   styleUrl: './event-preview.component.scss',
@@ -77,6 +84,7 @@ export class EventPreviewComponent
   protected showAssignUsersForm = false;
   protected showGalleryCreateForm = false;
   protected showEventEditForm = false;
+  protected assignmentEditData?: AssignmentEditData;
   protected userId?: string;
   protected galleries: GalleryDto[] = [];
   protected sasUri?: SasUri;
@@ -143,32 +151,6 @@ export class EventPreviewComponent
     }
   }
 
-  protected assignSelf() {
-    const defaultGallery = this.galleries.find((g) => g.isMainGallery);
-    console.log(defaultGallery);
-    console.log(this.galleries);
-    if (this.event && this.userId && defaultGallery) {
-      this.eventService
-        .assignPhotographerToEvent(
-          this.event.id,
-          defaultGallery.id,
-          this.userId,
-        )
-        .pipe(
-          useLocalLoader((value) => (this.assignmentsLoading = value)),
-          tap(() => {
-            this.snackbarService.addSnackbar(
-              SnackbarType.Success,
-              'Jūs buvote pridėtas prie renginio kaip fotografas.',
-            );
-            this.loadPhotographers(this.event!.id);
-          }),
-          takeUntil(this.destroy$),
-        )
-        .subscribe();
-    }
-  }
-
   protected openPhotographerForm() {
     this.showAssignUsersForm = true;
   }
@@ -179,6 +161,13 @@ export class EventPreviewComponent
 
   protected openEventEditForm() {
     this.showEventEditForm = true;
+  }
+
+  protected openGalleryAssignmentForm(
+    photographerId: string,
+    galleryId?: number,
+  ) {
+    this.assignmentEditData = { photographerId, galleryId };
   }
 
   protected archiveEvent() {
@@ -224,7 +213,20 @@ export class EventPreviewComponent
       this.showAssignUsersForm = false;
       this.snackbarService.addSnackbar(
         SnackbarType.Success,
-        'Fotografas pridėtas prie renginio.',
+        'Fotografui priskirta galerija',
+      );
+      this.loadPhotographers(this.event!.id);
+    }
+  }
+
+  protected handleGalleryAssignment($event: string) {
+    if ($event === 'cancel') {
+      this.assignmentEditData = undefined;
+    } else if ($event === 'assigned') {
+      this.assignmentEditData = undefined;
+      this.snackbarService.addSnackbar(
+        SnackbarType.Success,
+        'Fotografui priskirta galerija',
       );
       this.loadPhotographers(this.event!.id);
     }
@@ -237,7 +239,7 @@ export class EventPreviewComponent
       this.showGalleryCreateForm = false;
       this.snackbarService.addSnackbar(
         SnackbarType.Success,
-        'Galerija sukurta.',
+        'Galerija sukurta',
       );
       this.loadGalleries(this.event!.id);
     }
@@ -250,7 +252,7 @@ export class EventPreviewComponent
       this.showEventEditForm = false;
       this.snackbarService.addSnackbar(
         SnackbarType.Success,
-        'Renginys atnaujintas.',
+        'Renginys atnaujintas',
       );
       this.loadEvent(this.event!.id);
     }

@@ -27,7 +27,9 @@ public class AssignmentService : IAssignmentService
 
         var eventAssignment = await _assignmentRepository.GetForEventAsync(gallery.EventId, userId);
         if (eventAssignment != null)
-            return ServiceResult<bool>.Fail("User is already assigned to a gallery in this event.", HttpStatusCode.Conflict);
+        {
+            await RemovePhotographerAssignmentAsync(gallery.EventId, userId);
+        }
 
         var assignment = new PhotographerAssignment
         {

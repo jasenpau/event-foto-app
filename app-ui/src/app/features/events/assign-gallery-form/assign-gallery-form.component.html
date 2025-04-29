@@ -1,0 +1,25 @@
+<div class="side-view-header">
+  <h3 class="text-headline-large no-margin">Priskirti galeriją</h3>
+  <app-button [type]="ButtonType.Text" (click)="cancel()">Uždaryti</app-button>
+</div>
+<div>
+  <app-form-input-section
+    inputId="gallery"
+    label="Galerija"
+    description="Fotografo nuotraukos bus priskirtos šiai galerijai">
+    <app-select
+      id="targetGallery"
+      label="Galerija"
+      [formControl]="galleryControl"
+    >
+      <option *ngFor="let opt of galleries" [value]="opt.id">
+        {{ opt.name }}
+      </option>
+    </app-select>
+  </app-form-input-section>
+
+  <div class="button-container">
+    <app-button [type]="ButtonType.Filled" (click)="assignGallery()" [disabled]="!galleryControl.valid">Priskirti</app-button>
+  </div>
+</div>
+<app-loader-overlay *ngIf="isLoading" />
