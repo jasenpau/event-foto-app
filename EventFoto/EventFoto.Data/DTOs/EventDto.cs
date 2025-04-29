@@ -9,6 +9,7 @@ public record EventDto
     public DateTime StartDate { get; set; }
     public DateTime? EndDate { get; set; }
     public bool IsArchived { get; set; }
+    public string ArchiveName { get; set; }
     public string Location { get; set; }
     public string Note { get; set; }
     public Guid CreatedBy { get; set; }
@@ -26,6 +27,7 @@ public record EventDto
         Note = eventData.Note,
         Location = eventData.Location,
         IsArchived = eventData.IsArchived,
+        ArchiveName = eventData.ArchiveName,
         CreatedBy = eventData.CreatedBy,
         CreatedOn = eventData.CreatedOn,
         CreatedByName = eventData.CreatedByUser.Name,

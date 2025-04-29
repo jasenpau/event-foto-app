@@ -142,4 +142,12 @@ public class EventPhotoRepository : IEventPhotoRepository
             .ExecuteUpdateAsync(setters => setters
                 .SetProperty(p => p.GalleryId, destinationGalleryId));
     }
+
+    public Task<List<EventPhoto>> GetAllEventPhotosAsync(int eventId)
+    {
+        return EventPhotos
+            .Include(p => p.Gallery)
+            .Where(p => p.Gallery.EventId == eventId)
+            .ToListAsync();
+    }
 }

@@ -37,7 +37,9 @@ public class DownloadRequestRepository : IDownloadRequestRepository
 
     public Task<List<DownloadRequest>> GetBeforeDate(DateTime date)
     {
-        return DownloadRequests.Where(e => e.ProcessedOn.HasValue && e.ProcessedOn <= date).ToListAsync();
+        return DownloadRequests
+            .Where(e => e.ProcessedOn.HasValue && e.ProcessedOn <= date)
+            .ToListAsync();
     }
 
     public Task DeleteAsync(IList<DownloadRequest> downloadRequests)

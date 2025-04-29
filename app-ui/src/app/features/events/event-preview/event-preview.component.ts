@@ -8,12 +8,12 @@ import {
 import { NgForOf, NgIf } from '@angular/common';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, takeUntil, tap } from 'rxjs';
+import { forkJoin, of, switchMap, takeUntil, tap } from 'rxjs';
 import { formatLithuanianDate } from '../../../helpers/formatLithuanianDate';
 import { ButtonComponent } from '../../../components/button/button.component';
 import { ButtonType } from '../../../components/button/button.types';
 import { EventBadgeComponent } from '../../../components/event-badge/event-badge.component';
-import { UserGroup } from '../../../globals/userGroups';
+import { ViewPermissions } from '../../../globals/userGroups';
 import { UserService } from '../../../services/user/user.service';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { SnackbarType } from '../../../services/snackbar/snackbar.types';
@@ -37,6 +37,9 @@ import { GalleryService } from '../../../services/gallery/gallery.service';
 import { PageHeaderComponent } from '../../../components/page-header/page-header.component';
 import { CreateEventComponent } from '../create-event/create-event.component';
 import { SpinnerComponent } from '../../../components/spinner/spinner.component';
+import { ModalService } from '../../../services/modal/modal.service';
+import { ModalActions } from '../../../services/modal/modal.types';
+import { EnvService } from '../../../services/environment/env.service';
 
 const COMPONENT_LOADING_KEY = 'event-preview';
 
@@ -69,9 +72,8 @@ export class EventPreviewComponent
 
   protected event?: EventDto;
   protected eventPhotographers?: PhotographerAssignment[];
-  protected showAssignSelf = false;
   protected isAssignedSelf = false;
-  protected showAssignUsers = false;
+  protected permissionViews?: ViewPermissions;
   protected showAssignUsersForm = false;
   protected showGalleryCreateForm = false;
   protected showEventEditForm = false;
@@ -79,6 +81,8 @@ export class EventPreviewComponent
   protected galleries: GalleryDto[] = [];
   protected sasUri?: SasUri;
   protected assignmentsLoading = false;
+
+  private readonly archiveContainer;
 
   constructor(
     private readonly eventService: EventService,
@@ -89,15 +93,26 @@ export class EventPreviewComponent
     private readonly loaderService: LoaderService,
     private readonly blobService: BlobService,
     private readonly galleryService: GalleryService,
+    private readonly modalService: ModalService,
+    private envService: EnvService,
   ) {
     super();
     this.loaderService.startLoading(COMPONENT_LOADING_KEY);
     this.readRouteParams();
+    this.archiveContainer =
+      this.envService.getConfig().archiveDownloadsContainer;
+  }
+
+  get isEventArchived() {
+    return (
+      Boolean(this.event?.isArchived ?? false) ||
+      Boolean(this.event?.archiveName ?? false)
+    );
   }
 
   ngOnInit() {
     this.userId = this.userService.getCurrentUserData()?.id;
-    this.updateViewPermissions();
+    this.permissionViews = this.userService.getViewPermissions();
   }
 
   override ngOnDestroy() {
@@ -164,6 +179,42 @@ export class EventPreviewComponent
 
   protected openEventEditForm() {
     this.showEventEditForm = true;
+  }
+
+  protected archiveEvent() {
+    this.modalService
+      .openConfirmModal({
+        body: 'Ar tikrai norite archyvuoti šį renginį? Renginio originalio nuotraukos bus pašalintos ir bus galima tik atsisiųsti visas apdirbtas nuotraukas.',
+        confirm: 'Archyvuoti',
+        cancel: 'Atšaukti',
+      })
+      .pipe(
+        switchMap((modalAction) => {
+          if (modalAction === ModalActions.Confirm) {
+            return this.eventService.archiveEvent(this.event!.id);
+          } else return of(null);
+        }),
+      )
+      .subscribe();
+  }
+
+  protected downloadEventArchive() {
+    if (this.event?.isArchived && this.event.archiveName) {
+      this.blobService
+        .getFromBlob(this.archiveContainer, this.event.archiveName)
+        .pipe(
+          tap((blob) => {
+            const originalUri = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = originalUri;
+            a.download = this.event!.archiveName!;
+            a.click();
+            URL.revokeObjectURL(originalUri);
+          }),
+          takeUntil(this.destroy$),
+        )
+        .subscribe();
+    }
   }
 
   protected handlePhotographerFormEvent($event: string) {
@@ -278,12 +329,6 @@ export class EventPreviewComponent
         takeUntil(this.destroy$),
       )
       .subscribe();
-  }
-
-  private updateViewPermissions() {
-    const groups = this.userService.getUserGroups();
-    this.showAssignSelf = groups.includes(UserGroup.Photographer);
-    this.showAssignUsers = groups.includes(UserGroup.EventAdmin);
   }
 
   private setPhotographerList(assignment: PhotographerAssignment[]) {

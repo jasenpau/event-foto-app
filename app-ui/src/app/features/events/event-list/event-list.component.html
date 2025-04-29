@@ -2,7 +2,7 @@
   <app-page-header>
     <h2 class="text-headline-large no-margin">Renginiai</h2>
     <app-button
-      *ngIf="showCreateEvent"
+      *ngIf="viewPermissions?.eventAdmin"
       [icon]="buttonIcon.Add"
       (click)="openEventCreateForm()">
       Sukurti renginį
@@ -49,7 +49,7 @@
           <p class="text-label-medium no-margin">Pabaiga</p>
           <p class="text-body-large no-margin">{{formatDate(event.endDate)}}</p>
         </div>
-        <p class="text-body-large no-margin">{{ getPhotoCountString(event.photoCount) }}</p>
+        <p class="text-body-large no-margin" *ngIf="!event.isArchived">{{ getPhotoCountString(event.photoCount) }}</p>
         <app-event-badge class="event-list__status" [event]="event" />
       </div>
     </app-card-item>

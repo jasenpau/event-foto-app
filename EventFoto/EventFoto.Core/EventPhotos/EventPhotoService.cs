@@ -1,7 +1,5 @@
 ﻿using System.Net;
-using EventFoto.Core.Assignments;
 using EventFoto.Core.Events;
-using EventFoto.Core.Galleries;
 using EventFoto.Core.Processing;
 using EventFoto.Data.BlobStorage;
 using EventFoto.Data.DTOs;

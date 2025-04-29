@@ -156,4 +156,25 @@ public class BlobStorage : IBlobStorage
             return ServiceResult<int>.Fail($"Batch delete failed: {ex.Message}", HttpStatusCode.InternalServerError);
         }
     }
+
+    public async Task<ServiceResult<bool>> DeleteContainerAsync(string containerName, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var blobClient = new BlobServiceClient(_connectionString);
+            var containerClient = blobClient.GetBlobContainerClient(containerName);
+
+            if (!await containerClient.ExistsAsync(cancellationToken))
+            {
+                return ServiceResult<bool>.Fail($"Container '{containerName}' not found.", HttpStatusCode.NotFound);
+            }
+
+            await containerClient.DeleteAsync(conditions: null, cancellationToken);
+            return ServiceResult<bool>.Ok(true);
+        }
+        catch (Exception ex)
+        {
+            return ServiceResult<bool>.Fail($"Container deletion failed: {ex.Message}", HttpStatusCode.InternalServerError);
+        }
+    }
 }

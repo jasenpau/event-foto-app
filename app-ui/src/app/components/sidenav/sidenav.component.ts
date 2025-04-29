@@ -6,7 +6,6 @@ import { SvgIconSrc } from '../svg-icon/svg-icon.types';
 import { User } from '../../services/auth/auth.types';
 import { AuthService } from '../../services/auth/auth.service';
 import { UserService } from '../../services/user/user.service';
-import { UserGroup } from '../../globals/userGroups';
 
 interface SidenavItem {
   title: string;
@@ -39,13 +38,13 @@ export class SidenavComponent {
   }
 
   private generateSidenavItems(): SidenavItem[] {
-    const groups = this.userService.getUserGroups();
+    const viewPermissions = this.userService.getViewPermissions();
     const sidenavItems: SidenavItem[] = [
       { title: 'Renginiai', link: '/event', icon: SvgIconSrc.Ticket },
       { title: 'Kalendorius', link: '/calendar', icon: SvgIconSrc.Calendar },
     ];
 
-    if (groups.includes(UserGroup.Photographer)) {
+    if (viewPermissions.photographer) {
       sidenavItems.push({
         title: 'Fotoaparatas',
         link: '/camera',
@@ -53,7 +52,7 @@ export class SidenavComponent {
       });
     }
 
-    if (groups.includes(UserGroup.EventAdmin)) {
+    if (viewPermissions.eventAdmin) {
       sidenavItems.push({
         title: 'Vandens ženklai',
         link: '/watermark',

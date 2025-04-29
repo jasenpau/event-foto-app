@@ -102,4 +102,12 @@ public class EventController : AppControllerBase
         var result = await _assignmentService.RemovePhotographerAssignmentAsync(eventId, userId);
         return result.Success ? Ok(result.Data) : result.ToErrorResponse();
     }
+
+    [HttpPost("{eventId:int}/archive")]
+    [AccessGroupFilter(UserGroup.EventAdmin)]
+    public async Task<ActionResult<string>> ArchiveEvent(int eventId)
+    {
+        var result = await _eventService.ArchiveEventAsync(eventId);
+        return result.Success ? Ok(result.Data) : result.ToErrorResponse();
+    }
 }

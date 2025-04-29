@@ -34,7 +34,7 @@
   }
 
   &__table-today {
-    background-color: colors.$primary-container;
+    background-color: colors.$tertiary-container;
     font-weight: bold;
   }
 
@@ -52,18 +52,27 @@
   }
 
   &__table-event {
-    background: colors.$tertiary-container;
-    color: colors.$tertiary-on-container;
+    background: colors.$primary-container;
+    color: colors.$primary-on-container;
     padding: 2px 8px;
     border-radius: 4px;
     display: flex;
     flex-direction: column;
     gap: 8px;
-  }
 
-  &__table-event a {
-    text-decoration: none;
-    color: colors.$tertiary-on-container;
+    a {
+      text-decoration: none;
+      color: colors.$primary-on-container;
+    }
+
+    &--archived {
+      background: colors.$secondary-container;
+      color: colors.$secondary-on-container;
+
+      a {
+        color: colors.$secondary-on-container;
+      }
+    }
   }
 
   &__table-event-time {

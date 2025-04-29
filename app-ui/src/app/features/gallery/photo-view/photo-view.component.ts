@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   Component,
-  computed,
   effect,
   ElementRef,
   EventEmitter,
@@ -21,7 +20,6 @@ import { ImageService } from '../../../services/image/image.service';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { forkJoin, fromEvent, Observable, of, takeUntil, tap } from 'rxjs';
 import { NgIf } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { ButtonComponent } from '../../../components/button/button.component';
 import { formatLithuanianDateWithSeconds } from '../../../helpers/formatLithuanianDate';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
@@ -30,16 +28,12 @@ import { IconButtonComponent } from '../../../components/icon-button/icon-button
 import { BlobService } from '../../../services/blob/blob.service';
 import { useLocalLoader } from '../../../helpers/useLoader';
 import { LoaderOverlayComponent } from '../../../components/loader-overlay/loader-overlay.component';
+import { UserService } from '../../../services/user/user.service';
+import { ViewPermissions } from '../../../globals/userGroups';
 
 @Component({
   selector: 'app-photo-view',
-  imports: [
-    NgIf,
-    RouterLink,
-    ButtonComponent,
-    IconButtonComponent,
-    LoaderOverlayComponent,
-  ],
+  imports: [NgIf, ButtonComponent, IconButtonComponent, LoaderOverlayComponent],
   templateUrl: './photo-view.component.html',
   styleUrl: './photo-view.component.scss',
 })
@@ -57,16 +51,19 @@ export class PhotoViewComponent
   protected photoDetails?: PhotoDetailDto;
   protected imageDataUrl?: string;
   protected isLoading = true;
+  protected viewPermissions?: ViewPermissions;
 
   constructor(
     private readonly imageService: ImageService,
     private readonly snackbarService: SnackbarService,
     private readonly blobService: BlobService,
+    private readonly userService: UserService,
   ) {
     super();
     effect(() => {
       this.loadImage(this.openPhotoData());
     });
+    this.viewPermissions = this.userService.getViewPermissions();
   }
 
   ngAfterViewInit() {

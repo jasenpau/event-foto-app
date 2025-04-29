@@ -16,4 +16,5 @@ public interface IBlobStorage
         CancellationToken cancellationToken);
     public Task<ServiceResult<int>> DeleteFilesAsync(string containerName, IList<string> filenames,
         CancellationToken cancellationToken);
+    public Task<ServiceResult<bool>> DeleteContainerAsync(string containerName, CancellationToken cancellationToken);
 }

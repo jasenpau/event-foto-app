@@ -97,4 +97,12 @@ export class EventService {
       },
     );
   }
+
+  archiveEvent(eventId: number) {
+    return this.http.post<boolean>(
+      `${this.apiBaseUrl}/event/${eventId}/archive`,
+      {},
+      getAuthHeaders(),
+    );
+  }
 }

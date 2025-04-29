@@ -2,7 +2,9 @@ using EventFoto.Core;
 using EventFoto.Data;
 using EventFoto.Processor.CleanupProcessor;
 using EventFoto.Processor.DownloadZipProcessor;
+using EventFoto.Processor.EventArchiveProcessor;
 using EventFoto.Processor.ImageProcessor;
+using EventFoto.Processor.PhotoArchiveService;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +29,8 @@ ServiceConfigurator.ConfigureServices(builder.Services);
 builder.Services.AddScoped<IImageProcessor, ImageProcessor>();
 builder.Services.AddScoped<IDownloadZipProcessor, DownloadZipProcessor>();
 builder.Services.AddScoped<ICleanupProcessor, CleanupProcessor>();
+builder.Services.AddScoped<IEventArchiveProcessor, EventArchiveProcessor>();
+builder.Services.AddScoped<IPhotoArchiveService, PhotoArchiveService>();
 
 // Application Insights isn't enabled by default. See https://aka.ms/AAt8mw4.
 // builder.Services

@@ -51,6 +51,8 @@ import {
   PopupMenuComponent,
   PopupMenuItem,
 } from '../../../components/popup-menu/popup-menu.component';
+import { ViewPermissions } from '../../../globals/userGroups';
+import { UserService } from '../../../services/user/user.service';
 
 const COMPONENT_LOADING_KEY = 'gallery-view';
 
@@ -106,6 +108,7 @@ export class GalleryViewComponent
     },
   ];
   protected showDownloadOptions = false;
+  protected permissionViews?: ViewPermissions;
 
   private lastKey = '';
   private observer?: IntersectionObserver;
@@ -119,11 +122,13 @@ export class GalleryViewComponent
     private readonly galleryService: GalleryService,
     private readonly loaderService: LoaderService,
     private readonly snackbarService: SnackbarService,
+    private readonly userService: UserService,
     private readonly router: Router,
   ) {
     super();
     this.loaderService.startLoading(COMPONENT_LOADING_KEY);
     this.readRouteParams();
+    this.permissionViews = this.userService.getViewPermissions();
   }
 
   ngAfterViewInit(): void {

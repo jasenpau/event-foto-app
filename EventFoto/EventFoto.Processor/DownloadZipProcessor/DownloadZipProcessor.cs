@@ -1,24 +1,19 @@
-﻿using System.IO.Compression;
-using EventFoto.Data.BlobStorage;
-using EventFoto.Data.Models;
+﻿using EventFoto.Data.Models;
 using EventFoto.Data.Repositories;
-using Microsoft.Extensions.Configuration;
+using EventFoto.Processor.PhotoArchiveService;
 
 namespace EventFoto.Processor.DownloadZipProcessor;
 
 public class DownloadZipProcessor : IDownloadZipProcessor
 {
     private readonly IDownloadRequestRepository _downloadRequestRepository;
-    private readonly IBlobStorage _blobStorage;
-    private readonly IConfiguration _configuration;
+    private readonly IPhotoArchiveService _photoArchiveService;
 
     public DownloadZipProcessor(IDownloadRequestRepository downloadRequestRepository,
-        IBlobStorage blobStorage,
-        IConfiguration configuration)
+        IPhotoArchiveService photoArchiveService)
     {
         _downloadRequestRepository = downloadRequestRepository;
-        _blobStorage = blobStorage;
-        _configuration = configuration;
+        _photoArchiveService = photoArchiveService;
     }
 
     public async Task<int> ProcessDownloadAsync(ProcessingMessage message, CancellationToken cancellationToken)
@@ -26,43 +21,12 @@ public class DownloadZipProcessor : IDownloadZipProcessor
         var request = await _downloadRequestRepository.GetWithImagesAsync(message.EntityId);
         if (request == null) throw new InvalidOperationException("Download request not found");
 
-        var tempFilePath = Path.GetTempFileName();
-        var outputZipPath = Path.ChangeExtension(tempFilePath, ".zip");
-        var useProcessedPhotos = request.DownloadProcessedPhotos;
-
-        await using (var zipStream = new FileStream(outputZipPath, FileMode.Create))
-        using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Create, leaveOpen: false))
-        {
-            foreach (var item in request.DownloadImages)
-            {
-                if (useProcessedPhotos && !item.EventPhoto.IsProcessed) continue;
-
-                var container = _blobStorage.GetContainerName(item.EventPhoto.Gallery.EventId);
-                var filename = useProcessedPhotos ? item.EventPhoto.ProcessedFilename : item.EventPhoto.Filename;
-
-                var imageResult = await _blobStorage.DownloadFileAsync(container, filename, cancellationToken);
-                await using var imageStream = imageResult.Data;
-
-                var entry = archive.CreateEntry(filename, CompressionLevel.Optimal);
-                await using var entryStream = entry.Open();
-                await imageStream.CopyToAsync(entryStream, cancellationToken);
-            }
-        }
-
-        // Upload zip to blob storage
-        var zipFilename = message.Filename;
-        var archiveContainerName = _configuration["ProcessorOptions:ArchiveDownloadContainer"];
-        await using (var finalZipStream = File.OpenRead(outputZipPath))
-        {
-            await _blobStorage.UploadFileAsync(archiveContainerName, zipFilename, finalZipStream, "application/zip",
-                cancellationToken);
-        }
+        // Compress photos
+        var photos = request.DownloadImages.Select(i => i.EventPhoto).ToList();
+        await _photoArchiveService.ArchiveImagesAsync(message.Filename, photos, request.DownloadProcessedPhotos, cancellationToken);
 
         // Update the request
         await _downloadRequestRepository.MarkAsReady(request.Id);
-
-        // Cleanup
-        File.Delete(outputZipPath);
 
         return request.DownloadImages.Count;
     }

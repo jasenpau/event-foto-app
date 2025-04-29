@@ -10,7 +10,7 @@ import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { SvgIconSrc } from '../../../components/svg-icon/svg-icon.types';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { UserService } from '../../../services/user/user.service';
-import { UserGroup } from '../../../globals/userGroups';
+import { ViewPermissions } from '../../../globals/userGroups';
 import { formatLithuanianDate } from '../../../helpers/formatLithuanianDate';
 import { EventBadgeComponent } from '../../../components/event-badge/event-badge.component';
 import { PagedDataTable } from '../../../components/paged-table/paged-table';
@@ -73,11 +73,11 @@ export class EventListComponent
 
   protected eventsTableData: PagedDataTable<string, EventListDto>;
   protected searchForm: FormGroup;
-  protected showCreateEvent = false;
   protected minFromDate: Date = new Date(0);
   protected showEventCreateForm = false;
   protected showFilters = false;
   protected sasUri?: SasUri;
+  protected viewPermissions?: ViewPermissions;
 
   constructor(
     private eventService: EventService,
@@ -102,7 +102,7 @@ export class EventListComponent
   }
 
   ngOnInit() {
-    this.updateViewPermissions();
+    this.viewPermissions = this.userService.getViewPermissions();
     this.initializeSearch();
   }
 
@@ -195,11 +195,6 @@ export class EventListComponent
       }),
     );
   };
-
-  private updateViewPermissions() {
-    const groups = this.userService.getUserGroups();
-    this.showCreateEvent = groups.includes(UserGroup.EventAdmin);
-  }
 
   toggleFilters() {
     this.showFilters = !this.showFilters;

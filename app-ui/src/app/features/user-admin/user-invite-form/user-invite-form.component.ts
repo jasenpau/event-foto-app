@@ -21,6 +21,7 @@ import { SnackbarType } from '../../../services/snackbar/snackbar.types';
 import { handleApiError } from '../../../helpers/handleApiError';
 import { SelectComponent } from '../../../components/forms/select/select.component';
 import { EnvService } from '../../../services/environment/env.service';
+import { ViewPermissions } from '../../../globals/userGroups';
 
 @Component({
   selector: 'app-invite-user-form',
@@ -48,6 +49,7 @@ export class UserInviteFormComponent
   protected existingEmails: string[] = [];
   protected isLoading = false;
   protected userGroups: { name: string; id: string }[] = [];
+  protected viewPermissions?: ViewPermissions;
 
   constructor(
     private readonly userService: UserService,
@@ -56,6 +58,7 @@ export class UserInviteFormComponent
   ) {
     super();
     this.setupForm();
+    this.viewPermissions = this.userService.getViewPermissions();
   }
 
   setupForm() {
@@ -70,15 +73,21 @@ export class UserInviteFormComponent
         name: 'Fotografas',
         id: groupConfig.photographers,
       },
-      {
-        name: 'Renginių administratorius',
-        id: groupConfig.eventAdministrators,
-      },
-      {
-        name: 'Sistemos administratorius',
-        id: groupConfig.systemAdministrators,
-      },
     ];
+
+    if (this.viewPermissions?.systemAdmin) {
+      this.userGroups = [
+        ...this.userGroups,
+        {
+          name: 'Renginių administratorius',
+          id: groupConfig.eventAdministrators,
+        },
+        {
+          name: 'Sistemos administratorius',
+          id: groupConfig.systemAdministrators,
+        },
+      ];
+    }
 
     this.inviteUserForm = new FormGroup({
       name: new FormControl('', [

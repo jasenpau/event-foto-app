@@ -70,7 +70,7 @@ public class EventRepository : IEventRepository
         var nameQuery = string.IsNullOrWhiteSpace(searchParams.Query) ? null : searchParams.Query;
         var fromDate = searchParams.FromDate;
         var toDate = searchParams.ToDate;
-        var showArchived = searchParams.ShowArchived;
+        var showArchived = searchParams.ShowArchived ?? false;
         // Add one more element to check for next page
         var pageSize = searchParams.PageSize + 1;
 

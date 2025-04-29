@@ -6,7 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { EventService } from '../../../services/event/event.service';
 import { takeUntil, tap } from 'rxjs';
@@ -36,6 +36,7 @@ interface CalendarDisplayEvent {
     NgIf,
     RouterLink,
     PageHeaderComponent,
+    NgClass,
   ],
   templateUrl: './event-calendar.component.html',
   styleUrl: './event-calendar.component.scss',
@@ -165,7 +166,12 @@ export class EventCalendarComponent
     const end = this.getCalendarEnd(year, month);
 
     this.eventService
-      .searchEvents({ pageSize: 100, fromDate: start, toDate: end })
+      .searchEvents({
+        pageSize: 100,
+        fromDate: start,
+        toDate: end,
+        showArchived: true,
+      })
       .pipe(
         tap((events) => {
           this.mapEvents(events.data);
@@ -203,7 +209,10 @@ export class EventCalendarComponent
     }
   }
 
-  private getEventDisplayData(currentDate: Date, event: EventListDto) {
+  private getEventDisplayData(
+    currentDate: Date,
+    event: EventListDto,
+  ): CalendarDisplayEvent {
     const eventStartDate = new Date(event.startDate);
     const eventEndDate = event.endDate ? new Date(event.endDate) : undefined;
 

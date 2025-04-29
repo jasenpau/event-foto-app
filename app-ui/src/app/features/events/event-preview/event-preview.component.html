@@ -6,10 +6,22 @@
       <div class="event__header-controls">
         <app-event-badge [event]="event" />
         <app-button
-          *ngIf="showAssignUsers"
+          *ngIf="permissionViews?.eventAdmin && !isEventArchived"
           [type]="ButtonType.Text"
           (click)="openEventEditForm()">
           Redaguoti
+        </app-button>
+        <app-button
+          *ngIf="permissionViews?.eventAdmin && !isEventArchived"
+          [type]="ButtonType.Text"
+          (click)="archiveEvent()">
+          Archyvuoti
+        </app-button>
+        <app-button
+          *ngIf="isEventArchived"
+          [type]="ButtonType.Text"
+          (click)="downloadEventArchive()">
+          Atsisiųsti renginio archyvą
         </app-button>
       </div>
     </div>
@@ -39,14 +51,14 @@
           <p class="text-title-large">Fotografai</p>
           <div class="event__photographers-actions" *ngIf="!assignmentsLoading">
             <app-button
-              *ngIf="showAssignSelf && !isAssignedSelf"
+              *ngIf="permissionViews?.photographer && !isAssignedSelf && !isEventArchived"
               [type]="ButtonType.Filled"
               (click)="assignSelf()"
             >
               Pridėti save
             </app-button>
             <app-button
-              *ngIf="showAssignUsers"
+              *ngIf="permissionViews?.eventAdmin && !isEventArchived"
               [type]="ButtonType.Filled"
               (click)="openPhotographerForm()"
             >
@@ -66,7 +78,7 @@
             <td>
               <app-button
                 (click)="removePhotographer(assignment.userId)"
-                *ngIf="showAssignUsers || assignment.userId === userId"
+                *ngIf="(permissionViews?.eventAdmin || (assignment.userId === userId && permissionViews?.photographer)) && !isEventArchived"
                 [type]="ButtonType.Text">
                 Pašalinti
               </app-button>
@@ -77,7 +89,7 @@
       </div>
     </div>
   </div>
-  <div>
+  <div *ngIf="!isEventArchived">
     <h3 class="event__galleries-header text-title-large no-margin">Renginio nuotraukų galerijos</h3>
     <app-card-grid>
       <app-card-item
@@ -88,7 +100,7 @@
         (click)="openGallery(gallery)"
       />
       <!-- eslint-disable-next-line -->
-      <div class="event__add-gallery" (click)="openGalleryForm()">
+      <div class="event__add-gallery" (click)="openGalleryForm()" *ngIf="permissionViews?.eventAdmin">
         <div class="event__add-gallery-icon">
           <app-svg-icon [iconSrc]="SvgIconSrc.Add" [size]="SvgIconSize.Large" />
         </div>

@@ -25,6 +25,7 @@ export interface EventDto {
   location?: string;
   note?: string;
   isArchived: boolean;
+  archiveName?: string;
   createdAt: Date;
   createdByUser: string;
   createdBy: string;

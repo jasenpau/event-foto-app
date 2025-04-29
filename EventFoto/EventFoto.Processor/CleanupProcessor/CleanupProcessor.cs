@@ -7,16 +7,19 @@ namespace EventFoto.Processor.CleanupProcessor;
 public class CleanupProcessor : ICleanupProcessor
 {
     private readonly IDownloadRequestRepository _downloadRequestRepository;
+    private readonly IGalleryRepository _galleryRepository;
     private readonly IUploadBatchRepository _uploadBatchRepository;
     private readonly IBlobStorage _blobStorage;
     private readonly IConfiguration _configuration;
 
     public CleanupProcessor(IDownloadRequestRepository downloadRequestRepository,
+        IGalleryRepository galleryRepository,
         IUploadBatchRepository uploadBatchRepository,
         IBlobStorage blobStorage,
         IConfiguration configuration)
     {
         _downloadRequestRepository = downloadRequestRepository;
+        _galleryRepository = galleryRepository;
         _uploadBatchRepository = uploadBatchRepository;
         _blobStorage = blobStorage;
         _configuration = configuration;

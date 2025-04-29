@@ -10,16 +10,19 @@
       <h2 class="text-headline-large no-margin">{{ galleryDetails?.name }}</h2>
       <div class="gallery__header-controls">
         <app-upload-photo-form
+          *ngIf="permissionViews?.photographer"
           [eventId]="eventId!"
           [galleryId]="galleryId!"
           (photoUploadStarted)="handlePhotoUpload()"
         />
         <app-button
+          *ngIf="permissionViews?.eventAdmin"
           [type]="ButtonType.Text"
           (click)="openGalleryEditForm()">
           Redaguoti
         </app-button>
         <app-button
+          *ngIf="permissionViews?.eventAdmin"
           [type]="ButtonType.Text"
           [disabled]="imageData.length !== 0 || galleryDetails?.isMainGallery"
           (click)="deleteGallery()">
@@ -39,6 +42,7 @@
         tooltip="Panaikinti žymėjimą"
       />
       <app-icon-button
+        *ngIf="permissionViews?.photographer"
         [icon]="SvgIconSrc.FileMove"
         [disabled]="selectedImageIds.size === 0"
         (click)="openMovePhotosForm()"
@@ -58,6 +62,7 @@
         />
       </div>
       <app-icon-button
+        *ngIf="permissionViews?.photographer"
         [icon]="SvgIconSrc.Delete"
         [disabled]="selectedImageIds.size === 0"
         (click)="bulkDelete()"

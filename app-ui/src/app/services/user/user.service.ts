@@ -4,7 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
 import { AppGroupsDto, RegisterDto, UserData, UserListDto } from './user.types';
 import { AuthService } from '../auth/auth.service';
-import { UserGroup } from '../../globals/userGroups';
+import { ViewPermissions, UserGroup } from '../../globals/userGroups';
 import { PagedData } from '../../components/paged-table/paged-table.types';
 import { EnvService } from '../environment/env.service';
 import { LoaderService } from '../loader/loader.service';
@@ -70,6 +70,15 @@ export class UserService {
       return [UserGroup.Photographer];
     }
     return [];
+  }
+
+  getViewPermissions(): ViewPermissions {
+    const groups = this.getUserGroups();
+    return {
+      photographer: groups.includes(UserGroup.Photographer),
+      eventAdmin: groups.includes(UserGroup.EventAdmin),
+      systemAdmin: groups.includes(UserGroup.SystemAdmin),
+    };
   }
 
   register(userDetails: RegisterDto): Observable<UserData> {
