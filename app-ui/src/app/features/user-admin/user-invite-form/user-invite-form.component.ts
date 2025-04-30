@@ -130,7 +130,7 @@ export class UserInviteFormComponent
             }
           }),
           handleApiError((error) => {
-            if (error.status === 409 && error.title === 'email-exists') {
+            if (error.status === 409 && error.title === 'exists') {
               this.addConflictingEmail(formData.email);
             }
           }),
