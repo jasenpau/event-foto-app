@@ -70,7 +70,9 @@ public class EventPhotoRepository : IEventPhotoRepository
 
     public async Task<PagedData<string, EventPhoto>> SearchPhotosAsync(EventPhotoSearchParams searchParams)
     {
-        IQueryable<EventPhoto> query = EventPhotos.Where(p => p.IsProcessed);
+        IQueryable<EventPhoto> query = EventPhotos
+            .Include(p => p.User)
+            .Where(p => p.IsProcessed);
 
         if (searchParams.GalleryId.HasValue)
         {

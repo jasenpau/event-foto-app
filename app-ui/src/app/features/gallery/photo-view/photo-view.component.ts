@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   Component,
+  computed,
   effect,
   ElementRef,
   EventEmitter,
@@ -52,6 +53,7 @@ export class PhotoViewComponent
   protected imageDataUrl?: string;
   protected isLoading = true;
   protected viewPermissions?: ViewPermissions;
+  protected userId?: string;
 
   constructor(
     private readonly imageService: ImageService,
@@ -64,6 +66,7 @@ export class PhotoViewComponent
       this.loadImage(this.openPhotoData());
     });
     this.viewPermissions = this.userService.getViewPermissions();
+    this.userId = this.userService.getCurrentUserData()?.id;
   }
 
   ngAfterViewInit() {
@@ -75,6 +78,15 @@ export class PhotoViewComponent
         takeUntil(this.destroy$),
       )
       .subscribe();
+  }
+
+  protected get canDelete() {
+    return computed(() => {
+      return (
+        this.viewPermissions?.eventAdmin ||
+        this.userId === this.openPhotoData().photo.photographerId
+      );
+    });
   }
 
   protected close() {

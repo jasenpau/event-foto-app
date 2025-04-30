@@ -122,6 +122,14 @@ $min-card-width: 300px;
     }
   }
 
+  &__item-author {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    color: colors.$surface;
+    opacity: 0.85;
+  }
+
   &__loader {
     margin-top: 32px;
     display: flex;

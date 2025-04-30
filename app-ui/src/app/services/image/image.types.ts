@@ -4,6 +4,8 @@ export interface PhotoListDto {
   processedFilename?: string;
   captureDate: string;
   selected?: boolean;
+  photographerId: string;
+  photographerName: string;
 }
 
 export interface PhotoDetailDto {

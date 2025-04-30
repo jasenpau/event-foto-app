@@ -85,8 +85,10 @@ export class GalleryViewComponent
   protected eventId?: number;
   protected galleryId?: number;
   protected galleryDetails?: GalleryDto;
+  protected userId?: string;
   protected imageData: PhotoListDto[] = [];
   protected selectedImageIds = new Set<number>();
+  protected selectedOwnPhotos = true;
   protected hasMoreImages = true;
   protected isLoading = false;
   protected openedPhotoData?: OpenPhotoData;
@@ -135,6 +137,7 @@ export class GalleryViewComponent
     this.loaderService.startLoading(COMPONENT_LOADING_KEY);
     this.readRouteParams();
     this.permissionViews = this.userService.getViewPermissions();
+    this.userId = this.userService.getCurrentUserData()?.id;
   }
 
   ngAfterViewInit(): void {
@@ -177,6 +180,10 @@ export class GalleryViewComponent
     return EMPTY_SUBSCRIPTION;
   }
 
+  protected get canEditSelectedPhotos() {
+    return this.permissionViews?.eventAdmin || this.selectedOwnPhotos;
+  }
+
   protected openPhoto(image: PhotoListDto, index: number) {
     if (this.eventId) {
       this.openedPhotoData = {
@@ -190,8 +197,11 @@ export class GalleryViewComponent
   protected togglePhotoSelect(image: PhotoListDto) {
     if (this.selectedImageIds.has(image.id)) {
       this.selectedImageIds.delete(image.id);
+      this.selectedOwnPhotos = this.checkSelectedOwnPhotos();
     } else {
       this.selectedImageIds.add(image.id);
+      const isOwnPhoto = image.photographerId === this.userId;
+      this.selectedOwnPhotos = this.selectedOwnPhotos && isOwnPhoto;
     }
   }
 
@@ -239,6 +249,17 @@ export class GalleryViewComponent
     }
   }
 
+  private checkSelectedOwnPhotos() {
+    if (this.selectedImageIds.size === 0) return true;
+
+    const ids = Array.from(this.selectedImageIds);
+    return ids.every(
+      (id) =>
+        this.imageData.find((image) => image.id === id)?.photographerId ===
+        this.userId,
+    );
+  }
+
   private shiftOpenedImageIndex(offset: number) {
     const photo = this.openedPhotoData?.photo;
     if (photo) {
@@ -266,11 +287,13 @@ export class GalleryViewComponent
 
   protected unmarkAll() {
     this.selectedImageIds.clear();
+    this.selectedOwnPhotos = this.checkSelectedOwnPhotos();
   }
 
   protected markAll() {
     this.selectedImageIds.clear();
     this.imageData.forEach((i) => this.selectedImageIds.add(i.id));
+    this.selectedOwnPhotos = this.checkSelectedOwnPhotos();
   }
 
   protected bulkDelete() {
@@ -294,6 +317,7 @@ export class GalleryViewComponent
             return this.imageService.bulkDelete(selectedImages).pipe(
               tap(() => {
                 this.selectedImageIds.clear();
+                this.selectedOwnPhotos = this.checkSelectedOwnPhotos();
                 this.reload();
                 this.snackbarService.addSnackbar(
                   SnackbarType.Info,
