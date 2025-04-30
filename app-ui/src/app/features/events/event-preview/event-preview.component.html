@@ -23,6 +23,12 @@
           (click)="downloadEventArchive()">
           Atsisiųsti renginio archyvą
         </app-button>
+        <app-button
+          *ngIf="permissionViews?.eventAdmin && isEventArchived"
+          [type]="ButtonType.Text"
+          (click)="deleteEvent()">
+          Ištrinti renginį
+        </app-button>
       </div>
     </div>
   </app-page-header>

@@ -8,6 +8,7 @@ using EventFoto.Data.Enums;
 using EventFoto.Data.Models;
 using EventFoto.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Npgsql;
 
 namespace EventFoto.Core.Events;
@@ -17,14 +18,17 @@ public class EventService : IEventService
     private readonly IEventRepository _eventRepository;
     private readonly IBlobStorage _blobStorage;
     private readonly IProcessingQueue _processingQueue;
+    private readonly IConfiguration _configuration;
 
     public EventService(IEventRepository eventRepository,
         IBlobStorage  blobStorage,
-        IProcessingQueue processingQueue)
+        IProcessingQueue processingQueue,
+        IConfiguration configuration)
     {
         _eventRepository = eventRepository;
         _blobStorage = blobStorage;
         _processingQueue = processingQueue;
+        _configuration = configuration;
     }
 
     public async Task<ServiceResult<Event>> GetById(int id)
@@ -139,5 +143,34 @@ public class EventService : IEventService
         });
 
         return ServiceResult<string>.Ok(eventToArchive.ArchiveName);
+    }
+
+    public async Task<ServiceResult<bool>> DeleteEventAsync(int id)
+    {
+        var eventToDelete = await _eventRepository.GetByIdAsync(id);
+        if (eventToDelete == null)
+        {
+            return ServiceResult<bool>.Fail("Event not found", HttpStatusCode.NotFound);
+        }
+
+        if (!eventToDelete.IsArchived)
+        {
+            return ServiceResult<bool>.Fail("Only archived events can be deleted", HttpStatusCode.BadRequest);
+        }
+
+        if (!string.IsNullOrEmpty(eventToDelete.ArchiveName))
+        {
+            var containerName = _configuration["ProcessorOptions:ArchiveDownloadContainer"];
+            await _blobStorage.DeleteFilesAsync(containerName, new List<string> { eventToDelete.ArchiveName },
+                CancellationToken.None);
+        }
+
+        var result = await _eventRepository.DeleteAsync(id);
+        if (!result)
+        {
+            return ServiceResult<bool>.Fail("Event not found", HttpStatusCode.NotFound);
+        }
+
+        return ServiceResult<bool>.Ok(true);
     }
 }

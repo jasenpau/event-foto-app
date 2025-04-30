@@ -8,7 +8,7 @@ import {
 import { NgForOf, NgIf } from '@angular/common';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, of, switchMap, takeUntil, tap } from 'rxjs';
+import { delay, forkJoin, of, switchMap, takeUntil, tap } from 'rxjs';
 import { formatLithuanianDate } from '../../../helpers/formatLithuanianDate';
 import { ButtonComponent } from '../../../components/button/button.component';
 import { ButtonType } from '../../../components/button/button.types';
@@ -180,11 +180,16 @@ export class EventPreviewComponent
       .pipe(
         switchMap((modalAction) => {
           if (modalAction === ModalActions.Confirm) {
+            this.loaderService.startLoading(`${COMPONENT_LOADING_KEY}_archive`);
             return this.eventService.archiveEvent(this.event!.id).pipe(
+              delay(3000),
               tap(() => {
                 this.snackbarService.addSnackbar(
                   SnackbarType.Success,
                   'Renginys archyvuotas',
+                );
+                this.loaderService.finishLoading(
+                  `${COMPONENT_LOADING_KEY}_archive`,
                 );
                 this.router.navigate(['/event']);
               }),
@@ -212,6 +217,35 @@ export class EventPreviewComponent
         )
         .subscribe();
     }
+  }
+
+  protected deleteEvent() {
+    if (!this.event) return;
+
+    const deleteEvent$ = this.eventService.deleteEvent(this.event.id).pipe(
+      useLoader(`${COMPONENT_LOADING_KEY}_delete`, this.loaderService),
+      tap(() => {
+        this.snackbarService.addSnackbar(
+          SnackbarType.Info,
+          'Renginys ištrintas',
+        );
+        this.router.navigate(['/event']);
+      }),
+    );
+
+    this.modalService
+      .openConfirmModal({
+        body: 'Ar tikrai norite ištrinti šį renginį?\nŠis veiksmas yra negrįžtamas.',
+        confirm: 'Ištrinti',
+        cancel: 'Atšaukti',
+      })
+      .pipe(
+        switchMap((modalAction) => {
+          return modalAction === ModalActions.Confirm ? deleteEvent$ : of(null);
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
   }
 
   protected handlePhotographerFormEvent($event: string) {

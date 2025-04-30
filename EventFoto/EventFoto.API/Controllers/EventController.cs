@@ -67,6 +67,14 @@ public class EventController : AppControllerBase
         return result.Success ? Ok(EventDto.FromEvent(result.Data)) : result.ToErrorResponse();
     }
 
+    [HttpDelete("{id:int}")]
+    [AccessGroupFilter(UserGroup.EventAdmin)]
+    public async Task<ActionResult<bool>> DeleteEvent(int id)
+    {
+        var result = await _eventService.DeleteEventAsync(id);
+        return result.Success ? Ok(result.Data) : result.ToErrorResponse();
+    }
+
     [HttpGet("{eventId:int}/photographers")]
     public async Task<ActionResult<IList<AssignmentResponseDto>>> GetEventPhotographers(int eventId)
     {
@@ -122,7 +130,7 @@ public class EventController : AppControllerBase
     public async Task<ActionResult<string>> ArchiveEvent(int eventId)
     {
         var result = await _eventService.ArchiveEventAsync(eventId);
-        return result.Success ? Ok(result.Data) : result.ToErrorResponse();
+        return result.Success ? Ok(new ArchiveResponseDto { ArchiveName = result.Data }) : result.ToErrorResponse();
     }
 
     [HttpGet("calendar")]

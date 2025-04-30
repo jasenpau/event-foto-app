@@ -106,9 +106,16 @@ export class EventService {
   }
 
   archiveEvent(eventId: number) {
-    return this.http.post<boolean>(
+    return this.http.post<{ archiveName: string }>(
       `${this.apiBaseUrl}/event/${eventId}/archive`,
       {},
+      getAuthHeaders(),
+    );
+  }
+
+  deleteEvent(eventId: number) {
+    return this.http.delete<boolean>(
+      `${this.apiBaseUrl}/event/${eventId}`,
       getAuthHeaders(),
     );
   }

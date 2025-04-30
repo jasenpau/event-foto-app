@@ -16,7 +16,7 @@ public class CalendarExportService : ICalendarExportService
 
     public async Task<string> ExportCalendarAsync()
     {
-        var startDate = DateTime.UtcNow;
+        var startDate = DateTime.UtcNow.AddDays(-30);
         var endDate = DateTime.UtcNow.AddYears(1);
         var events = await _eventRepository.GetAllEventsInDatesAsync(startDate, endDate);
         return ExportToIcs(events);

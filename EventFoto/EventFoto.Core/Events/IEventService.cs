@@ -11,4 +11,5 @@ public interface IEventService
     public Task<ServiceResult<PagedData<string, EventListProjection>>> SearchEventsAsync(EventSearchParams searchParams);
     public Task<ServiceResult<Event>> UpdateEventAsync(int id, CreateEditEventDto eventDto);
     public Task<ServiceResult<string>> ArchiveEventAsync(int eventId);
+    public Task<ServiceResult<bool>> DeleteEventAsync(int id);
 }

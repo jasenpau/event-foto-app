@@ -105,4 +105,14 @@ public class EventRepository : IEventRepository
                 (e.StartDate <= endDate || (e.EndDate.HasValue && e.EndDate.Value <= endDate)))
             .ToListAsync();
     }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var event_ = await Events.FindAsync(id);
+        if (event_ == null) return false;
+
+        Events.Remove(event_);
+        await _context.SaveChangesAsync();
+        return true;
+    }
 }

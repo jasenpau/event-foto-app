@@ -11,4 +11,5 @@ public interface IEventRepository
     public Task<PagedData<string, EventListProjection>> SearchEventsAsync(EventSearchParams searchParams);
     public Task<Event> UpdateAsync(Event eventData);
     public Task<List<Event>> GetAllEventsInDatesAsync(DateTime startDate, DateTime endDate);
+    public Task<bool> DeleteAsync(int id);
 }
