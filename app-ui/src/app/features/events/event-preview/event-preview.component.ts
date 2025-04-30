@@ -180,7 +180,15 @@ export class EventPreviewComponent
       .pipe(
         switchMap((modalAction) => {
           if (modalAction === ModalActions.Confirm) {
-            return this.eventService.archiveEvent(this.event!.id);
+            return this.eventService.archiveEvent(this.event!.id).pipe(
+              tap(() => {
+                this.snackbarService.addSnackbar(
+                  SnackbarType.Success,
+                  'Renginys archyvuotas',
+                );
+                this.router.navigate(['/event']);
+              }),
+            );
           } else return of(null);
         }),
       )
