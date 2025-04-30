@@ -57,8 +57,8 @@ export class UserInviteFormComponent
     private readonly envService: EnvService,
   ) {
     super();
-    this.setupForm();
     this.viewPermissions = this.userService.getViewPermissions();
+    this.setupForm();
   }
 
   setupForm() {
