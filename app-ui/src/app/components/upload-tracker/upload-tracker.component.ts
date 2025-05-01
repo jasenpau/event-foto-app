@@ -1,9 +1,8 @@
-import { Component, Input } from '@angular/core';
-import {
-  UploadEventType,
-  UploadMessage,
-} from '../../features/camera/camera.types';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
+import { DisposableComponent } from '../disposable/disposable.component';
+import { CameraWorkerService } from '../../services/camera-worker/camera-worker.service';
+import { Subject, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-upload-tracker',
@@ -11,32 +10,57 @@ import { NgIf } from '@angular/common';
   templateUrl: './upload-tracker.component.html',
   styleUrl: './upload-tracker.component.scss',
 })
-export class UploadTrackerComponent {
-  activeUploads = new Set<string>();
-  erroredUploads = new Set<string>();
-  totalUploads = 0;
-  successfulUploads = 0;
+export class UploadTrackerComponent
+  extends DisposableComponent
+  implements OnInit, OnDestroy
+{
+  private subscriptionDestroy$ = new Subject<void>();
+  protected totalUploads = 0;
+  protected successfulUploads = 0;
+  protected inProgress = false;
 
-  @Input() set uploadEvent(message: UploadMessage | undefined) {
-    if (!message) return;
-
-    switch (message.eventType) {
-      case UploadEventType.UploadStart:
-        this.activeUploads.add(message.filename);
-        this.totalUploads += 1;
-        break;
-      case UploadEventType.UploadComplete:
-        this.activeUploads.delete(message.filename);
-        this.successfulUploads += 1;
-        break;
-      case UploadEventType.UploadError:
-        this.activeUploads.delete(message.filename);
-        this.erroredUploads.add(message.filename);
-        break;
-    }
+  constructor(private readonly cameraWorkerService: CameraWorkerService) {
+    super();
   }
 
-  get inProgress(): number {
-    return this.activeUploads.size;
+  ngOnInit() {
+    this.cameraWorkerService.isInitialized$
+      .pipe(
+        tap((initialized) => {
+          if (initialized) this.initListeners();
+          else this.subscriptionDestroy$.next();
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+  }
+
+  private initListeners() {
+    this.cameraWorkerService.isUploading$
+      .pipe(
+        tap((inProgress) => {
+          this.inProgress = inProgress;
+        }),
+        takeUntil(this.subscriptionDestroy$),
+      )
+      .subscribe();
+
+    this.cameraWorkerService.totalUploads$
+      .pipe(
+        tap((totalUploads) => {
+          this.totalUploads = totalUploads;
+        }),
+        takeUntil(this.subscriptionDestroy$),
+      )
+      .subscribe();
+
+    this.cameraWorkerService.successfulUploads$
+      .pipe(
+        tap((successfulUploads) => {
+          this.successfulUploads = successfulUploads;
+        }),
+        takeUntil(this.subscriptionDestroy$),
+      )
+      .subscribe();
   }
 }

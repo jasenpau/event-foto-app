@@ -11,6 +11,7 @@
     right: 48px;
     gap: 16px;
     min-width: 350px;
+    z-index: 5;
 
     @media (max-width: breakpoints.$mobile-large) {
       min-width: 0;

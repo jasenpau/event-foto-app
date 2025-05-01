@@ -7,12 +7,7 @@ import {
 } from '@angular/core';
 import { CameraSetupComponent } from '../camera-setup/camera-setup.component';
 import { NgIf } from '@angular/common';
-import {
-  CameraDevice,
-  CameraEvent,
-  CameraSettings,
-  UploadMessage,
-} from '../camera.types';
+import { CameraDevice, CameraEvent, CameraSettings } from '../camera.types';
 import {
   loadCameraDevice,
   loadCameraEvent,
@@ -21,7 +16,6 @@ import {
 import { EventService } from '../../../services/event/event.service';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { switchMap, takeUntil, tap } from 'rxjs';
-import { AUTH_TOKEN_STORAGE_KEY } from '../../../services/auth/auth.const';
 import { UserService } from '../../../services/user/user.service';
 import { UploadTrackerComponent } from '../../../components/upload-tracker/upload-tracker.component';
 import { EnvService } from '../../../services/environment/env.service';
@@ -30,6 +24,9 @@ import { IconButtonComponent } from '../../../components/icon-button/icon-button
 import { SvgIconSrc } from '../../../components/svg-icon/svg-icon.types';
 import { PhotographerAssignment } from '../../../services/event/event.types';
 import { Router } from '@angular/router';
+import { CameraWorkerService } from '../../../services/camera-worker/camera-worker.service';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
+import { SnackbarType } from '../../../services/snackbar/snackbar.types';
 
 @Component({
   selector: 'app-camera-main',
@@ -54,13 +51,11 @@ export class CameraMainComponent
   protected cameraLoadingFinished = false;
   protected eventLoadingFinished = false;
   protected userOpenSettings = false;
-  protected uploadEvent?: UploadMessage;
   protected assignment?: PhotographerAssignment;
 
   protected cameraInitialized = false;
   protected cameraStream?: MediaStream;
 
-  private cameraWorker: Worker;
   private userId?: string;
   private readonly apiBaseUrl: string;
 
@@ -69,18 +64,12 @@ export class CameraMainComponent
     private readonly userService: UserService,
     private readonly envService: EnvService,
     private readonly router: Router,
+    private readonly cameraWorkerService: CameraWorkerService,
+    private readonly snackbarService: SnackbarService,
   ) {
     super();
     this.apiBaseUrl = this.envService.getConfig().apiBaseUrl;
-    this.cameraWorker = new Worker(
-      new URL('./camera.worker', import.meta.url),
-      {
-        type: 'module',
-      },
-    );
-    this.cameraWorker.onmessage = (e) => {
-      this.handleWorkerMessage(e);
-    };
+    this.cameraWorkerService.initialize();
   }
 
   ngOnInit() {
@@ -132,14 +121,9 @@ export class CameraMainComponent
           await writable.write(blob);
           await writable.close();
 
-          const authToken = localStorage.getItem(AUTH_TOKEN_STORAGE_KEY);
-          if (!authToken) return;
-
-          this.cameraWorker.postMessage({
+          this.cameraWorkerService.postMessage({
             eventId,
             filename,
-            authToken,
-            apiBaseUrl: this.apiBaseUrl,
             captureDate: new Date(),
           });
         } catch (err) {
@@ -221,7 +205,6 @@ export class CameraMainComponent
 
   private async initCamera(cameraId: string) {
     this.stopCamera();
-    console.log('loading cameraId', cameraId);
 
     const constraints = {
       video: {
@@ -241,9 +224,13 @@ export class CameraMainComponent
       this.previewVideo.nativeElement.srcObject = this.cameraStream;
       this.cameraInitialized = true;
     } catch (error) {
-      console.log('failed to init camera', cameraId);
+      console.error('Failed to initialize camera', cameraId);
       console.error(error);
-      this.openSettings();
+      this.snackbarService.addSnackbar(
+        SnackbarType.Error,
+        'Nepavyko inicijuoti kameros įrenginio. Įsitinkinkite, jog suteikta prieiga',
+      );
+      // this.openSettings();
     }
   }
 
@@ -259,13 +246,7 @@ export class CameraMainComponent
   override ngOnDestroy() {
     super.ngOnDestroy();
     this.stopCamera();
-    this.cameraWorker.terminate();
-  }
-
-  private handleWorkerMessage(e: MessageEvent) {
-    console.log('respone from worker');
-    console.log(e.data);
-    this.uploadEvent = e.data;
+    this.cameraWorkerService.requestTerminate();
   }
 
   protected readonly SvgIconSrc = SvgIconSrc;

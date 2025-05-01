@@ -1,8 +1,11 @@
 /// <reference lib="webworker" />
 
-import { UploadMessage } from '../camera.types';
-import { SasUri, SasUriResponse } from '../../../services/image/image.types';
-import { SasTokenHandler, uploadPhoto } from '../uploadPhoto';
+import { UploadMessage } from '../../features/camera/camera.types';
+import { SasUri, SasUriResponse } from '../image/image.types';
+import {
+  SasTokenHandler,
+  uploadPhoto,
+} from '../../features/camera/uploadPhoto';
 
 const sasTokenData: SasUri = {
   baseUri: '',

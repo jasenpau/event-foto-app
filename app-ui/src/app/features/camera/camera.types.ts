@@ -24,3 +24,9 @@ export enum UploadEventType {
   UploadComplete = 'upload-complete',
   UploadError = 'upload-error',
 }
+
+export interface UploadData {
+  eventId: number;
+  filename: string;
+  captureDate: Date;
+}

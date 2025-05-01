@@ -7,7 +7,7 @@
     <p class="text-label-medium no-margin" *ngIf="event?.name">{{ event?.name }}</p>
     <p class="text-label-medium no-margin" *ngIf="assignment">{{ assignment.galleryName }}</p>
   </div>
-  <app-upload-tracker class="camera__upload-tracker" [uploadEvent]="uploadEvent" />
+  <app-upload-tracker class="camera__upload-tracker" />
   <video class="camera__video" #previewVideo autoplay playsinline></video>
   <canvas class="camera__canvas" #canvas></canvas>
   <div class="camera__controls">
@@ -15,6 +15,7 @@
       <app-icon-button [icon]="SvgIconSrc.ArrowBack" theme="light" (click)="goBack()" />
     </div>
     <div class="camera__control-section" *ngIf="cameraInitialized">
+      <!-- eslint-disable-next-line -->
       <div class="camera__capture" (click)="capture()" >
         <app-icon-button [icon]="SvgIconSrc.Camera"/>
       </div>
