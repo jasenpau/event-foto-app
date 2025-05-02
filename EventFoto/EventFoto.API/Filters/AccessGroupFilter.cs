@@ -3,9 +3,8 @@ using EventFoto.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace EventFoto.Core.Filters;
+namespace EventFoto.API.Filters;
 
 [AttributeUsage(AttributeTargets.Method)]
 public class AccessGroupFilter(UserGroup group) : AuthorizeAttribute, IAuthorizationFilter

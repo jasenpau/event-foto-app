@@ -1,5 +1,4 @@
-﻿using EventFoto.Core.ControllerBase;
-using EventFoto.Core.Extensions;
+﻿using EventFoto.API.Extensions;
 using EventFoto.Core.Watermarks;
 using EventFoto.Data.DTOs;
 using EventFoto.Data.Models;

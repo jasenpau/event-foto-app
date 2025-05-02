@@ -1,8 +1,8 @@
 using System.Reflection;
 using Azure.Identity;
+using EventFoto.API.Filters;
 using EventFoto.Core;
 using EventFoto.Core.CalendarExport;
-using EventFoto.Core.Filters;
 using EventFoto.Core.Providers;
 using EventFoto.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -27,11 +27,6 @@ public static class Program
             .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true)
             .AddEnvironmentVariables();
 
-        builder.Services.AddControllers(options =>
-        {
-            options.Filters.Add<ValidationFilter>();
-        });
-        
         builder.Services.Configure<ApiBehaviorOptions>(options =>
         {
             options.SuppressModelStateInvalidFilter = true;

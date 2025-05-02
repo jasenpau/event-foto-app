@@ -1,10 +1,9 @@
 using System.Security.Authentication;
 using EventFoto.Core.Providers;
 using EventFoto.Data.Enums;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
 
-namespace EventFoto.Core.ControllerBase;
+namespace EventFoto.API.Controllers;
 
 public class AppControllerBase : Microsoft.AspNetCore.Mvc.ControllerBase
 {

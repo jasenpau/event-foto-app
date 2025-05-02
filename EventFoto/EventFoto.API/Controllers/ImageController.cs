@@ -1,6 +1,5 @@
-﻿using EventFoto.Core.ControllerBase;
+﻿using EventFoto.API.Extensions;
 using EventFoto.Core.EventPhotos;
-using EventFoto.Core.Extensions;
 using EventFoto.Data.DTOs;
 using EventFoto.Data.Models;
 using Microsoft.AspNetCore.Authorization;
