@@ -83,6 +83,7 @@ jobs:
               AzureStorage__ProcessingQueueName="${{ vars.AZURE_STORAGE_PROCESSING_QUEUE }}" \
               AzureStorage__TokenExpiryInMinutes="${{ vars.SAS_TOKEN_EXPIRY_IN_MINUTES }}" \
               AzureStorage__WatermarkContainer="${{ vars.AZURE_STORAGE_WATERMARK_CONTAINER }}" \
+              ProcessorOptions__ArchiveDownloadContainer="${{ vars.PROCESSING_ARCHIVE_CONTAINER }}" \
               AzureAd__Instance="${{ vars.AZURE_AD_INSTANCE }}" \
               AzureAd__TenantId="${{ vars.AZURE_AD_TENANT_ID }}" \
               AzureAd__ClientId="${{ vars.AZURE_AD_CLIENT_ID }}" \
