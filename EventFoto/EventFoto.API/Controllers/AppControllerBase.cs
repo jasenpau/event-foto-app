@@ -1,11 +1,12 @@
 using System.Security.Authentication;
 using EventFoto.Core.Providers;
 using EventFoto.Data.Enums;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web;
 
 namespace EventFoto.API.Controllers;
 
-public class AppControllerBase : Microsoft.AspNetCore.Mvc.ControllerBase
+public class AppControllerBase : ControllerBase
 {
     protected Guid RequestUserId()
     {

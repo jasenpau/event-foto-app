@@ -27,6 +27,8 @@ public static class Program
             .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true)
             .AddEnvironmentVariables();
 
+        builder.Services.AddControllers();
+
         builder.Services.Configure<ApiBehaviorOptions>(options =>
         {
             options.SuppressModelStateInvalidFilter = true;
