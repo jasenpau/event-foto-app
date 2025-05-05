@@ -1,4 +1,5 @@
 using System.Net;
+using EventFoto.Core.GraphClient;
 using EventFoto.Data.DTOs;
 using EventFoto.Data.Models;
 using EventFoto.Data.Repositories;
@@ -12,11 +13,11 @@ namespace EventFoto.Core.Users;
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
-    private readonly GraphServiceClient _graphClient;
+    private readonly IGraphClientService _graphClient;
     private readonly IConfiguration _configuration;
 
     public UserService(IUserRepository userRepository,
-        GraphServiceClient graphClient,
+        IGraphClientService graphClient,
         IConfiguration configuration)
     {
         _userRepository = userRepository;
@@ -61,15 +62,7 @@ public class UserService : IUserService
 
         var invitationKey = Guid.NewGuid();
 
-        var invitation = new Invitation
-        {
-            InvitedUserEmailAddress = inviteRequestDto.Email,
-            InvitedUserDisplayName = inviteRequestDto.Name,
-            SendInvitationMessage = true,
-            InviteRedirectUrl = $"{_configuration["PublicAppUrl"]}/invite/{invitationKey}"
-        };
-
-        var inviteGraphResult = await _graphClient.Invitations.PostAsync(invitation);
+        var inviteGraphResult = await _graphClient.InviteUserAsync(inviteRequestDto.Email, inviteRequestDto.Name, invitationKey);
         if (inviteGraphResult?.InvitedUser?.Id == null)
         {
             return ServiceResult<Guid>.Fail("Failed to create invitation in Entra", HttpStatusCode.InternalServerError);
@@ -77,11 +70,8 @@ public class UserService : IUserService
 
         if (!string.IsNullOrEmpty(inviteRequestDto.GroupAssignment))
         {
-            var requestBody = new ReferenceCreate
-            {
-                OdataId = $"https://graph.microsoft.com/v1.0/directoryObjects/{inviteGraphResult.InvitedUser.Id}",
-            };
-            await _graphClient.Groups[inviteRequestDto.GroupAssignment].Members.Ref.PostAsync(requestBody);
+            var userId = inviteGraphResult.InvitedUser.Id ?? throw new InvalidOperationException("User ID is null");
+            await _graphClient.AssignUserGroup(userId, inviteRequestDto.GroupAssignment);
         }
 
         var newUser = new User

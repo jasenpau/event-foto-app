@@ -2,7 +2,6 @@
 using EventFoto.Core.EventPhotos;
 using EventFoto.Core.Events;
 using EventFoto.Core.Galleries;
-using EventFoto.Core.PhotoProcessing;
 using EventFoto.Core.Processing;
 using EventFoto.Core.Users;
 using EventFoto.Core.Watermarks;

@@ -9,13 +9,32 @@
 
     <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.2"/>
+        <PackageReference Include="FluentAssertions" Version="8.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.4" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0"/>
+        <PackageReference Include="Moq" Version="4.20.72" />
         <PackageReference Include="xunit" Version="2.9.2"/>
         <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2"/>
     </ItemGroup>
 
     <ItemGroup>
         <Using Include="Xunit"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\EventFoto.API\EventFoto.API.csproj" />
+      <ProjectReference Include="..\EventFoto.Core\EventFoto.Core.csproj" />
+      <ProjectReference Include="..\EventFoto.Data.Migrator\EventFoto.Data.Migrator.csproj" />
+      <ProjectReference Include="..\EventFoto.Data\EventFoto.Data.csproj" />
+      <ProjectReference Include="..\EventFoto.Processor\EventFoto.Processor.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="appsettings.test.json" />
+      <Content Include="appsettings.test.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

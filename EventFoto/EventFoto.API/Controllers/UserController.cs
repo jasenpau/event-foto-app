@@ -1,7 +1,9 @@
 using EventFoto.API.Extensions;
+using EventFoto.API.Filters;
 using EventFoto.Core.Providers;
 using EventFoto.Core.Users;
 using EventFoto.Data.DTOs;
+using EventFoto.Data.Enums;
 using EventFoto.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -57,6 +59,7 @@ public class UserController : AppControllerBase
     }
 
     [HttpPost("invite")]
+    [AccessGroupFilter(UserGroup.EventAdmin)]
     public async Task<ActionResult<Guid>> InviteUser([FromBody] UserInviteRequestDto inviteDto)
     {
         if (!string.IsNullOrEmpty(inviteDto.GroupAssignment) &&

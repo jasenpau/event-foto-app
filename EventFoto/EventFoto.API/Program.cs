@@ -1,8 +1,8 @@
 using System.Reflection;
 using Azure.Identity;
-using EventFoto.API.Filters;
 using EventFoto.Core;
 using EventFoto.Core.CalendarExport;
+using EventFoto.Core.GraphClient;
 using EventFoto.Core.Providers;
 using EventFoto.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,7 +13,7 @@ using Microsoft.Identity.Web;
 
 namespace EventFoto.API;
 
-public static class Program
+public class Program
 {
     public static void Main(string[] args)
     {
@@ -34,7 +34,7 @@ public static class Program
             options.SuppressModelStateInvalidFilter = true;
         });
 
-        builder.Services.AddDbContextPool<EventFotoContext>(opt =>
+        builder.Services.AddDbContext<EventFotoContext>(opt =>
         {
             opt.UseNpgsql(builder.Configuration.GetConnectionString("Database"));
             opt.EnableSensitiveDataLogging();
@@ -71,6 +71,7 @@ public static class Program
 
             return new GraphServiceClient(credential);
         });
+        services.AddScoped<IGraphClientService, GraphClientService>();
     }
 
     private static void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
