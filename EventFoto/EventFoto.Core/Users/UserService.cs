@@ -14,15 +14,12 @@ public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IGraphClientService _graphClient;
-    private readonly IConfiguration _configuration;
 
     public UserService(IUserRepository userRepository,
-        IGraphClientService graphClient,
-        IConfiguration configuration)
+        IGraphClientService graphClient)
     {
         _userRepository = userRepository;
         _graphClient = graphClient;
-        _configuration = configuration;
     }
     
     public async Task<ServiceResult<User>> GetUserAsync(Guid userId)

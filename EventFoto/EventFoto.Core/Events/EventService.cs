@@ -165,12 +165,7 @@ public class EventService : IEventService
                 CancellationToken.None);
         }
 
-        var result = await _eventRepository.DeleteAsync(id);
-        if (!result)
-        {
-            return ServiceResult<bool>.Fail("Event not found", HttpStatusCode.NotFound);
-        }
-
+        await _eventRepository.DeleteAsync(id);
         return ServiceResult<bool>.Ok(true);
     }
 }

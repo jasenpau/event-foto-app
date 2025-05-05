@@ -95,7 +95,7 @@ export class EventListComponent
     );
     this.searchForm = new FormGroup({
       search: new FormControl(null, [Validators.maxLength(100)]),
-      fromDate: new FormControl(getStartOfDay(new Date()), []),
+      fromDate: new FormControl(null, []),
       toDate: new FormControl(null, []),
       showArchived: new FormControl(null, []),
     });

@@ -71,7 +71,7 @@ namespace EventFoto.Data.Migrations
                   )
                   AND (
                       show_archived IS TRUE
-                      OR (show_archived IS FALSE AND e.""IsArchived"" = FALSE)
+                      OR (show_archived IS FALSE AND (e.""IsArchived"" = FALSE AND e.""ArchiveName"" IS NULL))
                       OR show_archived IS NULL
                   )
                 ORDER BY e.""StartDate"", e.""Id""

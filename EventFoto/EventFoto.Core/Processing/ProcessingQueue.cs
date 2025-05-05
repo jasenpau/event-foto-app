@@ -1,26 +1,20 @@
 ﻿using System.Text.Json;
-using Azure.Storage.Queues;
 using EventFoto.Data.Models;
-using Microsoft.Extensions.Configuration;
 
 namespace EventFoto.Core.Processing;
 
 public class ProcessingQueue : IProcessingQueue
 {
-    private readonly string _connectionString;
-    private readonly string _queueName;
+    private readonly IQueueClientFactory _queueClientFactory;
 
-    public ProcessingQueue(IConfiguration configuration)
+    public ProcessingQueue(IQueueClientFactory queueClientFactory)
     {
-        _connectionString = configuration["AzureStorage:ConnectionString"] ??
-                            throw new ArgumentNullException(nameof(configuration));
-        _queueName = configuration["AzureStorage:ProcessingQueueName"] ??
-                     throw new ArgumentNullException(nameof(configuration));
+        _queueClientFactory = queueClientFactory;
     }
 
     public async Task EnqueueMessage(ProcessingMessage message)
     {
-        var client = new QueueClient(_connectionString, _queueName);
+        var client = _queueClientFactory.GetClient();
         await client.CreateIfNotExistsAsync();
 
         if (await client.ExistsAsync())
@@ -32,7 +26,7 @@ public class ProcessingQueue : IProcessingQueue
         }
         else
         {
-            throw new InvalidOperationException($"Queue '{_queueName}' does not exist.");
+            throw new InvalidOperationException("Queue does not exist.");
         }
     }
 }

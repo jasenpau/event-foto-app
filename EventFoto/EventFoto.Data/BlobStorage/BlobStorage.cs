@@ -12,27 +12,30 @@ namespace EventFoto.Data.BlobStorage;
 
 public class BlobStorage : IBlobStorage
 {
+    private readonly BlobServiceClient _blobServiceClient;
+    private readonly IBlobBatchClientFactory _batchClientFactory;
     private readonly IConfiguration _configuration;
-    private readonly string _connectionString;
 
-    public BlobStorage(IConfiguration configuration)
+    public BlobStorage(BlobServiceClient blobServiceClient,
+        IBlobBatchClientFactory batchClientFactory,
+        IConfiguration configuration)
     {
+        _blobServiceClient = blobServiceClient;
+        _batchClientFactory = batchClientFactory;
         _configuration = configuration;
-        _connectionString = _configuration["AzureStorage:ConnectionString"];
     }
 
     public string GetContainerName(int eventId) => $"event-{eventId}";
 
     public async Task CreateContainerAsync(string containerName)
     {
-        var blobClient = new BlobServiceClient(_connectionString);
-        var containerClient = blobClient.GetBlobContainerClient(containerName);
+        var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
         await containerClient.CreateIfNotExistsAsync();
     }
 
     public async Task<ServiceResult<string>> GetUploadSasUri(string containerName, int tokenExpiryInMinutes)
     {
-        var containerClient = new BlobContainerClient(_connectionString, containerName);
+        var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
         await containerClient.CreateIfNotExistsAsync();
 
         if (!containerClient.CanGenerateSasUri)
@@ -54,8 +57,7 @@ public class BlobStorage : IBlobStorage
     public ServiceResult<string> GetReadOnlySasUri(int tokenExpiryInMinutes)
     {
         var accountKey = _configuration["AzureStorage:AccountKey"];
-        var blobServiceClient = new BlobServiceClient(_connectionString);
-        var credential = new StorageSharedKeyCredential(blobServiceClient.AccountName, accountKey);
+        var credential = new StorageSharedKeyCredential(_blobServiceClient.AccountName, accountKey);
 
         var isDev = _configuration["IsDevelopment"] == "true";
 
@@ -70,7 +72,7 @@ public class BlobStorage : IBlobStorage
         sasBuilder.SetPermissions(AccountSasPermissions.Read);
 
         var sasToken = sasBuilder.ToSasQueryParameters(credential).ToString();
-        var serviceUri = blobServiceClient.Uri;
+        var serviceUri = _blobServiceClient.Uri;
 
         return ServiceResult<string>.Ok($"{serviceUri}?{sasToken}");
     }
@@ -80,7 +82,7 @@ public class BlobStorage : IBlobStorage
     {
         try
         {
-            var containerClient = new BlobContainerClient(_connectionString, containerName);
+            var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
             await containerClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken);
             var blobClient = containerClient.GetBlobClient(filename);
 
@@ -111,7 +113,7 @@ public class BlobStorage : IBlobStorage
     public async Task<ServiceResult<MemoryStream>> DownloadFileAsync(string containerName, string filename,
         CancellationToken cancellationToken)
     {
-        var containerClient = new BlobContainerClient(_connectionString, containerName);
+        var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
         var blobClient = containerClient.GetBlobClient(filename);
 
         if (!await blobClient.ExistsAsync(cancellationToken))
@@ -128,10 +130,9 @@ public class BlobStorage : IBlobStorage
 
     public async Task<ServiceResult<int>> DeleteFilesAsync(string containerName, IList<string> filenames, CancellationToken cancellationToken)
     {
-        var blobClient = new BlobServiceClient(_connectionString);
-        var containerClient = blobClient.GetBlobContainerClient(containerName);
+        var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
 
-        var batchClient = blobClient.GetBlobBatchClient();
+        var batchClient = _batchClientFactory.Create(_blobServiceClient);
         var blobUris = filenames.Select(name => containerClient.GetBlobClient(name).Uri).ToList();
 
         var batches = blobUris.Batch(100);
@@ -161,8 +162,7 @@ public class BlobStorage : IBlobStorage
     {
         try
         {
-            var blobClient = new BlobServiceClient(_connectionString);
-            var containerClient = blobClient.GetBlobContainerClient(containerName);
+            var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
 
             if (!await containerClient.ExistsAsync(cancellationToken))
             {

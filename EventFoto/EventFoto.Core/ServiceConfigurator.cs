@@ -1,4 +1,5 @@
-﻿using EventFoto.Core.Assignments;
+﻿using Azure.Storage.Blobs;
+using EventFoto.Core.Assignments;
 using EventFoto.Core.EventPhotos;
 using EventFoto.Core.Events;
 using EventFoto.Core.Galleries;
@@ -7,13 +8,14 @@ using EventFoto.Core.Users;
 using EventFoto.Core.Watermarks;
 using EventFoto.Data.BlobStorage;
 using EventFoto.Data.Repositories;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventFoto.Core;
 
 public static class ServiceConfigurator
 {
-    public static void ConfigureServices(IServiceCollection services)
+    public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IEventRepository, EventRepository>();
@@ -31,7 +33,12 @@ public static class ServiceConfigurator
         services.AddScoped<IWatermarkService, WatermarkService>();
         services.AddScoped<IAssignmentService, AssignmentService>();
 
+        services.AddScoped<IBlobBatchClientFactory, BlobBatchClientFactory>();
         services.AddScoped<IBlobStorage, BlobStorage>();
         services.AddScoped<IProcessingQueue, ProcessingQueue>();
+
+        services.AddSingleton<IQueueClientFactory, QueueClientFactory>();
+        services.AddSingleton(x =>
+            new BlobServiceClient(configuration["AzureStorage:ConnectionString"]));
     }
 }

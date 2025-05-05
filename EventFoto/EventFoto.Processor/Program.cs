@@ -25,7 +25,7 @@ builder.Services.AddDbContextPool<EventFotoContext>(options =>
 
 });
 
-ServiceConfigurator.ConfigureServices(builder.Services);
+ServiceConfigurator.ConfigureServices(builder.Services, builder.Configuration);
 builder.Services.AddScoped<IImageProcessor, ImageProcessor>();
 builder.Services.AddScoped<IDownloadZipProcessor, DownloadZipProcessor>();
 builder.Services.AddScoped<ICleanupProcessor, CleanupProcessor>();

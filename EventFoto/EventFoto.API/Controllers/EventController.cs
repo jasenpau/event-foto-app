@@ -1,3 +1,4 @@
+using System.Net;
 using EventFoto.API.Extensions;
 using EventFoto.API.Filters;
 using EventFoto.Core.Events;
@@ -78,10 +79,7 @@ public class EventController : AppControllerBase
     public async Task<ActionResult<IList<AssignmentResponseDto>>> GetEventPhotographers(int eventId)
     {
         var result = await _assignmentService.GetAssignmentsForEvent(eventId);
-        if (!result.Success)
-        {
-            return result.ToErrorResponse();
-        }
+        if (!result.Success) return result.ToErrorResponse();
 
         var response = result.Data.Select(AssignmentResponseDto.FromModel).ToList();
         return Ok(response);
@@ -94,7 +92,11 @@ public class EventController : AppControllerBase
         var userGroup = RequestHighestUserGroup();
         if (userGroup is null || (userGroup == UserGroup.Photographer && requestDto.UserId != RequestUserId()))
         {
-            return Unauthorized("User does not have permission to assign others.");
+            return Unauthorized(new ProblemDetails()
+            {
+                Status = (int)HttpStatusCode.Unauthorized,
+                Detail = "User does not have permission to assign others."
+            });
         }
 
         var result = await _assignmentService.AssignPhotographerAsync(requestDto.GalleryId, requestDto.UserId);
@@ -108,7 +110,11 @@ public class EventController : AppControllerBase
         var userGroup = RequestHighestUserGroup();
         if (userGroup is null || (userGroup == UserGroup.Photographer && userId != RequestUserId()))
         {
-            return Unauthorized("User does not have permission to unassign others.");
+            return Unauthorized(new ProblemDetails()
+            {
+                Status = (int)HttpStatusCode.Unauthorized,
+                Detail = "User does not have permission to unassign others."
+            });
         }
 
         var result = await _assignmentService.RemovePhotographerAssignmentAsync(eventId, userId);
@@ -117,7 +123,7 @@ public class EventController : AppControllerBase
 
     [HttpGet("{eventId:int}/photographers/current")]
     [AccessGroupFilter(UserGroup.Photographer)]
-    public async Task<ActionResult<AssignmentResponseDto>> GetCurrentPhotographer(int eventId)
+    public async Task<ActionResult<AssignmentResponseDto>> GetCurrentPhotographerAssignment(int eventId)
     {
         var userId = RequestUserId();
         var result = await _assignmentService.GetUserAssignmentAsync(eventId, userId);

@@ -199,9 +199,6 @@ export class CameraSetupComponent
       pageSize,
     };
 
-    searchParams.fromDate = new Date();
-    searchParams.fromDate.setHours(0, 0, 0, 0);
-
     return this.eventService.searchEvents(searchParams);
   };
 }

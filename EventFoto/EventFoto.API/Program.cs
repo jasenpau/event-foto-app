@@ -56,7 +56,7 @@ public class Program
 
     private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-        ServiceConfigurator.ConfigureServices(services);
+        ServiceConfigurator.ConfigureServices(services, configuration);
 
         services.AddScoped<ICalendarExportService, CalendarExportService>();
         services.AddSingleton<IGroupSettingsProvider, GroupSettingsProvider>();

@@ -1,6 +1,8 @@
 ﻿using EventFoto.Data;
 using EventFoto.Data.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Xunit.Sdk;
 
 namespace EventFoto.Tests.TestBedSetup;
 
@@ -52,6 +54,15 @@ public class TestDataSetup
         var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
 
         context.Events.Add(eventData);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task AssignPhotographer(int galleryId, Guid photographerId)
+    {
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
+
+        context.PhotographerAssignments.Add(new PhotographerAssignment { GalleryId = galleryId, UserId = photographerId });
         await context.SaveChangesAsync();
     }
 }

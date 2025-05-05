@@ -21,7 +21,14 @@ public static class EventConstants
             }
         },
         IsArchived = false,
-        CreatedBy = UserConstants.GetTestEventAdmin().Id,
         CreatedOn = DateTime.UtcNow,
+        CreatedBy = UserConstants.GetTestEventAdmin().Id,
+        Watermark = new Watermark
+        {
+            Id = 1,
+            Name = "Test watermark",
+            Filename = "watermark.png",
+        },
+        WatermarkId = 1,
     };
 }

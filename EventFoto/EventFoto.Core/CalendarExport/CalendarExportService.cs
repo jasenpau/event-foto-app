@@ -27,12 +27,12 @@ public class CalendarExportService : ICalendarExportService
         var ical = new StringBuilder();
         ical.AppendLine("BEGIN:VCALENDAR");
         ical.AppendLine("VERSION:2.0");
-        ical.AppendLine("PRODID:-//YourCompany//YourApp//EN");
+        ical.AppendLine("PRODID:-//PauliusJasenas//EventFoto//LT");
 
         foreach (var e in events)
         {
             ical.AppendLine("BEGIN:VEVENT");
-            ical.AppendLine($"UID:{e.Id}@yourapp.com");
+            ical.AppendLine($"UID:{e.Id}@eventfoto.jasenas.com");
             ical.AppendLine($"DTSTAMP:{e.CreatedOn.ToUniversalTime():yyyyMMddTHHmmssZ}");
             ical.AppendLine($"DTSTART:{e.StartDate.ToUniversalTime():yyyyMMddTHHmmssZ}");
 

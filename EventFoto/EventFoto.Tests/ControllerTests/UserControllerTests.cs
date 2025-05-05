@@ -6,6 +6,7 @@ using EventFoto.Data.Models;
 using EventFoto.Tests.TestBedSetup;
 using EventFoto.Tests.TestConstants;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Xunit.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,7 +17,7 @@ public class UserControllerTests : IClassFixture<TestApplicationFactory>, IDispo
     private readonly TestApplicationFactory _factory;
     private readonly ITestOutputHelper _testOutputHelper;
     private readonly TestDataSetup _testSetup;
-    private IServiceScope _scope;
+    private readonly IServiceScope _scope;
 
     public UserControllerTests(TestApplicationFactory factory,
         ITestOutputHelper testOutputHelper)
@@ -191,6 +192,31 @@ public class UserControllerTests : IClassFixture<TestApplicationFactory>, IDispo
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task InviteUser_WithExistingEmail_ReturnsConflict()
+    {
+        // Arrange
+        var testAdmin = UserConstants.GetTestEventAdmin();
+        var client = await _testSetup.SetupWithUser(testAdmin);
+        var inviteDto = new UserInviteRequestDto
+        {
+            Email = testAdmin.Email,
+            Name = "Test User",
+        };
+        var request = new HttpRequestMessage(HttpMethod.Post, "/api/user/invite")
+        {
+            Content = JsonContent.Create(inviteDto)
+        };
+
+        // Act
+        var result = await client.SendRequest<ProblemDetails>(request, HttpStatusCode.Conflict);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Status.Should().Be((int)HttpStatusCode.Conflict);
+        result.Title.Should().Be("exists");
     }
 
     [Fact]
