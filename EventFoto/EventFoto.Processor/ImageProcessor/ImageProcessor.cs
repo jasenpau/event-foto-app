@@ -5,7 +5,6 @@ using EventFoto.Data.Repositories;
 using ExifLibrary;
 using Microsoft.Extensions.Configuration;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
 
 namespace EventFoto.Processor.ImageProcessor;
@@ -39,7 +38,7 @@ public class ImageProcessor : IImageProcessor
         var uploadBatch = await _uploadBatchRepository.GetByIdAsync(message.EntityId);
         if (uploadBatch == null)
         {
-            throw new InvalidOperationException("Upload batch not found.");
+            throw new InvalidOperationException("Upload batch not found");
         }
 
         var photos = uploadBatch.EventPhotos;

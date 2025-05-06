@@ -61,87 +61,77 @@ public class TestDataSetup
         return client;
     }
 
-    public async Task AddUser(User user)
+    public Task AddUser(User user)
     {
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
 
-        context.Users.Add(user);
-        await context.SaveChangesAsync();
+        return context.AddUser(user);
     }
 
-    public async Task AddEvent(Event eventData)
+    public Task AddEvent(Event eventData)
     {
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
 
-        context.Events.Add(eventData);
-        await context.SaveChangesAsync();
+        return context.AddEvent(eventData);
     }
 
-    public async Task AssignPhotographer(int galleryId, Guid photographerId)
+    public Task AssignPhotographer(int galleryId, Guid photographerId)
     {
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
 
-        context.PhotographerAssignments.Add(new PhotographerAssignment { GalleryId = galleryId, UserId = photographerId });
-        await context.SaveChangesAsync();
+        return context.AssignPhotographer(galleryId, photographerId);
     }
 
-    public async Task AddGallery(Gallery gallery)
+    public Task AddGallery(Gallery gallery)
     {
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
 
-        context.Galleries.Add(gallery);
-        await context.SaveChangesAsync();
+        return context.AddGallery(gallery);
     }
 
-    public async Task AddPhotos(List<EventPhoto> photos)
+    public Task AddPhotos(List<EventPhoto> photos)
     {
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
 
-        context.EventPhotos.AddRange(photos);
-        await context.SaveChangesAsync();
+        return context.AddPhotos(photos);
     }
 
-    public Task AddPhoto(EventPhoto testPhoto) =>
-        AddPhotos(new List<EventPhoto> { testPhoto });
+    public Task AddPhoto(EventPhoto testPhoto) => AddPhotos([testPhoto]);
 
-    public async Task AddUploadBatch(UploadBatch batch)
+    public Task AddUploadBatch(UploadBatch batch)
     {
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
 
-        context.UploadBatches.Add(batch);
-        await context.SaveChangesAsync();
+        return context.AddUploadBatch(batch);
     }
 
-    public async Task AddDownloadRequest(DownloadRequest request)
+    public Task AddDownloadRequest(DownloadRequest request)
     {
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
 
-        context.DownloadRequests.Add(request);
-        await context.SaveChangesAsync();
+        return context.AddDownloadRequest(request);
     }
 
-    public async Task AddWatermark(Watermark watermark)
+    public Task AddWatermark(Watermark watermark)
     {
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
 
-        context.Watermarks.Add(watermark);
-        await context.SaveChangesAsync();
+        return context.AddWatermark(watermark);
     }
 
-    public async Task AddWatermarks(List<Watermark> watermarks)
+    public Task AddWatermarks(List<Watermark> watermarks)
     {
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
 
-        context.Watermarks.AddRange(watermarks);
-        await context.SaveChangesAsync();
+        return context.AddWatermarks(watermarks);
     }
 }

@@ -38,6 +38,7 @@ public static class PhotoConstants
             CaptureDate = DateTime.UtcNow.AddMinutes(-4),
             UploadDate = DateTime.UtcNow.AddMinutes(-4),
             UserId = UserConstants.GetTestPhotographer().Id,
+            UploadBatchId = 1,
         },
 
         new()

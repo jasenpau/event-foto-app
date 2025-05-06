@@ -1,4 +1,5 @@
-﻿using Azure.Storage.Blobs;
+﻿using Azure;
+using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Specialized;
 using Azure.Storage.Sas;
 using EventFoto.Data.BlobStorage;
@@ -25,6 +26,16 @@ public static class BlobServiceClientMock
             .Returns(testUri);
 
         blobClientMock.SetupGet(x => x.Uri).Returns(testUri);
+        var response = new Mock<Response<bool>>();
+        response.SetupGet(x => x.Value).Returns(true);
+        blobClientMock.Setup(x => x.ExistsAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(response.Object);
+        blobClientMock.Setup(x => x.DownloadToAsync(It.IsAny<Stream>(), It.IsAny<CancellationToken>())).Callback(
+            (Stream stream, CancellationToken _) =>
+            {
+                using var fileStream = File.OpenRead("TestFiles/test.jpg");
+                fileStream.CopyTo(stream);
+            });
 
         return blobServiceClientMock;
     }

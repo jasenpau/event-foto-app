@@ -11,30 +11,37 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-var builder = FunctionsApplication.CreateBuilder(args);
+namespace EventFoto.Processor;
 
-builder.ConfigureFunctionsWebApplication();
-
-builder.Configuration
-    .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true)
-    .AddEnvironmentVariables();
-
-builder.Services.AddDbContextPool<EventFotoContext>(options =>
+public class Program
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Database"));
+    public static void Main(string[] args)
+    {
+        var builder = FunctionsApplication.CreateBuilder(args);
 
-});
+        builder.ConfigureFunctionsWebApplication();
 
-ServiceConfigurator.ConfigureServices(builder.Services, builder.Configuration);
-builder.Services.AddScoped<IImageProcessor, ImageProcessor>();
-builder.Services.AddScoped<IDownloadZipProcessor, DownloadZipProcessor>();
-builder.Services.AddScoped<ICleanupProcessor, CleanupProcessor>();
-builder.Services.AddScoped<IEventArchiveProcessor, EventArchiveProcessor>();
-builder.Services.AddScoped<IPhotoArchiveService, PhotoArchiveService>();
+        builder.Configuration
+            .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables();
 
-// Application Insights isn't enabled by default. See https://aka.ms/AAt8mw4.
-// builder.Services
-//     .AddApplicationInsightsTelemetryWorkerService()
-//     .ConfigureFunctionsApplicationInsights();
+        builder.Services.AddDbContext<EventFotoContext>(options =>
+        {
+            options.UseNpgsql(builder.Configuration.GetConnectionString("Database"));
+        });
 
-builder.Build().Run();
+        ServiceConfigurator.ConfigureServices(builder.Services, builder.Configuration);
+        builder.Services.AddScoped<IImageProcessor, ImageProcessor.ImageProcessor>();
+        builder.Services.AddScoped<IDownloadZipProcessor, DownloadZipProcessor.DownloadZipProcessor>();
+        builder.Services.AddScoped<ICleanupProcessor, CleanupProcessor.CleanupProcessor>();
+        builder.Services.AddScoped<IEventArchiveProcessor, EventArchiveProcessor.EventArchiveProcessor>();
+        builder.Services.AddScoped<IPhotoArchiveService, PhotoArchiveService.PhotoArchiveService>();
+
+        // Application Insights isn't enabled by default. See https://aka.ms/AAt8mw4.
+        // builder.Services
+        //     .AddApplicationInsightsTelemetryWorkerService()
+        //     .ConfigureFunctionsApplicationInsights();
+
+        builder.Build().Run();
+    }
+}
