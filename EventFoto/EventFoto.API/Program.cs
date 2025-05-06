@@ -1,5 +1,6 @@
 using System.Reflection;
 using Azure.Identity;
+using EventFoto.API.Middleware;
 using EventFoto.Core;
 using EventFoto.Core.CalendarExport;
 using EventFoto.Core.GraphClient;
@@ -46,7 +47,8 @@ public class Program
         var app = builder.Build();
 
         // app.UseHttpsRedirection();
-        
+
+        app.UseAuthenticationExceptionHandler();
         app.UseAuthentication();
         app.UseAuthorization();
         

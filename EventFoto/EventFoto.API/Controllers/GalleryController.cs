@@ -1,6 +1,8 @@
 ﻿using EventFoto.API.Extensions;
+using EventFoto.API.Filters;
 using EventFoto.Core.Galleries;
 using EventFoto.Data.DTOs;
+using EventFoto.Data.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +28,7 @@ public class GalleryController : AppControllerBase
     }
 
     [HttpPost("event/{eventId:int}")]
+    [AccessGroupFilter(UserGroup.EventAdmin)]
     public async Task<ActionResult<GalleryDto>> CreateGallery([FromRoute] int eventId,
         [FromBody] CreateEditGalleryRequestDto request)
     {
@@ -41,13 +44,15 @@ public class GalleryController : AppControllerBase
     }
 
     [HttpPut("{galleryId:int}")]
+    [AccessGroupFilter(UserGroup.EventAdmin)]
     public async Task<ActionResult<GalleryDto>> UpdateGalleryAsync([FromRoute] int galleryId, [FromBody] CreateEditGalleryRequestDto request)
     {
         var result = await _galleryService.UpdateGalleryAsync(galleryId, request);
         return result.Success ? Ok(GalleryDto.FromModel(result.Data)) : result.ToErrorResponse();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
+    [AccessGroupFilter(UserGroup.EventAdmin)]
     public async Task<ActionResult<bool>> DeleteGallery([FromRoute] int id)
     {
         var result = await _galleryService.DeleteGalleryAsync(id);

@@ -1,4 +1,5 @@
 using System.Security.Authentication;
+using EventFoto.API.Exceptions;
 using EventFoto.Core.Providers;
 using EventFoto.Data.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ public class AppControllerBase : ControllerBase
             return objectId;
         }
 
-        throw new AuthenticationException("Invalid user id");
+        throw new InvalidUserIdException();
     }
 
     protected UserGroup? RequestHighestUserGroup()

@@ -24,7 +24,6 @@ import {
 import { debounceTime, forkJoin, map, takeUntil, tap } from 'rxjs';
 import { DatePickerComponent } from '../../../components/forms/date-picker/date-picker.component';
 import { PagedDataLoader } from '../../../components/paged-table/paged-table.types';
-import { getStartOfDay } from '../../../helpers/getStartOfDay';
 import { CheckboxComponent } from '../../../components/forms/checkbox/checkbox.component';
 import { SpinnerComponent } from '../../../components/spinner/spinner.component';
 import { PaginationControlsComponent } from '../../../components/pagination-controls/pagination-controls.component';

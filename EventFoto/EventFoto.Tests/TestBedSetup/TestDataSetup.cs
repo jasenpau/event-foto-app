@@ -1,7 +1,10 @@
-﻿using EventFoto.Data;
+﻿using System.Security.Claims;
+using EventFoto.Data;
 using EventFoto.Data.Models;
+using EventFoto.Tests.TestConstants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Identity.Web;
 using Xunit.Sdk;
 
 namespace EventFoto.Tests.TestBedSetup;
@@ -22,6 +25,25 @@ public class TestDataSetup
         await context.Database.EnsureDeletedAsync();
 
         return _factory.CreateClient();
+    }
+
+    public async Task<HttpClient> SetupInvalidUserId()
+    {
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
+        await context.Database.EnsureDeletedAsync();
+
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.Name, "Invalid User"),
+            new(ClaimConstants.ObjectId, "invalid-guid"),
+            new("groups", "invalid-group"),
+        };
+
+        var claimsProvider = new UserClaimsProvider(claims);
+        var client = _factory.CreateClientWithTestAuth(claimsProvider);
+
+        return client;
     }
 
     public async Task<HttpClient> SetupWithUser(User user)
@@ -63,6 +85,24 @@ public class TestDataSetup
         var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
 
         context.PhotographerAssignments.Add(new PhotographerAssignment { GalleryId = galleryId, UserId = photographerId });
+        await context.SaveChangesAsync();
+    }
+
+    public async Task AddGallery(Gallery gallery)
+    {
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
+
+        context.Galleries.Add(gallery);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task AddPhotos(IList<EventPhoto> photos)
+    {
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
+
+        context.EventPhotos.AddRange(photos);
         await context.SaveChangesAsync();
     }
 }

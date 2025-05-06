@@ -66,4 +66,10 @@ public class GalleryRepository : IGalleryRepository
             .SqlQuery<EventGalleryProjection>($"SELECT * FROM get_event_galleries({eventId})")
             .ToListAsync();
     }
+
+    public async Task<bool> HasPhotosAsync(int galleryId)
+    {
+        var photoCount = await _context.EventPhotos.CountAsync(x => x.GalleryId == galleryId);
+        return photoCount > 0;
+    }
 }

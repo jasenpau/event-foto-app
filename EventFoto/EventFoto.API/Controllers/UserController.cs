@@ -72,6 +72,19 @@ public class UserController : AppControllerBase
             });
         }
 
+        var appGroups = _groupProvider.GetGroups();
+        var userGroup = RequestHighestUserGroup();
+        if (userGroup != UserGroup.SystemAdmin &&
+            (inviteDto.GroupAssignment == appGroups.SystemAdministrators ||
+             inviteDto.GroupAssignment == appGroups.EventAdministrators))
+        {
+            return Unauthorized(new ProblemDetails
+            {
+                Status = StatusCodes.Status401Unauthorized,
+                Detail = "User is not authorized to invite more privileged users."
+            });
+        }
+
         var result = await _userService.InviteUserAsync(inviteDto);
         return result.Success ? Ok(result.Data) : result.ToErrorResponse();
     }

@@ -49,18 +49,14 @@ public class GalleryService : IGalleryService
                 HttpStatusCode.BadRequest);
         }
 
-        if (gallery.Photos != null && gallery.Photos.Any())
+        if (await _galleryRepository.HasPhotosAsync(id))
         {
-            await _eventPhotoRepository.MoveAllGalleryPhotosAsync(id, gallery.Event.DefaultGalleryId);
+            return ServiceResult<bool>.Fail("Cannot delete gallery with photos", "not-empty-gallery",
+                HttpStatusCode.BadRequest);
         }
 
         var result = await _galleryRepository.DeleteAsync(id);
-        if (!result)
-        {
-            return ServiceResult<bool>.Fail("Failed to delete gallery", HttpStatusCode.InternalServerError);
-        }
-
-        return ServiceResult<bool>.Ok(true);
+        return ServiceResult<bool>.Ok(result);
     }
 
     public async Task<ServiceResult<Gallery>> UpdateGalleryAsync(int id, CreateEditGalleryRequestDto galleryDto)

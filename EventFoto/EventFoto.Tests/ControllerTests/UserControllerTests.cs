@@ -47,6 +47,21 @@ public class UserControllerTests : IClassFixture<TestApplicationFactory>, IDispo
     }
 
     [Fact]
+    public async Task GetCurrentUser_WithInvalidUserId()
+    {
+        // Arrange
+        var client = await _testSetup.SetupInvalidUserId();
+        var request = new HttpRequestMessage(HttpMethod.Get, "/api/user/current");
+
+        // Act
+        var result = await client.SendRequest<ProblemDetails>(request, HttpStatusCode.Unauthorized);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Status.Should().Be((int)HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
     public async Task Register_WithValidData_ReturnsNewUser()
     {
         // Arrange
@@ -217,6 +232,30 @@ public class UserControllerTests : IClassFixture<TestApplicationFactory>, IDispo
         result.Should().NotBeNull();
         result.Status.Should().Be((int)HttpStatusCode.Conflict);
         result.Title.Should().Be("exists");
+    }
+
+    [Fact]
+    public async Task InviteUser_WithInsufficientPermissions_ReturnsUnauthorized()
+    {
+        // Arrange
+        var client = await _testSetup.SetupWithUser(UserConstants.GetTestEventAdmin());
+        var inviteDto = new UserInviteRequestDto
+        {
+            Email = "invite@example.com",
+            Name = "Invited user",
+            GroupAssignment = UserConstants.SystemAdminGroupId.ToString(),
+        };
+        var request = new HttpRequestMessage(HttpMethod.Post, "/api/user/invite")
+        {
+            Content = JsonContent.Create(inviteDto)
+        };
+
+        // Act
+        var result = await client.SendRequest<ProblemDetails>(request, HttpStatusCode.Unauthorized);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Status.Should().Be((int)HttpStatusCode.Unauthorized);
     }
 
     [Fact]

@@ -15,6 +15,5 @@ public interface IEventPhotoRepository
     public Task<List<EventPhoto>> GetByIdsAsync(IList<int> photoIds);
     public Task DeleteEventPhotosAsync(IList<EventPhoto> photos, CancellationToken cancellationToken);
     public Task UpdateEventPhotosAsync(IList<EventPhoto> photos);
-    public Task MoveAllGalleryPhotosAsync(int sourceGalleryId, int destinationGalleryId);
     public Task<List<EventPhoto>> GetAllEventPhotosAsync(int eventId);
 }
