@@ -515,6 +515,8 @@ public class EventControllerTests : IClassFixture<TestApplicationFactory>, IDisp
     {
         // Arrange
         var client = await _testSetup.SetupEmpty();
+        var testEvent = EventConstants.GetCurrentEvent();
+        await _testSetup.AddEvent(testEvent);
         var request = new HttpRequestMessage(HttpMethod.Get, "/api/event/calendar");
 
         // Act
@@ -523,6 +525,8 @@ public class EventControllerTests : IClassFixture<TestApplicationFactory>, IDisp
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         response.Content.Headers.ContentType?.MediaType.Should().Be("text/calendar");
+        var calendarContent = await response.Content.ReadAsStringAsync();
+        calendarContent.Should().Contain("BEGIN:VCALENDAR");
     }
 
     private EventFotoContext GetDbContext()
