@@ -97,7 +97,7 @@ public class TestDataSetup
         await context.SaveChangesAsync();
     }
 
-    public async Task AddPhotos(IList<EventPhoto> photos)
+    public async Task AddPhotos(List<EventPhoto> photos)
     {
         using var scope = _factory.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
@@ -124,6 +124,24 @@ public class TestDataSetup
         var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
 
         context.DownloadRequests.Add(request);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task AddWatermark(Watermark watermark)
+    {
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
+
+        context.Watermarks.Add(watermark);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task AddWatermarks(List<Watermark> watermarks)
+    {
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
+
+        context.Watermarks.AddRange(watermarks);
         await context.SaveChangesAsync();
     }
 }

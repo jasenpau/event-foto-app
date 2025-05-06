@@ -13,7 +13,7 @@ public static class BlobServiceClientMock
         var testUri = new Uri("https://account_name.exmaple.com");
         var blobServiceClientMock = new Mock<BlobServiceClient>(testUri, null!);
         var blobContainerClientMock = new Mock<BlobContainerClient>();
-        var blobClientMock = new Mock<BlobClient>();
+        var blobClientMock = new Mock<BlobClient>(testUri, null!);
 
         blobServiceClientMock.Setup(x => x.GetBlobContainerClient(It.IsAny<string>()))
             .Returns(blobContainerClientMock.Object);
@@ -23,6 +23,8 @@ public static class BlobServiceClientMock
         blobContainerClientMock.Setup(x => x.CanGenerateSasUri).Returns(true);
         blobContainerClientMock.Setup(x => x.GenerateSasUri(It.IsAny<BlobSasBuilder>()))
             .Returns(testUri);
+
+        blobClientMock.SetupGet(x => x.Uri).Returns(testUri);
 
         return blobServiceClientMock;
     }

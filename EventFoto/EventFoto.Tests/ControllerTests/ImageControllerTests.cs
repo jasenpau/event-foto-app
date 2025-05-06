@@ -266,7 +266,7 @@ public class ImageControllerTests : IClassFixture<TestApplicationFactory>, IDisp
         // Assert
         result.Should().NotBeNull();
         result.Id.Should().Be(testBatch.Id);
-        result.PhotoCount.Should().Be(3);
+        result.PhotoCount.Should().Be(6);
         result.Ready.Should().Be(testBatch.IsReady);
     }
 
@@ -339,7 +339,8 @@ public class ImageControllerTests : IClassFixture<TestApplicationFactory>, IDisp
         await _testSetup.AddUser(UserConstants.GetTestEventAdmin());
         await _testSetup.AddEvent(EventConstants.GetCurrentEvent());
         await _testSetup.AddPhotos(PhotoConstants.GetTestPhotos(1));
-        var request = new HttpRequestMessage(HttpMethod.Get, $"/api/image/search?galleryId=1&pageSize=2&keyOffset={DateTime.UtcNow.AddDays(-1)}|0");
+        var keyOffset = $"{DateTime.UtcNow.AddDays(-1)}|0";
+        var request = new HttpRequestMessage(HttpMethod.Get, $"/api/image/search?galleryId=1&pageSize=2&keyOffset={keyOffset}");
 
         // Act
         var result = await client.SendRequest<PagedData<string, EventPhotoListDto>>(request);
@@ -347,6 +348,9 @@ public class ImageControllerTests : IClassFixture<TestApplicationFactory>, IDisp
         // Assert
         result.Should().NotBeNull();
         result.Data.Should().NotBeEmpty();
+        result.HasNextPage.Should().BeTrue();
+        result.PageSize.Should().Be(2);
+        result.KeyOffset.Should().Be(keyOffset);
     }
 
     [Fact]

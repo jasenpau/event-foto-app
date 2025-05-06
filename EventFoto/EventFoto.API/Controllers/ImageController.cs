@@ -63,6 +63,7 @@ public class ImageController : AppControllerBase
         {
             return BadRequest(new ProblemDetails
             {
+                Status = StatusCodes.Status400BadRequest,
                 Detail = "Invalid event ID",
             });
         }

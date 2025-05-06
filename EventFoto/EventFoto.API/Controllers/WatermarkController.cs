@@ -1,6 +1,8 @@
 ﻿using EventFoto.API.Extensions;
+using EventFoto.API.Filters;
 using EventFoto.Core.Watermarks;
 using EventFoto.Data.DTOs;
+using EventFoto.Data.Enums;
 using EventFoto.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,10 +22,15 @@ public class WatermarkController : AppControllerBase
     }
 
     [HttpPost]
+    [AccessGroupFilter(UserGroup.EventAdmin)]
     public async Task<ActionResult<WatermarkDto>> UploadWatermark([FromForm] string name, [FromForm] IFormFile file, CancellationToken cancellationToken)
     {
         if (file == null || file.Length == 0)
-            return BadRequest("No file uploaded.");
+            return BadRequest(new ProblemDetails
+            {
+                Detail = "No file provided",
+                Status = StatusCodes.Status400BadRequest,
+            });
 
         using var memoryStream = new MemoryStream();
         await file.CopyToAsync(memoryStream, cancellationToken);
@@ -36,6 +43,7 @@ public class WatermarkController : AppControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [AccessGroupFilter(UserGroup.EventAdmin)]
     public async Task<ActionResult<bool>> DeleteWatermark(int id, CancellationToken cancellationToken)
     {
         var result = await _watermarkService.DeleteWatermarkAsync(id, cancellationToken);
@@ -45,6 +53,7 @@ public class WatermarkController : AppControllerBase
     }
 
     [HttpGet("{id:int}")]
+    [AccessGroupFilter(UserGroup.EventAdmin)]
     public ActionResult<WatermarkDto> GetWatermark(int id)
     {
         var result = _watermarkService.GetWatermarkAsync(id);
@@ -54,6 +63,7 @@ public class WatermarkController : AppControllerBase
     }
 
     [HttpGet("search")]
+    [AccessGroupFilter(UserGroup.EventAdmin)]
     public ActionResult<PagedData<string, WatermarkDto>> SearchWatermarks([FromQuery] WatermarkSearchParams searchParams)
     {
         var result = _watermarkService.SearchWatermarksAsync(searchParams);
