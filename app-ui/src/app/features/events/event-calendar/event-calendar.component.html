@@ -4,7 +4,7 @@
   </app-page-header>
 
   <div class="calendar__download">
-    <app-button [type]="ButtonType.Filled" link="http://localhost:5192/api/event/calendar" download="calendar.ics">Atsisiųsti kalendorių</app-button>
+    <app-button [type]="ButtonType.Filled" [link]="apiBaseUrl + '/event/calendar'" download="calendar.ics">Atsisiųsti kalendorių</app-button>
   </div>
 
   <form class="calendar__controls" [formGroup]="calendarForm">

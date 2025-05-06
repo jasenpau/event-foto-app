@@ -23,6 +23,7 @@ import { useLocalLoader } from '../../../helpers/useLoader';
 import { SpinnerComponent } from '../../../components/spinner/spinner.component';
 import { ButtonComponent } from '../../../components/button/button.component';
 import { ButtonType } from '../../../components/button/button.types';
+import { EnvService } from '../../../services/environment/env.service';
 
 interface CalendarDisplayEvent {
   event: EventListDto;
@@ -75,9 +76,14 @@ export class EventCalendarComponent
   }[][] = [];
   protected calendarEvents: Record<string, EventListDto[]> = {};
   protected isLoading = false;
+  protected apiBaseUrl: string;
 
-  constructor(private readonly eventService: EventService) {
+  constructor(
+    private readonly eventService: EventService,
+    envService: EnvService,
+  ) {
     super();
+    this.apiBaseUrl = envService.getConfig().apiBaseUrl;
     this.calendarForm = new FormGroup({
       year: new FormControl<string>(new Date().getFullYear().toString(), [
         Validators.required,
