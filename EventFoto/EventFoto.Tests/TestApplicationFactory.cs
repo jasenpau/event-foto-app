@@ -42,9 +42,9 @@ public class TestApplicationFactory : WebApplicationFactory<Program>
             services.AddSingleton(graphClientMock.Object);
 
             services.RemoveAll<BlobServiceClient>();
-            services.RemoveAll<IBlobBatchClientFactory>();
+            services.RemoveAll<IBlobServiceClientHelper>();
             services.AddSingleton(BlobServiceClientMock.GetMock().Object);
-            services.AddSingleton(BlobServiceClientMock.GetBlobBatchClientFactoryMock().Object);
+            services.AddSingleton(BlobServiceClientMock.GetBlobHelperMock().Object);
 
             services.RemoveAll<IQueueClientFactory>();
             services.AddSingleton(QueueClientMock.GetFactoryMock().Object);

@@ -33,7 +33,7 @@ public static class ServiceConfigurator
         services.AddScoped<IWatermarkService, WatermarkService>();
         services.AddScoped<IAssignmentService, AssignmentService>();
 
-        services.AddScoped<IBlobBatchClientFactory, BlobBatchClientFactory>();
+        services.AddScoped<IBlobServiceClientHelper, BlobServiceClientHelper>();
         services.AddScoped<IBlobStorage, BlobStorage>();
         services.AddScoped<IProcessingQueue, ProcessingQueue>();
 

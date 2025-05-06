@@ -13,15 +13,15 @@ namespace EventFoto.Data.BlobStorage;
 public class BlobStorage : IBlobStorage
 {
     private readonly BlobServiceClient _blobServiceClient;
-    private readonly IBlobBatchClientFactory _batchClientFactory;
+    private readonly IBlobServiceClientHelper _serviceClientHelper;
     private readonly IConfiguration _configuration;
 
     public BlobStorage(BlobServiceClient blobServiceClient,
-        IBlobBatchClientFactory batchClientFactory,
+        IBlobServiceClientHelper serviceClientHelper,
         IConfiguration configuration)
     {
         _blobServiceClient = blobServiceClient;
-        _batchClientFactory = batchClientFactory;
+        _serviceClientHelper = serviceClientHelper;
         _configuration = configuration;
     }
 
@@ -57,7 +57,8 @@ public class BlobStorage : IBlobStorage
     public ServiceResult<string> GetReadOnlySasUri(int tokenExpiryInMinutes)
     {
         var accountKey = _configuration["AzureStorage:AccountKey"];
-        var credential = new StorageSharedKeyCredential(_blobServiceClient.AccountName, accountKey);
+        var accountName = _serviceClientHelper.GetAccountName(_blobServiceClient);
+        var credential = new StorageSharedKeyCredential(accountName, accountKey);
 
         var isDev = _configuration["IsDevelopment"] == "true";
 
@@ -132,7 +133,7 @@ public class BlobStorage : IBlobStorage
     {
         var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
 
-        var batchClient = _batchClientFactory.Create(_blobServiceClient);
+        var batchClient = _serviceClientHelper.CreateBatchClient(_blobServiceClient);
         var blobUris = filenames.Select(name => containerClient.GetBlobClient(name).Uri).ToList();
 
         var batches = blobUris.Batch(100);

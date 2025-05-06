@@ -105,4 +105,25 @@ public class TestDataSetup
         context.EventPhotos.AddRange(photos);
         await context.SaveChangesAsync();
     }
+
+    public Task AddPhoto(EventPhoto testPhoto) =>
+        AddPhotos(new List<EventPhoto> { testPhoto });
+
+    public async Task AddUploadBatch(UploadBatch batch)
+    {
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
+
+        context.UploadBatches.Add(batch);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task AddDownloadRequest(DownloadRequest request)
+    {
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<EventFotoContext>();
+
+        context.DownloadRequests.Add(request);
+        await context.SaveChangesAsync();
+    }
 }

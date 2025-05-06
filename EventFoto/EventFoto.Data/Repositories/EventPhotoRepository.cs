@@ -91,16 +91,6 @@ public class EventPhotoRepository : IEventPhotoRepository
                 (p.CaptureDate == offsetDate && p.Id > offsetId));
         }
 
-        if (searchParams.FromDate.HasValue)
-        {
-            query = query.Where(p => p.CaptureDate >= searchParams.FromDate.Value);
-        }
-
-        if (searchParams.ToDate.HasValue)
-        {
-            query = query.Where(p => p.CaptureDate <= searchParams.ToDate.Value);
-        }
-
         query = query.OrderBy(p => p.CaptureDate).ThenBy(p => p.Id);
         query = query.Take(searchParams.PageSize + 1);
 

@@ -14,6 +14,8 @@ public static class PhotoConstants
             CaptureDate = DateTime.UtcNow.AddDays(-1),
             UploadDate = DateTime.UtcNow.AddDays(-1),
             UserId = UserConstants.GetTestPhotographer().Id,
+            IsProcessed = true,
+            ProcessedFilename = "out-test1.jpg",
         },
 
         new()
@@ -24,6 +26,8 @@ public static class PhotoConstants
             CaptureDate = DateTime.UtcNow.AddDays(-1),
             UploadDate = DateTime.UtcNow.AddDays(-1),
             UserId = UserConstants.GetTestPhotographer().Id,
+            IsProcessed = true,
+            ProcessedFilename = "out-test2.jpg"
         },
 
         new()
@@ -36,4 +40,22 @@ public static class PhotoConstants
             UserId = UserConstants.GetTestPhotographer().Id,
         }
     ];
+
+    public static UploadBatch GetTestUploadBatch() => new()
+    {
+        Id = 1,
+        UserId = UserConstants.GetTestPhotographer().Id
+    };
+
+    public static DownloadRequest GetTestDownloadRequest() => new()
+    {
+        Id = 1,
+        UserId = UserConstants.GetTestPhotographer().Id,
+        DownloadProcessedPhotos = true,
+        DownloadImages = GetTestPhotos(1).Select(x => new DownloadImage()
+        {
+            DownloadRequestId = 1,
+            EventPhotoId = x.Id
+        }).ToList(),
+    };
 }

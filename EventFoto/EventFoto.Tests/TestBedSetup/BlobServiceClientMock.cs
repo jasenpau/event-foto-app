@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Specialized;
+using Azure.Storage.Sas;
 using EventFoto.Data.BlobStorage;
 using Moq;
 
@@ -9,7 +10,8 @@ public static class BlobServiceClientMock
 {
     public static Mock<BlobServiceClient> GetMock()
     {
-        var blobServiceClientMock = new Mock<BlobServiceClient>();
+        var testUri = new Uri("https://account_name.exmaple.com");
+        var blobServiceClientMock = new Mock<BlobServiceClient>(testUri, null!);
         var blobContainerClientMock = new Mock<BlobContainerClient>();
         var blobClientMock = new Mock<BlobClient>();
 
@@ -18,18 +20,23 @@ public static class BlobServiceClientMock
 
         blobContainerClientMock.Setup(x => x.GetBlobClient(It.IsAny<string>()))
             .Returns(blobClientMock.Object);
+        blobContainerClientMock.Setup(x => x.CanGenerateSasUri).Returns(true);
+        blobContainerClientMock.Setup(x => x.GenerateSasUri(It.IsAny<BlobSasBuilder>()))
+            .Returns(testUri);
 
         return blobServiceClientMock;
     }
 
-    public static Mock<IBlobBatchClientFactory> GetBlobBatchClientFactoryMock()
+    public static Mock<IBlobServiceClientHelper> GetBlobHelperMock()
     {
-        var blobBatchClientFactoryMock = new Mock<IBlobBatchClientFactory>();
+        var blobServiceClientHelperMock = new Mock<IBlobServiceClientHelper>();
         var batchClientMock = new Mock<BlobBatchClient>();
 
-        blobBatchClientFactoryMock.Setup(x => x.Create(It.IsAny<BlobServiceClient>()))
+        blobServiceClientHelperMock.Setup(x => x.CreateBatchClient(It.IsAny<BlobServiceClient>()))
             .Returns(batchClientMock.Object);
+        blobServiceClientHelperMock.Setup(x => x.GetAccountName(It.IsAny<BlobServiceClient>()))
+            .Returns("TestAccountName");
 
-        return blobBatchClientFactoryMock;
+        return blobServiceClientHelperMock;
     }
 }

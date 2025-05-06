@@ -1,6 +1,8 @@
 ﻿using EventFoto.API.Extensions;
+using EventFoto.API.Filters;
 using EventFoto.Core.EventPhotos;
 using EventFoto.Data.DTOs;
+using EventFoto.Data.Enums;
 using EventFoto.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +29,7 @@ public class ImageController : AppControllerBase
     }
 
     [HttpPost("bulk-delete")]
+    [AccessGroupFilter(UserGroup.Photographer)]
     public async Task<ActionResult<int>> BulkDelete([FromBody] BulkPhotoModifyDto dto,
         CancellationToken cancellationToken)
     {
@@ -45,6 +48,7 @@ public class ImageController : AppControllerBase
     }
 
     [HttpPost("bulk-move")]
+    [AccessGroupFilter(UserGroup.Photographer)]
     public async Task<ActionResult<int>> BulkMove([FromBody] BulkPhotoMoveDto dto)
     {
         var result = await _eventPhotoService.MovePhotos(dto.PhotoIds, dto.TargetGalleryId);
@@ -52,11 +56,15 @@ public class ImageController : AppControllerBase
     }
 
     [HttpPost("upload")]
+    [AccessGroupFilter(UserGroup.Photographer)]
     public async Task<ActionResult<UploadBatchDto>> UploadImages([FromBody] UploadMessageDto uploadMessage)
     {
         if (uploadMessage.EventId <= 0)
         {
-            return BadRequest("Invalid event ID.");
+            return BadRequest(new ProblemDetails
+            {
+                Detail = "Invalid event ID",
+            });
         }
 
         var result = await _eventPhotoService.UploadPhotoBatch(RequestUserId(), uploadMessage);
@@ -81,13 +89,14 @@ public class ImageController : AppControllerBase
     }
 
     [HttpGet("sas")]
-    public ActionResult<string> GetReadOnlySasToken()
+    public ActionResult<ActionResult<SasUriResponseDto>> GetReadOnlySasToken()
     {
         var result = _eventPhotoService.GetReadOnlySasUri();
         return result.Success ? Ok(result.Data) : result.ToErrorResponse();
     }
 
     [HttpGet("sas/{eventId:int}")]
+    [AccessGroupFilter(UserGroup.Photographer)]
     public async Task<ActionResult<SasUriResponseDto>> GetUploadSasUri([FromRoute] int eventId)
     {
         var result = await _eventPhotoService.GetUploadSasUri(eventId);

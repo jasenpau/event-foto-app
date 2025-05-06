@@ -13,7 +13,7 @@ namespace EventFoto.Core.EventPhotos;
 public class EventPhotoService : IEventPhotoService
 {
     private readonly IConfiguration _configuration;
-    private readonly IEventService  _eventService;
+    private readonly IEventRepository  _eventRepository;
     private readonly IBlobStorage _blobStorage;
     private readonly IEventPhotoRepository _eventPhotoRepository;
     private readonly IProcessingQueue _processingQueue;
@@ -22,7 +22,7 @@ public class EventPhotoService : IEventPhotoService
     private readonly IUploadBatchRepository _uploadBatchRepository;
     private readonly IPhotographerAssignmentRepository _assignmentRepository;
 
-    public EventPhotoService(IEventService eventService,
+    public EventPhotoService(IEventRepository eventRepository,
         IBlobStorage blobStorage,
         IEventPhotoRepository  eventPhotoRepository,
         IProcessingQueue processingQueue,
@@ -32,7 +32,7 @@ public class EventPhotoService : IEventPhotoService
         IPhotographerAssignmentRepository assignmentRepository,
         IConfiguration configuration)
     {
-        _eventService = eventService;
+        _eventRepository = eventRepository;
         _blobStorage = blobStorage;
         _eventPhotoRepository = eventPhotoRepository;
         _processingQueue = processingQueue;
@@ -53,8 +53,11 @@ public class EventPhotoService : IEventPhotoService
 
     public async Task<ServiceResult<UploadBatch>> UploadPhotoBatch(Guid userId, UploadMessageDto uploadPhotoData)
     {
-        var eventResult = await _eventService.GetById(uploadPhotoData.EventId);
-        if (!eventResult.Success) return ServiceResult<UploadBatch>.Fail("Event not found", HttpStatusCode.NotFound);
+        var eventData = await _eventRepository.GetByIdAsync(uploadPhotoData.EventId);
+        if (eventData is null)
+        {
+            return ServiceResult<UploadBatch>.Fail("Event not found", HttpStatusCode.NotFound);
+        }
 
         var uploadBatch = await _uploadBatchRepository.CreateAsync(new UploadBatch
         {
@@ -65,7 +68,7 @@ public class EventPhotoService : IEventPhotoService
         if (galleryId is null)
         {
             var assignment = await _assignmentRepository.GetForEventAsync(uploadPhotoData.EventId, userId);
-            galleryId = assignment?.GalleryId ?? eventResult.Data.DefaultGalleryId;
+            galleryId = assignment?.GalleryId ?? eventData.DefaultGalleryId;
         }
 
         var eventPhotos = uploadPhotoData.PhotoFilenames.Select(photo => new EventPhoto
@@ -97,10 +100,10 @@ public class EventPhotoService : IEventPhotoService
 
     public async Task<ServiceResult<SasUriResponseDto>> GetUploadSasUri(int eventId)
     {
-        var eventResult = await _eventService.GetById(eventId);
-        if (!eventResult.Success)
+        var eventData = await _eventRepository.GetByIdAsync(eventId);
+        if (eventData is null)
         {
-            return ServiceResult<SasUriResponseDto>.Fail(eventResult);
+            return ServiceResult<SasUriResponseDto>.Fail("Event not found", HttpStatusCode.NotFound);
         }
 
         var tokenExpiryInMinutes = int.Parse(_configuration["AzureStorage:TokenExpiryInMinutes"] ?? "20");
