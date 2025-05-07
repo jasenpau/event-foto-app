@@ -102,7 +102,7 @@ export class PhotoViewComponent
         tap(() => {
           this.snackbarService.addSnackbar(
             SnackbarType.Info,
-            'Nuotrauka buvo ištrinta.',
+            'Nuotrauka buvo ištrinta',
           );
           this.photoAction.emit(PhotoAction.Delete);
         }),

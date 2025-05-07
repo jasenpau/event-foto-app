@@ -141,7 +141,7 @@ export class EventPreviewComponent
           tap(() => {
             this.snackbarService.addSnackbar(
               SnackbarType.Success,
-              'Fotografas buvo pašalintas.',
+              'Fotografas buvo pašalintas',
             );
             this.loadPhotographers(this.event!.id);
           }),
@@ -186,7 +186,7 @@ export class EventPreviewComponent
               tap(() => {
                 this.snackbarService.addSnackbar(
                   SnackbarType.Success,
-                  'Renginys archyvuotas',
+                  'Renginys bus archyvuotas artimiausiu metu, prašome palaukti',
                 );
                 this.loaderService.finishLoading(
                   `${COMPONENT_LOADING_KEY}_archive`,

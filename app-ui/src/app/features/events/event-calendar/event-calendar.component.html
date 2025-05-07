@@ -17,58 +17,60 @@
     </app-select>
   </form>
 
-  <table class="calendar__table" *ngIf="!isLoading">
-    <tr>
-      <th>Pirmadienis</th>
-      <th>Antradienis</th>
-      <th>Trečiadienis</th>
-      <th>Ketvirtadienis</th>
-      <th>Penktadienis</th>
-      <th>Šeštadienis</th>
-      <th>Sekmadienis</th>
-    </tr>
-    <tr *ngFor="let week of weeks">
-      <td *ngFor="let day of week"
-          [class.calendar__table-today]="day.today">
-        <p class="calendar__table-day" [class.calendar__table-prev-next-month]="!day.currentMonth">{{ day.day }}</p>
-        <ul class="calendar__table-events-container">
-          <li
-            *ngFor="let eventDisplay of day.events"
-            class="calendar__table-event"
-            [ngClass]="{'calendar__table-event--archived': eventDisplay.event.isArchived}"
-          >
-            <a [routerLink]="'/event/' + eventDisplay.event.id">
-              <p>{{ eventDisplay.event.name }}</p>
-              @if (!eventDisplay.event.isArchived) {
-                <p *ngIf="eventDisplay.startsToday && eventDisplay.endsToday && eventDisplay.event.endDate"
-                class="calendar__table-event-time">
-                  {{ formatEventTime(eventDisplay.event.startDate) }} - {{ formatEventTime(eventDisplay.event.endDate) }}
-                </p>
-                <p *ngIf="eventDisplay.startsToday && eventDisplay.endsToday && !eventDisplay.event.endDate"
-                   class="calendar__table-event-time">
-                  {{ formatEventTime(eventDisplay.event.startDate) }}
-                </p>
-                <p *ngIf="eventDisplay.startsToday && !eventDisplay.endsToday"
-                   class="calendar__table-event-time">
-                  Pradžia {{ formatEventTime(eventDisplay.event.startDate) }}
-                </p>
-                <p *ngIf="!eventDisplay.startsToday && eventDisplay.endsToday && eventDisplay.event.endDate"
-                   class="calendar__table-event-time">
-                  Pabaiga {{ formatEventTime(eventDisplay.event.endDate) }}
-                </p>
-                <p *ngIf="!eventDisplay.startsToday && !eventDisplay.endsToday"
-                   class="calendar__table-event-time">
-                  Tęstinis
-                </p>
-              } @else {
-                <p class="calendar__table-event-time">Archyvuotas</p>
-              }
-            </a>
-          </li>
-        </ul>
-      </td>
-    </tr>
-  </table>
+  <div class="calendar__table-wrapper">
+    <table class="calendar__table" *ngIf="!isLoading">
+      <tr>
+        <th>Pirmadienis</th>
+        <th>Antradienis</th>
+        <th>Trečiadienis</th>
+        <th>Ketvirtadienis</th>
+        <th>Penktadienis</th>
+        <th>Šeštadienis</th>
+        <th>Sekmadienis</th>
+      </tr>
+      <tr *ngFor="let week of weeks">
+        <td *ngFor="let day of week"
+            [class.calendar__table-today]="day.today">
+          <p class="calendar__table-day" [class.calendar__table-prev-next-month]="!day.currentMonth">{{ day.day }}</p>
+          <ul class="calendar__table-events-container">
+            <li
+              *ngFor="let eventDisplay of day.events"
+              class="calendar__table-event"
+              [ngClass]="{'calendar__table-event--archived': eventDisplay.event.isArchived}"
+            >
+              <a [routerLink]="'/event/' + eventDisplay.event.id">
+                <p>{{ eventDisplay.event.name }}</p>
+                @if (!eventDisplay.event.isArchived) {
+                  <p *ngIf="eventDisplay.startsToday && eventDisplay.endsToday && eventDisplay.event.endDate"
+                  class="calendar__table-event-time">
+                    {{ formatEventTime(eventDisplay.event.startDate) }} - {{ formatEventTime(eventDisplay.event.endDate) }}
+                  </p>
+                  <p *ngIf="eventDisplay.startsToday && eventDisplay.endsToday && !eventDisplay.event.endDate"
+                     class="calendar__table-event-time">
+                    {{ formatEventTime(eventDisplay.event.startDate) }}
+                  </p>
+                  <p *ngIf="eventDisplay.startsToday && !eventDisplay.endsToday"
+                     class="calendar__table-event-time">
+                    Pradžia {{ formatEventTime(eventDisplay.event.startDate) }}
+                  </p>
+                  <p *ngIf="!eventDisplay.startsToday && eventDisplay.endsToday && eventDisplay.event.endDate"
+                     class="calendar__table-event-time">
+                    Pabaiga {{ formatEventTime(eventDisplay.event.endDate) }}
+                  </p>
+                  <p *ngIf="!eventDisplay.startsToday && !eventDisplay.endsToday"
+                     class="calendar__table-event-time">
+                    Tęstinis
+                  </p>
+                } @else {
+                  <p class="calendar__table-event-time">Archyvuotas</p>
+                }
+              </a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+  </div>
   <div class="calendar__loader" *ngIf="isLoading">
     <app-spinner />
   </div>

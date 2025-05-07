@@ -62,8 +62,8 @@ export class CreateEventComponent
   @Output() formEvent = new EventEmitter<string>();
 
   protected readonly buttonType = ButtonType;
-  protected minEventStartDate = new Date();
-  protected minEventEndDate = new Date();
+  protected minEventStartDate = this.getMinDate();
+  protected minEventEndDate = this.getMinDate();
   protected createEventForm: FormGroup;
   protected existingNames: string[] = [];
   protected isLoading = false;
@@ -203,5 +203,11 @@ export class CreateEventComponent
   private addConflictingName(name: string) {
     this.existingNames.push(name.trim());
     this.createEventForm.controls['name'].updateValueAndValidity();
+  }
+
+  private getMinDate() {
+    const date = new Date();
+    date.setFullYear(date.getFullYear() - 1);
+    return date;
   }
 }

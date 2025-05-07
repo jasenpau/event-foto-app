@@ -358,7 +358,7 @@ export class GalleryViewComponent
       this.showGalleryEditForm = false;
       this.snackbarService.addSnackbar(
         SnackbarType.Success,
-        'Galerija atnaujinta.',
+        'Galerija atnaujinta',
       );
       this.getGalleryDetails(this.galleryId!);
     }
@@ -371,7 +371,7 @@ export class GalleryViewComponent
       this.showMovePhotosForm = false;
       this.snackbarService.addSnackbar(
         SnackbarType.Success,
-        'Nuotraukos perkeltos.',
+        'Nuotraukos perkeltos',
       );
       this.reload();
     }
@@ -384,7 +384,7 @@ export class GalleryViewComponent
         tap(() => {
           this.snackbarService.addSnackbar(
             SnackbarType.Info,
-            'Galerija ištrinta.',
+            'Galerija ištrinta',
           );
           this.router.navigate(['/event', this.eventId!]);
         }),
@@ -459,7 +459,7 @@ export class GalleryViewComponent
   private bulkDownload(processed: boolean, quality?: number) {
     const snackbarId = this.snackbarService.addSnackbar(
       SnackbarType.Loading,
-      'Nuotraukų archyvas yra ruošiamas.',
+      'Nuotraukų archyvas yra ruošiamas, prašome neperkrauti naršyklės lango',
       false,
     );
     const selectedImages = Array.from(this.selectedImageIds);

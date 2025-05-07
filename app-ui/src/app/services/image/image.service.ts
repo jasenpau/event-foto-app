@@ -183,7 +183,7 @@ export class ImageService {
 
     const snackbarId = this.snackbarService.addSnackbar(
       SnackbarType.Loading,
-      'Nuotraukos įkeliamos',
+      'Nuotraukos įkeliamos, prašome neperkrauti naršyklės lango',
       false,
     );
 
@@ -201,7 +201,7 @@ export class ImageService {
         this.snackbarService.deleteSnackbar(snackbarId);
         this.snackbarService.addSnackbar(
           SnackbarType.Error,
-          'Įvyko klaida įkeliant nuotraukas.',
+          'Įvyko klaida įkeliant nuotraukas',
         );
         return;
       }
@@ -232,7 +232,7 @@ export class ImageService {
           this.snackbarService.deleteSnackbar(snackbarId);
           this.snackbarService.addSnackbar(
             SnackbarType.Success,
-            'Nuotraukų archyvas paruoštas.',
+            'Nuotraukų archyvas paruoštas',
           );
 
           const archiveUri = URL.createObjectURL(archiveBlob);

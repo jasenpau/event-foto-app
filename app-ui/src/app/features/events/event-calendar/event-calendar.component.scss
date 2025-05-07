@@ -17,6 +17,10 @@
     margin-bottom: 32px;
   }
 
+  &__table-wrapper {
+    overflow-x: scroll;
+  }
+
   &__table {
     width: 100%;
     border-collapse: collapse;

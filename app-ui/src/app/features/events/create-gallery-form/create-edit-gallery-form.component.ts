@@ -73,7 +73,7 @@ export class CreateEditGalleryFormComponent
         Validators.required,
         invalidValues(
           this.existingNames,
-          'Galerija tokiu pavadinimu šiame renginyje jau yra.',
+          'Galerija tokiu pavadinimu šiame renginyje jau yra',
         ),
       ]),
     });
