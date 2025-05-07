@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EventFoto.Data.Migrations
 {
     [DbContext(typeof(EventFotoContext))]
-    [Migration("20250427135358_EventSearchFunction")]
-    partial class EventSearchFunction
+    [Migration("20250507211548_UpdatedEventSearchFunction")]
+    partial class UpdatedEventSearchFunction
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,6 +56,9 @@ namespace EventFoto.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("DownloadProcessedPhotos")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Filename")
                         .HasColumnType("text");
 
@@ -64,6 +67,9 @@ namespace EventFoto.Data.Migrations
 
                     b.Property<DateTime?>("ProcessedOn")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("Quality")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -82,6 +88,9 @@ namespace EventFoto.Data.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ArchiveName")
+                        .HasColumnType("text");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid");
@@ -114,6 +123,9 @@ namespace EventFoto.Data.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int?>("WatermarkId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedBy");
@@ -123,6 +135,8 @@ namespace EventFoto.Data.Migrations
 
                     b.HasIndex("Name")
                         .IsUnique();
+
+                    b.HasIndex("WatermarkId");
 
                     b.ToTable("Events", (string)null);
                 });
@@ -161,6 +175,9 @@ namespace EventFoto.Data.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
+                    b.Property<int?>("WatermarkId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GalleryId");
@@ -188,11 +205,39 @@ namespace EventFoto.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
+                    b.Property<int?>("WatermarkId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
 
+                    b.HasIndex("WatermarkId");
+
                     b.ToTable("Gallery", (string)null);
+                });
+
+            modelBuilder.Entity("EventFoto.Data.Models.PhotographerAssignment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("GalleryId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GalleryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PhotographerAssignments");
                 });
 
             modelBuilder.Entity("EventFoto.Data.Models.UploadBatch", b =>
@@ -261,19 +306,23 @@ namespace EventFoto.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("EventUser", b =>
+            modelBuilder.Entity("EventFoto.Data.Models.Watermark", b =>
                 {
-                    b.Property<int>("AssignedPhotographerEventsId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("PhotographersId")
-                        .HasColumnType("uuid");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.HasKey("AssignedPhotographerEventsId", "PhotographersId");
+                    b.Property<string>("Filename")
+                        .HasColumnType("text");
 
-                    b.HasIndex("PhotographersId");
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
 
-                    b.ToTable("EventUser");
+                    b.HasKey("Id");
+
+                    b.ToTable("Watermarks");
                 });
 
             modelBuilder.Entity("EventFoto.Data.Models.DownloadImage", b =>
@@ -320,9 +369,16 @@ namespace EventFoto.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("EventFoto.Data.Models.Watermark", "Watermark")
+                        .WithMany()
+                        .HasForeignKey("WatermarkId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("CreatedByUser");
 
                     b.Navigation("DefaultGallery");
+
+                    b.Navigation("Watermark");
                 });
 
             modelBuilder.Entity("EventFoto.Data.Models.EventPhoto", b =>
@@ -359,7 +415,33 @@ namespace EventFoto.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("EventFoto.Data.Models.Watermark", "Watermark")
+                        .WithMany()
+                        .HasForeignKey("WatermarkId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("Event");
+
+                    b.Navigation("Watermark");
+                });
+
+            modelBuilder.Entity("EventFoto.Data.Models.PhotographerAssignment", b =>
+                {
+                    b.HasOne("EventFoto.Data.Models.Gallery", "Gallery")
+                        .WithMany("Assignments")
+                        .HasForeignKey("GalleryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EventFoto.Data.Models.User", "User")
+                        .WithMany("Assignments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Gallery");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EventFoto.Data.Models.UploadBatch", b =>
@@ -371,21 +453,6 @@ namespace EventFoto.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("EventUser", b =>
-                {
-                    b.HasOne("EventFoto.Data.Models.Event", null)
-                        .WithMany()
-                        .HasForeignKey("AssignedPhotographerEventsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EventFoto.Data.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("PhotographersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("EventFoto.Data.Models.DownloadRequest", b =>
@@ -400,12 +467,19 @@ namespace EventFoto.Data.Migrations
 
             modelBuilder.Entity("EventFoto.Data.Models.Gallery", b =>
                 {
+                    b.Navigation("Assignments");
+
                     b.Navigation("Photos");
                 });
 
             modelBuilder.Entity("EventFoto.Data.Models.UploadBatch", b =>
                 {
                     b.Navigation("EventPhotos");
+                });
+
+            modelBuilder.Entity("EventFoto.Data.Models.User", b =>
+                {
+                    b.Navigation("Assignments");
                 });
 #pragma warning restore 612, 618
         }

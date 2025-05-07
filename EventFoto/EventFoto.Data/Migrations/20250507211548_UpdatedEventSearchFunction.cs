@@ -5,7 +5,7 @@
 namespace EventFoto.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class EventSearchFunction : Migration
+    public partial class UpdatedEventSearchFunction : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
