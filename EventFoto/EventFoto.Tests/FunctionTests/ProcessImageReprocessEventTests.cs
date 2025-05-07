@@ -10,14 +10,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace EventFoto.Tests.FunctionTests;
 
-public class ProcessImageFunctionUploadBatch
+public class ProcessImageReprocessEventTests
 {
     private readonly FunctionTestHost _host;
     private readonly ProcessImageFunction _function;
     private readonly FunctionContext _functionContext;
     private readonly EventFotoContext _context;
 
-    public ProcessImageFunctionUploadBatch()
+    public ProcessImageReprocessEventTests()
     {
         _host = new FunctionTestHost(services =>
         {
@@ -29,9 +29,10 @@ public class ProcessImageFunctionUploadBatch
     }
 
     [Fact]
-    public async Task ProcessImageFunction_UploadBatch_ValidMessage()
+    public async Task ProcessImageFunction_ReprocessEvent_ValidMessage()
     {
         // Arrange
+        await _context.Reset();
         await _context.AddUser(UserConstants.GetTestPhotographer());
         await _context.AddUser(UserConstants.GetTestEventAdmin());
         await _context.AddEvent(EventConstants.GetCurrentEvent());
@@ -40,14 +41,11 @@ public class ProcessImageFunctionUploadBatch
         _context.Galleries.Update(gallery);
         await _context.SaveChangesAsync();
         await _context.AddPhotos(PhotoConstants.GetTestPhotos(1));
-        var uploadBatch = PhotoConstants.GetTestUploadBatch();
-        await _context.AddUploadBatch(uploadBatch);
 
         var message = new ProcessingMessage
         {
-            Type = ProcessingMessageType.UploadBatch,
+            Type = ProcessingMessageType.ReprocessEvent,
             EntityId = 1,
-            Filename = "test.jpg",
             EnqueuedOn = DateTime.UtcNow
         };
         var queueMessage = QueueMessageMock.Serialize(message);
@@ -56,33 +54,11 @@ public class ProcessImageFunctionUploadBatch
         await _function.ProcessMessage(queueMessage, _functionContext);
 
         // Assert
-        var photo = _context.EventPhotos.First(x => x.Id == 3);
-        photo.Should().NotBeNull();
-        photo.IsProcessed.Should().BeTrue();
-        photo.ProcessedFilename.Should().Be("out-test3.jpg");
-        var processedBatch = _context.UploadBatches.First(x => x.Id == 1);
-        processedBatch.IsReady.Should().BeTrue();
-        processedBatch.ProcessedOn.Should().NotBeNull();
-    }
-
-    [Fact]
-    public async Task ProcessImageFunction_UploadBatch_NonExistentBatch()
-    {
-        // Arrange
-        var message = new ProcessingMessage
+        var photos = _context.EventPhotos.Where(x => x.IsProcessed == true).ToList();
+        photos.Should().NotBeEmpty();
+        photos.ForEach(x =>
         {
-            Type = ProcessingMessageType.UploadBatch,
-            EntityId = 1,
-            Filename = "test.jpg",
-            EnqueuedOn = DateTime.UtcNow
-        };
-        var queueMessage = QueueMessageMock.Serialize(message);
-
-        // Act
-        var act = async () => await _function.ProcessMessage(queueMessage, _functionContext);
-
-        // Assert
-        await act.Should().ThrowAsync<InvalidOperationException>()
-            .WithMessage("Upload batch not found");
+            x.WatermarkId.Should().Be(1);
+        });
     }
 }

@@ -339,7 +339,7 @@ public class ImageControllerTests : IClassFixture<TestApplicationFactory>, IDisp
         await _testSetup.AddUser(UserConstants.GetTestEventAdmin());
         await _testSetup.AddEvent(EventConstants.GetCurrentEvent());
         await _testSetup.AddPhotos(PhotoConstants.GetTestPhotos(1));
-        var keyOffset = $"{DateTime.UtcNow.AddDays(-1)}|0";
+        var keyOffset = $"{DateTime.UtcNow.AddDays(-1):O}|0";
         var request = new HttpRequestMessage(HttpMethod.Get, $"/api/image/search?galleryId=1&pageSize=2&keyOffset={keyOffset}");
 
         // Act

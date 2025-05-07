@@ -21,4 +21,19 @@ public static class QueueMessageMock
 
         return queueMessage;
     }
+
+    public static QueueMessage Serialize(string message)
+    {
+        var body = BinaryData.FromString(message);
+
+        var queueMessage = QueuesModelFactory.QueueMessage(
+            messageId: "1",
+            popReceipt: "2",
+            body: body,
+            dequeueCount: 1,
+            insertedOn: DateTimeOffset.UtcNow
+        );
+
+        return queueMessage;
+    }
 }

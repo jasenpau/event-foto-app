@@ -61,4 +61,10 @@ public static class EventFotoContextExtensions
         context.Watermarks.AddRange(watermarks);
         await context.SaveChangesAsync();
     }
+
+    public static async Task Reset(this EventFotoContext context)
+    {
+        await context.Database.EnsureDeletedAsync();
+        await context.Database.EnsureCreatedAsync();
+    }
 }
