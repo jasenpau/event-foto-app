@@ -34,7 +34,7 @@ public class AppControllerBase : ControllerBase
         var appGroups = groupSettingsProvider.GetGroups();
 
         var userGroups = user.FindAll("groups").ToList();
-        if (userGroups.Any(x => x.Value == appGroups.SystemAdministrators)) return UserGroup.EventAdmin;
+        if (userGroups.Any(x => x.Value == appGroups.SystemAdministrators)) return UserGroup.SystemAdmin;
         if (userGroups.Any(x => x.Value == appGroups.EventAdministrators)) return UserGroup.EventAdmin;
         if (userGroups.Any(x => x.Value == appGroups.Photographers)) return UserGroup.Photographer;
 
