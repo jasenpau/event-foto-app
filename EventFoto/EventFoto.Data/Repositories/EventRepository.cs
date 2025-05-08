@@ -58,7 +58,7 @@ public class EventRepository : IEventRepository
     public async Task<PagedData<string, EventListProjection>> SearchEventsAsync(EventSearchParams searchParams)
     {
         var idOffset = 0;
-        var dateOffset = DateTime.MinValue.ToUniversalTime();
+        var dateOffset = DateTime.MaxValue.ToUniversalTime();
         if (!string.IsNullOrWhiteSpace(searchParams.KeyOffset))
         {
             var offset = searchParams.KeyOffset.Split('|');
