@@ -70,6 +70,8 @@ export class UserListComponent
 
     switch (groupId) {
       case undefined:
+      case null:
+      case '':
         return 'Žiūrėtojas';
       case this.appGroups.systemAdministrators:
         return 'Sistemos administratorius';
