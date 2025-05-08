@@ -69,10 +69,6 @@ export class UserListComponent
     if (!this.appGroups) return '';
 
     switch (groupId) {
-      case undefined:
-      case null:
-      case '':
-        return 'Žiūrėtojas';
       case this.appGroups.systemAdministrators:
         return 'Sistemos administratorius';
       case this.appGroups.eventAdministrators:
@@ -80,7 +76,7 @@ export class UserListComponent
       case this.appGroups.photographers:
         return 'Fotografas';
       default:
-        return '';
+        return 'Žiūrėtojas';
     }
   }
 
