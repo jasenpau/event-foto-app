@@ -6,8 +6,14 @@ namespace EventFoto.Core.GraphClient;
 
 public class GraphClientService : IGraphClientService
 {
-    private readonly IConfiguration _configuration;
     private readonly GraphServiceClient _graphClient;
+    private readonly IConfiguration _configuration;
+
+    public GraphClientService(GraphServiceClient graphClient, IConfiguration configuration)
+    {
+        _graphClient = graphClient;
+        _configuration = configuration;
+    }
 
     public Task<Invitation?> InviteUserAsync(string email, string name, Guid invitationKey)
     {
