@@ -88,6 +88,7 @@ export class CameraMainComponent
     if (settings.event) {
       this.event = settings.event;
       this.eventLoadingFinished = true;
+      this.loadEvent();
     }
 
     this.userOpenSettings = false;
