@@ -12,4 +12,9 @@
     [size]="svgSize"
   />
 </button>
-<span *ngIf="tooltip" class="icon-button__tooltip">{{ tooltip }}</span>
+<span *ngIf="tooltip && !multilineTooltip" class="icon-button__tooltip">{{ tooltip }}</span>
+<span *ngIf="tooltip && multilineTooltip" class="icon-button__tooltip">
+  <ng-container *ngFor="let line of tooltip.split('\n')">
+    {{ line }}<br />
+  </ng-container>
+</span>

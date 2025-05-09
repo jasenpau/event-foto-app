@@ -51,17 +51,18 @@
   &__tooltip {
     display: none;
     position: absolute;
-    bottom: -40px;
+    top: 40px;
     left: 50%;
     transform: translateX(-50%);
     font-size: functions.rem-size(14px);
     font-weight: 500;
-    height: 32px;
+    min-height: 32px;
     line-height: 32px;
     background: colors.$surface-tint-3;
     padding: 0 10px;
     border-radius: 4px;
     text-wrap: nowrap;
+    text-align: center;
   }
 
   &:focus-visible ~ &__tooltip {

@@ -184,6 +184,19 @@ export class GalleryViewComponent
     return this.permissionViews?.eventAdmin || this.selectedOwnPhotos;
   }
 
+  protected noEditTooltip(defaultText: string, noEditText?: string) {
+    if (!noEditText) return defaultText;
+
+    const canEdit = this.canEditSelectedPhotos;
+    const hasSelectedPhotos = this.selectedImageIds.size > 0;
+
+    if (hasSelectedPhotos && !canEdit) {
+      return `${defaultText}\n${noEditText}`;
+    }
+
+    return defaultText;
+  }
+
   protected openPhoto(image: PhotoListDto, index: number) {
     if (this.eventId) {
       this.openedPhotoData = {
