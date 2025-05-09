@@ -11,6 +11,8 @@ import { WatermarkService } from '../../../services/watermark/watermark.service'
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { useLocalLoader } from '../../../helpers/useLoader';
 import { LoaderOverlayComponent } from '../../../components/loader-overlay/loader-overlay.component';
+import { SnackbarService } from '../../../services/snackbar/snackbar.service';
+import { SnackbarType } from '../../../services/snackbar/snackbar.types';
 
 @Component({
   selector: 'app-watermark-page',
@@ -36,7 +38,10 @@ export class WatermarkPageComponent
   protected refreshEvent = '';
   protected isLoading = false;
 
-  constructor(private watermarkService: WatermarkService) {
+  constructor(
+    private watermarkService: WatermarkService,
+    private readonly snackbarService: SnackbarService,
+  ) {
     super();
   }
 
@@ -47,6 +52,10 @@ export class WatermarkPageComponent
   protected handleCreateFormEvent(event: string) {
     if (event === 'created') {
       this.showCreateForm = false;
+      this.snackbarService.addSnackbar(
+        SnackbarType.Success,
+        'Vandens ženklas sėkmingai sukurtas',
+      );
       this.refreshEvent = `${event}-${Date.now()}`;
     } else if (event === 'cancel') {
       this.showCreateForm = false;
@@ -64,6 +73,10 @@ export class WatermarkPageComponent
       .pipe(
         useLocalLoader((value) => (this.isLoading = value)),
         tap(() => {
+          this.snackbarService.addSnackbar(
+            SnackbarType.Info,
+            'Vandens sėkmingai pašalintas',
+          );
           this.refreshEvent = `deleted-${Date.now()}`;
         }),
         takeUntil(this.destroy$),
