@@ -9,10 +9,12 @@ body {
   margin: 0;
   font-family: typography.$font-family;
   font-optical-sizing: auto;
+  height: 100%;
 }
 
 body {
   background: colors.$surface;
+  overflow: hidden;
 }
 
 html {

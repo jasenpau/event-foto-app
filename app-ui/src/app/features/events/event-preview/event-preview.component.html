@@ -112,7 +112,16 @@
         [title]="gallery.name"
         [description]="getPhotoCountString(gallery.photoCount)"
         (click)="openGallery(gallery)"
-      />
+        [hasContent]="gallery.id === event.defaultGalleryId"
+      >
+        <app-badge
+          *ngIf="gallery.id === event.defaultGalleryId"
+          class="event__galleries-badge"
+          [type]="BadgeType.Primary"
+        >
+          Pagrindinė galerija
+        </app-badge>
+      </app-card-item>
       <!-- eslint-disable-next-line -->
       <div class="event__add-gallery" (click)="openGalleryForm()" *ngIf="permissionViews?.eventAdmin">
         <div class="event__add-gallery-icon">

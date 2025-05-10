@@ -80,6 +80,12 @@
     margin-bottom: 24px;
   }
 
+  &__galleries-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+  }
+
   &__add-gallery {
     display: flex;
     flex-direction: column;

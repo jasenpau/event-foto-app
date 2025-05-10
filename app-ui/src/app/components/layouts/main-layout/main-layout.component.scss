@@ -6,7 +6,7 @@ $sidenav-width: 80px;
 .main-layout {
   display: grid;
   grid-template-columns: $sidenav-width 1fr;
-  height: 100vh;
+  height: 100%;
 
   @media (max-width: breakpoints.$mobile-large) {
     grid-template-columns: 1fr;
@@ -16,12 +16,12 @@ $sidenav-width: 80px;
     border-right: 1px solid colors.$outline;
 
     @media (max-width: breakpoints.$mobile-large) {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       z-index: 5;
       width: 100vw;
-      height: 100vh;
+      height: 100%;
 
       &--open {
         display: block;
@@ -30,8 +30,11 @@ $sidenav-width: 80px;
   }
 
   &__content {
-    padding: 32px 40px;
     overflow: scroll;
+  }
+
+  &__content-padding {
+    padding: 32px 40px;
 
     @media (max-width: breakpoints.$mobile-large) {
       padding: 24px 16px;

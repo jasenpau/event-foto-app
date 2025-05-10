@@ -53,6 +53,7 @@ import {
 } from '../../../components/popup-menu/popup-menu.component';
 import { ViewPermissions } from '../../../globals/userGroups';
 import { UserService } from '../../../services/user/user.service';
+import { useLoader } from '../../../helpers/useLoader';
 
 const COMPONENT_LOADING_KEY = 'gallery-view';
 
@@ -391,9 +392,10 @@ export class GalleryViewComponent
   }
 
   protected deleteGallery() {
-    this.galleryService
+    const deleteGallery$ = this.galleryService
       .deleteGallery(this.galleryId!)
       .pipe(
+        useLoader(COMPONENT_LOADING_KEY, this.loaderService),
         tap(() => {
           this.snackbarService.addSnackbar(
             SnackbarType.Info,
@@ -408,6 +410,20 @@ export class GalleryViewComponent
               'Negalima ištrinti pagrindinės renginio galerijos',
             );
           }
+        }),
+      );
+
+    this.modalService
+      .openConfirmModal({
+        body: 'Ar tikrai norite ištrinti galeriją?',
+        confirm: 'Ištrinti',
+      })
+      .pipe(
+        switchMap((modalAction) => {
+          if (modalAction === ModalActions.Confirm) {
+            return deleteGallery$;
+          }
+          return of({});
         }),
         takeUntil(this.destroy$),
       )

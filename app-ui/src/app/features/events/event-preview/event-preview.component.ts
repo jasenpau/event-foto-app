@@ -41,6 +41,8 @@ import { ModalService } from '../../../services/modal/modal.service';
 import { ModalActions } from '../../../services/modal/modal.types';
 import { EnvService } from '../../../services/environment/env.service';
 import { AssignGalleryFormComponent } from '../assign-gallery-form/assign-gallery-form.component';
+import { BadgeComponent } from '../../../components/badge/badge.component';
+import { BadgeType } from '../../../components/badge/badge.types';
 
 const COMPONENT_LOADING_KEY = 'event-preview';
 
@@ -67,6 +69,7 @@ interface AssignmentEditData {
     CreateEventComponent,
     SpinnerComponent,
     AssignGalleryFormComponent,
+    BadgeComponent,
   ],
   templateUrl: './event-preview.component.html',
   styleUrl: './event-preview.component.scss',
@@ -384,4 +387,5 @@ export class EventPreviewComponent
 
   protected readonly SvgIconSrc = SvgIconSrc;
   protected readonly SvgIconSize = SvgIconSize;
+  protected readonly BadgeType = BadgeType;
 }

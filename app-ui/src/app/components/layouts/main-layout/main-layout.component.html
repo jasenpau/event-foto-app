@@ -7,7 +7,9 @@
   />
   <app-sidenav class="main-layout__sidenav hide-mobile-sidenav" [ngClass]="{ 'hide-mobile-sidenav--open': showSidenav }" />
   <div class="main-layout__content">
-    <ng-content />
+    <div class="main-layout__content-padding">
+      <ng-content />
+    </div>
   </div>
   <div class="main-layout__loader" *ngIf="showLoader">
     <app-spinner />
