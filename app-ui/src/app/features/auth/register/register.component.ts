@@ -37,9 +37,9 @@ export class RegisterComponent
   ) {
     super();
     this.form = new FormGroup({
-      name: new FormControl('', [
+      name: new FormControl({ value: '', disabled: true }, [
         Validators.required,
-        Validators.maxLength(40),
+        Validators.maxLength(255),
       ]),
       email: new FormControl({ value: '', disabled: true }, [
         Validators.required,
