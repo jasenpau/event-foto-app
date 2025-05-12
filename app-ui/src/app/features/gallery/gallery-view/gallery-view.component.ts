@@ -104,6 +104,12 @@ export class GalleryViewComponent
       },
     },
     {
+      text: 'Originalios nuotraukos – iki 2000px',
+      action: () => {
+        this.bulkDownload(false, 2000);
+      },
+    },
+    {
       text: 'Apdorotos nuotraukos – pilna kokybė',
       action: () => {
         this.bulkDownload(true);
