@@ -3,8 +3,8 @@
     *ngIf="showSettings() || userOpenSettings"
     (settingsUpdated)="updateSettings($event)"
   />
-  <div class="camera__event-data">
-    <p class="text-label-medium no-margin" *ngIf="event?.name">{{ event?.name }}</p>
+  <div class="camera__event-data" *ngIf="event">
+    <p class="text-label-medium no-margin" *ngIf="event?.name">{{ event.name }}</p>
     <p class="text-label-medium no-margin" *ngIf="assignment">{{ assignment.galleryName }}</p>
   </div>
   <app-upload-tracker class="camera__upload-tracker" />
@@ -14,7 +14,7 @@
     <div class="camera__control-section">
       <app-icon-button [icon]="SvgIconSrc.ArrowBack" theme="light" (click)="goBack()" />
     </div>
-    <div class="camera__control-section" *ngIf="cameraInitialized">
+    <div class="camera__control-section" *ngIf="cameraInitialized && event">
       <!-- eslint-disable-next-line -->
       <div class="camera__capture" (click)="capture()" >
         <app-icon-button [icon]="SvgIconSrc.Camera"/>

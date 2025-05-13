@@ -146,7 +146,7 @@ export class CameraMainComponent
     this.userOpenSettings = true;
   }
 
-  private loadCamera() {
+  private async loadCamera() {
     const cameraDevice = loadCameraDevice();
     if (cameraDevice) {
       this.cameraDevice = cameraDevice;
@@ -158,7 +158,7 @@ export class CameraMainComponent
     }
   }
 
-  private loadEvent() {
+  private async loadEvent() {
     const eventData = loadCameraEvent();
     if (eventData) {
       const event$ = this.eventService.getEventDetails(eventData.id).pipe(
@@ -176,6 +176,7 @@ export class CameraMainComponent
         }),
         handleApiError((error) => {
           if (error.status === 404) {
+            this.event = undefined;
             saveCameraEvent();
             this.eventLoadingFinished = true;
           }
@@ -231,7 +232,6 @@ export class CameraMainComponent
         SnackbarType.Error,
         'Nepavyko inicijuoti kameros įrenginio. Įsitinkinkite, jog suteikta prieiga',
       );
-      // this.openSettings();
     }
   }
 
