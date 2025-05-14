@@ -37,7 +37,7 @@ import { BlobService } from '../../../services/blob/blob.service';
 import { PluralDefinition, pluralizeLt } from '../../../helpers/pluralizeLt';
 import { RouterLink } from '@angular/router';
 
-const EVENT_TABLE_PAGE_SIZE = 20;
+const EVENT_TABLE_PAGE_SIZE = 10;
 
 @Component({
   selector: 'app-event-list',
