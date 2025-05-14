@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   OnDestroy,
@@ -15,7 +16,7 @@ import {
 } from '../cameraSettingsHelper';
 import { EventService } from '../../../services/event/event.service';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
-import { switchMap, takeUntil, tap } from 'rxjs';
+import { fromEvent, switchMap, takeUntil, tap } from 'rxjs';
 import { UserService } from '../../../services/user/user.service';
 import { UploadTrackerComponent } from '../../../components/upload-tracker/upload-tracker.component';
 import { EnvService } from '../../../services/environment/env.service';
@@ -41,7 +42,7 @@ import { SnackbarType } from '../../../services/snackbar/snackbar.types';
 })
 export class CameraMainComponent
   extends DisposableComponent
-  implements OnInit, OnDestroy
+  implements OnInit, OnDestroy, AfterViewInit
 {
   @ViewChild('previewVideo') previewVideo!: ElementRef<HTMLVideoElement>;
   @ViewChild('canvas') canvas!: ElementRef<HTMLCanvasElement>;
@@ -76,6 +77,17 @@ export class CameraMainComponent
     this.loadCamera();
     this.loadEvent();
     this.userId = this.userService.getCurrentUserData()?.id;
+  }
+
+  ngAfterViewInit() {
+    fromEvent<KeyboardEvent>(document.body, 'keyup')
+      .pipe(
+        tap((event) => {
+          this.handleKeyboardEvent(event);
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
   }
 
   updateSettings(settings: CameraSettings) {
@@ -144,6 +156,15 @@ export class CameraMainComponent
 
   openSettings() {
     this.userOpenSettings = true;
+  }
+
+  private handleKeyboardEvent($event: KeyboardEvent) {
+    switch ($event.key) {
+      case ' ':
+      case 'Enter':
+        this.capture();
+        return;
+    }
   }
 
   private async loadCamera() {
