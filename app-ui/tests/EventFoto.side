@@ -1,0 +1,3365 @@
+{
+  "id": "4f45b874-6cc8-4b85-bf36-0ff220974fbc",
+  "version": "2.0",
+  "name": "EventFoto",
+  "url": "https://dev-eventfoto.jasenas.com",
+  "tests": [{
+    "id": "3ba6f5d6-30dd-4ed6-a069-84403408e071",
+    "name": "Create event",
+    "commands": [{
+      "id": "7c9a8c02-67b6-4b6f-8ec0-0381027a66f7",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "adbd9755-0bca-4fec-8be1-12dd2bfd6a9a",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "40bf18da-be8e-4c15-a7d0-2c32ccf13216",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Sukurti renginį')]",
+      "targets": [
+        ["css=.button--icon", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Sukurti renginį')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "5c3afc2c-2623-453b-ba77-79f1d7d5865b",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #name",
+      "targets": [
+        ["css=.input-field > #name", "css:finder"],
+        ["xpath=//input[@id='name']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='name']/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b9211372-2f18-4894-95c1-45bd715695e4",
+      "comment": "",
+      "command": "type",
+      "target": "css=.input-field > #name",
+      "targets": [
+        ["css=.input-field > #name", "css:finder"],
+        ["xpath=//input[@id='name']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='name']/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": "Test event 12"
+    }, {
+      "id": "c1bef349-b99a-4464-8172-7f21c4be0f09",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//app-date-picker[@id='startDate']/div/input[2]",
+      "targets": [
+        ["css=.active", "css:finder"],
+        ["xpath=(//input[@type='text'])[5]", "xpath:attributes"],
+        ["xpath=//app-date-picker[@id='startDate']/div/input[2]", "xpath:idRelative"],
+        ["xpath=//div[2]/app-date-picker/div/input[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "19fa3099-e2e2-4831-81a0-4de023926e8d",
+      "comment": "",
+      "command": "click",
+      "target": "css=.open .today",
+      "targets": [
+        ["css=.open .today", "css:finder"],
+        ["xpath=//div[3]/div[2]/div/div[2]/div/span[17]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "29a3f739-87fd-4365-9b18-47f790d386e6",
+      "comment": "",
+      "command": "click",
+      "target": "css=.visible",
+      "targets": [
+        ["css=.visible", "css:finder"],
+        ["xpath=//div[4]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "7c4a70a5-484c-4cf8-a30e-0bd31e6d7109",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #location",
+      "targets": [
+        ["css=.input-field > #location", "css:finder"],
+        ["xpath=//input[@id='location']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='location']/div/input", "xpath:idRelative"],
+        ["xpath=//app-form-input-section[4]/div/div[2]/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "464fc188-3aa2-463a-9561-0dbdd04a19b2",
+      "comment": "",
+      "command": "type",
+      "target": "css=.input-field > #location",
+      "targets": [
+        ["css=.input-field > #location", "css:finder"],
+        ["xpath=//input[@id='location']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='location']/div/input", "xpath:idRelative"],
+        ["xpath=//app-form-input-section[4]/div/div[2]/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": "KTU III rūmai"
+    }, {
+      "id": "9f073ebe-95d7-4a93-a149-95da56bc3df2",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #note",
+      "targets": [
+        ["css=.input-field > #note", "css:finder"],
+        ["xpath=//textarea[@id='note']", "xpath:attributes"],
+        ["xpath=//app-text-area[@id='note']/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5f405791-561f-4ce7-b6ae-711e7e1e4a4b",
+      "comment": "",
+      "command": "type",
+      "target": "css=.input-field > #note",
+      "targets": [
+        ["css=.input-field > #note", "css:finder"],
+        ["xpath=//textarea[@id='note']", "xpath:attributes"],
+        ["xpath=//app-text-area[@id='note']/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": "Lorem ipsum dolar amet si"
+    }, {
+      "id": "3cae2e55-f12f-46c2-b26d-b51bcb4e42bd",
+      "comment": "",
+      "command": "click",
+      "target": "css=app-button:nth-child(1) > .button--filled",
+      "targets": [
+        ["css=app-button:nth-child(1) > .button--filled", "css:finder"],
+        ["xpath=(//button[@type='submit'])[6]", "xpath:attributes"],
+        ["xpath=//div[2]/app-button/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ed59cbe2-2690-4f6b-9b0f-97b7044692ce",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.text-headline-large",
+      "targets": [
+        ["css=.text-headline-large", "css:finder"],
+        ["xpath=//h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Test event 12')]", "xpath:innerText"]
+      ],
+      "value": "Test event 12"
+    }, {
+      "id": "92c5a41a-4293-4166-93da-04239931e91d",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.event__details-row:nth-child(2) > .text-body-large",
+      "targets": [
+        ["css=.event__details-row:nth-child(2) > .text-body-large", "css:finder"],
+        ["xpath=//div[2]/p[2]", "xpath:position"],
+        ["xpath=//p[contains(.,'KTU III rūmai')]", "xpath:innerText"]
+      ],
+      "value": "KTU III rūmai"
+    }, {
+      "id": "e426d3b6-82c2-415f-a019-c440e482eb8f",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.event__details-row:nth-child(3) > .text-body-large",
+      "targets": [
+        ["css=.event__details-row:nth-child(3) > .text-body-large", "css:finder"],
+        ["xpath=//div[3]/p[2]", "xpath:position"],
+        ["xpath=//p[contains(.,'Lorem ipsum dolar amet si')]", "xpath:innerText"]
+      ],
+      "value": "Lorem ipsum dolar amet si"
+    }, {
+      "id": "378f0197-8010-4ff8-be5a-73bddc5cde02",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.card__title",
+      "targets": [
+        ["css=.card__title", "css:finder"],
+        ["xpath=//div[2]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Pagrindinė galerija')]", "xpath:innerText"]
+      ],
+      "value": "Pagrindinė galerija"
+    }, {
+      "id": "142f3e9a-42bd-4ae0-934f-cb9dd618accf",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.badge--accent",
+      "targets": [
+        ["css=.badge--accent", "css:finder"],
+        ["xpath=//span", "xpath:position"],
+        ["xpath=//span[contains(.,'Aktyvus')]", "xpath:innerText"]
+      ],
+      "value": "Aktyvus"
+    }, {
+      "id": "9c0326aa-ef42-4467-a161-f91dcdaf70c7",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "59f48cc3-9371-4cff-a951-898d605baaef",
+    "name": "Search events",
+    "commands": [{
+      "id": "117c9bcf-a1a3-4986-bb84-305631f95a4a",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "b31e9c76-1a6a-4b35-b931-3618c0112e18",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "70757553-f5c0-4822-8f3a-3f1d18932872",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #search",
+      "targets": [
+        ["css=.input-field > #search", "css:finder"],
+        ["xpath=//input[@id='search']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='search']/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9f004486-93c2-48d1-8628-84452e9691dc",
+      "comment": "",
+      "command": "type",
+      "target": "css=.input-field > #search",
+      "targets": [
+        ["css=.input-field > #search", "css:finder"],
+        ["xpath=//input[@id='search']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='search']/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "Test event 12"
+    }, {
+      "id": "fb506035-0eea-49f5-bb8d-c0ff06bcff5c",
+      "comment": "",
+      "command": "click",
+      "target": "css=.event-list",
+      "targets": [
+        ["css=.event-list", "css:finder"],
+        ["xpath=//app-event-list/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "7ec3a509-5b5c-4853-bb4c-c9330e014dc3",
+      "comment": "",
+      "command": "assertText",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": "Test event 12"
+    }, {
+      "id": "3f52bca4-e9b9-4d4b-a849-685e5e493b41",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.badge--accent",
+      "targets": [
+        ["css=.badge--accent", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/div/app-event-badge/app-badge/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Aktyvus')]", "xpath:innerText"]
+      ],
+      "value": "Aktyvus"
+    }, {
+      "id": "2b6060e4-a839-4744-828d-9827a5531737",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "a85afa03-ccc7-4317-8f31-8ac6652f3c47",
+    "name": "Assign self as photographer",
+    "commands": [{
+      "id": "1dc42d1e-409a-49ed-902a-b94e3fedb45e",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ead63e2d-f122-4fd0-a520-674d7a5b3085",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "70aeb3c5-db05-4801-b868-f2cb76870f7a",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(1) .card__title", "css:finder"],
+        ["xpath=//div[2]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Test event 12')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "4a828214-7f13-463f-a3c4-bb4f5c50f41f",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Pridėti save')]",
+      "targets": [
+        ["css=app-button:nth-child(1) > .button--filled", "css:finder"],
+        ["xpath=(//button[@type='submit'])[3]", "xpath:attributes"],
+        ["xpath=//div[2]/div/div/div/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Pridėti save')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "98c3b8e5-193d-42e0-b3e5-1add848256d5",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Priskirti')]",
+      "targets": [
+        ["css=.button-container .button", "css:finder"],
+        ["xpath=(//button[@type='submit'])[6]", "xpath:attributes"],
+        ["xpath=//div[2]/div/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Priskirti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9e4405e9-9efb-4b92-9c15-500c76f6a04b",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=td:nth-child(1)",
+      "targets": [
+        ["css=td:nth-child(1)", "css:finder"],
+        ["xpath=//td", "xpath:position"],
+        ["xpath=//td[contains(.,'Paulius Jasėnas')]", "xpath:innerText"]
+      ],
+      "value": "Paulius Jasėnas"
+    }, {
+      "id": "662b4133-264c-4165-a22a-13e553e3cc0b",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=td:nth-child(2)",
+      "targets": [
+        ["css=td:nth-child(2)", "css:finder"],
+        ["xpath=//td[2]", "xpath:position"],
+        ["xpath=//td[contains(.,'Pagrindinė galerija')]", "xpath:innerText"]
+      ],
+      "value": "Pagrindinė galerija"
+    }, {
+      "id": "b46ae544-6033-42ca-8bb1-5b5e5c640503",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "21ec8ed8-cf8e-4868-8233-950b73e223e1",
+    "name": "Create gallery",
+    "commands": [{
+      "id": "7da95815-4280-47b7-8a73-0834912cac3e",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "62d25a91-a5f3-401b-ad85-ff43b2e38e39",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "b10e36be-3e56-4c22-b549-7533689b28f2",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(1) .card__title", "css:finder"],
+        ["xpath=//div[2]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Test event 12')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "0e5740bb-2371-40dc-87ef-8653a3932cfd",
+      "comment": "",
+      "command": "click",
+      "target": "css=.event__add-gallery-icon svg",
+      "targets": [
+        ["css=.event__add-gallery-icon svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "f36febb6-8c94-4a54-9cd9-ee11f7b55fb3",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #name",
+      "targets": [
+        ["css=.input-field > #name", "css:finder"],
+        ["xpath=//input[@id='name']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='name']/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "319faae4-5cd5-4902-bedf-851100ac1530",
+      "comment": "",
+      "command": "type",
+      "target": "css=.input-field > #name",
+      "targets": [
+        ["css=.input-field > #name", "css:finder"],
+        ["xpath=//input[@id='name']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='name']/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "Test gallery"
+    }, {
+      "id": "b4621773-9433-4bc0-8d4c-38400a9264bf",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Sukurti')]",
+      "targets": [
+        ["css=.form-controls .button", "css:finder"],
+        ["xpath=(//button[@type='submit'])[7]", "xpath:attributes"],
+        ["xpath=//div[2]/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Sukurti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "15ed7370-cc29-45fd-9d86-fd619caa166c",
+      "comment": "",
+      "command": "assertText",
+      "target": "xpath=//h2[contains(.,'Test gallery')]",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Test gallery')]", "xpath:innerText"]
+      ],
+      "value": "Test gallery"
+    }, {
+      "id": "5828c763-da57-4182-b526-66d9aee28989",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "16d0a38c-085c-4079-a31e-7d26a8f596a8",
+    "name": "Assign photographer to Test gallery",
+    "commands": [{
+      "id": "a1cd2880-9efb-428d-9791-e655fd1dd174",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ce9f8888-7764-4383-b312-0da0a7934cda",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "9395f310-1ee8-4947-b4b1-03baf9f776c6",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "797e070f-b995-422e-90b6-cf70f27a01b0",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Pridėti fotografą')]",
+      "targets": [
+        ["css=.button--filled", "css:finder"],
+        ["xpath=(//button[@type='submit'])[3]", "xpath:attributes"],
+        ["xpath=//div[2]/div/div/div/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Pridėti fotografą')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "7814b955-34d8-4779-9429-a4f7698fd6ef",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #targetGallery",
+      "targets": [
+        ["css=.input-field > #targetGallery", "css:finder"],
+        ["xpath=//select[@id='targetGallery']", "xpath:attributes"],
+        ["xpath=//app-select[@id='targetGallery']/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "48a75419-8457-46eb-beac-0a36a875b634",
+      "comment": "",
+      "command": "select",
+      "target": "css=.input-field > #targetGallery",
+      "targets": [],
+      "value": "label=Test gallery"
+    }, {
+      "id": "c2bbcd6c-38ca-4cca-8797-9df6bab6b2c9",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//option[contains(.,' Test gallery ')]",
+      "targets": [
+        ["css=option:nth-child(2)", "css:finder"],
+        ["xpath=//option[@value='38']", "xpath:attributes"],
+        ["xpath=//select[@id='targetGallery']/option[2]", "xpath:idRelative"],
+        ["xpath=//option[2]", "xpath:position"],
+        ["xpath=//option[contains(.,' Test gallery ')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "1bba0de7-7852-421f-a239-fc3fbe4b5933",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #photographer-search",
+      "targets": [
+        ["css=.input-field > #photographer-search", "css:finder"],
+        ["xpath=//input[@id='photographer-search']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='photographer-search']/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "c34ee85e-812f-4f60-a9cf-fb5ad8751439",
+      "comment": "",
+      "command": "type",
+      "target": "css=.input-field > #photographer-search",
+      "targets": [
+        ["css=.input-field > #photographer-search", "css:finder"],
+        ["xpath=//input[@id='photographer-search']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='photographer-search']/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "jasenasp"
+    }, {
+      "id": "ead8a24e-ad88-4f52-9c93-bb19965241a2",
+      "comment": "",
+      "command": "waitForText",
+      "target": "css=.assign-photographer-table td:nth-child(2)",
+      "targets": [
+        ["css=.assign-photographer-table td:nth-child(2)", "css:finder"],
+        ["xpath=//div[2]/table/tr[2]/td[2]", "xpath:position"],
+        ["xpath=//td[contains(.,'jasenasp@gmail.com')]", "xpath:innerText"]
+      ],
+      "value": "jasenasp@gmail.com"
+    }, {
+      "id": "fb0b57fd-e764-4e0d-aeb8-8154d3f2bc7c",
+      "comment": "",
+      "command": "click",
+      "target": "css=td > app-button > .button",
+      "targets": [
+        ["css=td > app-button > .button", "css:finder"],
+        ["xpath=(//button[@type='submit'])[9]", "xpath:attributes"],
+        ["xpath=//td[3]/app-button/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f6eb66fe-2c71-43db-8c10-dd710c9ed801",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=tr:nth-child(3) > td:nth-child(1)",
+      "targets": [
+        ["css=tr:nth-child(3) > td:nth-child(1)", "css:finder"],
+        ["xpath=//tr[3]/td", "xpath:position"],
+        ["xpath=//td[contains(.,'Paulius J.')]", "xpath:innerText"]
+      ],
+      "value": "Paulius J."
+    }, {
+      "id": "2ce44df6-ffd2-41ad-ac07-ba4ce1765c38",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=tr:nth-child(3) > td:nth-child(2)",
+      "targets": [
+        ["css=tr:nth-child(3) > td:nth-child(2)", "css:finder"],
+        ["xpath=//tr[3]/td[2]", "xpath:position"],
+        ["xpath=//td[contains(.,'Test gallery')]", "xpath:innerText"]
+      ],
+      "value": "Test gallery"
+    }, {
+      "id": "ced7c2e5-e5b5-4382-94ab-c75855e6e488",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "3d617094-e3a4-4e86-bc31-6310811545ed",
+    "name": "Edit event",
+    "commands": [{
+      "id": "23b82d84-4bd7-4213-9636-8e099575486b",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "29eb44a1-b0b1-4fd9-9dae-dd77681ad4bd",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d4ba512c-c292-460d-ad57-94cd165a89fe",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "55b2d954-2499-4db8-84ec-94f609a0ac09",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Redaguoti')]",
+      "targets": [
+        ["css=.event__header-controls > app-button:nth-child(2) > .button", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Redaguoti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "f5d07035-476c-4d23-8072-85914c1b8312",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #location",
+      "targets": [
+        ["css=.input-field > #location", "css:finder"],
+        ["xpath=//input[@id='location']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='location']/div/input", "xpath:idRelative"],
+        ["xpath=//app-form-input-section[4]/div/div[2]/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5cc28bf2-9031-4694-95ef-f0713a4b23f7",
+      "comment": "",
+      "command": "type",
+      "target": "css=.input-field > #location",
+      "targets": [
+        ["css=.input-field > #location", "css:finder"],
+        ["xpath=//input[@id='location']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='location']/div/input", "xpath:idRelative"],
+        ["xpath=//app-form-input-section[4]/div/div[2]/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": "Niekur"
+    }, {
+      "id": "040fff0f-6579-48c9-8cbd-72f378d12597",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #note",
+      "targets": [
+        ["css=.input-field > #note", "css:finder"],
+        ["xpath=//textarea[@id='note']", "xpath:attributes"],
+        ["xpath=//app-text-area[@id='note']/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f1ec7e7f-44d5-4c13-94d4-dade977b4402",
+      "comment": "",
+      "command": "type",
+      "target": "css=.input-field > #note",
+      "targets": [
+        ["css=.input-field > #note", "css:finder"],
+        ["xpath=//textarea[@id='note']", "xpath:attributes"],
+        ["xpath=//app-text-area[@id='note']/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": "Pav"
+    }, {
+      "id": "7b5d7974-2c1d-42ea-bcb4-5747c5b190ad",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Išsaugoti')]",
+      "targets": [
+        ["css=.form-controls .button", "css:finder"],
+        ["xpath=(//button[@type='submit'])[9]", "xpath:attributes"],
+        ["xpath=//div[2]/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Išsaugoti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "010eb09c-0e45-4c5c-9436-df364f40bc21",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.event__details-row:nth-child(2) > .text-body-large",
+      "targets": [
+        ["css=.event__details-row:nth-child(2) > .text-body-large", "css:finder"],
+        ["xpath=//div[2]/p[2]", "xpath:position"],
+        ["xpath=//p[contains(.,'Niekur')]", "xpath:innerText"]
+      ],
+      "value": "Niekur"
+    }, {
+      "id": "4955ca33-355c-4431-9a30-2aafee1e18a6",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.event__details-row:nth-child(3) > .text-body-large",
+      "targets": [
+        ["css=.event__details-row:nth-child(3) > .text-body-large", "css:finder"],
+        ["xpath=//div[3]/p[2]", "xpath:position"],
+        ["xpath=//p[contains(.,'Pav')]", "xpath:innerText"]
+      ],
+      "value": "Pav"
+    }, {
+      "id": "7766fe37-a3ef-454b-92b3-754cfa41e70c",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "963eb032-26fb-4aa8-9515-7c1c0ec2a4b0",
+    "name": "Open event in calendar",
+    "commands": [{
+      "id": "2db5eb51-8ae5-4379-9fd9-004e68ab2010",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "5cf9e2d8-b4a3-4dc7-a6d5-f5bf2d1dc6e8",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d744fd04-2ff4-41f4-b128-376b753fe0c5",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Kalendorius",
+      "targets": [
+        ["css=li:nth-child(2) .sidenav__list-item-pill", "css:finder"],
+        ["xpath=//li[2]/a/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "6814b0ed-706f-4323-b43e-90b59db2b5da",
+      "comment": "",
+      "command": "assertText",
+      "target": "xpath=//p[contains(.,'Test event 12')]",
+      "targets": [
+        ["css=.calendar__table-today .calendar__table-event:nth-child(2) p:nth-child(1)", "css:finder"],
+        ["xpath=//li[2]/a/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Test event 12')]", "xpath:innerText"]
+      ],
+      "value": "Test event 12"
+    }, {
+      "id": "11671c19-d056-48de-a051-8bd262fc620b",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//p[contains(.,'Test event 12')]",
+      "targets": [
+        ["css=.calendar__table-today .calendar__table-event:nth-child(2) p:nth-child(1)", "css:finder"],
+        ["xpath=//li[2]/a/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Test event 12')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "b16464b9-13ad-4989-95a6-e94ede50b2b2",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.text-headline-large",
+      "targets": [
+        ["css=.text-headline-large", "css:finder"],
+        ["xpath=//h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Test event 12')]", "xpath:innerText"]
+      ],
+      "value": "Test event 12"
+    }, {
+      "id": "4a4374d2-9f28-4ca7-b995-c50bad483f79",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "4736da47-3aba-4f9f-88a4-3019690a76fb",
+    "name": "Download calendar file",
+    "commands": [{
+      "id": "93bd651a-827f-45cf-b896-b15ddd7c213b",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "9823e9a3-0514-4838-a9e7-a4ed8af6a185",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0351643d-84e0-42d2-a624-98b62698b3dc",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Kalendorius",
+      "targets": [
+        ["linkText=Kalendorius", "linkText"],
+        ["css=li:nth-child(2) > .sidenav__list-item", "css:finder"],
+        ["xpath=//a[contains(text(),'Kalendorius')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/calendar')]", "xpath:href"],
+        ["xpath=//li[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Kalendorius')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9063219d-cf13-4f74-b70d-6a3914cb978a",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Atsisiųsti kalendorių",
+      "targets": [
+        ["linkText=Atsisiųsti kalendorių", "linkText"],
+        ["css=.button", "css:finder"],
+        ["xpath=//a[contains(text(),'Atsisiųsti kalendorių')]", "xpath:link"],
+        ["xpath=//a[contains(@href, 'https://dev-eventfoto-api.azurewebsites.net/api/event/calendar')]", "xpath:href"],
+        ["xpath=//app-button/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Atsisiųsti kalendorių')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "914356cf-561e-49e9-9ace-6df0a7a524ef",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "c08cc879-7bb4-4dd7-b298-b0d807fbd2d5",
+    "name": "Upload photos to gallery",
+    "commands": [{
+      "id": "bfcd32d8-fa42-4b4b-9346-a7704498f705",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "c4b79ebe-0468-4300-a6e5-4e33756a4954",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "b60b2765-3145-477a-af5c-cda1b36fde71",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e126349c-d60e-4bd8-a532-dbbe3f7fe501",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(.,'Pagrindinė galerija')]",
+      "targets": [
+        ["css=app-card-item:nth-child(1) .card__title", "css:finder"],
+        ["xpath=//div[2]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Pagrindinė galerija')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "933fcff6-8800-4bcc-aa95-6af44b5698e4",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//label[contains(.,'Įkelti nuotraukas')]",
+      "targets": [
+        ["css=.upload__label", "css:finder"],
+        ["xpath=//label", "xpath:position"],
+        ["xpath=//label[contains(.,'Įkelti nuotraukas')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9a8c1516-9980-48cb-a7e2-3a53ddf67a93",
+      "comment": "",
+      "command": "waitForText",
+      "target": "css=.snackbar__title",
+      "targets": [],
+      "value": "Nuotraukos įkeliamos, prašome neperkrauti naršyklės lango"
+    }, {
+      "id": "e008654e-2514-49e4-8459-7d32f2f3186c",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=.gallery__item > .gallery__image",
+      "targets": [
+        ["css=.gallery__item:nth-child(2) > .gallery__image", "css:finder"],
+        ["xpath=//img[@alt='out-1747179662159_PXL_20250508_085333785.jpg']", "xpath:img"],
+        ["xpath=//div[2]/img", "xpath:position"]
+      ],
+      "value": "60000"
+    }, {
+      "id": "08b86416-f3bc-4a4d-b4a0-e538c85ceca8",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.gallery__item:nth-child(1) > .gallery__item-author",
+      "targets": [
+        ["css=.gallery__item:nth-child(1) > .gallery__item-author", "css:finder"],
+        ["xpath=//div[2]/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Paulius Jasėnas')]", "xpath:innerText"]
+      ],
+      "value": "Paulius Jasėnas"
+    }, {
+      "id": "67b32944-9105-4733-8743-15475bd295eb",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "563d1c8a-15c7-4457-ba15-265ac02b3f68",
+    "name": "Open photo from gallery",
+    "commands": [{
+      "id": "409b9d2f-d680-4676-9654-e7954b4b3385",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0c7a401a-2276-4a84-b9d7-453813ffbf24",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4c50c66c-152a-4ac4-85ef-b78099b6f7d0",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5aefb252-a43f-451a-81c5-9fdfce3f96d5",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(.,'Pagrindinė galerija')]",
+      "targets": [
+        ["css=app-card-item:nth-child(1) .card__title", "css:finder"],
+        ["xpath=//div[2]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Pagrindinė galerija')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "bf298ccc-4c96-4003-a227-b3a5355738a5",
+      "comment": "",
+      "command": "click",
+      "target": "css=.gallery__item:nth-child(1) > .gallery__image",
+      "targets": [
+        ["css=.gallery__item:nth-child(1) > .gallery__image", "css:finder"],
+        ["xpath=//img[@alt='out-1747180018912_PXL_20250508_115629379.jpg']", "xpath:img"],
+        ["xpath=//img", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "dde46a8a-9cb0-49f3-9379-e1be54732ce8",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.photo__image",
+      "targets": [
+        ["css=.photo__image", "css:finder"],
+        ["xpath=(//img[@alt='out-1747180018912_PXL_20250508_115629379.jpg'])[2]", "xpath:img"],
+        ["xpath=//app-photo-view/div/div[2]/div/img", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "c52e21ff-1950-48fd-886a-cff7ccc28cdc",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.photo__detail-line:nth-child(2) > .photo__detail-line-title",
+      "targets": [
+        ["css=.photo__detail-line:nth-child(2) > .photo__detail-line-title", "css:finder"],
+        ["xpath=//div[2]/div[2]/div[2]/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Fotografas')]", "xpath:innerText"]
+      ],
+      "value": "Fotografas"
+    }, {
+      "id": "b3b8a25d-3c62-4784-a398-86066e8d2ac5",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.photo__detail-line:nth-child(3) > .photo__detail-line-title",
+      "targets": [],
+      "value": "Nuotrauka sukurta"
+    }, {
+      "id": "232d9724-0584-494e-8ec5-bdeb4a5e7ac8",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "b225cd4b-ddc7-4807-a4c2-837d8ead50a1",
+    "name": "Delete photo from photo view",
+    "commands": [{
+      "id": "9772ed3e-887a-4e9d-b6a8-055e27807031",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8a67f710-71dd-4a62-8dd8-f2d02bed19bd",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a70d540e-bf61-4646-b0f0-ac3caacd9a54",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e5be6b25-ce26-444d-96c6-08a56d3e5aac",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(.,'Pagrindinė galerija')]",
+      "targets": [
+        ["css=app-card-item:nth-child(1) .card__title", "css:finder"],
+        ["xpath=//div[2]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Pagrindinė galerija')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "bb174a98-948e-480e-9b81-18763515e9df",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f9c20aca-a169-4596-ac6d-cbeeb88d4b9a",
+      "comment": "",
+      "command": "click",
+      "target": "css=.gallery__item:nth-child(1) > .gallery__image",
+      "targets": [
+        ["css=.gallery__item:nth-child(2) > .gallery__image", "css:finder"],
+        ["xpath=//img[@alt='out-1747180247426_PXL_20250508_115629379.jpg']", "xpath:img"],
+        ["xpath=//div[2]/img", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "76272a17-8906-4877-8977-5f786687b397",
+      "comment": "",
+      "command": "click",
+      "target": "css=.photo__actions .button--text",
+      "targets": [
+        ["css=.photo__actions .button--text", "css:finder"],
+        ["xpath=(//button[@type='submit'])[4]", "xpath:attributes"],
+        ["xpath=//div[6]/app-button/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "225183a4-4ea2-4cef-96ad-c11759d05091",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.snackbar__title",
+      "targets": [
+        ["css=.snackbar__title", "css:finder"],
+        ["xpath=//app-snackbar-container/div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Nuotrauka buvo ištrinta')]", "xpath:innerText"]
+      ],
+      "value": "Nuotrauka buvo ištrinta"
+    }, {
+      "id": "0dae1045-aa50-4e89-bcaf-9d390c708f86",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "d7820430-0266-43de-8841-e3c1669c4c0a",
+    "name": "Navigate to the next photo with button",
+    "commands": [{
+      "id": "9fee7235-276c-4fe0-9f3f-ef485c94f62d",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2ae9dd10-2e12-4f1b-aa79-255b66f3f9e2",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2b20ebb9-82b1-474d-8fb4-28203dafbbaf",
+      "comment": "",
+      "command": "click",
+      "target": "css=app-card-item:nth-child(2) .card__title",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5de3a4db-19ad-45cd-a79e-cbf09a5b0618",
+      "comment": "",
+      "command": "click",
+      "target": "css=app-card-item:nth-child(1) .card__title",
+      "targets": [
+        ["css=app-card-item:nth-child(1) .card__title", "css:finder"],
+        ["xpath=//div[2]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Pagrindinė galerija')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "800d1b0e-2133-4b33-9090-17a1c344b49f",
+      "comment": "",
+      "command": "click",
+      "target": "css=.gallery__item:nth-child(1) > .gallery__image",
+      "targets": [
+        ["css=.gallery__item:nth-child(1) > .gallery__image", "css:finder"],
+        ["xpath=//img[@alt='out-1747180383065_PXL_20250508_085324361.jpg']", "xpath:img"],
+        ["xpath=//img", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "26e92f9a-9536-4509-9d26-b732207b3ab0",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.photo__detail-line:nth-child(5) > .photo__detail-line-title",
+      "targets": [
+        ["css=.photo__detail-line:nth-child(5) > .photo__detail-line-title", "css:finder"],
+        ["xpath=//div[5]/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Failo pavadinimas')]", "xpath:innerText"]
+      ],
+      "value": "Failo pavadinimas"
+    }, {
+      "id": "07bb4560-7e98-4a66-8539-e572742ae285",
+      "comment": "",
+      "command": "click",
+      "target": "css=.icon-button--light svg",
+      "targets": [
+        ["css=.icon-button--light svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "351440ad-1fb2-4f3a-9a18-adb9691198d0",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.icon-button--light svg",
+      "targets": [
+        ["css=.icon-button--light svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "62c02514-7e9b-4e13-9731-5a707b8e7180",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "css=div:nth-child(3) > app-icon-button > .icon-button--light svg",
+      "targets": [
+        ["css=div:nth-child(3) > app-icon-button > .icon-button--light svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "a6a31ae9-d1fc-49d8-9c85-e5272f4ec5d5",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.photo__image",
+      "targets": [
+        ["css=.photo__image", "css:finder"],
+        ["xpath=(//img[@alt='out-1747180383065_PXL_20250508_085333785.jpg'])[2]", "xpath:img"],
+        ["xpath=//app-photo-view/div/div[2]/div/img", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "a85e5d83-a53a-42e7-bb19-bde6a6bb20fa",
+    "name": "Change assignment",
+    "commands": [{
+      "id": "423f5e46-2d0b-41d7-b629-68a81309dfac",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "5081a24d-e655-4be5-b53e-b12dee39898e",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "89842f9a-3595-4f94-ac05-5a0d91bb7065",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "df1e4747-edb6-423f-a2cf-ab42d9c37f97",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Keisti galeriją')]",
+      "targets": [
+        ["css=tr:nth-child(2) app-button:nth-child(1) > .button", "css:finder"],
+        ["xpath=(//button[@type='submit'])[4]", "xpath:attributes"],
+        ["xpath=//td[3]/div/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Keisti galeriją')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "cc28d687-6694-4300-b884-4017e0e3d3a2",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #targetGallery",
+      "targets": [
+        ["css=.input-field > #targetGallery", "css:finder"],
+        ["xpath=//select[@id='targetGallery']", "xpath:attributes"],
+        ["xpath=//app-select[@id='targetGallery']/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "620b8c4b-3431-48a8-8a8a-7510e5388edb",
+      "comment": "",
+      "command": "select",
+      "target": "css=.input-field > #targetGallery",
+      "targets": [],
+      "value": "label=Test gallery"
+    }, {
+      "id": "9a92585e-0e50-43e1-93ab-c6f50b529767",
+      "comment": "",
+      "command": "click",
+      "target": "css=option:nth-child(2)",
+      "targets": [
+        ["css=option:nth-child(2)", "css:finder"],
+        ["xpath=//option[@value='38']", "xpath:attributes"],
+        ["xpath=//select[@id='targetGallery']/option[2]", "xpath:idRelative"],
+        ["xpath=//option[2]", "xpath:position"],
+        ["xpath=//option[contains(.,' Test gallery ')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "7508717e-034c-4f1b-83c8-61cc993cd771",
+      "comment": "",
+      "command": "click",
+      "target": "css=.button-container .button",
+      "targets": [
+        ["css=.button-container .button", "css:finder"],
+        ["xpath=(//button[@type='submit'])[9]", "xpath:attributes"],
+        ["xpath=//div[2]/div/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Priskirti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "7fbc80df-ebc9-468a-9ddd-e3732461084c",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=tr:nth-child(3) > td:nth-child(2)",
+      "targets": [
+        ["css=tr:nth-child(3) > td:nth-child(2)", "css:finder"],
+        ["xpath=//tr[3]/td[2]", "xpath:position"]
+      ],
+      "value": "Test gallery"
+    }, {
+      "id": "511a9012-fd33-4989-ab1b-c5d018190874",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "1a689343-d4b6-4426-b85c-57ad021441a7",
+    "name": "Take a photo",
+    "commands": [{
+      "id": "73e6188c-268b-4900-b646-95edab7d11e7",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ea1d7c28-a029-47b7-8e94-dc2db2a26b0e",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4dd60216-a21f-4ff1-a65a-c22e01278557",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.localStorage.removeItem(\"cameraEventSettings\")",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "99f08b3b-0c41-4b16-9e9e-2864a35c738c",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.localStorage.removeItem(\"cameraDeviceSettings\")",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "9dc1f7b8-a929-4494-92de-fb48ab3f8d68",
+      "comment": "",
+      "command": "click",
+      "target": "css=li:nth-child(3) svg",
+      "targets": [
+        ["css=li:nth-child(3) svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "35f14d53-d4ca-470b-8521-f43e5743cb4c",
+      "comment": "",
+      "command": "waitForText",
+      "target": "css=.camera-settings__header > h3",
+      "targets": [],
+      "value": "Nustatymai"
+    }, {
+      "id": "9e7cb370-18b3-4f6d-9e57-392402601dad",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Pakeisti')]",
+      "targets": [
+        ["css=app-button:nth-child(3) > .button--text", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//form/div/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Pakeisti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "80b66a61-afab-4b97-9575-ea815f0f38eb",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #event-search",
+      "targets": [
+        ["css=.input-field > #event-search", "css:finder"],
+        ["xpath=//input[@id='event-search']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='event-search']/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "884e50d7-e3af-42e9-a4d2-b92637746f5f",
+      "comment": "",
+      "command": "type",
+      "target": "css=.input-field > #event-search",
+      "targets": [
+        ["css=.input-field > #event-search", "css:finder"],
+        ["xpath=//input[@id='event-search']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='event-search']/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": "Test event 12"
+    }, {
+      "id": "3e27b1a4-e97f-4678-b32a-e20199a4b815",
+      "comment": "",
+      "command": "waitForText",
+      "target": "css=td:nth-child(1)",
+      "targets": [
+        ["css=td:nth-child(1)", "css:finder"],
+        ["xpath=//td", "xpath:position"],
+        ["xpath=//td[contains(.,'Test event 12')]", "xpath:innerText"]
+      ],
+      "value": "Test event 12"
+    }, {
+      "id": "1ca4b156-9548-4c24-b82a-51f6522f612d",
+      "comment": "",
+      "command": "click",
+      "target": "css=td .button",
+      "targets": [
+        ["css=td .button", "css:finder"],
+        ["xpath=(//button[@type='submit'])[6]", "xpath:attributes"],
+        ["xpath=//td[3]/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Pasirinkti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "da3ad60e-c670-4f4d-9745-a5beb6a435e0",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #camera-select",
+      "targets": [
+        ["css=.input-field > #camera-select", "css:finder"],
+        ["xpath=//select[@id='camera-select']", "xpath:attributes"],
+        ["xpath=//app-select[@id='camera-select']/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "11401629-aba6-4774-bb61-7f46d599ae4b",
+      "comment": "",
+      "command": "click",
+      "target": "css=option",
+      "targets": [
+        ["css=option", "css:finder"],
+        ["xpath=//option[@value='l3F9pTTl4swNACojZxl7Nq1GXiJ9X7+aANz3cK2oNv4=']", "xpath:attributes"],
+        ["xpath=//select[@id='camera-select']/option", "xpath:idRelative"],
+        ["xpath=//option", "xpath:position"],
+        ["xpath=//option[contains(.,' USB2.0 HD UVC WebCam ')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "30779e72-8c01-40a7-859f-0e6a70eef310",
+      "comment": "",
+      "command": "click",
+      "target": "css=.button--filled",
+      "targets": [
+        ["css=.button--filled", "css:finder"],
+        ["xpath=(//button[@type='submit'])[2]", "xpath:attributes"],
+        ["xpath=//form/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Išsaugoti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "63a9b9ef-29ec-4ac8-ad93-2fe270001576",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.text-label-medium:nth-child(1)",
+      "targets": [
+        ["css=.text-label-medium:nth-child(1)", "css:finder"],
+        ["xpath=//p", "xpath:position"],
+        ["xpath=//p[contains(.,'Test event 12')]", "xpath:innerText"]
+      ],
+      "value": "Test event 12"
+    }, {
+      "id": "ea2c950d-056d-49c3-b02d-b203ec703278",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.text-label-medium:nth-child(2)",
+      "targets": [
+        ["css=.text-label-medium:nth-child(2)", "css:finder"],
+        ["xpath=//p[2]", "xpath:position"],
+        ["xpath=//p[contains(.,'Test gallery')]", "xpath:innerText"]
+      ],
+      "value": "Test gallery"
+    }, {
+      "id": "24f60ecd-3b17-4ede-86ef-8472aab244af",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.upload-tracker__counter",
+      "targets": [
+        ["css=.upload-tracker__counter", "css:finder"],
+        ["xpath=//span", "xpath:position"],
+        ["xpath=//span[contains(.,'0 / 0')]", "xpath:innerText"]
+      ],
+      "value": "0 / 0"
+    }, {
+      "id": "08e21195-9171-41b3-ad97-3412409c6e7d",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=.camera__video",
+      "targets": [],
+      "value": "30000"
+    }, {
+      "id": "1e067955-c267-40c0-83ca-3bdddfb3064e",
+      "comment": "",
+      "command": "click",
+      "target": "css=.icon-button--dark path",
+      "targets": [
+        ["css=.icon-button--dark path", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "67e8a598-ca61-423b-95e3-5a58a3232c01",
+      "comment": "",
+      "command": "waitForText",
+      "target": "css=.upload-tracker__counter",
+      "targets": [
+        ["css=.upload-tracker__counter", "css:finder"],
+        ["xpath=//span", "xpath:position"],
+        ["xpath=//span[contains(.,'1 / 1')]", "xpath:innerText"]
+      ],
+      "value": "1 / 1"
+    }, {
+      "id": "f62f420f-dd9c-4d4d-b5bb-07f2b587070f",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "be0d9db0-e409-4676-978b-ce5d388130cd",
+    "name": "Download all photos",
+    "commands": [{
+      "id": "da51dfc7-1954-46e3-8d60-fa0e8f5db7b2",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "afe113ca-2d4c-4bd1-8e85-98d750d5de16",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "92bfc97e-c92b-4759-8538-16bf8448106f",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "22ee6624-23fe-402c-a905-da63a5e4c235",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(.,'Pagrindinė galerija')]",
+      "targets": [
+        ["css=app-card-item:nth-child(1) .card__title", "css:finder"],
+        ["xpath=//div[2]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Pagrindinė galerija')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "65cc82ac-4492-4565-adff-63601efa47bf",
+      "comment": "",
+      "command": "click",
+      "target": "css=.button--filled",
+      "targets": [
+        ["css=.button--filled", "css:finder"],
+        ["xpath=(//button[@type='submit'])[3]", "xpath:attributes"],
+        ["xpath=//app-gallery-view/div/div/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Žymėti visas')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "a3708029-ed6d-433e-a003-3f817d83996a",
+      "comment": "",
+      "command": "pause",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8e23c881-a70b-4074-a1d6-a407346e5438",
+      "comment": "",
+      "command": "click",
+      "target": "css=.gallery__toolbar-icons > div svg",
+      "targets": [
+        ["css=.gallery__toolbar-icons > div svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "b1b560e8-3716-42b8-8497-5d52deab144e",
+      "comment": "",
+      "command": "click",
+      "target": "css=.popup-menu__item:nth-child(1)",
+      "targets": [
+        ["css=.popup-menu__item:nth-child(1)", "css:finder"],
+        ["xpath=//div/ul/li", "xpath:position"],
+        ["xpath=//li[contains(.,'Originalios nuotraukos')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "751d7b8e-3940-4443-872f-870d42045802",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.snackbar__title",
+      "targets": [
+        ["css=.snackbar__title", "css:finder"],
+        ["xpath=//app-snackbar-container/div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Nuotraukų archyvas yra ruošiamas, prašome neperkrauti naršyklės lango')]", "xpath:innerText"]
+      ],
+      "value": "Nuotraukų archyvas yra ruošiamas, prašome neperkrauti naršyklės lango"
+    }, {
+      "id": "35b84add-1425-4be5-ac7b-6f443160b52e",
+      "comment": "",
+      "command": "waitForText",
+      "target": "css=.snackbar__title",
+      "targets": [],
+      "value": "Nuotraukų archyvas paruoštas"
+    }, {
+      "id": "3da1ee02-876b-4623-b38f-0cf4eb9745ff",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "f085ae54-4a61-456c-b2ee-2e8be55a7f61",
+    "name": "Upload watermark",
+    "commands": [{
+      "id": "7fd3d393-9d12-4beb-8a00-1cad2a6cdda6",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "96631459-5dc5-4356-80a3-bb1d7d4f0fa1",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1c71b25f-67b5-4775-813e-a35f7d511694",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Vandens ženklai",
+      "targets": [
+        ["linkText=Vandens ženklai", "linkText"],
+        ["css=li:nth-child(4) > .sidenav__list-item", "css:finder"],
+        ["xpath=//a[contains(text(),'Vandens ženklai')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/watermark')]", "xpath:href"],
+        ["xpath=//li[4]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Vandens ženklai')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "34ce4b07-5317-40d3-806f-0d97a6f3187a",
+      "comment": "",
+      "command": "click",
+      "target": "css=.button--filled",
+      "targets": [
+        ["css=.button--filled", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Sukurti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "201d2596-5f18-4a82-8f4d-703adf424ce8",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #name",
+      "targets": [
+        ["css=.input-field > #name", "css:finder"],
+        ["xpath=//input[@id='name']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='name']/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "4f8e9b8c-468f-4c39-a46a-cab433d597c1",
+      "comment": "",
+      "command": "type",
+      "target": "css=.input-field > #name",
+      "targets": [
+        ["css=.input-field > #name", "css:finder"],
+        ["xpath=//input[@id='name']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='name']/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": "Test watermark"
+    }, {
+      "id": "e1eedbfa-9abb-406f-a5dd-0d48f5cbad82",
+      "comment": "",
+      "command": "click",
+      "target": "css=.file-upload-field .button",
+      "targets": [
+        ["css=.file-upload-field .button", "css:finder"],
+        ["xpath=(//button[@type='button'])[6]", "xpath:attributes"],
+        ["xpath=//div[2]/div/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Pasirinkti failą')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "4a7185e7-e2a9-45fd-9ffa-eb391f24d360",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=.file-upload-field > .chess-background",
+      "targets": [
+        ["css=.file-upload-field > .chess-background", "css:finder"],
+        ["xpath=//img[@alt='Watermark preview']", "xpath:img"],
+        ["xpath=//div/img", "xpath:position"]
+      ],
+      "value": "60000"
+    }, {
+      "id": "b7cf66ff-4d43-46cd-a0d4-c81b74a7cbf8",
+      "comment": "",
+      "command": "click",
+      "target": "css=app-button:nth-child(1) > .button--filled",
+      "targets": [
+        ["css=app-button:nth-child(1) > .button--filled", "css:finder"],
+        ["xpath=(//button[@type='submit'])[5]", "xpath:attributes"],
+        ["xpath=//form/div/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Pridėti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "ed3fa8fa-076a-4c99-836b-41838fb340ff",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.snackbar__title",
+      "targets": [
+        ["css=.snackbar__title", "css:finder"],
+        ["xpath=//div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Vandens ženklas sėkmingai sukurtas')]", "xpath:innerText"]
+      ],
+      "value": "Vandens ženklas sėkmingai sukurtas"
+    }, {
+      "id": "95d23060-6cfc-4587-a396-c8742eabf9d9",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "097f85af-d767-429d-830e-c079690ea476",
+    "name": "Add watermark to event",
+    "commands": [{
+      "id": "5fcc299e-a419-4924-b8c0-02de0813acc4",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "da05742d-7575-44bf-8a5c-7cd58ee13bbd",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "aa2416ed-4ab8-411a-8470-72f0fde53caf",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "c845755c-248a-4054-bb0e-ee9a7489092c",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Redaguoti')]",
+      "targets": [
+        ["css=.event__header-controls > app-button:nth-child(2) > .button", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Redaguoti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e5cb48a9-693c-44d3-a13a-f18276298c7f",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Pakeisti')]",
+      "targets": [
+        ["css=.watermark-controls .button", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//form/div/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Pakeisti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "1156ab09-f228-42b4-ae9d-5350dddd2e5f",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #query",
+      "targets": [
+        ["css=.input-field > #query", "css:finder"],
+        ["xpath=//input[@id='query']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='query']/div/input", "xpath:idRelative"],
+        ["xpath=//app-watermark-search/div/div/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "fe8d2c1c-9b23-4620-bb99-39018e45f9bd",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "010ff541-523e-4537-9744-4766b6d569a3",
+      "comment": "",
+      "command": "type",
+      "target": "css=.input-field > #query",
+      "targets": [
+        ["css=.input-field > #query", "css:finder"],
+        ["xpath=//input[@id='query']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='query']/div/input", "xpath:idRelative"],
+        ["xpath=//app-watermark-search/div/div/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": "Test watermark"
+    }, {
+      "id": "9e60240f-4206-4266-a10d-6c7247f06c18",
+      "comment": "",
+      "command": "waitForText",
+      "target": "css=tr:nth-child(1) > td:nth-child(2)",
+      "targets": [
+        ["css=tr:nth-child(1) > td:nth-child(2)", "css:finder"],
+        ["xpath=//app-watermark-search/div/table/tr/td[2]", "xpath:position"],
+        ["xpath=//td[contains(.,'Test watermark')]", "xpath:innerText"]
+      ],
+      "value": "Test watermark"
+    }, {
+      "id": "e6bc8248-5990-4979-adfb-ba3cbf6cda17",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Pasirinkti')]",
+      "targets": [
+        ["css=.table__pad-row-end .button", "css:finder"],
+        ["xpath=(//button[@type='button'])[2]", "xpath:attributes"],
+        ["xpath=//td[3]/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Pasirinkti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "562f2bde-30f2-44dd-9fca-8fae7a4dd6f7",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Išsaugoti')]",
+      "targets": [
+        ["css=.form-controls .button", "css:finder"],
+        ["xpath=(//button[@type='submit'])[9]", "xpath:attributes"],
+        ["xpath=//div[2]/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Išsaugoti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "32baa61c-05ab-4934-a5a8-7eddb3141992",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.modal__body > p",
+      "targets": [
+        ["css=.modal__body > p", "css:finder"],
+        ["xpath=//app-confirmation-modal/div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Ar norite apdoroti visas renginio nuotraukas su nauju vandens ženklu?')]", "xpath:innerText"]
+      ],
+      "value": "Ar norite apdoroti visas renginio nuotraukas su nauju vandens ženklu?"
+    }, {
+      "id": "552c8d11-9897-4c3c-b4c7-53b494899996",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Taip')]",
+      "targets": [
+        ["css=app-button:nth-child(2) > .button--filled", "css:finder"],
+        ["xpath=(//button[@type='submit'])[11]", "xpath:attributes"],
+        ["xpath=//app-confirmation-modal/div/div/div/app-button[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Taip')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "ee599e06-3529-49f4-9581-4c2070110492",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.snackbar__title",
+      "targets": [
+        ["css=.snackbar__title", "css:finder"],
+        ["xpath=//app-snackbar-container/div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Renginys atnaujintas')]", "xpath:innerText"]
+      ],
+      "value": "Renginys atnaujintas"
+    }, {
+      "id": "fa46b09e-efe0-4191-86ed-ec430eda989e",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "2c387b4d-7ac3-4894-9b1b-7eae8f4392ca",
+    "name": "Remove watermark from event",
+    "commands": [{
+      "id": "c5e049c6-127e-4cea-b25e-8d3fd6dae660",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0b08f0af-0d7b-4936-938f-178c4979ae77",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "b66be7dd-c2ee-4533-a151-b659b6f641db",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b8efea27-6b41-43e3-be13-972587fab4cc",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Redaguoti')]",
+      "targets": [
+        ["css=.event__header-controls > app-button:nth-child(2) > .button", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Redaguoti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "8de6ac85-69e5-4e0c-ba81-cd04063de3ed",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.watermark-display__name",
+      "targets": [
+        ["css=.watermark-display__name", "css:finder"],
+        ["xpath=//div/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Test watermark')]", "xpath:innerText"]
+      ],
+      "value": "Test watermark"
+    }, {
+      "id": "1c3dc07d-ed91-4671-bbb6-9c4a3a722e55",
+      "comment": "",
+      "command": "click",
+      "target": "css=.watermark-controls > app-button:nth-child(2) > .button",
+      "targets": [
+        ["css=.watermark-controls > app-button:nth-child(2) > .button", "css:finder"],
+        ["xpath=(//button[@type='button'])[2]", "xpath:attributes"],
+        ["xpath=//form/div/app-button[2]/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2fd648f5-f06e-45da-844c-f2436debdae8",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.watermark-display > .text-body-large",
+      "targets": [
+        ["css=.watermark-display > .text-body-large", "css:finder"],
+        ["xpath=//div/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Vandens ženklas nepasirinktas')]", "xpath:innerText"]
+      ],
+      "value": "Vandens ženklas nepasirinktas"
+    }, {
+      "id": "baaf5e50-8c9b-4650-9472-bae06abc90a6",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Išsaugoti')]",
+      "targets": [
+        ["css=.form-controls .button", "css:finder"],
+        ["xpath=(//button[@type='submit'])[9]", "xpath:attributes"],
+        ["xpath=//div[2]/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Išsaugoti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "74b16058-45b3-45c3-84b1-7e14c1017bbb",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.modal__body > p",
+      "targets": [
+        ["css=.modal__body > p", "css:finder"],
+        ["xpath=//app-confirmation-modal/div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Ar norite apdoroti visas renginio nuotraukas su nauju vandens ženklu?')]", "xpath:innerText"]
+      ],
+      "value": "Ar norite apdoroti visas renginio nuotraukas su nauju vandens ženklu?"
+    }, {
+      "id": "e226dced-7a43-4b76-92cf-18f380eb6e19",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Taip')]",
+      "targets": [
+        ["css=app-button:nth-child(2) > .button--filled", "css:finder"],
+        ["xpath=(//button[@type='submit'])[11]", "xpath:attributes"],
+        ["xpath=//app-confirmation-modal/div/div/div/app-button[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Taip')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "d41cf210-9194-43a4-8f8b-326eca84d694",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.snackbar__title",
+      "targets": [
+        ["css=.snackbar__title", "css:finder"],
+        ["xpath=//app-snackbar-container/div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Renginys atnaujintas')]", "xpath:innerText"]
+      ],
+      "value": "Renginys atnaujintas"
+    }, {
+      "id": "c2394fb9-8eb1-42ae-8fbb-0bd4443efe5d",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "3202e8e4-4f6c-4323-88d6-578c110d4b67",
+    "name": "Add watermark to gallery",
+    "commands": [{
+      "id": "f91c2c73-abb1-48f4-8985-b90dc5a8e938",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "345463e0-351e-4e77-a26e-fc3777a15254",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "fb38b99e-450d-492e-bc71-a40bb6faa0d7",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "677168c1-5425-4508-b38e-e5e70c8f2606",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(.,'Test gallery')]",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Test gallery')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "a4a9617f-5926-4f27-9995-3c139be81abe",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "39c08b17-4be6-4ba5-a061-668de92063f7",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Redaguoti')]",
+      "targets": [
+        ["css=app-button:nth-child(2) > .button--text", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Redaguoti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "4884660a-21a6-4183-aee9-15e358b4c832",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.text-body-large:nth-child(2)",
+      "targets": [
+        ["css=.text-body-large:nth-child(2)", "css:finder"],
+        ["xpath=//div/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Vandens ženklas nepasirinktas')]", "xpath:innerText"]
+      ],
+      "value": "Vandens ženklas nepasirinktas"
+    }, {
+      "id": "4bf56a0d-d4c6-448a-bf7a-f10360085cc2",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Pakeisti')]",
+      "targets": [
+        ["css=.watermark-controls .button", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//form/div/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Pakeisti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "34984cb4-04ee-4035-8f0f-e88fb9d60b0d",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #query",
+      "targets": [
+        ["css=.input-field > #query", "css:finder"],
+        ["xpath=//input[@id='query']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='query']/div/input", "xpath:idRelative"],
+        ["xpath=//app-watermark-search/div/div/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "93fd82f5-e0c0-4e45-a331-24e6ce6a570e",
+      "comment": "",
+      "command": "type",
+      "target": "css=.input-field > #query",
+      "targets": [
+        ["css=.input-field > #query", "css:finder"],
+        ["xpath=//input[@id='query']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='query']/div/input", "xpath:idRelative"],
+        ["xpath=//app-watermark-search/div/div/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": "Test watermark"
+    }, {
+      "id": "0f34c8d4-f173-4bd7-9df7-4c89278882e9",
+      "comment": "",
+      "command": "waitForText",
+      "target": "css=td:nth-child(2)",
+      "targets": [],
+      "value": "Test watermark"
+    }, {
+      "id": "614577d0-4e99-4018-985a-c5f1ae060001",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Pasirinkti')]",
+      "targets": [
+        ["css=.table__pad-row-end .button", "css:finder"],
+        ["xpath=(//button[@type='button'])[2]", "xpath:attributes"],
+        ["xpath=//td[3]/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Pasirinkti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "5e7f99ec-1a22-4d67-94a6-d8785f91745c",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.chess-background",
+      "targets": [
+        ["css=.chess-background", "css:finder"],
+        ["xpath=//img[@alt='Test watermark']", "xpath:img"],
+        ["xpath=//app-watermark-display/div/img", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "1bc14558-9b2e-45f4-8175-006b6083b376",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.watermark-display__name",
+      "targets": [
+        ["css=.watermark-display__name", "css:finder"],
+        ["xpath=//div/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Test watermark')]", "xpath:innerText"]
+      ],
+      "value": "Test watermark"
+    }, {
+      "id": "82333301-c803-47ab-8c1d-2556d4e63bcd",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Išsaugoti')]",
+      "targets": [
+        ["css=app-button:nth-child(1) > .button--filled", "css:finder"],
+        ["xpath=(//button[@type='submit'])[5]", "xpath:attributes"],
+        ["xpath=//div[2]/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Išsaugoti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "1c30f056-15e7-461b-82bd-5f1396714612",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.modal__body > p",
+      "targets": [
+        ["css=.modal__body > p", "css:finder"],
+        ["xpath=//app-confirmation-modal/div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Ar norite apdoroti visas galerijos nuotraukas su nauju vandens ženklu?')]", "xpath:innerText"]
+      ],
+      "value": "Ar norite apdoroti visas galerijos nuotraukas su nauju vandens ženklu?"
+    }, {
+      "id": "76473dae-e2a0-4b65-b7a3-142b97ef88f1",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Taip')]",
+      "targets": [
+        ["css=.modal__controls .button--filled", "css:finder"],
+        ["xpath=(//button[@type='submit'])[7]", "xpath:attributes"],
+        ["xpath=//app-confirmation-modal/div/div/div/app-button[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Taip')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "51d2e222-cce3-461b-bfd5-a5a3776092d9",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.snackbar__title",
+      "targets": [
+        ["css=.snackbar__title", "css:finder"],
+        ["xpath=//app-snackbar-container/div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Galerija atnaujinta')]", "xpath:innerText"]
+      ],
+      "value": "Galerija atnaujinta"
+    }, {
+      "id": "13e8d119-e891-4d0b-a736-c2316f338de1",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "ab1c1c5e-3112-475e-9c0e-15f31d624ca7",
+    "name": "Gallery selection",
+    "commands": [{
+      "id": "6668fffd-cc3a-4532-b7a3-0bdb6cb56e57",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "c8c31d92-1e19-494c-8e6f-148e030714d2",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "624c239e-c5e5-488d-9664-be4132d27387",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "8c76147a-3329-4463-a782-a4625d9974f0",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(.,'Pagrindinė galerija')]",
+      "targets": [
+        ["css=app-card-item:nth-child(1) .card__title", "css:finder"],
+        ["xpath=//div[2]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Pagrindinė galerija')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "d825c832-3c2f-485a-8ff8-48dc8c772c9e",
+      "comment": "",
+      "command": "click",
+      "target": "css=.gallery__item:nth-child(1) .gallery__item-selector-check",
+      "targets": [
+        ["css=.gallery__item:nth-child(1) .gallery__item-selector-check", "css:finder"],
+        ["xpath=//div[2]/div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "46cb6d53-e568-437e-8469-26bb2dad43a2",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.gallery__selected-count",
+      "targets": [
+        ["css=.gallery__selected-count", "css:finder"],
+        ["xpath=//p", "xpath:position"],
+        ["xpath=//p[contains(.,'1 nuotrauka')]", "xpath:innerText"]
+      ],
+      "value": "1 nuotrauka"
+    }, {
+      "id": "1cd0b9e2-b707-4827-a355-6cc5cee0c19b",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.gallery__item-selector-check--selected",
+      "targets": [
+        ["css=.gallery__item-selector-check--selected", "css:finder"],
+        ["xpath=//div[2]/div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2445e4a4-04d3-4506-89ac-468e1bae0670",
+      "comment": "",
+      "command": "click",
+      "target": "css=.gallery__toolbar-icons > app-icon-button:nth-child(1) path",
+      "targets": [
+        ["css=.gallery__toolbar-icons > app-icon-button:nth-child(1) path", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "096d6fbc-b985-4c08-9869-de949ccd9565",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.gallery__selected-count",
+      "targets": [
+        ["css=.gallery__selected-count", "css:finder"],
+        ["xpath=//p", "xpath:position"],
+        ["xpath=//p[contains(.,'0 nuotrauka')]", "xpath:innerText"]
+      ],
+      "value": "0 nuotrauka"
+    }, {
+      "id": "3b9e8a54-b393-42f2-84dc-f07a56fdbbf4",
+      "comment": "",
+      "command": "click",
+      "target": "css=.button--filled",
+      "targets": [
+        ["css=.button--filled", "css:finder"],
+        ["xpath=(//button[@type='submit'])[3]", "xpath:attributes"],
+        ["xpath=//app-gallery-view/div/div/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Žymėti visas')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "aa90fb0c-f019-4120-b265-e3e7a667d629",
+      "comment": "",
+      "command": "assertNotText",
+      "target": "css=.gallery__selected-count",
+      "targets": [
+        ["css=.gallery__selected-count", "css:finder"],
+        ["xpath=//p", "xpath:position"],
+        ["xpath=//p[contains(.,'4 nuotrauka')]", "xpath:innerText"]
+      ],
+      "value": "0 nuotrauka"
+    }, {
+      "id": "46808d86-a9ad-4e6b-a426-87e155f225f1",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "f4441353-4e87-4fe0-bb63-0c2675f54f04",
+    "name": "Delete watermark",
+    "commands": [{
+      "id": "e1b6d258-39f0-4187-aae5-bd56d9b3c469",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f932e6cf-cb08-4f61-b96c-67425cb3147d",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "62e4e5d1-2209-4be2-89c9-af289bfb3c5c",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Vandens ženklai",
+      "targets": [
+        ["linkText=Vandens ženklai", "linkText"],
+        ["css=li:nth-child(4) > .sidenav__list-item", "css:finder"],
+        ["xpath=//a[contains(text(),'Vandens ženklai')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/watermark')]", "xpath:href"],
+        ["xpath=//li[4]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Vandens ženklai')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "80b8eeaa-1eb5-413a-b1ec-10495d5044f9",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field",
+      "targets": [
+        ["css=.input-field", "css:finder"],
+        ["xpath=//app-input-field[@id='query']/div", "xpath:idRelative"],
+        ["xpath=//app-input-field/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2727f736-33c8-46cc-9780-ee1813de8b8f",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #query",
+      "targets": [
+        ["css=.input-field > #query", "css:finder"],
+        ["xpath=//input[@id='query']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='query']/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "dcd853a2-29ca-41d7-b22b-daf170e80434",
+      "comment": "",
+      "command": "type",
+      "target": "css=.input-field > #query",
+      "targets": [
+        ["css=.input-field > #query", "css:finder"],
+        ["xpath=//input[@id='query']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='query']/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "Test watermark"
+    }, {
+      "id": "2aa496b0-6e64-4444-977b-f3cbedd7dc65",
+      "comment": "",
+      "command": "waitForText",
+      "target": "css=td:nth-child(2)",
+      "targets": [
+        ["css=td:nth-child(2)", "css:finder"],
+        ["xpath=//td[2]", "xpath:position"],
+        ["xpath=//td[contains(.,'Test watermark')]", "xpath:innerText"]
+      ],
+      "value": "Test watermark"
+    }, {
+      "id": "4f7220c3-6094-4c00-8117-70dd5d8e5638",
+      "comment": "",
+      "command": "click",
+      "target": "css=.table__pad-row-end .button",
+      "targets": [
+        ["css=.table__pad-row-end .button", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//td[3]/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Ištrinti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9eb8d2da-c3bd-4d2b-85af-978de2ae3177",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.snackbar__title",
+      "targets": [
+        ["css=.snackbar__title", "css:finder"],
+        ["xpath=//div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Vandens sėkmingai pašalintas')]", "xpath:innerText"]
+      ],
+      "value": "Vandens sėkmingai pašalintas"
+    }, {
+      "id": "170ace62-e6cb-4f31-bb2d-4358dc6e36f1",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "8422631f-b87c-40c0-b4f4-5e59bb145541",
+    "name": "Verify deleted watermark on gallery",
+    "commands": [{
+      "id": "1a64c354-cb48-47d0-a587-3a41c9ad8f92",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "75cd23d3-e7ef-4391-b51e-5ffd0bb127eb",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ee7f31a0-9b0a-4232-9ed2-dc87736d393b",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f569e33c-ffa3-4dab-8f62-81f64bdcfc05",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(.,'Test gallery')]",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Test gallery')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "0b73d6ae-e229-48ca-a0fc-2a238e6a7c8e",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Redaguoti')]",
+      "targets": [
+        ["css=app-button:nth-child(2) > .button--text", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Redaguoti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c92418f0-76e9-4898-b342-307f68c6d1b6",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.text-body-large:nth-child(2)",
+      "targets": [
+        ["css=.text-body-large:nth-child(2)", "css:finder"],
+        ["xpath=//div/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Vandens ženklas nepasirinktas')]", "xpath:innerText"]
+      ],
+      "value": "Vandens ženklas nepasirinktas"
+    }, {
+      "id": "0d0b846f-3b68-4e65-918c-8892258b9c61",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "5c448902-44e7-4c0b-9a4b-46ff98653c73",
+    "name": "Move photos to gallery",
+    "commands": [{
+      "id": "58833523-49d5-4972-a7c0-a2232bf0536b",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "44da53ff-f31a-497a-b5fe-c515ff362599",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "675bc310-c731-4cb3-b104-8f5d37c2047f",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9f586bc7-dfba-4147-9a05-38d02e642c76",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(.,'Test gallery')]",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Test gallery')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "a5dfd04c-766c-4d3c-baef-2798a834d095",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=.gallery__item:nth-child(1) > .gallery__image",
+      "targets": [
+        ["css=.gallery__item:nth-child(1) > .gallery__image", "css:finder"],
+        ["xpath=//img[@alt='out-a5d1e352-c9b0-4006-9fd7-a887c6899c68-1747212104830.jpg']", "xpath:img"],
+        ["xpath=//img", "xpath:position"]
+      ],
+      "value": "30000"
+    }, {
+      "id": "045ddedc-11aa-45fd-8a49-994f2791a496",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Žymėti visas')]",
+      "targets": [
+        ["css=.button--filled", "css:finder"],
+        ["xpath=(//button[@type='submit'])[3]", "xpath:attributes"],
+        ["xpath=//app-gallery-view/div/div/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Žymėti visas')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "12061ae9-44d1-4230-9b7c-fb82dea055bf",
+      "comment": "",
+      "command": "assertNotText",
+      "target": "css=.gallery__selected-count",
+      "targets": [
+        ["css=.gallery__selected-count", "css:finder"],
+        ["xpath=//p", "xpath:position"],
+        ["xpath=//p[contains(.,'0 nuotrauka')]", "xpath:innerText"]
+      ],
+      "value": "0 nuotrauka"
+    }, {
+      "id": "2e142ee1-2490-48d1-81ff-fcac52501631",
+      "comment": "",
+      "command": "click",
+      "target": "css=app-icon-button:nth-child(2) > .icon-button",
+      "targets": [
+        ["css=app-icon-button:nth-child(2) > .icon-button", "css:finder"],
+        ["xpath=//app-icon-button[2]/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "4f8dbc49-840a-4022-a24a-8c4a93ef9d80",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #targetGallery",
+      "targets": [
+        ["css=.input-field > #targetGallery", "css:finder"],
+        ["xpath=//select[@id='targetGallery']", "xpath:attributes"],
+        ["xpath=//app-select[@id='targetGallery']/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e10e6a1e-3646-4a78-aa33-066236a4a80c",
+      "comment": "",
+      "command": "click",
+      "target": "css=option",
+      "targets": [
+        ["css=option", "css:finder"],
+        ["xpath=//option[@value='36']", "xpath:attributes"],
+        ["xpath=//select[@id='targetGallery']/option", "xpath:idRelative"],
+        ["xpath=//option", "xpath:position"],
+        ["xpath=//option[contains(.,' Pagrindinė galerija ')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "b457b4c9-cbe0-46d3-bf4e-f34ace073691",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Perkelti')]",
+      "targets": [
+        ["css=.ng-pristine .button", "css:finder"],
+        ["xpath=(//button[@type='submit'])[5]", "xpath:attributes"],
+        ["xpath=//form/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Perkelti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "75bf0811-2853-4673-aa42-01e1154aca26",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.snackbar__title",
+      "targets": [
+        ["css=.snackbar__title", "css:finder"],
+        ["xpath=//app-snackbar-container/div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Nuotraukos perkeltos')]", "xpath:innerText"]
+      ],
+      "value": "Nuotraukos perkeltos"
+    }, {
+      "id": "d611a82b-7e2a-48cf-a25a-c27acfce619f",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "237de037-93ee-4f87-a119-382684579dbd",
+    "name": "Delete gallery",
+    "commands": [{
+      "id": "3b4f40d9-9086-472b-9dd3-ca06a4d6fe4b",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6fbbeb64-39e7-468c-a9a8-172981f63d6d",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3bd2eb15-baf5-469c-a250-4c44cc176f6f",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "aea098c6-fed3-4310-9688-3d94cf1967c6",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(.,'Test gallery')]",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Test gallery')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "23f9ebc0-a6c2-4a61-aab6-c36dc8ef8be7",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "66edcbdc-97c4-4d0f-815c-877b290c1b9a",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Ištrinti galeriją')]",
+      "targets": [
+        ["css=app-button:nth-child(3) > .button", "css:finder"],
+        ["xpath=(//button[@type='submit'])[2]", "xpath:attributes"],
+        ["xpath=//app-button[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Ištrinti galeriją')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "511725b3-100c-4480-9d96-46ae46318aa9",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.modal__body > p",
+      "targets": [
+        ["css=.modal__body > p", "css:finder"],
+        ["xpath=//app-confirmation-modal/div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Ar tikrai norite ištrinti galeriją?')]", "xpath:innerText"]
+      ],
+      "value": "Ar tikrai norite ištrinti galeriją?"
+    }, {
+      "id": "23c5c1b5-4fb9-4ba9-9f90-b2bdac293669",
+      "comment": "",
+      "command": "click",
+      "target": "css=.modal__controls .button--filled",
+      "targets": [
+        ["css=.modal__controls .button--filled", "css:finder"],
+        ["xpath=(//button[@type='submit'])[5]", "xpath:attributes"],
+        ["xpath=//app-confirmation-modal/div/div/div/app-button[2]/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "6a5949da-813e-41b9-a373-afd14bafaa15",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.snackbar__title",
+      "targets": [
+        ["css=.snackbar__title", "css:finder"],
+        ["xpath=//app-snackbar-container/div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Galerija ištrinta')]", "xpath:innerText"]
+      ],
+      "value": "Galerija ištrinta"
+    }, {
+      "id": "68fe8e1b-a9ae-47f2-9501-25ab58547e8d",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "0e8b9a69-d2df-4028-9376-28a7c5b939b9",
+    "name": "Delete all photos in gallery",
+    "commands": [{
+      "id": "c4001d41-9199-4f32-a04e-ad2a37e2307c",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a8632810-d972-4d94-9491-1d48ac9bbf5e",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "c3a7b706-9591-47d1-81f0-52f49715ceba",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e4e1c4f5-0664-4cd4-b020-88bbc21e9a79",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(.,'Pagrindinė galerija')]",
+      "targets": [
+        ["css=.card__title", "css:finder"],
+        ["xpath=//div[2]/h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Pagrindinė galerija')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "cf0c2256-4a77-422e-a9f1-a9b9822ca526",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=.gallery__item:nth-child(1) > .gallery__image",
+      "targets": [
+        ["css=.gallery__item:nth-child(1) > .gallery__image", "css:finder"],
+        ["xpath=//img[@alt='out-1747180383065_PXL_20250508_085324361.jpg']", "xpath:img"],
+        ["xpath=//img", "xpath:position"]
+      ],
+      "value": "30000"
+    }, {
+      "id": "255371c2-7fc0-45cd-af65-5158efb2e0fd",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Žymėti visas')]",
+      "targets": [
+        ["css=.button--filled", "css:finder"],
+        ["xpath=(//button[@type='submit'])[3]", "xpath:attributes"],
+        ["xpath=//app-gallery-view/div/div/app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Žymėti visas')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "5691a219-5901-44a6-b64a-59e1341ec643",
+      "comment": "",
+      "command": "click",
+      "target": "css=app-icon-button:nth-child(4) path",
+      "targets": [
+        ["css=app-icon-button:nth-child(4) path", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "2281600a-c056-4b7e-a19b-d3085458f856",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.modal__body > p",
+      "targets": [
+        ["css=.modal__body > p", "css:finder"],
+        ["xpath=//app-confirmation-modal/div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Ar tikrai norite ištrinti 13 nuotraukų?')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "fb95f620-7493-4d9b-aaa2-161e1340a2db",
+      "comment": "",
+      "command": "click",
+      "target": "css=.modal__controls .button--filled",
+      "targets": [
+        ["css=.modal__controls .button--filled", "css:finder"],
+        ["xpath=(//button[@type='submit'])[5]", "xpath:attributes"],
+        ["xpath=//app-confirmation-modal/div/div/div/app-button[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Trinti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c931457e-4d36-4368-b91d-3e9cbd4b816a",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.snackbar__title",
+      "targets": [
+        ["css=.snackbar__title", "css:finder"],
+        ["xpath=//app-snackbar-container/div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Nuotraukos ištrintos')]", "xpath:innerText"]
+      ],
+      "value": "Nuotraukos ištrintos"
+    }, {
+      "id": "458560f1-8b70-4100-8493-db8f8c995f49",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "1244e337-a09d-474c-9fca-a1b155935f5a",
+    "name": "Archive event",
+    "commands": [{
+      "id": "4aa25b4d-70f9-4eb8-a168-275cac031f8f",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "5c7dabbf-93bb-4096-87b6-8d00442c21f9",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4dea5c43-6216-4670-80be-056973631d41",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "750928ce-4ee1-41aa-9bc0-7c5bf9d983f0",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Archyvuoti')]",
+      "targets": [
+        ["css=app-button:nth-child(3) > .button", "css:finder"],
+        ["xpath=(//button[@type='submit'])[2]", "xpath:attributes"],
+        ["xpath=//app-button[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Archyvuoti')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "fe0d8a6b-bff1-443b-a6dd-fa0f042f6305",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.modal__body > p",
+      "targets": [
+        ["css=.modal__body > p", "css:finder"],
+        ["xpath=//app-confirmation-modal/div/div/p", "xpath:position"]
+      ],
+      "value": "Ar tikrai norite archyvuoti šį renginį? Renginio originalio nuotraukos bus pašalintos ir bus galima tik atsisiųsti visas apdorotas nuotraukas."
+    }, {
+      "id": "8e0e9880-d9f7-4aa8-8bce-1517e429c723",
+      "comment": "",
+      "command": "click",
+      "target": "css=.modal__controls .button--filled",
+      "targets": [
+        ["css=.modal__controls .button--filled", "css:finder"],
+        ["xpath=(//button[@type='submit'])[6]", "xpath:attributes"],
+        ["xpath=//app-confirmation-modal/div/div/div/app-button[2]/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "51d67df8-24d4-4209-9e49-86e682af8085",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.snackbar__title",
+      "targets": [
+        ["css=.snackbar__title", "css:finder"],
+        ["xpath=//app-snackbar-container/div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Renginys bus archyvuotas artimiausiu metu, prašome palaukti')]", "xpath:innerText"]
+      ],
+      "value": "Renginys bus archyvuotas artimiausiu metu, prašome palaukti"
+    }, {
+      "id": "bcd11586-0a5a-4d8a-82e5-6252e8ec924a",
+      "comment": "",
+      "command": "pause",
+      "target": "60000",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "399c49c1-4a02-4cdf-a3dc-953ebe7cc972",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "e6eda6a1-0559-49d9-b2ba-41b2a809b2af",
+    "name": "Delete event",
+    "commands": [{
+      "id": "569dab19-d81e-4595-8339-5ae55be3bc36",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "64298b90-455a-4a4e-9da4-aa477aec1e49",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "cfabd224-4774-4710-9e5b-ccda380a8579",
+      "comment": "",
+      "command": "click",
+      "target": "css=label > #showArchived",
+      "targets": [
+        ["css=label > #showArchived", "css:finder"],
+        ["xpath=//input[@id='showArchived']", "xpath:attributes"],
+        ["xpath=//app-checkbox[@id='showArchived']/div/label/input", "xpath:idRelative"],
+        ["xpath=//label/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2e833a60-86fe-4833-84d9-7032a22da538",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #search",
+      "targets": [
+        ["css=.input-field > #search", "css:finder"],
+        ["xpath=//input[@id='search']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='search']/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d494f1aa-8e5e-4c6a-a96d-dde037c153ac",
+      "comment": "",
+      "command": "type",
+      "target": "css=.input-field > #search",
+      "targets": [
+        ["css=.input-field > #search", "css:finder"],
+        ["xpath=//input[@id='search']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='search']/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "Test event 12"
+    }, {
+      "id": "ba5668c5-3144-4321-9cb8-6acee762cfb3",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "css=.badge--secondary",
+      "targets": [
+        ["css=.badge--secondary", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/div/app-event-badge/app-badge/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Archyvuotas')]", "xpath:innerText"]
+      ],
+      "value": "30000"
+    }, {
+      "id": "0a7ba08d-ad07-4363-94c8-6da2cd2d9ad6",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//h2[contains(@class, 'card__title') and text() = 'Test event 12']",
+      "targets": [
+        ["css=app-card-item:nth-child(2) .card__title", "css:finder"],
+        ["xpath=//app-card-item[2]/div/div[2]/h2", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0e2c1e00-f05a-48cd-afeb-20cdee71ea19",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.badge",
+      "targets": [
+        ["css=.badge", "css:finder"],
+        ["xpath=//span", "xpath:position"],
+        ["xpath=//span[contains(.,'Archyvuotas')]", "xpath:innerText"]
+      ],
+      "value": "Archyvuotas"
+    }, {
+      "id": "43ac767a-6871-4672-9415-50b7cd976fa6",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Ištrinti renginį')]",
+      "targets": [
+        ["css=app-button:nth-child(3) > .button", "css:finder"],
+        ["xpath=(//button[@type='submit'])[2]", "xpath:attributes"],
+        ["xpath=//app-button[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Ištrinti renginį')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "3ab17aa9-a76c-4b12-9976-72cc9958fc17",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.modal__body > p",
+      "targets": [
+        ["css=.modal__body > p", "css:finder"],
+        ["xpath=//app-confirmation-modal/div/div/p", "xpath:position"]
+      ],
+      "value": "Ar tikrai norite ištrinti šį renginį? Šis veiksmas yra negrįžtamas."
+    }, {
+      "id": "07f5cdb6-5e8e-4c51-b178-4112648528a3",
+      "comment": "",
+      "command": "click",
+      "target": "css=.button--filled",
+      "targets": [
+        ["css=.button--filled", "css:finder"],
+        ["xpath=(//button[@type='submit'])[4]", "xpath:attributes"],
+        ["xpath=//app-confirmation-modal/div/div/div/app-button[2]/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5304109e-3e9f-4023-bb63-5e60c9d0c866",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.snackbar__title",
+      "targets": [
+        ["css=.snackbar__title", "css:finder"],
+        ["xpath=//app-snackbar-container/div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Renginys ištrintas')]", "xpath:innerText"]
+      ],
+      "value": "Renginys ištrintas"
+    }, {
+      "id": "33df1ebd-5dba-4ca9-b279-874ccdb7edba",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "f79f57a9-555a-4860-8944-fe3d5959393a",
+    "name": "Search users",
+    "commands": [{
+      "id": "ba2cd6ac-b9f5-4edb-b0a8-d271484df4e9",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3298c558-dceb-460a-a4a9-828faed5ae29",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a8f5fed0-6a5b-4ac3-890e-78a2b6331c0c",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Naudotojai",
+      "targets": [
+        ["linkText=Naudotojai", "linkText"],
+        ["css=li:nth-child(5) > .sidenav__list-item", "css:finder"],
+        ["xpath=//a[contains(text(),'Naudotojai')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/users')]", "xpath:href"],
+        ["xpath=//li[5]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Naudotojai')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "961d56a0-4826-4057-9017-944b317a703b",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #search",
+      "targets": [
+        ["css=.input-field > #search", "css:finder"],
+        ["xpath=//input[@id='search']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='search']/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e35d7a5f-bc9a-48ac-bcfc-bc6a0660fba4",
+      "comment": "",
+      "command": "type",
+      "target": "css=.input-field > #search",
+      "targets": [
+        ["css=.input-field > #search", "css:finder"],
+        ["xpath=//input[@id='search']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='search']/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "jasenasp"
+    }, {
+      "id": "36e3a44d-fc3a-40cf-8c26-9ad9ee864318",
+      "comment": "",
+      "command": "waitForText",
+      "target": "css=tr:nth-child(2) > .user-list__table-full-width:nth-child(2)",
+      "targets": [
+        ["css=tr:nth-child(2) > .user-list__table-full-width:nth-child(2)", "css:finder"],
+        ["xpath=//td[2]", "xpath:position"],
+        ["xpath=//td[contains(.,'jasenasp@gmail.com')]", "xpath:innerText"]
+      ],
+      "value": "jasenasp@gmail.com"
+    }, {
+      "id": "73cfd3e8-8415-4fcc-b3f9-2f5a82de3df4",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=tr:nth-child(2) > .table__pad-row-start",
+      "targets": [
+        ["css=tr:nth-child(2) > .table__pad-row-start", "css:finder"],
+        ["xpath=//td", "xpath:position"],
+        ["xpath=//td[contains(.,'Paulius J.')]", "xpath:innerText"]
+      ],
+      "value": "Paulius J."
+    }, {
+      "id": "b49ba41c-183c-47e4-aebf-8ff114385154",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "61e5bd14-98ed-4475-b75b-a59eb2be5f81",
+    "name": "Invite user",
+    "commands": [{
+      "id": "99ceb2c8-5441-449f-947a-5dac081cd693",
+      "comment": "",
+      "command": "open",
+      "target": "/event",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "eb849b64-6008-49b7-a0bf-fea28361d02c",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1666x952",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f618a505-9986-464a-9eab-e08082c464fe",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Naudotojai",
+      "targets": [
+        ["linkText=Naudotojai", "linkText"],
+        ["css=li:nth-child(5) > .sidenav__list-item", "css:finder"],
+        ["xpath=//a[contains(text(),'Naudotojai')]", "xpath:link"],
+        ["xpath=//a[contains(@href, '/users')]", "xpath:href"],
+        ["xpath=//li[5]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Naudotojai')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "63d9d57b-63d5-4470-b44c-e73bd379123c",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[contains(.,'Pakviesti naudotoją')]",
+      "targets": [
+        ["css=.button--filled", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//app-button/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Pakviesti naudotoją')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "80e8221a-d875-4f4d-afa9-5bd11e207644",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #name",
+      "targets": [
+        ["css=.input-field > #name", "css:finder"],
+        ["xpath=//input[@id='name']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='name']/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9d05241b-2526-4eea-aded-ba20a0ffc158",
+      "comment": "",
+      "command": "type",
+      "target": "css=.input-field > #name",
+      "targets": [
+        ["css=.input-field > #name", "css:finder"],
+        ["xpath=//input[@id='name']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='name']/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": "Test user"
+    }, {
+      "id": "0f52c803-27d3-4eeb-8597-b8d2ea3abc2a",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #email",
+      "targets": [
+        ["css=.input-field > #email", "css:finder"],
+        ["xpath=//input[@id='email']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='email']/div/input", "xpath:idRelative"],
+        ["xpath=//app-form-input-section[2]/div/div[2]/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "675fed3a-0e3b-4fb5-aab1-0d654e628bfe",
+      "comment": "",
+      "command": "executeScript",
+      "target": "return Math.random().toString().slice(2)",
+      "targets": [],
+      "value": "randomVal"
+    }, {
+      "id": "3baa6aac-e543-45fd-a6b3-94eb86406d9f",
+      "comment": "",
+      "command": "type",
+      "target": "css=.input-field > #email",
+      "targets": [
+        ["css=.input-field > #email", "css:finder"],
+        ["xpath=//input[@id='email']", "xpath:attributes"],
+        ["xpath=//app-input-field[@id='email']/div/input", "xpath:idRelative"],
+        ["xpath=//app-form-input-section[2]/div/div[2]/app-input-field/div/input", "xpath:position"]
+      ],
+      "value": "testuser${randomVal}@example.com"
+    }, {
+      "id": "16e2fcbc-312b-4758-87fe-59dc18bf2bb6",
+      "comment": "",
+      "command": "click",
+      "target": "css=.input-field > #group",
+      "targets": [
+        ["css=.input-field > #group", "css:finder"],
+        ["xpath=//select[@id='group']", "xpath:attributes"],
+        ["xpath=//app-select[@id='group']/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "1184a204-1488-4bb2-9a8f-d2fc0e0f1591",
+      "comment": "",
+      "command": "select",
+      "target": "css=.input-field > #group",
+      "targets": [],
+      "value": "label=Fotografas"
+    }, {
+      "id": "827bda00-223d-4d7a-a2cd-bbd5d6742c8a",
+      "comment": "",
+      "command": "click",
+      "target": "css=option:nth-child(2)",
+      "targets": [
+        ["css=option:nth-child(2)", "css:finder"],
+        ["xpath=//option[@value='2d302869-8926-498d-bd46-4b118919ea70']", "xpath:attributes"],
+        ["xpath=//select[@id='group']/option[2]", "xpath:idRelative"],
+        ["xpath=//option[2]", "xpath:position"],
+        ["xpath=//option[contains(.,'Fotografas')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e63077a5-3787-4322-97a0-db2ca01a8779",
+      "comment": "",
+      "command": "click",
+      "target": "css=app-button:nth-child(4) > .button",
+      "targets": [
+        ["css=app-button:nth-child(4) > .button", "css:finder"],
+        ["xpath=(//button[@type='submit'])[5]", "xpath:attributes"],
+        ["xpath=//form/app-button/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9570b911-a78d-42c1-a7b3-031ba241efdb",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.snackbar__title",
+      "targets": [
+        ["css=.snackbar__title", "css:finder"],
+        ["xpath=//div/div/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Naudotojas pakviestas')]", "xpath:innerText"]
+      ],
+      "value": "Naudotojas pakviestas"
+    }, {
+      "id": "ab4e0c9a-0afa-4740-b04d-fdda47eb7950",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "62e33abd-2905-45c8-ba6d-46cd1caaf455",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["3ba6f5d6-30dd-4ed6-a069-84403408e071", "59f48cc3-9371-4cff-a951-898d605baaef", "a85afa03-ccc7-4317-8f31-8ac6652f3c47", "21ec8ed8-cf8e-4868-8233-950b73e223e1", "16d0a38c-085c-4079-a31e-7d26a8f596a8", "a85e5d83-a53a-42e7-bb19-bde6a6bb20fa", "3d617094-e3a4-4e86-bc31-6310811545ed", "963eb032-26fb-4aa8-9515-7c1c0ec2a4b0", "4736da47-3aba-4f9f-88a4-3019690a76fb", "c08cc879-7bb4-4dd7-b298-b0d807fbd2d5", "563d1c8a-15c7-4457-ba15-265ac02b3f68", "b225cd4b-ddc7-4807-a4c2-837d8ead50a1", "f085ae54-4a61-456c-b2ee-2e8be55a7f61", "097f85af-d767-429d-830e-c079690ea476", "2c387b4d-7ac3-4894-9b1b-7eae8f4392ca", "3202e8e4-4f6c-4323-88d6-578c110d4b67", "1a689343-d4b6-4426-b85c-57ad021441a7", "ab1c1c5e-3112-475e-9c0e-15f31d624ca7", "be0d9db0-e409-4676-978b-ce5d388130cd", "5c448902-44e7-4c0b-9a4b-46ff98653c73", "f4441353-4e87-4fe0-bb63-0c2675f54f04", "8422631f-b87c-40c0-b4f4-5e59bb145541", "0e8b9a69-d2df-4028-9376-28a7c5b939b9", "237de037-93ee-4f87-a119-382684579dbd", "1244e337-a09d-474c-9fca-a1b155935f5a", "e6eda6a1-0559-49d9-b2ba-41b2a809b2af", "f79f57a9-555a-4860-8944-fe3d5959393a", "61e5bd14-98ed-4475-b75b-a59eb2be5f81"]
+  }],
+  "urls": ["https://dev-eventfoto.jasenas.com/"],
+  "plugins": []
+}
