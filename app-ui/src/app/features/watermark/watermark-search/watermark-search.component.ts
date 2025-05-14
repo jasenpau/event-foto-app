@@ -22,7 +22,7 @@ import { BlobService } from '../../../services/blob/blob.service';
 import { SasUri } from '../../../services/image/image.types';
 import { forkJoin, map } from 'rxjs';
 
-const WATERMARK_TABLE_PAGE_SIZE = 20;
+const WATERMARK_TABLE_PAGE_SIZE = 5;
 
 @Component({
   selector: 'app-watermark-search',
