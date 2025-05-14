@@ -6,7 +6,6 @@ import { UserService } from '../../../services/user/user.service';
 import { RegisterComponent } from '../register/register.component';
 import { NgIf } from '@angular/common';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
-import { handleApiError } from '../../../helpers/handleApiError';
 import { LoaderService } from '../../../services/loader/loader.service';
 
 const COMPONENT_LOADING_KEY = 'login-redirect';
