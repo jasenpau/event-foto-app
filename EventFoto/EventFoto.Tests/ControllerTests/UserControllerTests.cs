@@ -67,13 +67,9 @@ public class UserControllerTests : IClassFixture<TestApplicationFactory>, IDispo
         // Arrange
         var testUser = UserConstants.GetTestPhotographer();
         var client = await _testSetup.SetupWithUser(testUser);
-        var registerDto = new RegisterDto()
-        {
-            Name = "New User Name",
-        };
         var request = new HttpRequestMessage(HttpMethod.Post, "/api/user/register")
         {
-            Content = JsonContent.Create(registerDto)
+            Content = JsonContent.Create("{}")
         };
 
         // Act
@@ -82,7 +78,7 @@ public class UserControllerTests : IClassFixture<TestApplicationFactory>, IDispo
         // Assert
         result.Should().NotBeNull();
         result.Id.Should().Be(testUser.Id);
-        result.Name.Should().Be(registerDto.Name);
+        result.IsActive.Should().BeTrue();
     }
 
     [Fact]

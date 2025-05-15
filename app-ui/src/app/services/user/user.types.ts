@@ -21,8 +21,3 @@ export interface AppGroupsDto {
   eventAdministrators: string;
   photographers: string;
 }
-
-export interface RegisterDto {
-  email: string;
-  name: string;
-}

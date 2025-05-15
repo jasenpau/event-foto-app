@@ -15,6 +15,8 @@ import { UserService } from '../../../services/user/user.service';
 import { takeUntil, tap } from 'rxjs';
 import { DisposableComponent } from '../../../components/disposable/disposable.component';
 import { Router } from '@angular/router';
+import { LoaderService } from '../../../services/loader/loader.service';
+import { useLoader } from '../../../helpers/useLoader';
 
 @Component({
   selector: 'app-register',
@@ -34,6 +36,7 @@ export class RegisterComponent
   constructor(
     private userService: UserService,
     private router: Router,
+    private loaderService: LoaderService,
   ) {
     super();
     this.form = new FormGroup({
@@ -63,17 +66,15 @@ export class RegisterComponent
   }
 
   register() {
-    this.form.markAllAsTouched();
-    if (this.form.valid) {
-      this.userService
-        .register(this.form.value)
-        .pipe(
-          tap(() => {
-            this.router.navigate(['/']);
-          }),
-          takeUntil(this.destroy$),
-        )
-        .subscribe();
-    }
+    this.userService
+      .register()
+      .pipe(
+        useLoader('register-loading', this.loaderService),
+        tap(() => {
+          this.router.navigate(['/']);
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
   }
 }

@@ -29,11 +29,10 @@ public class UserService : IUserService
         return ServiceResult<User>.Ok(user);
     }
 
-    public async Task<ServiceResult<User>> InviteRegisterAsync(RegisterDto registerDto, Guid userId)
+    public async Task<ServiceResult<User>> InviteRegisterAsync(Guid userId)
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
 
-        user.Name = registerDto.Name;
         user.IsActive = true;
         user = await _userRepository.UpdateUserAsync(user);
 

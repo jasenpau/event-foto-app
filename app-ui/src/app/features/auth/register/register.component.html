@@ -1,8 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="register()" class="register-form">
   <h3 class="text-title-large no-margin">Patvirtinkite pakvietimą</h3>
-  <p class="text-body-medium no-margin">Pateikite šiek tiek informacijos apie save.</p>
+  <p class="text-body-medium no-margin">Informacijos keisti negalima.</p>
   <app-input-field id="name" formControlName="name" label="Vardas" />
   <app-input-field id="email" formControlName="email" label="El. paštas" />
-  <p class="text-body-small no-margin">Informacijos keisti negalima.</p>
   <app-button [type]="buttonType" [size]="buttonSize">Patvirtinti</app-button>
 </form>

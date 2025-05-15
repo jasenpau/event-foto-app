@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { getAuthHeaders } from '../../helpers/getAuthHeaders';
-import { AppGroupsDto, RegisterDto, UserData, UserListDto } from './user.types';
+import { AppGroupsDto, UserData, UserListDto } from './user.types';
 import { AuthService } from '../auth/auth.service';
 import { ViewPermissions, UserGroup } from '../../globals/userGroups';
 import { PagedData } from '../../components/paged-table/paged-table.types';
@@ -81,13 +81,9 @@ export class UserService {
     };
   }
 
-  register(userDetails: RegisterDto): Observable<UserData> {
+  register(): Observable<UserData> {
     return this.http
-      .post<UserData>(
-        `${this.apiBaseUrl}/user/register`,
-        userDetails,
-        getAuthHeaders(),
-      )
+      .post<UserData>(`${this.apiBaseUrl}/user/register`, {}, getAuthHeaders())
       .pipe(
         tap((result) => {
           this.currentUser = result;

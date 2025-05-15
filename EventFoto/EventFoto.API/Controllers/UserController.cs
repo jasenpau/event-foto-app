@@ -36,10 +36,10 @@ public class UserController : AppControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<UserDto>> InviteRegister([FromBody] RegisterDto registerDto)
+    public async Task<ActionResult<UserDto>> InviteRegister()
     {
         var userId = RequestUserId();
-        var result = await _userService.InviteRegisterAsync(registerDto, userId);
+        var result = await _userService.InviteRegisterAsync(userId);
         return result.Success
             ? Ok(UserDto.FromModel(result.Data))
             : result.ToErrorResponse();
